@@ -104,6 +104,7 @@
         <div id="data-pos">POS: [0.00, 0.00]</div>
         <div id="data-mom">MOM: 0.000 kg·m/s</div>
         <div id="data-prob">Ψ_PROB: 0.00%</div>
+        <div id="data-fluc">FLUCTUATION: 0.00</div>
         <div id="data-uncert">ΔxΔp ≥ ℏ/2</div>
     </div>
 
@@ -141,6 +142,7 @@
         const elPos = document.getElementById('data-pos');
         const elMom = document.getElementById('data-mom');
         const elProb = document.getElementById('data-prob');
+        const elFluc = document.getElementById('data-fluc');
 
         let ball = {
             x: 0,
@@ -156,6 +158,14 @@
             y: window.innerHeight / 2
         };
 
+        // 虛擬引力中心點 (增加隨機漲落)
+        let virtualCenter = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            offsetX: 0,
+            offsetY: 0
+        };
+
         let quantumStates = [
             { x: 0, y: 0, vx: 0, vy: 0 },
             { x: 0, y: 0, vx: 0, vy: 0 },
@@ -163,6 +173,7 @@
         ];
 
         let trails = []; 
+        let time = 0;
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -208,20 +219,31 @@
         }
 
         function updateData() {
-            // 更新 UI 上的運算數據
             elPos.innerText = `POS: [${ball.x.toFixed(2)}, ${ball.y.toFixed(2)}]`;
             const momentum = Math.sqrt(ball.vx ** 2 + ball.vy ** 2).toFixed(3);
             elMom.innerText = `MOM: ${momentum} kg·m/s`;
             
-            // 模擬機率波隨距離滑鼠越近，坍縮機率越高
             const dist = Math.sqrt((mouse.x - ball.x)**2 + (mouse.y - ball.y)**2);
             const prob = Math.max(0, 100 - (dist / 10)).toFixed(2);
             elProb.innerText = `Ψ_PROB: ${prob}%`;
+
+            const fluctuation = Math.sqrt(virtualCenter.offsetX**2 + virtualCenter.offsetY**2).toFixed(2);
+            elFluc.innerText = `FLUCTUATION: ${fluctuation}`;
         }
 
         function animate() {
-            const dx = mouse.x - ball.x;
-            const dy = mouse.y - ball.y;
+            time += 0.05;
+
+            // 更新引力中心的隨機隨機漲落 (模擬量子場擾動)
+            // 使用 sin 組合隨機數產生平滑但不可預測的位移
+            virtualCenter.offsetX = Math.sin(time * 0.7) * 40 + (Math.random() - 0.5) * 60;
+            virtualCenter.offsetY = Math.cos(time * 0.8) * 40 + (Math.random() - 0.5) * 60;
+            virtualCenter.x = mouse.x + virtualCenter.offsetX;
+            virtualCenter.y = mouse.y + virtualCenter.offsetY;
+
+            // 球體朝向「虛擬中心」移動
+            const dx = virtualCenter.x - ball.x;
+            const dy = virtualCenter.y - ball.y;
             const targetAngle = Math.atan2(dy, dx);
             const currentAngle = Math.atan2(ball.vy, ball.vx);
             
@@ -260,7 +282,7 @@
                     s.vx = ball.vx;
                     s.vy = ball.vy;
                 }
-                const drift = (i + 1) * 0.1;
+                const drift = (i + 1) * 0.15;
                 s.vx += (Math.random() - 0.5) * drift;
                 s.vy += (Math.random() - 0.5) * drift;
                 s.x += s.vx;
