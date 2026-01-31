@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000;
+            background-color: #1a1a1a; /* 底色：灰色 */
             color: #fff;
             margin: 0;
             padding: 0;
@@ -44,14 +44,15 @@
             animation: revealBrand 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             white-space: nowrap;
             pointer-events: none;
-            z-index: 20;
+            z-index: 30; /* 確保文字在最上層 */
         }
 
         .status-text {
             animation: revealText 4s cubic-bezier(0.19, 1, 0.22, 1) forwards 1s;
             opacity: 0;
-            letter-spacing: 0.5em; /* 增加字距以配合大字級 */
+            letter-spacing: 0.5em; 
             color: #e5e5e5;
+            z-index: 30;
         }
 
         .grain-overlay {
@@ -68,11 +69,11 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 10;
+            z-index: 20; /* Canvas 作為黑色遮罩層 */
         }
 
         @media (max-width: 640px) {
-            .brand-header { letter-spacing: 0.4em !important; text-indent: 0.4em; font-size: 2.25rem; } /* 手機端同步放大 */
+            .brand-header { letter-spacing: 0.4em !important; text-indent: 0.4em; font-size: 2.25rem; } 
             .status-text { letter-spacing: 0.3em; }
         }
     </style>
@@ -80,10 +81,11 @@
 <body>
 
     <div class="grain-overlay"></div>
+    <!-- 黑色遮罩 Canvas -->
     <canvas id="canvas"></canvas>
 
-    <main class="flex flex-col items-center px-10 relative z-20 pointer-events-none">
-        <header class="mb-16"> <!-- 增加間距配合大字體 -->
+    <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none">
+        <header class="mb-16">
             <h1 class="brand-header text-4xl md:text-6xl uppercase">
                 XIAOSTUDIO
             </h1>
@@ -98,8 +100,7 @@
             </p>
         </section>
 
-        <!-- 底部區塊 -->
-        <footer class="fixed bottom-10 left-0 w-full text-center">
+        <footer class="fixed bottom-10 left-0 w-full text-center z-30">
             <div class="h-[60px]" id="paddle-zone"></div>
             
             <div class="flex flex-col space-y-3">
@@ -118,13 +119,13 @@
             y: -50,
             vx: 0,
             vy: 6,
-            size: 4, // 稍微加大球體配合大字體
+            size: 4, // 尺寸縮小五倍 (從 20 變為 4)
             isBouncing: false
         };
 
         let paddle = {
             width: 120,
-            height: 1,
+            height: 2,
             x: 0,
             y: 0,
             targetX: 0
@@ -138,6 +139,14 @@
             paddle.y = canvas.height - 125; 
             paddle.width = window.innerWidth < 600 ? 100 : 160;
             if (!ball.isBouncing) ball.x = canvas.width / 2;
+            
+            resetMask();
+        }
+
+        function resetMask() {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = '#000'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
         window.addEventListener('resize', resize);
@@ -157,10 +166,12 @@
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'destination-out';
+
             paddle.x += (paddle.targetX - paddle.x) * 0.12;
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            
+            // 橫桿刮開效果
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
             ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
             ball.y += ball.vy;
@@ -178,29 +189,31 @@
                 if (ball.y < ball.size || ball.y > canvas.height - ball.size) ball.vy *= -1;
                 if (ball.vy > 0 && ball.y + ball.size > paddle.y && ball.y - ball.size < paddle.y + paddle.height + 3) {
                     if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-                        ball.vy *= -1.01; 
+                        ball.vy *= -1.02; 
                         const hitPoint = (ball.x - (paddle.x + paddle.width/2)) / (paddle.width/2);
                         ball.vx += hitPoint * 4;
                     }
                 }
             }
 
+            // 繪製球體留下的細刮開路徑
             trails.push({ x: ball.x, y: ball.y, life: 1 });
             for (let i = trails.length - 1; i >= 0; i--) {
                 let t = trails[i];
-                t.life -= 0.04;
+                t.life -= 0.005; // 讓細線條留存更久一點
                 if (t.life <= 0) trails.splice(i, 1);
                 else {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${t.life * 0.12})`;
                     ctx.beginPath();
-                    ctx.arc(t.x, t.y, ball.size * t.life, 0, Math.PI * 2);
+                    ctx.arc(t.x, t.y, ball.size * (0.5 + t.life * 0.5), 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
+
+            // 繪製當前球體
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
-            ctx.fillStyle = 'white';
             ctx.fill();
+
             requestAnimationFrame(animate);
         }
         window.onload = init;
