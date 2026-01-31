@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIAOSTUDIO | Coming Soon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 核心進場動畫：由模糊分散到清晰集中 */
+        @keyframes revealBrand {
+            0% {
+                filter: blur(20px);
+                letter-spacing: 2.5em; 
+                opacity: 0;
+                transform: scale(1.05);
+            }
+            100% {
+                filter: blur(0px);
+                letter-spacing: 0.8em; 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes revealText {
+            0% {
+                filter: blur(10px);
+                letter-spacing: 0.8em;
+                opacity: 0;
+            }
+            100% {
+                filter: blur(0px);
+                letter-spacing: 0.4em;
+                opacity: 1;
+            }
+        }
+
+        @keyframes expandHeight {
+            0% { height: 0; opacity: 0; }
+            100% { height: 80px; opacity: 0.2; }
+        }
+
+        .brand-header {
+            font-weight: 200;
+            text-indent: 0.8em; 
+            animation: revealBrand 3.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            white-space: nowrap;
+        }
+
+        .status-text-group {
+            animation: revealText 4s cubic-bezier(0.19, 1, 0.22, 1) forwards 1.2s;
+            opacity: 0;
+            text-indent: 0.4em;
+        }
+
+        .divider {
+            width: 1px;
+            height: 0;
+            background-color: #fff;
+            animation: expandHeight 2.8s cubic-bezier(0.65, 0, 0.35, 1) forwards 2.2s;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.04;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+        }
+
+        @media (max-width: 640px) {
+            .brand-header { 
+                letter-spacing: 0.4em !important; 
+                text-indent: 0.4em; 
+                font-size: 1.15rem;
+            }
+            @keyframes revealBrand {
+                0% { filter: blur(12px); letter-spacing: 1.5em; opacity: 0; }
+                100% { filter: blur(0px); letter-spacing: 0.4em; opacity: 1; }
+            }
+            .divider { animation: expandHeight 2.8s forwards 1.8s; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grain-overlay"></div>
+
+    <main class="flex flex-col items-center px-10">
+        <header>
+            <h1 class="brand-header text-2xl md:text-3xl uppercase">
+                XIAOSTUDIO
+            </h1>
+        </header>
+        
+        <div class="my-14 md:my-20">
+            <div class="divider"></div>
+        </div>
+
+        <section class="status-text-group flex flex-col items-center">
+            <p class="text-[9px] md:text-xs font-light text-gray-400 uppercase leading-[3] mb-4">
+                Refining the digital experience
+            </p>
+            <p class="text-[8px] md:text-[9px] font-extralight text-gray-600 uppercase">
+                Est. 2026 — Launching soon
+            </p>
+        </section>
+
+        <footer class="fixed bottom-10 left-0 w-full text-center">
+            <div class="flex flex-col space-y-3">
+                <a href="https://xiaostudio.xyz" 
+                   class="text-[8px] md:text-[9px] tracking-[0.6em] text-gray-500 hover:text-white transition-all duration-1000 uppercase">
+                    www.xiaostudio.xyz
+                </a>
+                <a href="mailto:jewuenxiao@gmail.com" 
+                   class="text-[7px] md:text-[8px] tracking-[0.4em] text-gray-600 hover:text-white transition-all duration-1000 uppercase">
+                    jewuenxiao@gmail.com
+                </a>
+            </div>
+        </footer>
+    </main>
+
+</body>
+</html>
