@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XIAOSTUDIO | Coming Soon</title>
     
-    <!-- 分頁圖示 (Favicon) -->
+    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,7 +28,7 @@
             cursor: none; 
         }
 
-        /* 品牌字體動畫 */
+        /* Brand Typography Animations */
         @keyframes revealBrand {
             0% { filter: blur(20px); letter-spacing: 2em; opacity: 0; }
             100% { filter: blur(0px); letter-spacing: 0.8em; opacity: 1; }
@@ -56,6 +56,14 @@
             z-index: 40;
         }
 
+        .service-item {
+            animation: revealText 5s cubic-bezier(0.19, 1, 0.22, 1) forwards 1.5s;
+            opacity: 0;
+            letter-spacing: 0.2em;
+            font-weight: 200;
+            z-index: 40;
+        }
+
         .grain-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -73,7 +81,7 @@
             z-index: 20; 
         }
 
-        /* 量子數據面板 */
+        /* Quantum Data Panel */
         .quantum-data {
             position: fixed;
             top: 40px;
@@ -90,6 +98,7 @@
         @media (max-width: 640px) {
             .brand-header { letter-spacing: 0.4em !important; text-indent: 0.4em; font-size: 2.25rem; } 
             .status-text { letter-spacing: 0.3em; }
+            .service-item { letter-spacing: 0.1em; font-size: 10px; }
             .quantum-data { top: 20px; left: 20px; font-size: 8px; }
         }
     </style>
@@ -98,7 +107,7 @@
 
     <div class="grain-overlay"></div>
     
-    <!-- 數據顯示層 -->
+    <!-- Data Display Layer -->
     <div class="quantum-data">
         <div>PARTICLE_ID: 0x9F_STU</div>
         <div id="data-pos">POS: [0.00, 0.00]</div>
@@ -111,17 +120,28 @@
     <canvas id="canvas"></canvas>
 
     <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none">
-        <header class="mb-16">
+        <header class="mb-12">
             <h1 class="brand-header text-4xl md:text-6xl uppercase">
                 XIAOSTUDIO
             </h1>
         </header>
 
         <section class="flex flex-col items-center text-center">
+            <!-- Core Service Items -->
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-12 max-w-3xl">
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Visual Design</span>
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">•</span>
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Motion Graphics</span>
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">•</span>
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Graphic Design</span>
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">•</span>
+                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Product Cinematography</span>
+            </div>
+
             <p class="status-text text-[20px] md:text-2xl font-light text-white uppercase leading-[2.5] mb-8">
                 Refining the digital experience
             </p>
-            <p class="status-text text-[18px] md:text-xl font-normal text-gray-300 uppercase">
+            <p class="status-text text-[16px] md:text-lg font-normal text-gray-400 uppercase">
                 Est. 2026 — Launching soon
             </p>
         </section>
@@ -138,7 +158,7 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         
-        // 數據面板 DOM
+        // Data Panel DOM
         const elPos = document.getElementById('data-pos');
         const elMom = document.getElementById('data-mom');
         const elProb = document.getElementById('data-prob');
@@ -158,7 +178,7 @@
             y: window.innerHeight / 2
         };
 
-        // 虛擬引力中心點 (增加隨機漲落)
+        // Virtual center of gravity with fluctuation
         let virtualCenter = {
             x: window.innerWidth / 2,
             y: window.innerHeight / 2,
@@ -234,14 +254,12 @@
         function animate() {
             time += 0.05;
 
-            // 更新引力中心的隨機隨機漲落 (模擬量子場擾動)
-            // 使用 sin 組合隨機數產生平滑但不可預測的位移
+            // Update virtual center fluctuation
             virtualCenter.offsetX = Math.sin(time * 0.7) * 40 + (Math.random() - 0.5) * 60;
             virtualCenter.offsetY = Math.cos(time * 0.8) * 40 + (Math.random() - 0.5) * 60;
             virtualCenter.x = mouse.x + virtualCenter.offsetX;
             virtualCenter.y = mouse.y + virtualCenter.offsetY;
 
-            // 球體朝向「虛擬中心」移動
             const dx = virtualCenter.x - ball.x;
             const dy = virtualCenter.y - ball.y;
             const targetAngle = Math.atan2(dy, dx);
