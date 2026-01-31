@@ -24,86 +24,33 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+            touch-action: none;
         }
 
-        /* 影片背景容器 */
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .video-background video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-            /* 調低透明度以維持品牌文字的可讀性 */
-            opacity: 0.1;
-            filter: grayscale(100%) contrast(120%);
-        }
-
-        /* 核心進場動畫：由模糊分散到清晰集中 */
+        /* 品牌字體進場動畫 */
         @keyframes revealBrand {
-            0% {
-                filter: blur(20px);
-                letter-spacing: 2.5em; 
-                opacity: 0;
-                transform: scale(1.05);
-            }
-            100% {
-                filter: blur(0px);
-                letter-spacing: 0.8em; 
-                opacity: 1;
-                transform: scale(1);
-            }
+            0% { filter: blur(20px); letter-spacing: 2em; opacity: 0; }
+            100% { filter: blur(0px); letter-spacing: 0.8em; opacity: 1; }
         }
 
         @keyframes revealText {
-            0% {
-                filter: blur(10px);
-                letter-spacing: 0.8em;
-                opacity: 0;
-            }
-            100% {
-                filter: blur(0px);
-                letter-spacing: 0.4em;
-                opacity: 1;
-            }
-        }
-
-        @keyframes expandHeight {
-            0% { height: 0; opacity: 0; }
-            100% { height: 80px; opacity: 0.2; }
+            0% { filter: blur(10px); opacity: 0; }
+            100% { filter: blur(0px); opacity: 0.4; }
         }
 
         .brand-header {
             font-weight: 200;
             text-indent: 0.8em; 
-            animation: revealBrand 3.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            animation: revealBrand 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             white-space: nowrap;
+            pointer-events: none;
+            z-index: 20;
         }
 
-        .status-text-group {
-            animation: revealText 4s cubic-bezier(0.19, 1, 0.22, 1) forwards 1.2s;
+        .status-text {
+            animation: revealText 4s cubic-bezier(0.19, 1, 0.22, 1) forwards 1s;
             opacity: 0;
-            text-indent: 0.4em;
-        }
-
-        .divider {
-            width: 1px;
-            height: 0;
-            background-color: #fff;
-            animation: expandHeight 2.8s cubic-bezier(0.65, 0, 0.35, 1) forwards 2.2s;
+            letter-spacing: 0.4em;
         }
 
         .grain-overlay {
@@ -112,72 +59,176 @@
             width: 100%; height: 100%;
             pointer-events: none;
             z-index: 50;
-            opacity: 0.04;
+            opacity: 0.03;
             background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
         }
 
+        #canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+        }
+
         @media (max-width: 640px) {
-            .brand-header { 
-                letter-spacing: 0.4em !important; 
-                text-indent: 0.4em; 
-                font-size: 1.15rem;
-            }
-            @keyframes revealBrand {
-                0% { filter: blur(12px); letter-spacing: 1.5em; opacity: 0; }
-                100% { filter: blur(0px); letter-spacing: 0.4em; opacity: 1; }
-            }
-            .divider { animation: expandHeight 2.8s forwards 1.8s; }
+            .brand-header { letter-spacing: 0.4em !important; text-indent: 0.4em; font-size: 1.15rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 影片背景層 -->
-    <div class="video-background">
-        <video autoplay muted loop playsinline poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-            <source src="https://cdn.pixabay.com/video/2025/06/17/286278_small.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-
-    <!-- 膠片顆粒質感層 -->
     <div class="grain-overlay"></div>
+    <canvas id="canvas"></canvas>
 
-    <main class="flex flex-col items-center px-10 relative z-10">
-        <header>
+    <main class="flex flex-col items-center px-10 relative z-20 pointer-events-none">
+        <header class="mb-8">
             <h1 class="brand-header text-2xl md:text-3xl uppercase">
                 XIAOSTUDIO
             </h1>
         </header>
-        
-        <div class="my-14 md:my-20">
-            <div class="divider"></div>
-        </div>
 
-        <section class="status-text-group flex flex-col items-center">
-            <p class="text-[9px] md:text-xs font-light text-gray-400 uppercase leading-[3] mb-4">
+        <section class="flex flex-col items-center">
+            <p class="status-text text-[9px] md:text-xs font-light text-gray-400 uppercase leading-[3] mb-4">
                 Refining the digital experience
             </p>
-            <p class="text-[8px] md:text-[9px] font-extralight text-gray-600 uppercase">
+            <p class="status-text text-[8px] md:text-[9px] font-extralight text-gray-600 uppercase">
                 Est. 2026 — Launching soon
             </p>
         </section>
 
+        <!-- 底部區塊，橫桿將會在 mail 上方的區塊運作 -->
         <footer class="fixed bottom-10 left-0 w-full text-center">
+            <!-- 預留給橫桿的空間 (約 60px) -->
+            <div class="h-[60px]" id="paddle-zone"></div>
+            
             <div class="flex flex-col space-y-3">
-                <!-- 信箱連結移至上方 -->
-                <a href="mailto:jewuenxiao@gmail.com" 
-                   class="text-[10px] md:text-[12px] tracking-[0.4em] text-gray-600 hover:text-white transition-all duration-1000 uppercase">
-                    jewuenxiao@gmail.com
-                </a>
-                <!-- 網址連結移至下方 -->
-                <a href="https://xiaostudio.xyz" 
-                   class="text-[8px] md:text-[9px] tracking-[0.6em] text-gray-500 hover:text-white transition-all duration-1000 uppercase">
-                    www.xiaostudio.xyz
-                </a>
+                <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[7px] md:text-[8px] tracking-[0.4em] text-gray-600 hover:text-white transition-all duration-1000 uppercase">jewuenxiao@gmail.com</a>
+                <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[8px] md:text-[9px] tracking-[0.6em] text-gray-500 hover:text-white transition-all duration-1000 uppercase">www.xiaostudio.xyz</a>
             </div>
         </footer>
     </main>
 
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let ball = {
+            x: 0,
+            y: -50,
+            vx: 0,
+            vy: 6,
+            size: 3,
+            isBouncing: false
+        };
+
+        let paddle = {
+            width: 100,
+            height: 1,
+            x: 0,
+            y: 0,
+            targetX: 0
+        };
+
+        let trails = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // 將橫桿位置設定在信箱連結上方 (螢幕底部算起約 110px 到 130px 處)
+            paddle.y = canvas.height - 125; 
+            paddle.width = window.innerWidth < 600 ? 80 : 120;
+            
+            if (!ball.isBouncing) {
+                ball.x = canvas.width / 2;
+            }
+        }
+
+        window.addEventListener('resize', resize);
+        
+        function handleMove(x) {
+            paddle.targetX = x - paddle.width / 2;
+        }
+
+        window.addEventListener('mousemove', e => handleMove(e.clientX));
+        window.addEventListener('touchmove', e => {
+            handleMove(e.touches[0].clientX);
+            e.preventDefault();
+        }, { passive: false });
+
+        function init() {
+            resize();
+            ball.x = canvas.width / 2;
+            paddle.targetX = (canvas.width - paddle.width) / 2;
+            paddle.x = paddle.targetX;
+            animate();
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            paddle.x += (paddle.targetX - paddle.x) * 0.12;
+
+            // 繪製橫桿
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+            ball.y += ball.vy;
+            ball.x += ball.vx;
+
+            if (!ball.isBouncing) {
+                if (ball.y >= paddle.y) {
+                    ball.y = paddle.y;
+                    ball.vy = -5; 
+                    ball.vx = (Math.random() - 0.5) * 4; 
+                    ball.isBouncing = true;
+                }
+            } else {
+                if (ball.x < ball.size || ball.x > canvas.width - ball.size) ball.vx *= -1;
+                if (ball.y < ball.size || ball.y > canvas.height - ball.size) ball.vy *= -1;
+
+                // 橫桿碰撞檢測
+                if (ball.vy > 0 && 
+                    ball.y + ball.size > paddle.y && 
+                    ball.y - ball.size < paddle.y + paddle.height + 3) {
+                    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+                        ball.vy *= -1.01; 
+                        const hitPoint = (ball.x - (paddle.x + paddle.width/2)) / (paddle.width/2);
+                        ball.vx += hitPoint * 4;
+                        
+                        const maxSpeed = 10;
+                        if (Math.abs(ball.vx) > maxSpeed) ball.vx = maxSpeed * Math.sign(ball.vx);
+                        if (Math.abs(ball.vy) > maxSpeed) ball.vy = maxSpeed * Math.sign(ball.vy);
+                    }
+                }
+            }
+
+            // 軌跡效果
+            trails.push({ x: ball.x, y: ball.y, life: 1 });
+            for (let i = trails.length - 1; i >= 0; i--) {
+                let t = trails[i];
+                t.life -= 0.04;
+                if (t.life <= 0) {
+                    trails.splice(i, 1);
+                } else {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${t.life * 0.12})`;
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, ball.size * t.life, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // 繪製主球體
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fill();
+
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
