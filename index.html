@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a; /* 底色：灰色 */
+            background-color: #1a1a1a; 
             color: #fff;
             margin: 0;
             padding: 0;
@@ -25,9 +25,10 @@
             min-height: 100vh;
             overflow: hidden;
             touch-action: none;
+            cursor: none; 
         }
 
-        /* 品牌字體進場動畫 */
+        /* 品牌字體動畫 */
         @keyframes revealBrand {
             0% { filter: blur(20px); letter-spacing: 2em; opacity: 0; }
             100% { filter: blur(0px); letter-spacing: 0.8em; opacity: 1; }
@@ -44,7 +45,7 @@
             animation: revealBrand 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             white-space: nowrap;
             pointer-events: none;
-            z-index: 30; /* 確保文字在最上層 */
+            z-index: 40; 
         }
 
         .status-text {
@@ -52,7 +53,7 @@
             opacity: 0;
             letter-spacing: 0.5em; 
             color: #e5e5e5;
-            z-index: 30;
+            z-index: 40;
         }
 
         .grain-overlay {
@@ -69,7 +70,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 20; /* Canvas 作為黑色遮罩層 */
+            z-index: 20; 
         }
 
         @media (max-width: 640px) {
@@ -81,7 +82,6 @@
 <body>
 
     <div class="grain-overlay"></div>
-    <!-- 黑色遮罩 Canvas -->
     <canvas id="canvas"></canvas>
 
     <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none">
@@ -100,9 +100,7 @@
             </p>
         </section>
 
-        <footer class="fixed bottom-10 left-0 w-full text-center z-30">
-            <div class="h-[60px]" id="paddle-zone"></div>
-            
+        <footer class="fixed bottom-10 left-0 w-full text-center z-40">
             <div class="flex flex-col space-y-3">
                 <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[10px] md:text-[12px] tracking-[0.4em] text-gray-400 hover:text-white transition-all duration-1000 uppercase">jewuenxiao@gmail.com</a>
                 <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[11px] md:text-[13px] tracking-[0.6em] text-gray-400 hover:text-white transition-all duration-1000 uppercase">www.xiaostudio.xyz</a>
@@ -116,30 +114,30 @@
         
         let ball = {
             x: 0,
-            y: -50,
-            vx: 0,
-            vy: 6,
-            size: 4, // 尺寸縮小五倍 (從 20 變為 4)
-            isBouncing: false
-        };
-
-        let paddle = {
-            width: 120,
-            height: 2,
-            x: 0,
             y: 0,
-            targetX: 0
+            vx: 0,
+            vy: 0,
+            speed: 5.5,
+            size: 2.5
         };
 
-        let trails = [];
+        let mouse = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+        };
+
+        // 量子疊加態：多個影子路徑
+        let quantumStates = [
+            { x: 0, y: 0, vx: 0, vy: 0 },
+            { x: 0, y: 0, vx: 0, vy: 0 },
+            { x: 0, y: 0, vx: 0, vy: 0 }
+        ];
+
+        let trails = []; 
 
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            paddle.y = canvas.height - 125; 
-            paddle.width = window.innerWidth < 600 ? 100 : 160;
-            if (!ball.isBouncing) ball.x = canvas.width / 2;
-            
             resetMask();
         }
 
@@ -150,68 +148,134 @@
         }
 
         window.addEventListener('resize', resize);
-        function handleMove(x) { paddle.targetX = x - paddle.width / 2; }
-        window.addEventListener('mousemove', e => handleMove(e.clientX));
+
+        function handleMove(clientX, clientY) { 
+            mouse.x = clientX;
+            mouse.y = clientY;
+        }
+
+        window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
         window.addEventListener('touchmove', e => {
-            handleMove(e.touches[0].clientX);
+            handleMove(e.touches[0].clientX, e.touches[0].clientY);
             e.preventDefault();
         }, { passive: false });
 
         function init() {
             resize();
             ball.x = canvas.width / 2;
-            paddle.targetX = (canvas.width - paddle.width) / 2;
-            paddle.x = paddle.targetX;
+            ball.y = canvas.height / 2;
+            const angle = Math.random() * Math.PI * 2;
+            ball.vx = Math.cos(angle) * ball.speed;
+            ball.vy = Math.sin(angle) * ball.speed;
+            
+            // 初始化疊加態
+            quantumStates.forEach(s => {
+                s.x = ball.x;
+                s.y = ball.y;
+                s.vx = ball.vx;
+                s.vy = ball.vy;
+            });
+
             animate();
         }
 
         function animate() {
-            ctx.globalCompositeOperation = 'destination-out';
-
-            paddle.x += (paddle.targetX - paddle.x) * 0.12;
+            // 1. 量子轉向機制：主球體與疊加態受滑鼠引力影響
+            const dx = mouse.x - ball.x;
+            const dy = mouse.y - ball.y;
+            const targetAngle = Math.atan2(dy, dx);
+            const currentAngle = Math.atan2(ball.vy, ball.vx);
             
-            // 橫桿刮開效果
-            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-            ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+            let diff = targetAngle - currentAngle;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            
+            const turnSpeed = 0.04;
+            const newAngle = currentAngle + diff * turnSpeed;
+            ball.vx = Math.cos(newAngle) * ball.speed;
+            ball.vy = Math.sin(newAngle) * ball.speed;
 
-            ball.y += ball.vy;
             ball.x += ball.vx;
+            ball.y += ball.vy;
 
-            if (!ball.isBouncing) {
-                if (ball.y >= paddle.y) {
-                    ball.y = paddle.y;
-                    ball.vy = -5; 
-                    ball.vx = (Math.random() - 0.5) * 4; 
-                    ball.isBouncing = true;
+            // 邊界反射 (觀測點：觸碰邊界時疊加態會同步至主球體)
+            const bounce = (b) => {
+                if (b.x < b.size || b.x > canvas.width - b.size) {
+                    b.vx *= -1;
+                    b.x = b.x < b.size ? b.size : canvas.width - b.size;
+                    return true;
                 }
-            } else {
-                if (ball.x < ball.size || ball.x > canvas.width - ball.size) ball.vx *= -1;
-                if (ball.y < ball.size || ball.y > canvas.height - ball.size) ball.vy *= -1;
-                if (ball.vy > 0 && ball.y + ball.size > paddle.y && ball.y - ball.size < paddle.y + paddle.height + 3) {
-                    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-                        ball.vy *= -1.02; 
-                        const hitPoint = (ball.x - (paddle.x + paddle.width/2)) / (paddle.width/2);
-                        ball.vx += hitPoint * 4;
-                    }
+                if (b.y < b.size || b.y > canvas.height - b.size) {
+                    b.vy *= -1;
+                    b.y = b.y < b.size ? b.size : canvas.height - b.size;
+                    return true;
                 }
-            }
+                return false;
+            };
 
-            // 繪製球體留下的細刮開路徑
-            trails.push({ x: ball.x, y: ball.y, life: 1 });
-            for (let i = trails.length - 1; i >= 0; i--) {
-                let t = trails[i];
-                t.life -= 0.005; // 讓細線條留存更久一點
-                if (t.life <= 0) trails.splice(i, 1);
-                else {
+            const collided = bounce(ball);
+
+            // 更新量子疊加態 (稍微偏移，模擬不確定性)
+            quantumStates.forEach((s, i) => {
+                if (collided) { // 量子坍縮效應：碰撞時重置到主球體位置
+                    s.x = ball.x;
+                    s.y = ball.y;
+                    s.vx = ball.vx;
+                    s.vy = ball.vy;
+                }
+                const drift = (i + 1) * 0.1;
+                s.vx += (Math.random() - 0.5) * drift;
+                s.vy += (Math.random() - 0.5) * drift;
+                s.x += s.vx;
+                s.y += s.vy;
+                bounce(s);
+            });
+
+            // 記錄主路徑點
+            trails.push({ x: ball.x, y: ball.y, life: 1, states: JSON.parse(JSON.stringify(quantumStates)) });
+
+            // --- 處理量子刮除 (利用多重線條模擬波函數) ---
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            
+            if (trails.length > 1) {
+                for (let i = 1; i < trails.length; i++) {
+                    const t1 = trails[i - 1];
+                    const t2 = trails[i];
+                    
+                    // 繪製主實線路徑
                     ctx.beginPath();
-                    ctx.arc(t.x, t.y, ball.size * (0.5 + t.life * 0.5), 0, Math.PI * 2);
-                    ctx.fill();
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${t2.life})`;
+                    ctx.lineWidth = ball.size * 2 * (0.4 + t2.life * 0.6);
+                    ctx.moveTo(t1.x, t1.y);
+                    ctx.lineTo(t2.x, t2.y);
+                    ctx.stroke();
+
+                    // 繪製微弱的量子機率波 (虛線感)
+                    t2.states.forEach((s2, idx) => {
+                        const s1 = t1.states[idx];
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${t2.life * 0.2})`;
+                        ctx.lineWidth = ball.size * 0.5;
+                        ctx.moveTo(s1.x, s1.y);
+                        ctx.lineTo(s2.x, s2.y);
+                        ctx.stroke();
+                    });
+                    
+                    trails[i].life -= 0.003; 
                 }
             }
 
-            // 繪製當前球體
+            while (trails.length > 0 && trails[0].life <= 0) {
+                trails.shift();
+            }
+
+            // 繪製量子中心 (核心點)
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = '#ffffff';
             ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
+            ctx.arc(ball.x, ball.y, 1.2, 0, Math.PI * 2);
             ctx.fill();
 
             requestAnimationFrame(animate);
