@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XIAOSTUDIO | Coming Soon</title>
     
-    <!-- 分頁圖示 (Favicon) - 使用自定義極簡 SVG -->
+    <!-- 分頁圖示 (Favicon) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,6 +24,32 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+        }
+
+        /* 影片背景容器 */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            /* 調低透明度以維持品牌文字的可讀性 */
+            opacity: 0.1;
+            filter: grayscale(100%) contrast(120%);
         }
 
         /* 核心進場動畫：由模糊分散到清晰集中 */
@@ -106,9 +132,18 @@
 </head>
 <body>
 
+    <!-- 影片背景層 -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+            <source src="https://cdn.pixabay.com/video/2025/06/17/286278_small.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- 膠片顆粒質感層 -->
     <div class="grain-overlay"></div>
 
-    <main class="flex flex-col items-center px-10">
+    <main class="flex flex-col items-center px-10 relative z-10">
         <header>
             <h1 class="brand-header text-2xl md:text-3xl uppercase">
                 XIAOSTUDIO
@@ -130,13 +165,15 @@
 
         <footer class="fixed bottom-10 left-0 w-full text-center">
             <div class="flex flex-col space-y-3">
+                <!-- 信箱連結移至上方 -->
+                <a href="mailto:jewuenxiao@gmail.com" 
+                   class="text-[10px] md:text-[12px] tracking-[0.4em] text-gray-600 hover:text-white transition-all duration-1000 uppercase">
+                    jewuenxiao@gmail.com
+                </a>
+                <!-- 網址連結移至下方 -->
                 <a href="https://xiaostudio.xyz" 
                    class="text-[8px] md:text-[9px] tracking-[0.6em] text-gray-500 hover:text-white transition-all duration-1000 uppercase">
                     www.xiaostudio.xyz
-                </a>
-                <a href="mailto:jewuenxiao@gmail.com" 
-                   class="text-[7px] md:text-[8px] tracking-[0.4em] text-gray-600 hover:text-white transition-all duration-1000 uppercase">
-                    jewuenxiao@gmail.com
                 </a>
             </div>
         </footer>
