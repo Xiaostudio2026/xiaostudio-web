@@ -34,7 +34,6 @@
             color: #1a1a1a;
         }
 
-        /* 負片切換按鈕 */
         .mode-toggle {
             position: fixed;
             bottom: 40px;
@@ -69,7 +68,6 @@
             border-color: black;
         }
 
-        /* Brand Typography Animations */
         @keyframes revealBrand {
             0% { filter: blur(20px); letter-spacing: 2em; opacity: 0; }
             100% { filter: blur(0px); letter-spacing: 0.8em; opacity: 1; }
@@ -122,7 +120,6 @@
             z-index: 20; 
         }
 
-        /* Quantum Data Panel */
         .quantum-data {
             position: fixed;
             top: 40px;
@@ -154,13 +151,12 @@
 
     <div class="grain-overlay"></div>
     
-    <!-- Data Display Layer -->
     <div class="quantum-data">
-        <div>PARTICLE_ID: 0x9F_STU</div>
+        <div>SYSTEM_STATUS: ARCHIVING_TRAILS</div>
+        <div id="data-nodes">NODES: 0</div>
         <div id="data-pos">POS: [0.00, 0.00]</div>
         <div id="data-mom">MOM: 0.000 kg·m/s</div>
         <div id="data-prob">Ψ_PROB: 0.00%</div>
-        <div id="data-fluc">FLUCTUATION: 0.00</div>
         <div id="data-uncert">ΔxΔp ≥ ℏ/2</div>
     </div>
 
@@ -208,56 +204,47 @@
         const body = document.getElementById('body');
         const modeBtn = document.getElementById('mode-btn');
         
-        // Data Panel DOM
         const elPos = document.getElementById('data-pos');
         const elMom = document.getElementById('data-mom');
         const elProb = document.getElementById('data-prob');
-        const elFluc = document.getElementById('data-fluc');
+        const elNodes = document.getElementById('data-nodes');
 
         let isInverted = false;
 
         let ball = {
-            x: 0,
-            y: 0,
-            vx: 0,
-            vy: 0,
-            speed: 5.5,
-            size: 2.5
+            x: 0, y: 0, vx: 0, vy: 0,
+            speed: 4.5, size: 2.0
         };
 
-        let mouse = {
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2
-        };
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        let virtualCenter = { x: 0, y: 0, offsetX: 0, offsetY: 0 };
+        
+        let quantumStates = [];
+        const nodeCount = Math.floor(Math.random() * 5) + 6; // 增加到 6-10 個節點
 
-        let virtualCenter = {
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2,
-            offsetX: 0,
-            offsetY: 0
-        };
-
-        let quantumStates = [
-            { x: 0, y: 0, vx: 0, vy: 0 },
-            { x: 0, y: 0, vx: 0, vy: 0 },
-            { x: 0, y: 0, vx: 0, vy: 0 }
-        ];
-
-        let trails = []; 
+        let lastPos = { x: 0, y: 0, states: [] };
         let time = 0;
 
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            // 視窗調整大小時清空畫布，以便重新開始留痕
+            clearCanvas();
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = isInverted ? '#e5e5e5' : '#1a1a1a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
         window.addEventListener('resize', resize);
 
-        // 負片效果切換
         modeBtn.addEventListener('click', () => {
             isInverted = !isInverted;
             body.classList.toggle('invert-mode');
             modeBtn.innerText = isInverted ? 'Normal View' : 'Invert View';
+            // 切換模式時，為了視覺統一，清空畫布
+            clearCanvas();
         });
 
         function handleMove(clientX, clientY) { 
@@ -279,13 +266,23 @@
             ball.vx = Math.cos(angle) * ball.speed;
             ball.vy = Math.sin(angle) * ball.speed;
             
-            quantumStates.forEach(s => {
-                s.x = ball.x;
-                s.y = ball.y;
-                s.vx = ball.vx;
-                s.vy = ball.vy;
-            });
+            for(let i = 0; i < nodeCount; i++) {
+                quantumStates.push({
+                    x: ball.x,
+                    y: ball.y,
+                    vx: ball.vx,
+                    vy: ball.vy,
+                    drift: 0.05 + Math.random() * 0.15,
+                    friction: 0.96 + Math.random() * 0.03
+                });
+            }
 
+            lastPos.x = ball.x;
+            lastPos.y = ball.y;
+            lastPos.states = quantumStates.map(s => ({x: s.x, y: s.y}));
+
+            elNodes.innerText = `NODES: ${nodeCount}`;
+            clearCanvas(); // 初始填充背景
             animate();
         }
 
@@ -297,22 +294,15 @@
             const dist = Math.sqrt((mouse.x - ball.x)**2 + (mouse.y - ball.y)**2);
             const prob = Math.max(0, 100 - (dist / 10)).toFixed(2);
             elProb.innerText = `Ψ_PROB: ${prob}%`;
-
-            const fluctuation = Math.sqrt(virtualCenter.offsetX**2 + virtualCenter.offsetY**2).toFixed(2);
-            elFluc.innerText = `FLUCTUATION: ${fluctuation}`;
         }
 
         function animate() {
             time += 0.05;
 
-            // 清除背景 (根據模式切換顏色)
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = isInverted ? '#e5e5e5' : '#1a1a1a';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 注意：不再每幀使用 fillRect 覆蓋背景，從而留下軌跡
 
-            // 更新虛擬中心
-            virtualCenter.offsetX = Math.sin(time * 0.7) * 40 + (Math.random() - 0.5) * 60;
-            virtualCenter.offsetY = Math.cos(time * 0.8) * 40 + (Math.random() - 0.5) * 60;
+            virtualCenter.offsetX = Math.sin(time * 0.7) * 50 + (Math.random() - 0.5) * 100;
+            virtualCenter.offsetY = Math.cos(time * 0.8) * 50 + (Math.random() - 0.5) * 100;
             virtualCenter.x = mouse.x + virtualCenter.offsetX;
             virtualCenter.y = mouse.y + virtualCenter.offsetY;
 
@@ -325,7 +315,7 @@
             while (diff < -Math.PI) diff += Math.PI * 2;
             while (diff > Math.PI) diff -= Math.PI * 2;
             
-            const turnSpeed = 0.04;
+            const turnSpeed = 0.03;
             const newAngle = currentAngle + diff * turnSpeed;
             ball.vx = Math.cos(newAngle) * ball.speed;
             ball.vy = Math.sin(newAngle) * ball.speed;
@@ -334,77 +324,59 @@
             ball.y += ball.vy;
 
             const bounce = (b) => {
-                if (b.x < b.size || b.x > canvas.width - b.size) {
-                    b.vx *= -1;
-                    b.x = b.x < b.size ? b.size : canvas.width - b.size;
-                    return true;
-                }
-                if (b.y < b.size || b.y > canvas.height - b.size) {
-                    b.vy *= -1;
-                    b.y = b.y < b.size ? b.size : canvas.height - b.size;
-                    return true;
-                }
-                return false;
+                let hit = false;
+                if (b.x < 0 || b.x > canvas.width) { b.vx *= -1; hit = true; }
+                if (b.y < 0 || b.y > canvas.height) { b.vy *= -1; hit = true; }
+                return hit;
             };
 
             const collided = bounce(ball);
 
-            quantumStates.forEach((s, i) => {
+            quantumStates.forEach((s) => {
                 if (collided) {
-                    s.x = ball.x;
-                    s.y = ball.y;
-                    s.vx = ball.vx;
-                    s.vy = ball.vy;
+                    s.vx = ball.vx + (Math.random() - 0.5) * 3;
+                    s.vy = ball.vy + (Math.random() - 0.5) * 3;
                 }
-                const drift = (i + 1) * 0.15;
-                s.vx += (Math.random() - 0.5) * drift;
-                s.vy += (Math.random() - 0.5) * drift;
+                s.vx += (Math.random() - 0.5) * s.drift;
+                s.vy += (Math.random() - 0.5) * s.drift;
+                s.vx *= s.friction;
+                s.vy *= s.friction;
+                s.vx += (ball.x - s.x) * 0.0012;
+                s.vy += (ball.y - s.y) * 0.0012;
                 s.x += s.vx;
                 s.y += s.vy;
                 bounce(s);
             });
 
-            trails.push({ x: ball.x, y: ball.y, life: 1, states: JSON.parse(JSON.stringify(quantumStates)) });
-
-            // 繪製軌跡 (核心：根據 isInverted 變換軌跡顏色)
-            // 在負片模式下使用深灰色/黑色軌跡，在普通模式下使用白色軌跡
+            // 直接在當前畫布繪製線段
             const strokeBaseColor = isInverted ? '0, 0, 0' : '255, 255, 255';
-            
-            if (trails.length > 1) {
-                for (let i = 1; i < trails.length; i++) {
-                    const t1 = trails[i - 1];
-                    const t2 = trails[i];
-                    
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(${strokeBaseColor}, ${t2.life * 0.4})`;
-                    ctx.lineWidth = ball.size * 2 * (0.4 + t2.life * 0.6);
-                    ctx.moveTo(t1.x, t1.y);
-                    ctx.lineTo(t2.x, t2.y);
-                    ctx.stroke();
+            const flicker = 0.7 + Math.random() * 0.3;
 
-                    t2.states.forEach((s2, idx) => {
-                        const s1 = t1.states[idx];
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(${strokeBaseColor}, ${t2.life * 0.15})`;
-                        ctx.lineWidth = ball.size * 0.5;
-                        ctx.moveTo(s1.x, s1.y);
-                        ctx.lineTo(s2.x, s2.y);
-                        ctx.stroke();
-                    });
-                    
-                    trails[i].life -= 0.003; 
-                }
-            }
-
-            while (trails.length > 0 && trails[0].life <= 0) {
-                trails.shift();
-            }
-
-            // 繪製核心粒子
-            ctx.fillStyle = isInverted ? '#000000' : '#ffffff';
+            // 繪製主粒子路徑線段
             ctx.beginPath();
-            ctx.arc(ball.x, ball.y, 1.2, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.strokeStyle = `rgba(${strokeBaseColor}, ${0.08 * flicker})`;
+            ctx.lineWidth = ball.size;
+            ctx.moveTo(lastPos.x, lastPos.y);
+            ctx.lineTo(ball.x, ball.y);
+            ctx.stroke();
+
+            // 繪製量子態分身路徑線段
+            quantumStates.forEach((s, idx) => {
+                const lp = lastPos.states[idx];
+                if (!lp) return;
+                
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(${strokeBaseColor}, ${0.03 * flicker})`;
+                ctx.lineWidth = ball.size * 0.4;
+                ctx.moveTo(lp.x, lp.y);
+                ctx.lineTo(s.x, s.y);
+                ctx.stroke();
+            });
+
+            // 更新上一次的位置
+            lastPos.x = ball.x;
+            lastPos.y = ball.y;
+            lastPos.states = quantumStates.map(s => ({x: s.x, y: s.y}));
 
             updateData();
             requestAnimationFrame(animate);
