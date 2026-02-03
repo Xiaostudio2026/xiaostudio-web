@@ -26,6 +26,47 @@
             overflow: hidden;
             touch-action: none;
             cursor: none; 
+            transition: background-color 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        body.invert-mode {
+            background-color: #e5e5e5;
+            color: #1a1a1a;
+        }
+
+        /* 負片切換按鈕 */
+        .mode-toggle {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.5s ease;
+        }
+
+        .mode-toggle:hover {
+            background: white;
+            color: black;
+            border-color: white;
+        }
+
+        body.invert-mode .mode-toggle {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.invert-mode .mode-toggle:hover {
+            background: black;
+            color: white;
+            border-color: black;
         }
 
         /* Brand Typography Animations */
@@ -52,7 +93,7 @@
             animation: revealText 4s cubic-bezier(0.19, 1, 0.22, 1) forwards 1s;
             opacity: 0;
             letter-spacing: 0.5em; 
-            color: #e5e5e5;
+            color: inherit;
             z-index: 40;
         }
 
@@ -93,6 +134,11 @@
             letter-spacing: 0.1em;
             pointer-events: none;
             line-height: 2;
+            transition: color 1s ease;
+        }
+
+        body.invert-mode .quantum-data {
+            color: rgba(0, 0, 0, 0.4);
         }
 
         @media (max-width: 640px) {
@@ -100,10 +146,11 @@
             .status-text { letter-spacing: 0.3em; }
             .service-item { letter-spacing: 0.1em; font-size: 10px; }
             .quantum-data { top: 20px; left: 20px; font-size: 8px; }
+            .mode-toggle { bottom: 20px; right: 20px; font-size: 8px; }
         }
     </style>
 </head>
-<body>
+<body id="body">
 
     <div class="grain-overlay"></div>
     
@@ -119,6 +166,8 @@
 
     <canvas id="canvas"></canvas>
 
+    <button id="mode-btn" class="mode-toggle uppercase">Invert View</button>
+
     <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none">
         <header class="mb-12">
             <h1 class="brand-header text-4xl md:text-6xl uppercase">
@@ -127,29 +176,28 @@
         </header>
 
         <section class="flex flex-col items-center text-center">
-            <!-- Core Service Items -->
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-12 max-w-3xl">
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Visual Design</span>
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">•</span>
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Motion Graphics</span>
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">•</span>
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Graphic Design</span>
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">•</span>
-                <span class="service-item text-[11px] md:text-[13px] text-gray-400 uppercase">Product Cinematography</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">Visual Design</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">•</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">Motion Graphics</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">•</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">Graphic Design</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">•</span>
+                <span class="service-item text-[11px] md:text-[13px] opacity-60 uppercase">Product Cinematography</span>
             </div>
 
-            <p class="status-text text-[20px] md:text-2xl font-light text-white uppercase leading-[2.5] mb-8">
+            <p class="status-text text-[20px] md:text-2xl font-light uppercase leading-[2.5] mb-8">
                 Refining the digital experience
             </p>
-            <p class="status-text text-[16px] md:text-lg font-normal text-gray-400 uppercase">
+            <p class="status-text text-[16px] md:text-lg font-normal opacity-60 uppercase">
                 Est. 2026 — Launching soon
             </p>
         </section>
 
         <footer class="fixed bottom-10 left-0 w-full text-center z-40">
             <div class="flex flex-col space-y-3">
-                <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[10px] md:text-[12px] tracking-[0.4em] text-gray-400 hover:text-white transition-all duration-1000 uppercase">jewuenxiao@gmail.com</a>
-                <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[11px] md:text-[13px] tracking-[0.6em] text-gray-400 hover:text-white transition-all duration-1000 uppercase">www.xiaostudio.xyz</a>
+                <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[10px] md:text-[12px] tracking-[0.4em] opacity-40 hover:opacity-100 transition-all duration-1000 uppercase">jewuenxiao@gmail.com</a>
+                <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[11px] md:text-[13px] tracking-[0.6em] opacity-40 hover:opacity-100 transition-all duration-1000 uppercase">www.xiaostudio.xyz</a>
             </div>
         </footer>
     </main>
@@ -157,12 +205,16 @@
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        const body = document.getElementById('body');
+        const modeBtn = document.getElementById('mode-btn');
         
         // Data Panel DOM
         const elPos = document.getElementById('data-pos');
         const elMom = document.getElementById('data-mom');
         const elProb = document.getElementById('data-prob');
         const elFluc = document.getElementById('data-fluc');
+
+        let isInverted = false;
 
         let ball = {
             x: 0,
@@ -178,7 +230,6 @@
             y: window.innerHeight / 2
         };
 
-        // Virtual center of gravity with fluctuation
         let virtualCenter = {
             x: window.innerWidth / 2,
             y: window.innerHeight / 2,
@@ -198,16 +249,16 @@
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            resetMask();
-        }
-
-        function resetMask() {
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = '#000'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
         window.addEventListener('resize', resize);
+
+        // 負片效果切換
+        modeBtn.addEventListener('click', () => {
+            isInverted = !isInverted;
+            body.classList.toggle('invert-mode');
+            modeBtn.innerText = isInverted ? 'Normal View' : 'Invert View';
+        });
 
         function handleMove(clientX, clientY) { 
             mouse.x = clientX;
@@ -254,7 +305,12 @@
         function animate() {
             time += 0.05;
 
-            // Update virtual center fluctuation
+            // 清除背景 (根據模式切換顏色)
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = isInverted ? '#e5e5e5' : '#1a1a1a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 更新虛擬中心
             virtualCenter.offsetX = Math.sin(time * 0.7) * 40 + (Math.random() - 0.5) * 60;
             virtualCenter.offsetY = Math.cos(time * 0.8) * 40 + (Math.random() - 0.5) * 60;
             virtualCenter.x = mouse.x + virtualCenter.offsetX;
@@ -310,9 +366,9 @@
 
             trails.push({ x: ball.x, y: ball.y, life: 1, states: JSON.parse(JSON.stringify(quantumStates)) });
 
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
+            // 繪製軌跡 (核心：根據 isInverted 變換軌跡顏色)
+            // 在負片模式下使用深灰色/黑色軌跡，在普通模式下使用白色軌跡
+            const strokeBaseColor = isInverted ? '0, 0, 0' : '255, 255, 255';
             
             if (trails.length > 1) {
                 for (let i = 1; i < trails.length; i++) {
@@ -320,7 +376,7 @@
                     const t2 = trails[i];
                     
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${t2.life})`;
+                    ctx.strokeStyle = `rgba(${strokeBaseColor}, ${t2.life * 0.4})`;
                     ctx.lineWidth = ball.size * 2 * (0.4 + t2.life * 0.6);
                     ctx.moveTo(t1.x, t1.y);
                     ctx.lineTo(t2.x, t2.y);
@@ -329,7 +385,7 @@
                     t2.states.forEach((s2, idx) => {
                         const s1 = t1.states[idx];
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${t2.life * 0.2})`;
+                        ctx.strokeStyle = `rgba(${strokeBaseColor}, ${t2.life * 0.15})`;
                         ctx.lineWidth = ball.size * 0.5;
                         ctx.moveTo(s1.x, s1.y);
                         ctx.lineTo(s2.x, s2.y);
@@ -344,8 +400,8 @@
                 trails.shift();
             }
 
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = '#ffffff';
+            // 繪製核心粒子
+            ctx.fillStyle = isInverted ? '#000000' : '#ffffff';
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, 1.2, 0, Math.PI * 2);
             ctx.fill();
