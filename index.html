@@ -10,10 +10,10 @@
     <meta name="theme-color" content="#1a1a1a">
     <link rel="icon" sizes="192x192" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
     
-    <!-- Favicon (一般瀏覽器頁籤) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
     
-    <!-- Apple Touch Icon (iOS 手機主畫面) -->
+    <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,7 +30,7 @@
         body.light-mode {
             --bg-color: #f5f5f5;
             --text-color: #1a1a1a;
-            --sub-text: rgba(0, 0, 0, 0.4);
+            --sub-text: rgba(0, 0, 0, 0.5);
         }
 
         body {
@@ -48,40 +48,20 @@
             transition: background-color 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        /* 品牌字體動畫 */
         @keyframes revealBrand {
             0% { filter: blur(20px); letter-spacing: 2em; opacity: 0; }
             100% { filter: blur(0px); letter-spacing: 0.8em; opacity: 1; }
         }
 
-        @keyframes revealText {
-            0% { filter: blur(10px); opacity: 0; }
-            100% { filter: blur(0px); opacity: 0.8; }
-        }
-
         .brand-header {
             font-weight: 200;
-            text-indent: 0.8em; 
+            padding-left: 0.8em; 
             animation: revealBrand 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             white-space: nowrap;
             pointer-events: none;
             z-index: 40; 
             color: var(--text-color);
-        }
-
-        .status-text {
-            animation: revealText 4s cubic-bezier(0.19, 1, 0.22, 1) forwards 1s;
-            opacity: 0;
-            letter-spacing: 0.5em; 
-            z-index: 40;
-        }
-
-        .service-item {
-            animation: revealText 5s cubic-bezier(0.19, 1, 0.22, 1) forwards 1.5s;
-            opacity: 0;
-            letter-spacing: 0.2em;
-            font-weight: 200;
-            z-index: 40;
+            text-align: center;
         }
 
         #canvas {
@@ -92,11 +72,9 @@
             pointer-events: none;
         }
 
-        /* 量子數據面板 */
         .quantum-data {
             position: fixed;
-            top: 40px;
-            left: 40px;
+            top: 40px; left: 40px;
             z-index: 60;
             font-family: 'JetBrains Mono', monospace;
             font-size: 10px;
@@ -106,38 +84,24 @@
             line-height: 2;
         }
 
-        /* 主題切換按鈕 */
         .theme-toggle {
             position: fixed;
-            top: 40px;
-            right: 40px;
+            top: 40px; right: 40px;
             z-index: 100;
             cursor: pointer;
             padding: 10px;
-            transition: opacity 0.3s ease;
             opacity: 0.6;
-            background: none;
-            border: none;
-            outline: none;
+            background: none; border: none; outline: none;
         }
 
-        .theme-toggle:hover {
-            opacity: 1;
-        }
-
+        .theme-toggle:hover { opacity: 1; }
         .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: var(--text-color);
-            stroke-width: 1.5;
-            transition: stroke 0.8s ease;
+            width: 20px; height: 20px;
+            fill: none; stroke: var(--text-color); stroke-width: 1.5;
         }
 
         @media (max-width: 640px) {
-            .brand-header { letter-spacing: 0.4em !important; text-indent: 0.4em; font-size: 2.25rem; } 
-            .status-text { letter-spacing: 0.3em; }
-            .service-item { letter-spacing: 0.1em; font-size: 10px; }
+            .brand-header { letter-spacing: 0.4em !important; padding-left: 0.4em; font-size: 2.25rem; } 
             .quantum-data { top: 20px; left: 20px; font-size: 8px; }
             .theme-toggle { top: 20px; right: 20px; }
         }
@@ -152,46 +116,38 @@
     </button>
     
     <div class="quantum-data">
-        <div>PARTICLE_ID: 0x9F_STU</div>
-        <div id="data-pos">POS: [0.00, 0.00]</div>
-        <div id="data-mom">MOM: 0.000 kg·m/s</div>
-        <div id="data-prob">Ψ_PROB: 0.00%</div>
-        <div id="data-fluc">FLUCTUATION: 0.00</div>
-        <div id="data-lines">LINES: 0</div>
+        <div>CORE_ID: XIAO_STU_v3.3</div>
+        <div id="data-pos">POS: [0, 0]</div>
+        <div id="data-mom">MOM: 0.000</div>
+        <div id="data-total">NODES: 0</div>
+        <div id="data-field">CONTENT: UPDATED</div>
     </div>
 
     <canvas id="canvas"></canvas>
 
-    <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none">
-        <header class="mb-12">
-            <h1 class="brand-header text-4xl md:text-6xl uppercase">
-                XIAOSTUDIO
-            </h1>
+    <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none w-full">
+        <header class="mb-12 w-full flex justify-center">
+            <h1 class="brand-header text-4xl md:text-6xl uppercase">XIAOSTUDIO</h1>
         </header>
 
         <section class="flex flex-col items-center text-center">
-            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-12 max-w-3xl">
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">Visual Design</span>
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">•</span>
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">Motion Graphics</span>
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">•</span>
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">Graphic Design</span>
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">•</span>
-                <span class="service-item text-[11px] md:text-[13px] uppercase opacity-60">Product Cinematography</span>
+            <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mb-12 max-w-4xl opacity-60">
+                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Visual Design</span>
+                <span class="text-xs opacity-30">•</span>
+                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Motion Graphics</span>
+                <span class="text-xs opacity-30">•</span>
+                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Graphic Design</span>
+                <span class="text-xs opacity-30">•</span>
+                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Product Photography</span>
             </div>
-
-            <p class="status-text text-[20px] md:text-2xl font-light uppercase leading-[2.5] mb-8">
-                Refining the digital experience
-            </p>
-            <p class="status-text text-[16px] md:text-lg font-normal opacity-50 uppercase">
-                Est. 2026 — Launching soon
-            </p>
+            <p class="text-[20px] md:text-2xl font-light uppercase tracking-[0.5em] mb-4">Refining the digital experience</p>
+            <p class="text-[14px] opacity-40 uppercase tracking-[0.3em]">Launching 2026</p>
         </section>
 
         <footer class="fixed bottom-10 left-0 w-full text-center z-40">
-            <div class="flex flex-col space-y-3">
-                <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[10px] md:text-[12px] tracking-[0.4em] opacity-40 hover:opacity-100 transition-all duration-1000 uppercase">jewuenxiao@gmail.com</a>
-                <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[11px] md:text-[13px] tracking-[0.6em] opacity-40 hover:opacity-100 transition-all duration-1000 uppercase">www.xiaostudio.xyz</a>
+            <div class="flex flex-col space-y-3 opacity-40">
+                <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[10px] tracking-[0.4em] hover:opacity-100 uppercase transition-opacity duration-500">jewuenxiao@gmail.com</a>
+                <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[11px] tracking-[0.6em] hover:opacity-100 uppercase transition-opacity duration-500">www.xiaostudio.xyz</a>
             </div>
         </footer>
     </main>
@@ -200,12 +156,9 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const toggleBtn = document.getElementById('theme-toggle');
-        
         const elPos = document.getElementById('data-pos');
         const elMom = document.getElementById('data-mom');
-        const elProb = document.getElementById('data-prob');
-        const elFluc = document.getElementById('data-fluc');
-        const elLines = document.getElementById('data-lines');
+        const elTotal = document.getElementById('data-total');
 
         let isLightMode = false;
         toggleBtn.addEventListener('click', () => {
@@ -214,45 +167,30 @@
         });
 
         let ball = {
-            x: 0,
-            y: 0,
-            vx: 0,
-            vy: 0,
-            speed: 4.0,
-            size: 1.0
+            x: 0, y: 0,
+            vx: 0, vy: 0,
+            speed: 4.5,
+            friction: 0.985
         };
 
-        let mouse = {
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2
-        };
-
-        let virtualCenter = {
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2,
-            offsetX: 0,
-            offsetY: 0
-        };
-
-        let quantumStates = [];
-        const lineCount = Math.floor(Math.random() * 8) + 5;
-
-        let trails = []; 
+        let mouse = { x: -1000, y: -1000, active: false };
+        let history = []; 
+        let quantumBursts = []; 
         let time = 0;
-        let frameCount = 0;
 
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            if (ball.x === 0) {
+                ball.x = canvas.width / 2;
+                ball.y = canvas.height / 2;
+            }
         }
 
         window.addEventListener('resize', resize);
-
         function handleMove(clientX, clientY) { 
-            mouse.x = clientX;
-            mouse.y = clientY;
+            mouse.x = clientX; mouse.y = clientY; mouse.active = true;
         }
-
         window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
         window.addEventListener('touchmove', e => {
             handleMove(e.touches[0].clientX, e.touches[0].clientY);
@@ -261,132 +199,103 @@
 
         function init() {
             resize();
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height / 2;
             const angle = Math.random() * Math.PI * 2;
             ball.vx = Math.cos(angle) * ball.speed;
             ball.vy = Math.sin(angle) * ball.speed;
-            
-            for(let i=0; i<lineCount; i++) {
-                quantumStates.push({
-                    x: ball.x,
-                    y: ball.y,
-                    vx: ball.vx + (Math.random()-0.5),
-                    vy: ball.vy + (Math.random()-0.5),
-                    phase: Math.random() * Math.PI * 2
-                });
-            }
-
             animate();
         }
 
         function updateData() {
-            elPos.innerText = `POS: [${ball.x.toFixed(2)}, ${ball.y.toFixed(2)}]`;
-            const momentum = Math.sqrt(ball.vx ** 2 + ball.vy ** 2).toFixed(3);
-            elMom.innerText = `MOM: ${momentum} kg·m/s`;
-            
-            const dist = Math.sqrt((mouse.x - ball.x)**2 + (mouse.y - ball.y)**2);
-            const prob = Math.max(0, 100 - (dist / 12)).toFixed(2);
-            elProb.innerText = `Ψ_PROB: ${prob}%`;
-
-            const fluctuation = Math.sqrt(virtualCenter.offsetX**2 + virtualCenter.offsetY**2).toFixed(2);
-            elFluc.innerText = `FLUCTUATION: ${fluctuation}`;
-            elLines.innerText = `LINES: ${lineCount + 1}`;
+            elPos.innerText = `POS: [${Math.floor(ball.x)}, ${Math.floor(ball.y)}]`;
+            elMom.innerText = `MOM: ${Math.sqrt(ball.vx**2 + ball.vy**2).toFixed(3)}`;
+            elTotal.innerText = `NODES: ${history.length + quantumBursts.length}`;
         }
 
         function animate() {
-            time += 0.015;
-            frameCount++;
-
+            time += 0.01;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const autoX = Math.sin(time * 0.25) * (canvas.width * 0.35) + (canvas.width / 2);
-            const autoY = Math.cos(time * 0.35) * (canvas.height * 0.35) + (canvas.height / 2);
-            
-            const mixFactor = 0.85;
-            virtualCenter.offsetX = Math.sin(time * 1.1) * 70 + (Math.random() - 0.5) * 80;
-            virtualCenter.offsetY = Math.cos(time * 1.3) * 70 + (Math.random() - 0.5) * 80;
-            
-            virtualCenter.x = (mouse.x * (1-mixFactor) + autoX * mixFactor) + virtualCenter.offsetX;
-            virtualCenter.y = (mouse.y * (1-mixFactor) + autoY * mixFactor) + virtualCenter.offsetY;
+            const autoX = Math.sin(time * 0.4) * (canvas.width * 0.45) + (canvas.width / 2);
+            const autoY = Math.cos(time * 0.3) * (canvas.height * 0.45) + (canvas.height / 2);
 
-            const dx = virtualCenter.x - ball.x;
-            const dy = virtualCenter.y - ball.y;
-            const targetAngle = Math.atan2(dy, dx);
-            const currentAngle = Math.atan2(ball.vy, ball.vx);
-            
-            let diff = targetAngle - currentAngle;
-            while (diff < -Math.PI) diff += Math.PI * 2;
-            while (diff > Math.PI) diff -= Math.PI * 2;
-            
-            const turnSpeed = 0.03;
-            const newAngle = currentAngle + diff * turnSpeed;
-            ball.vx = Math.cos(newAngle) * ball.speed;
-            ball.vy = Math.sin(newAngle) * ball.speed;
+            let targetX = autoX;
+            let targetY = autoY;
 
+            if (mouse.active) {
+                const distToMouse = Math.sqrt((mouse.x - ball.x)**2 + (mouse.y - ball.y)**2);
+                const influence = Math.min(1, 600 / (distToMouse + 200));
+                targetX = autoX * (1 - influence) + mouse.x * influence;
+                targetY = autoY * (1 - influence) + mouse.y * influence;
+            }
+
+            ball.vx += (targetX - ball.x) * 0.003;
+            ball.vy += (targetY - ball.y) * 0.003;
+            ball.vx *= ball.friction;
+            ball.vy *= ball.friction;
             ball.x += ball.vx;
             ball.y += ball.vy;
 
-            const bounce = (b) => {
-                if (b.x < 0 || b.x > canvas.width) b.vx *= -1;
-                if (b.y < 0 || b.y > canvas.height) b.vy *= -1;
-            };
+            const b = 5;
+            if (ball.x < b || ball.x > canvas.width - b) ball.vx *= -1;
+            if (ball.y < b || ball.y > canvas.height - b) ball.vy *= -1;
 
-            bounce(ball);
+            history.push({ x: ball.x, y: ball.y });
 
-            quantumStates.forEach((s, i) => {
-                const driftX = Math.sin(time * 1.8 + s.phase) * 1.2;
-                const driftY = Math.cos(time * 1.8 + s.phase) * 1.2;
-                s.vx = ball.vx + driftX;
-                s.vy = ball.vy + driftY;
-                s.x += s.vx;
-                s.y += s.vy;
-                bounce(s);
-            });
-
-            if (frameCount % 2 === 0) {
-                trails.push({ 
-                    x: ball.x, 
-                    y: ball.y, 
-                    states: quantumStates.map(s => ({x: s.x, y: s.y})) 
+            if (Math.random() > 0.6) {
+                const angle = Math.random() * Math.PI * 2;
+                const length = Math.random() * 180 + 20;
+                quantumBursts.push({
+                    x1: ball.x,
+                    y1: ball.y,
+                    x2: ball.x + Math.cos(angle) * length,
+                    y2: ball.y + Math.sin(angle) * length,
+                    opacity: Math.random() * 0.4 + 0.1
                 });
             }
 
-            const colorRgb = isLightMode ? "0, 0, 0" : "255, 255, 255";
+            if (history.length > 5000) history.shift();
+            if (quantumBursts.length > 1000) quantumBursts.shift();
+
+            const color = isLightMode ? "0, 0, 0" : "255, 255, 255";
+            const burstAlphaScale = isLightMode ? 0.35 : 0.2;
+            const historyAlpha = isLightMode ? 0.25 : 0.15;
+            const lineWidthScale = isLightMode ? 0.8 : 0.6;
+
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
-            
-            if (trails.length > 1) {
-                const baseAlpha = isLightMode ? 0.11 : 0.20;
-                
+
+            // 1. 繪製發散隨機線條
+            quantumBursts.forEach(b => {
                 ctx.beginPath();
-                ctx.strokeStyle = `rgba(${colorRgb}, ${baseAlpha})`;
-                ctx.lineWidth = 0.8;
-                for (let i = 1; i < trails.length; i++) {
-                    ctx.moveTo(trails[i-1].x, trails[i-1].y);
-                    ctx.lineTo(trails[i].x, trails[i].y);
+                ctx.strokeStyle = `rgba(${color}, ${b.opacity * burstAlphaScale})`;
+                ctx.lineWidth = isLightMode ? 0.4 : 0.3;
+                ctx.moveTo(b.x1, b.y1);
+                ctx.lineTo(b.x2, b.y2);
+                ctx.stroke();
+            });
+
+            // 2. 繪製主軌跡
+            if (history.length > 1) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(${color}, ${historyAlpha})`;
+                ctx.lineWidth = lineWidthScale;
+                ctx.moveTo(history[0].x, history[0].y);
+                for (let i = 1; i < history.length; i++) {
+                    ctx.lineTo(history[i].x, history[i].y);
                 }
                 ctx.stroke();
-
-                for (let idx = 0; idx < lineCount; idx++) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(${colorRgb}, ${baseAlpha * 0.35})`;
-                    ctx.lineWidth = 0.5;
-                    for (let i = 1; i < trails.length; i++) {
-                        const s1 = trails[i-1].states[idx];
-                        const s2 = trails[i].states[idx];
-                        if (s1 && s2) {
-                            ctx.moveTo(s1.x, s1.y);
-                            ctx.lineTo(s2.x, s2.y);
-                        }
-                    }
-                    ctx.stroke();
-                }
             }
+
+            // 3. 繪製核心點
+            ctx.fillStyle = `rgba(${color}, 0.9)`;
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, 1.8, 0, Math.PI * 2);
+            ctx.fill();
 
             updateData();
             requestAnimationFrame(animate);
         }
+
         window.onload = init;
     </script>
 </body>
