@@ -1,352 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIAOSTUDIO | Refining The Digital Experience</title>
     
-    <!-- 1. 修改標題 -->
-    <title>XIAOSTUDIO | Official</title>
-    
-    <!-- 2. 加入 LINE 分享文字介紹與圖片設定 (OG Tags) -->
-    <meta property="og:title" content="XIAOSTUDIO | Official">
-    <meta property="og:description" content="探索數位設計美學，致力於精煉視覺、動態影像與商品攝影的極致體驗。">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://xiaostudio.xyz">
-    <meta property="og:image" content="https://xiaostudio.xyz/assets/images/Xiao_og_image.jpg">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-
-    <!-- Android Chrome 專用設置 -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#1a1a1a">
-    <link rel="icon" sizes="192x192" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
-    
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 x=%2250%%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-weight=%22200%22 font-size=%2280%22 fill=%22white%22>X</text></svg>">
-
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&family=JetBrains+Mono:wght@100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --bg-color: #1a1a1a;
-            --text-color: #ffffff;
-            --sub-text: rgba(255, 255, 255, 0.4);
-            --logo-fill: #ffffff;
-        }
-
-        body.light-mode {
-            --bg-color: #f5f5f5;
-            --text-color: #1a1a1a;
-            --sub-text: rgba(0, 0, 0, 0.5);
-            --logo-fill: #1a1a1a;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #000;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            overflow: hidden; /* 防止滾動，保持沉浸感 */
+        }
+
+        /* 影片背景設定 */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
             overflow: hidden;
-            touch-action: none;
-            transition: background-color 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        @keyframes revealBrand {
-            0% { filter: blur(20px); letter-spacing: 2em; opacity: 0; }
-            100% { filter: blur(0px); letter-spacing: 0.8em; opacity: 1; }
-        }
-
-        .brand-header {
-            font-weight: 200;
-            padding-left: 0.8em; 
-            animation: revealBrand 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 40; 
-            color: var(--text-color);
-            text-align: center;
-        }
-
-        #canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .quantum-data {
-            position: fixed;
-            top: 40px; left: 40px;
-            z-index: 60;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: var(--sub-text);
-            letter-spacing: 0.1em;
-            pointer-events: none;
-            line-height: 2;
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 40px; right: 40px;
-            z-index: 100;
-            cursor: pointer;
-            padding: 10px;
-            opacity: 0.6;
-            background: none; border: none; outline: none;
-        }
-
-        .theme-toggle:hover { opacity: 1; }
-        .theme-toggle svg {
-            width: 20px; height: 20px;
-            fill: none; stroke: var(--text-color); stroke-width: 1.5;
-        }
-
-        /* Logo 樣式設定 */
-        .brand-logo-svg {
-            width: 150px;
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
             height: auto;
-            fill: var(--logo-fill);
-            opacity: 0.6;
-            transition: opacity 0.5s, fill 0.8s;
-        }
-        .brand-logo-svg:hover {
-            opacity: 1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
         }
 
-        @media (max-width: 640px) {
-            .brand-header { letter-spacing: 0.4em !important; padding-left: 0.4em; font-size: 2.25rem; } 
-            .quantum-data { top: 20px; left: 20px; font-size: 8px; }
-            .theme-toggle { top: 20px; right: 20px; }
-            .brand-logo-svg { width: 120px; }
+        /* 深色遮罩，增加文字對比 */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: -1;
         }
+
+        .hero-title {
+            font-weight: 100;
+            letter-spacing: 0.6em;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.4s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            transition: width 0.4s ease;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .side-info {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 9px;
+            letter-spacing: 0.4em;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .contact-link {
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .contact-link:hover {
+            color: #fff;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* 漸入動畫 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade {
+            animation: fadeInUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
 
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 18h6m-3-15c-3.866 0-7 3.134-7 7 0 2.553 1.366 4.787 3.415 6.02L8 19h8l-.415-2.98C17.634 14.787 19 12.553 19 10c0-3.866-3.134-7-7-7z" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-    
-    <div class="quantum-data">
-        <div>CORE_ID: XIAO_STU_v3.3</div>
-        <div id="data-pos">POS: [0, 0]</div>
-        <div id="data-mom">MOM: 0.000</div>
-        <div id="data-total">NODES: 0</div>
-        <div id="data-field">CONTENT: UPDATED</div>
+    <!-- 背景影片區 -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline poster="">
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770784852/video_16_ydhrer.mp4" type="video/mp4">
+        </video>
     </div>
+    <div class="video-overlay"></div>
 
-    <canvas id="canvas"></canvas>
+    <!-- 頂部導覽 -->
+    <nav class="fixed top-0 w-full z-50 p-10 md:p-16 flex justify-between items-start animate-fade">
+        <div class="flex flex-col gap-2">
+            <span class="text-lg font-light tracking-[0.5em] uppercase">XIAOSTUDIO</span>
+            <div class="h-[1px] w-12 bg-white/30"></div>
+        </div>
+        
+        <div class="hidden md:flex flex-col items-end gap-3">
+            <a href="#" class="nav-link">Visual Design</a>
+            <a href="#" class="nav-link">Motion Graphics</a>
+            <a href="#" class="nav-link">Graphic Design</a>
+            <a href="#" class="nav-link">Product Photography</a>
+        </div>
+    </nav>
 
-    <main class="flex flex-col items-center px-10 relative z-30 pointer-events-none w-full">
-        <header class="mb-12 w-full flex justify-center">
-            <h1 class="brand-header text-4xl md:text-6xl uppercase">XIAOSTUDIO</h1>
-        </header>
-
-        <section class="flex flex-col items-center text-center">
-            <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mb-12 max-w-4xl opacity-60">
-                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Visual Design</span>
-                <span class="text-xs opacity-30">•</span>
-                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Motion Graphics</span>
-                <span class="text-xs opacity-30">•</span>
-                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Graphic Design</span>
-                <span class="text-xs opacity-30">•</span>
-                <span class="text-[10px] md:text-[11px] uppercase tracking-[0.2em]">Product Photography</span>
+    <!-- 主內容區 -->
+    <main class="relative h-screen flex items-center px-10 md:px-24">
+        <div class="max-w-4xl">
+            <div class="mb-8 overflow-hidden">
+                <p class="text-[10px] tracking-[0.8em] text-white/50 uppercase animate-fade delay-1">
+                    Identity & Digital Craft
+                </p>
             </div>
-            <p class="text-[20px] md:text-2xl font-light uppercase tracking-[0.5em] mb-4">Refining the digital experience</p>
-            <p class="text-[14px] opacity-40 uppercase tracking-[0.3em]">Launching 2026</p>
-        </section>
-
-        <footer class="fixed bottom-10 left-0 w-full text-center z-40 flex flex-col items-center">
-            <!-- 加入 Logo SVG -->
-            <div class="mb-4 pointer-events-auto">
-                <svg class="brand-logo-svg" viewBox="0 0 143.04 86.44" xmlns="http://www.w3.org/2000/svg">
-                    <g id="XiaoStudio">
-                        <g>
-                            <g>
-                                <g>
-                                    <path d="M142.94,47.56c-.14-.2-.38-.21-.54-.2-.08,0-.17.01-.25.02h-.04c-2.44.29-5.09,1.06-7.66,1.8-2.12.62-4.3,1.25-6.3,1.59-.11,0-.23,0-.35,0-1.16.05-2.54.41-3.87.75-1.28.33-2.6.67-3.65.72-.18,0-.36,0-.52,0-.08,0-.16-.01-.25-.03.34-1.06.31-2.28-.09-3.24-.02-.06-.07-.11-.12-.15-.42-.26-.92-.39-1.45-.37-.83.04-1.64.44-2.27,1.09.01-.21,0-.45-.17-.62-.13-.13-.31-.18-.54-.17-.02,0-.03,0-.05,0-.15.01-.21.05-1.23,1.01-.36.34-.77.72-.9.82-3.26,2.44-5.71,4.51-8.58,6.95l-.11.09c-.98.84-1.44,1.2-1.64,1.35,0-.13.03-.32.09-.5.57-1.94,1.64-4.19,2.23-5.36.13-.26.4-.69.66-1.11h0c.41-.66.76-1.21.84-1.5.11-.4,0-.65-.14-.9-.04-.08-.12-.13-.2-.15l-.46-.11s-.06,0-.09,0c-.09,0-.17.04-.22.11-2.48,2.84-5.36,5.76-8.33,8.47-.11.1-.21.19-.32.29-.52.48-1.05.97-1.61,1.33.31-1.04.78-2.01,1.27-3.02.11-.23.22-.46.33-.69.87-1.83,3.5-7.38,5.35-10.28.83-1.31,2.02-2.64,3.27-4.05,1.13-1.27,2.31-2.59,3.21-3.9l.04-.06c1.32-1.92,1.79-3.01,1.54-3.56-.06-.12-.2-.33-.54-.36-.03,0-.07,0-.1,0h0c-.77.03-1.94,1.26-3.09,2.58l-.06.07c-1.53,1.76-2.7,3.63-3.82,5.44-.9,1.45-1.83,2.95-2.94,4.35-2.63,3.34-6.43,7.7-9.92,11.38-.94.99-1.83,1.85-2.71,2.63,0,0,0-.02,0-.02.34-1.48.9-1.95,1.68-2.6.33-.28.7-.59,1.08-1,.03-.03,2.91-3.25,2.66-4.68,0-.05-.03-.1-.06-.14-.22-.28-.5-.43-.82-.43-.02,0-.05,0-.07,0-.89.04-1.87,1.19-2.45,1.87l-.06.07c-.73.85-1.23,1.71-1.72,2.55-.31.53-.62,1.07-.99,1.59-.88,1.27-4.8,3.93-6.29,4.76-.19.11-.38.2-.54.27l3.19-6.31c.04-.07.04-.16.03-.21-.05-.25-.15-.75-.64-.76,0,0-.01,0-.02,0-.63.03-5.84,4.37-6.07,4.6-.29.27-.66.66-1.04,1.1.2-.3.42-.58.65-.87.2-.26.42-.52.62-.82.09-.13.07-.3-.04-.41l-.53-.5c-.06-.06-.14-.09-.23-.08-.04,0-.08.01-.12.03-.72.34-2.11,1.03-3.32,1.85-1.67,1.14-3.43,2.63-5.29,4.19-2.58,2.17-5.24,4.42-7.58,5.63-.33.17-1.07.38-1.44.41.3-1,.89-1.92,1.46-2.82.12-.19.24-.37.35-.55.93-1.49,1.97-2.93,2.97-4.32l.02-.03c.6-.83,1.22-1.69,1.81-2.55.67-.24,1.35-.45,2.01-.65h.01c.71-.22,1.44-.45,2.16-.71,3.2-1.16,6.87-2.54,9.84-4.34,2.77-1.68,4.32-3.68,4.35-5.62.02-1.6-.94-3.04-2.85-4.28-1.37-.89-2.42-1.26-3.4-1.22-1.24.05-2.38.77-3.8,2.39-1.69,1.92-3.21,4.28-4.67,6.56-1.4,2.18-2.84,4.43-4.43,6.28-1.77.47-2.13.62-2.42.73-.3.12-.5.2-2.55.67-.3.07-.61.14-.91.21-.65.15-1.24.29-1.83.41.09-.8-.05-1.49-.42-2.07-1.05-1.64-3.86-2.34-8.6-2.13-.93.04-1.77.11-2.45.16-.3.02-.57.04-.8.06-1.5.1-3.02.32-4.49.52h-.02c-1.69.24-3.44.49-5.19.57-.37.02-.74.02-1.09.02-.02,0-.05,0-.08,0-.14,0-.3.03-.46.06h-.03c-.17.03-.36.07-.51.07-.22,0-.27-.03-.27-.04,0,0-.02-.03-.02-.1,1.15-.61,2.32-1.25,3.45-1.86l.03-.02c8.12-4.4,16.51-8.95,25.12-10.98l-1.52,1.11-7.37,3.2c-.09.04-.16.13-.18.23-.09.44.06.69.19.82.17.16.43.24.78.22s.67-.1.92-.17l.13-.03c1.84-.45,7.7-3.44,9.22-4.7l.16-.13c.67-.55,1.51-1.23,1.42-2.48-.01-.16-.15-.29-.31-.29-.31,0-.62,0-.94.02-5.97.26-12.37,3.32-18.02,6.02l-.45.21c-.6.28-14.61,7-15.26,9.56,0,0,0,.01,0,.02-.15.99.33,1.61,1.37,1.78,1,.17,2.15.23,3.5.17,2.16-.09,4.52-.47,6.8-.83,2.31-.37,4.7-.74,6.89-.84.74-.03,1.4-.03,2.03,0,2.27.13,3.67.73,4.03,1.74.05.13.08.28.09.43-.11,0-.21.01-.31.02-.21,0-.4.01-.59,0,0,0-.02,0-.02,0-.08,0-.16.04-.21.1-.52.56-.69.93-.57,1.26.09.25.32.39.7.44.12.01.25.02.39.01.05,0,.1,0,.15-.01-.53,1.02-1.47,2.17-2.79,3.42-7.56,7.1-26.04,14.15-35.86,14.94-.1,0-.2.01-.3.02-1.38.06-2.81-.23-4.2-.51h-.01s-.02,0-.02,0c-1.43-.29-2.91-.59-4.39-.53-.16,0-.32.02-.48.03-.12.01-.22.09-.26.2-.04.11-.01.24.07.33,2.1,2.15,4.87,3.13,8.47,2.97,2.08-.09,4.17-.53,6.02-.92,9.76-2.06,30.22-9.84,35.56-19.33.16-.29.31-.59.44-.88l6.72-1.54c-.67,1.11-1.43,2.17-2.16,3.2-.79,1.11-1.6,2.24-2.31,3.44l-.13.22c-.72,1.21-2.23,3.71-.95,4.63.29.21.9.21,1.15.2s.46-.04.6-.09c.27-.08,2.21-1.18,2.47-1.35,1.88-1.22,3.82-2.86,5.69-4.44,1.62-1.37,3.29-2.79,4.9-3.9.23-.16.5-.3.79-.44.19-.1.39-.2.58-.31-.17.45-.36.9-.54,1.33-.39.91-.79,1.85-.99,2.84l-.03.13c-.07.32-.14.63.12,1.02.06.09.17.14.27.14.05,0,.09-.01.13-.04,1.02-.53,1.67-1.57,2.3-2.57.28-.44.53-.85.82-1.22.58-.74,1.93-2.05,2.56-2.63.63-.59,1.23-1.02,1.87-1.48.07-.05.13-.1.2-.14-.27.55-.65,1.18-1.02,1.8-.78,1.29-1.52,2.52-1.44,3.29.05.49.28.71.47.81.15.08.34.12.55.11.67-.03,1.51-.49,2.25-.9.29-.16.57-.31.73-.37.03,0,.06-.02.08-.04l4.25-3.16s-.01.07-.02.11c-.04.38-.1.78-.16,1.16h0s-.03.19-.03.19c-.02.13.05.26.16.32.31.18.62.25.94.24.29-.01.59-.1.9-.27.53-.29.93-.74,1.31-1.18.15-.18.3-.35.45-.5,1.66-1.66,3.24-3.5,4.78-5.27h.01c1.24-1.44,2.51-2.91,3.82-4.29l-.59,1.31c-.34.68-.74,1.41-1.09,2.05-1.18,2.16-2.4,4.38-2.65,6.87-.01.13.05.25.16.31.48.26.88.38,1.25.36.66-.03,1.13-.46,1.79-1.06l.08-.08c.97-.88,1.88-1.82,2.77-2.74.73-.75,1.48-1.52,2.24-2.25.24-.23.54-.46.83-.69l-.05-.07s0,0,0,0l.05.07c.07-.06.15-.12.22-.18-.1.39-.31.81-.51,1.22-.15.31-.31.63-.42.93-.84,2.4-.95,3.68-.35,4.14.15.12.34.17.56.16.37-.02.84-.22,1.43-.62,1.44-.98,2.82-2.29,4.29-3.68,1.67-1.58,3.4-3.22,5.19-4.29-.3.58-.48,1.2-.66,1.8-.1.34-.21.72-.34,1.07-.07.2-.18.46-.31.75-.63,1.48-1.42,3.33-.75,4.15.21.26.54.38.97.37.12,0,.24-.02.37-.05,2.19-.43,4.74-3.6,6.43-5.7l.03-.03c.17-.21.32-.4.47-.58,7.21-1.1,13.42-2.55,18.99-4.43.63-.21,1.26-.46,1.87-.69,1.14-.44,2.31-.89,3.45-1.14.1-.02.18-.09.22-.18.12-.27.22-.57.05-.81ZM117.55,52.37l-2.26.33c-.02-.1,0-.23.06-.38.29-.7,1.33-1.45,1.6-1.47.02,0,.04,0,.06,0,.3-.01.5.05.6.19.17.23.15.72-.06,1.33ZM116.06,55.14c-.2.28-.64.8-1.57,1.68-1.11,1.05-2.09,1.82-2.3,1.91-.08.04-.15.06-.2.08l1.39-4.11c.57.48,1.32.52,1.99.49.19,0,.37-.02.55-.04.05,0,.1,0,.15-.01ZM65.42,57.6c.13-.22.32-.53.59-.95l.52-.8c1.82-2.8,4.08-6.29,5.98-8.73.81-1.04,1.88-2.23,3-2.28.04,0,.08,0,.12,0,1.2.03,4.12,1.86,4.7,3.15.67,1.46.21,2.25-.94,3.27-1.88,1.68-5.91,3.45-8.15,4.35-1.06.43-2.16.78-3.22,1.12-.85.27-1.73.56-2.6.88ZM9.38,80.54s0,0,0,0h0s0,0,0,0Z"/>
-                                    <path d="M107.92,44.49c-.19.14-.34.28-.38.68,0,.1.03.2.11.27l.49.41c.06.05.14.08.21.07.03,0,.05,0,.08-.01.1-.03.18-.12.21-.22.06-.24.14-.49.31-.61.41-.29,4.73-1.87,5.56-2.09.68-.18.92-.28,1.64-.61.04-.02.09-.04.14-.05h.01c.22-.08.56-.2.73-.6.04-.09.03-.19-.01-.27-.05-.09-.13-.14-.23-.16-.13-.02-.28-.03-.44-.02-.42.02-.86.14-1.26.24l-.24.06c-.86.22-5.25,1.37-6.86,2.85-.03.03-.06.05-.09.07Z"/>
-                                </g>
-                                <g>
-                                    <path d="M85.93.11c-2.83-.55-5.42,1-7.91,2.13-7.7,3.49-15.34,9-22.47,13.56-.39-4.78-1.99-7.8-7-8.67-9.32-1.62-18.53,1.42-27.13,4.55.69,2.01,3.41-.32,4.46-.66,7.83-2.5,29.12-7.82,27.28,6.11-8.35,6.21-16.98,12.16-25.12,18.64-9.07,7.21-16.8,14.53-26.45,21.18-.79.55-1.76.6-1.56,1.93.41.43,5.46-2.26,6.18-2.75,9.63-6.55,18.95-16.39,28.36-23.73,5.51-4.29,11.5-8.05,16.93-12.45,2.05-.79-.83,4.19-1.15,4.77-1.45,2.64-3.5,5.74-5.2,8.26-1.46,2.17-4.01,3.76-4.09,6.48,1.11.29,1.83-.16,2.77-.55,3.63-1.54,9.03-6.12,12.76-8.41,2-1.23,9.46-5.95,11.04-6.33.85-.2,1.17.17.86.99-.87,2.32-5.22,5.36-6.59,8.45-.61,1.38.53,2.95,2.02,2.72.34-.05.67-.17.98-.36l14.02-9.07c.39-2.44-15.41,9.33-14.77,6.83.72-2.85,8.2-8.88,8.33-11.46-.48-.92-1.58-1.32-2.53-.92-8.81,3.69-16.47,9.64-24.57,14.63-.43.1-.42-.6-.24-.95.63-1.25,2.85-3.57,3.82-5.11,1.94-3.11,4.74-10.3,6.43-12.26,1.47-1.7,9.55-6.38,12.03-7.9,1.7-1.04,15.82-9.36,16.54-8.5-.27,2.42-3.32,2.85-4.7,4.43-.13.46.62.47.91.37,1.14-.39,6.91-4.65,5.76-5.93Z"/>
-                                    <path d="M135.01,12.16l-3.92,1.94c-4.18,1.39-15.12,3.26-18,5.15-.33.22-.74.47-.69.89l1.25.48c.69,4.19-5.86,10.28-9.04,12.6-1.62,1.18-6.24,4.21-8.05,3.52-.65-.34-.95-.79-.92-1.55.1-2.13,3.96-6.84,5.36-8.78.37-.52,1.67-1.26.7-1.9l-15.58,11.97-1.88-.81c.08-.79,6.39-7.66,7.41-9.1.37-.52,1.44-1.55.57-2.05-5.75,3.38-10.79,7.92-16.9,10.64-1.14.51-2.4-.55-2.05-1.75,0-.01,0-.02,0-.03.21-.69,3.59-5.27,4.26-6,2.35-2.54,7.51-6.16,11.08-5.69,1.56.2,2.47,1.64,4.06,1.29.97-.22,1.96.3,2.27,1.24v.03s-3.07,5.29-3.07,5.29c1.99-1.39,13.17-9.88,14.53-9.77,1.52.12,0,2.37-.39,2.93-2.56,3.71-6.94,7.11-7.83,11.67,1.35,1.53,11.44-7.49,12.26-9.32.45-1.02.6-1.98.54-3.08-8.04-1.37,2.87-5.04,5.75-5.97,5.71-1.84,12.28-3.3,18.26-3.83ZM76.08,31.76c-.33.72.47,1.44,1.15,1.03,3.11-1.84,9.47-6.41,10.19-7,1.75-1.45,1.76-3.1-.65-2.79-3.33.43-8.91,4.9-10.69,8.76Z"/>
-                                    <path d="M119.61,4.52c.06.94-2.17.99-2.98,1.19-7.56,1.86-15.08,3.77-22.57,5.92l-14.85,6.03c.99-2.14,3.87-2.97,5.97-3.89,10.52-4.59,23.07-7.7,34.43-9.25Z"/>
-                                </g>
-                            </g>
-                            <path d="M105.64,71.23c.04,1.22-3.46,1.19-4.73,1.41-11.95,2.07-23.84,4.21-35.69,6.64l-23.61,7.15c1.67-2.74,6.24-3.69,9.58-4.78,16.75-5.48,36.58-8.95,54.45-10.43Z"/>
-                        </g>
-                    </g>
-                </svg>
+            <h1 class="hero-title text-3xl md:text-5xl lg:text-6xl animate-fade delay-2">
+                REFINING THE<br>
+                DIGITAL EXPERIENCE<br>
+                BUILT WITH INTENT.
+            </h1>
+            <div class="mt-12 animate-fade delay-3">
+                <button class="border border-white/20 px-10 py-4 text-[10px] tracking-[0.5em] uppercase hover:bg-white hover:text-black transition-all duration-500">
+                    Explore Work
+                </button>
             </div>
-
-            <!-- 原有的聯絡資訊 -->
-            <div class="flex flex-col space-y-3 opacity-40">
-                <a href="mailto:jewuenxiao@gmail.com" class="pointer-events-auto text-[10px] tracking-[0.4em] hover:opacity-100 uppercase transition-opacity duration-500">jewuenxiao@gmail.com</a>
-                <a href="https://xiaostudio.xyz" class="pointer-events-auto text-[11px] tracking-[0.6em] hover:opacity-100 uppercase transition-opacity duration-500">www.xiaostudio.xyz</a>
-            </div>
-        </footer>
+        </div>
     </main>
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const toggleBtn = document.getElementById('theme-toggle');
-        const elPos = document.getElementById('data-pos');
-        const elMom = document.getElementById('data-mom');
-        const elTotal = document.getElementById('data-total');
+    <!-- 側邊與底部資訊 -->
+    <aside class="fixed right-10 bottom-10 hidden md:block animate-fade delay-3">
+        <div class="side-info uppercase">
+            ESTABLISHED 2026 / TAIPEI TW
+        </div>
+    </aside>
 
-        let isLightMode = false;
-        toggleBtn.addEventListener('click', () => {
-            isLightMode = !isLightMode;
-            document.body.classList.toggle('light-mode');
-        });
+    <footer class="fixed left-10 bottom-10 animate-fade delay-3">
+        <div class="flex flex-col">
+            <a href="mailto:jewuenxiao@gmail.com" class="contact-link uppercase">jewuenxiao@gmail.com</a>
+            <div class="text-[9px] tracking-[0.3em] text-white/30 uppercase">
+                &copy; 2026 XIAOSTUDIO. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
 
-        let ball = {
-            x: 0, y: 0,
-            vx: 0, vy: 0,
-            speed: 4.5,
-            friction: 0.985
-        };
-
-        let mouse = { x: -1000, y: -1000, active: false };
-        let history = []; 
-        let quantumBursts = []; 
-        let time = 0;
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            if (ball.x === 0) {
-                ball.x = canvas.width / 2;
-                ball.y = canvas.height / 2;
-            }
-        }
-
-        window.addEventListener('resize', resize);
-        function handleMove(clientX, clientY) { 
-            mouse.x = clientX; mouse.y = clientY; mouse.active = true;
-        }
-        window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
-        window.addEventListener('touchmove', e => {
-            handleMove(e.touches[0].clientX, e.touches[0].clientY);
-            e.preventDefault();
-        }, { passive: false });
-
-        function init() {
-            resize();
-            const angle = Math.random() * Math.PI * 2;
-            ball.vx = Math.cos(angle) * ball.speed;
-            ball.vy = Math.sin(angle) * ball.speed;
-            animate();
-        }
-
-        function updateData() {
-            elPos.innerText = `POS: [${Math.floor(ball.x)}, ${Math.floor(ball.y)}]`;
-            elMom.innerText = `MOM: ${Math.sqrt(ball.vx**2 + ball.vy**2).toFixed(3)}`;
-            elTotal.innerText = `NODES: ${history.length + quantumBursts.length}`;
-        }
-
-        function animate() {
-            time += 0.01;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const autoX = Math.sin(time * 0.4) * (canvas.width * 0.45) + (canvas.width / 2);
-            const autoY = Math.cos(time * 0.3) * (canvas.height * 0.45) + (canvas.height / 2);
-
-            let targetX = autoX;
-            let targetY = autoY;
-
-            if (mouse.active) {
-                const distToMouse = Math.sqrt((mouse.x - ball.x)**2 + (mouse.y - ball.y)**2);
-                const influence = Math.min(1, 600 / (distToMouse + 200));
-                targetX = autoX * (1 - influence) + mouse.x * influence;
-                targetY = autoY * (1 - influence) + mouse.y * influence;
-            }
-
-            ball.vx += (targetX - ball.x) * 0.003;
-            ball.vy += (targetY - ball.y) * 0.003;
-            ball.vx *= ball.friction;
-            ball.vy *= ball.friction;
-            ball.x += ball.vx;
-            ball.y += ball.vy;
-
-            const b = 5;
-            if (ball.x < b || ball.x > canvas.width - b) ball.vx *= -1;
-            if (ball.y < b || ball.y > canvas.height - b) ball.vy *= -1;
-
-            history.push({ x: ball.x, y: ball.y });
-
-            if (Math.random() > 0.6) {
-                const angle = Math.random() * Math.PI * 2;
-                const length = Math.random() * 180 + 20;
-                quantumBursts.push({
-                    x1: ball.x,
-                    y1: ball.y,
-                    x2: ball.x + Math.cos(angle) * length,
-                    y2: ball.y + Math.sin(angle) * length,
-                    opacity: Math.random() * 0.4 + 0.1
-                });
-            }
-
-            if (history.length > 5000) history.shift();
-            if (quantumBursts.length > 1000) quantumBursts.shift();
-
-            const color = isLightMode ? "0, 0, 0" : "255, 255, 255";
-            const burstAlphaScale = isLightMode ? 0.35 : 0.2;
-            const historyAlpha = isLightMode ? 0.25 : 0.15;
-            const lineWidthScale = isLightMode ? 0.8 : 0.6;
-
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-
-            // 1. 繪製發散隨機線條
-            quantumBursts.forEach(b => {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(${color}, ${b.opacity * burstAlphaScale})`;
-                ctx.lineWidth = isLightMode ? 0.4 : 0.3;
-                ctx.moveTo(b.x1, b.y1);
-                ctx.lineTo(b.x2, b.y2);
-                ctx.stroke();
-            });
-
-            // 2. 繪製主軌跡
-            if (history.length > 1) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(${color}, ${historyAlpha})`;
-                ctx.lineWidth = lineWidthScale;
-                ctx.moveTo(history[0].x, history[0].y);
-                for (let i = 1; i < history.length; i++) {
-                    ctx.lineTo(history[i].x, history[i].y);
-                }
-                ctx.stroke();
-            }
-
-            // 3. 繪製核心點
-            ctx.fillStyle = `rgba(${color}, 0.9)`;
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, 1.8, 0, Math.PI * 2);
-            ctx.fill();
-
-            updateData();
-            requestAnimationFrame(animate);
-        }
-
-        window.onload = init;
-    </script>
 </body>
 </html>
