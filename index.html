@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
     
-    <!-- 分頁標籤圖示 (Favicon) -->
+    <!-- 分頁標籤圖示 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='black'/><path d='M35 35L65 65M65 35L35 65' stroke='white' stroke-width='8' stroke-linecap='round'/></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,10 +17,10 @@
             color: #fff;
             font-family: 'Montserrat', sans-serif;
             margin: 0;
-            overflow: hidden; 
+            overflow: hidden;
         }
 
-        /* 影片背景 */
+        /* 影片背景：維持高清晰度 */
         .video-background {
             position: fixed;
             top: 0;
@@ -29,6 +29,7 @@
             height: 100%;
             z-index: -2;
             overflow: hidden;
+            filter: brightness(1.1) contrast(1.05); 
         }
 
         .video-background video {
@@ -43,40 +44,55 @@
             object-fit: cover;
         }
 
-        /* 漸層遮罩 */
+        /* 漸層遮罩：保持透明度，兼顧影片能見度與文字對比 */
         .video-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
             z-index: -1;
+            pointer-events: none;
         }
 
-        /* 主標題樣式 - 加粗 */
         .hero-main-title {
             font-weight: 800;
             letter-spacing: 0.15em;
             line-height: 1.1;
             text-transform: uppercase;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
         }
 
-        /* 副標題樣式 - 加粗 */
         .hero-sub-title {
             font-weight: 700;
             letter-spacing: 0.5em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 1);
         }
 
         .nav-link {
             font-size: 10px;
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.7);
             transition: all 0.4s ease;
             position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
         }
 
         .nav-link:hover {
@@ -88,7 +104,7 @@
             text-orientation: mixed;
             font-size: 9px;
             letter-spacing: 0.4em;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         @keyframes fadeInUp {
@@ -122,7 +138,7 @@
             <div class="h-[2px] w-16 bg-white"></div>
         </div>
         
-        <div class="hidden md:flex flex-col items-end gap-4">
+        <div class="hidden md:flex flex-col items-end gap-4 mr-20">
             <a href="#" class="nav-link">Visual Design</a>
             <a href="#" class="nav-link">Motion Graphics</a>
             <a href="#" class="nav-link">Graphic Design</a>
@@ -133,21 +149,18 @@
     <!-- 主內容區 -->
     <main class="relative h-screen flex items-center px-10 md:px-24">
         <div class="max-w-5xl">
-            <!-- 副標題 -->
-            <div class="mb-4 overflow-hidden">
+            <div class="mb-4">
                 <h2 class="hero-sub-title text-sm md:text-lg animate-fade delay-1">
                     BUILT WITH INTENT
                 </h2>
             </div>
             
-            <!-- 主標題 -->
             <h1 class="hero-main-title text-4xl md:text-7xl lg:text-8xl animate-fade delay-2">
                 REFINING THE<br>
                 DIGITAL<br>
                 EXPERIENCE
             </h1>
 
-            <!-- 行動呼籲 -->
             <div class="mt-12 animate-fade delay-3">
                 <button class="bg-white text-black font-bold px-12 py-5 text-[11px] tracking-[0.6em] uppercase hover:bg-transparent hover:text-white border border-white transition-all duration-500">
                     Explore Work
@@ -167,7 +180,7 @@
     <footer class="fixed left-10 bottom-10 animate-fade delay-3">
         <div class="flex flex-col gap-2">
             <a href="mailto:jewuenxiao@gmail.com" class="text-[10px] tracking-[0.2em] font-bold uppercase hover:opacity-70 transition-opacity">jewuenxiao@gmail.com</a>
-            <div class="text-[9px] tracking-[0.3em] text-white/40 uppercase">
+            <div class="text-[9px] tracking-[0.3em] text-white/60 uppercase">
                 &copy; 2026 XIAOSTUDIO.
             </div>
         </div>
