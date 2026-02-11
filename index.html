@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
     
-    <!-- 分頁標籤圖示 -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='black'/><path d='M35 35L65 65M65 35L35 65' stroke='white' stroke-width='8' stroke-linecap='round'/></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +19,6 @@
             overflow: hidden;
         }
 
-        /* 影片背景：維持高清晰度 */
         .video-background {
             position: fixed;
             top: 0;
@@ -29,7 +27,7 @@
             height: 100%;
             z-index: -2;
             overflow: hidden;
-            filter: brightness(1.1) contrast(1.05); 
+            filter: brightness(0.95) contrast(1.1); 
         }
 
         .video-background video {
@@ -44,14 +42,13 @@
             object-fit: cover;
         }
 
-        /* 漸層遮罩：保持透明度，兼顧影片能見度與文字對比 */
         .video-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
             z-index: -1;
             pointer-events: none;
         }
@@ -61,14 +58,14 @@
             letter-spacing: 0.15em;
             line-height: 1.1;
             text-transform: uppercase;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 30px rgba(0,0,0,0.6);
         }
 
         .hero-sub-title {
             font-weight: 700;
             letter-spacing: 0.5em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 1);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .nav-link {
@@ -99,12 +96,28 @@
             color: #fff;
         }
 
-        .side-info {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 9px;
-            letter-spacing: 0.4em;
-            color: rgba(255, 255, 255, 0.5);
+        /* 音訊切換按鈕樣式 */
+        .audio-toggle {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            z-index: 100;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .audio-toggle:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.1);
         }
 
         @keyframes fadeInUp {
@@ -115,7 +128,6 @@
         .animate-fade {
             animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
-
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
         .delay-3 { animation-delay: 0.6s; }
@@ -123,10 +135,10 @@
 </head>
 <body>
 
-    <!-- 背景影片區 -->
+    <!-- 背景影片區：移除 muted 屬性以允許聲音 -->
     <div class="video-background">
-        <video autoplay muted loop playsinline>
-            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770791881/Xiaostudio_loop.mp4" type="video/mp4">
+        <video id="bgVideo" autoplay loop playsinline>
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_02_jurk3l.mp4" type="video/mp4">
         </video>
     </div>
     <div class="video-overlay"></div>
@@ -169,12 +181,13 @@
         </div>
     </main>
 
-    <!-- 側邊資訊 -->
-    <aside class="fixed right-10 bottom-10 hidden md:block animate-fade delay-3">
-        <div class="side-info uppercase">
-            ESTABLISHED 2026 / TAIPEI TW
-        </div>
-    </aside>
+    <!-- 音訊切換按鈕 -->
+    <button id="audioToggle" class="audio-toggle animate-fade delay-3" aria-label="切換聲音">
+        <!-- 音量開啟圖示 -->
+        <svg id="volumeOn" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        <!-- 音量關閉圖示 -->
+        <svg id="volumeOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+    </button>
 
     <!-- 底部聯絡 -->
     <footer class="fixed left-10 bottom-10 animate-fade delay-3">
@@ -185,6 +198,35 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        const video = document.getElementById('bgVideo');
+        const audioBtn = document.getElementById('audioToggle');
+        const volOn = document.getElementById('volumeOn');
+        const volOff = document.getElementById('volumeOff');
+
+        // 預設靜音以符合瀏覽器自動播放政策
+        video.muted = true;
+
+        audioBtn.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                volOn.classList.remove('hidden');
+                volOff.classList.add('hidden');
+            } else {
+                video.muted = true;
+                volOn.classList.add('hidden');
+                volOff.classList.remove('hidden');
+            }
+        });
+
+        // 嘗試在載入後自動播放（部分瀏覽器可能仍會阻擋聲音）
+        window.addEventListener('load', () => {
+            video.play().catch(error => {
+                console.log("瀏覽器阻擋了自動播放聲音，需手動點擊按鈕開啟。");
+            });
+        });
+    </script>
 
 </body>
 </html>
