@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio Core - 數據與脈動</title>
+    <title>Core Processor Unit - 量化解析</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
 
         :root {
-            --bg-color: #0a0a0a;
+            --bg-color: #050505;
             --accent-color: #ffffff;
-            --grid-color: #222222;
-            --panel-bg: #151515;
+            --grid-color: #1a1a1a;
+            --panel-bg: #0f0f0f;
         }
 
         body {
@@ -26,11 +26,11 @@
         .scanline {
             width: 100%;
             height: 2px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             position: absolute;
             z-index: 10;
             top: 0;
-            animation: scan 4s linear infinite;
+            animation: scan 6s linear infinite;
             pointer-events: none;
         }
 
@@ -40,180 +40,251 @@
         }
 
         .crt-glow {
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
 
         #game-canvas {
-            border: 2px solid #333;
+            border: 1px solid #444;
             background-color: #000;
             image-rendering: pixelated;
         }
 
         .dashboard-panel {
             background: var(--panel-bg);
-            border: 1px solid #333;
+            border: 1px solid #222;
             position: relative;
-            overflow: hidden;
         }
 
         #ecg-canvas {
             width: 100%;
-            height: 120px;
+            height: 100px;
             background: #000;
-            border: 1px solid #222;
         }
 
-        .thermal-map {
-            background: radial-gradient(circle at center, #666 0%, #333 40%, #111 100%);
-            opacity: 0.6;
+        /* 核心組件裝飾 */
+        .chip-corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid #444;
         }
 
+        /* 按鈕樣式 */
         .control-btn {
             user-select: none;
             touch-action: none;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #444;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #222;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
-            transition: background 0.1s;
+            border-radius: 4px;
+            transition: all 0.1s ease;
+            color: #666;
         }
 
         .control-btn:active {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .control-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        /* 量化測試動畫 */
+        .benchmark-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            position: relative;
+            width: 100%;
+            animation: slide 2s infinite linear;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-6">
     <div class="scanline"></div>
 
-    <!-- 標題欄位 -->
-    <header class="mb-12 border-b border-white/20 pb-6 flex flex-col md:flex-row justify-between items-end">
+    <!-- 頂部：處理器架構資訊 -->
+    <header class="mb-8 border-b border-white/10 pb-4 flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
-            <h1 class="text-4xl font-bold tracking-tighter crt-glow">STUDIO_CORE.exe</h1>
-            <p class="text-xs text-gray-500 mt-2">系統狀態: 正常運行 | 位置: 第七分區</p>
+            <div class="text-[10px] text-gray-600 mb-1 tracking-[0.2em]">INTEL_ARCH / CORE_PROCESSOR_UNIT</div>
+            <h1 class="text-3xl font-bold tracking-tighter crt-glow">THREAD_MASTER v2.5</h1>
         </div>
-        <div class="text-right mt-4 md:mt-0">
-            <div class="text-sm font-bold uppercase">運作率: <span id="uptime">99.98%</span></div>
-            <div class="w-32 h-1 bg-gray-800 inline-block mt-1">
-                <div class="h-full bg-white w-4/5 animate-pulse"></div>
+        <div class="flex gap-8 mt-4 md:mt-0">
+            <div class="text-right">
+                <div class="text-[10px] text-gray-500">指令週期 (CYCLE)</div>
+                <div class="text-lg font-bold" id="cycle-count">0048293</div>
+            </div>
+            <div class="text-right">
+                <div class="text-[10px] text-gray-500">核心溫度 (TEMP)</div>
+                <div class="text-lg font-bold" id="temp-val">42.5°C</div>
             </div>
         </div>
     </header>
 
-    <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
-        <!-- 左側：數據面板 -->
-        <div class="lg:col-span-4 space-y-6">
+        <!-- 左側：硬體監控 (Hardware Monitor) -->
+        <div class="lg:col-span-3 space-y-4">
             <div class="dashboard-panel p-4">
-                <h3 class="text-xs font-bold mb-4 border-l-2 border-white pl-2">SYSTEM_STATS / 系統數值</h3>
+                <div class="chip-corner top-0 left-0 border-r-0 border-b-0"></div>
+                <h3 class="text-[10px] font-bold mb-4 text-gray-400">MEMORY_CACHE / 快取分配</h3>
                 <div class="space-y-4">
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1">
-                            <span>攜運載荷 (LOAD)</span>
-                            <span id="load-val">78%</span>
+                        <div class="flex justify-between text-[9px] mb-1">
+                            <span>L1_CACHE (PRIMARY)</span>
+                            <span id="l1-val">12%</span>
                         </div>
-                        <div class="h-2 bg-black border border-white/20">
-                            <div id="load-bar" class="h-full bg-gray-400" style="width: 78%"></div>
+                        <div class="h-1 bg-black border border-white/10">
+                            <div id="l1-bar" class="h-full bg-white/40 transition-all duration-500" style="width: 12%"></div>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1">
-                            <span>運算頻率 (FREQ)</span>
-                            <span id="freq-val">4.2GHz</span>
+                        <div class="flex justify-between text-[9px] mb-1">
+                            <span>L2_CACHE (SHARED)</span>
+                            <span id="l2-val">45%</span>
                         </div>
-                        <div class="h-2 bg-black border border-white/20">
-                            <div id="freq-bar" class="h-full bg-gray-600" style="width: 60%"></div>
+                        <div class="h-1 bg-black border border-white/10">
+                            <div id="l2-bar" class="h-full bg-white/20 transition-all duration-700" style="width: 45%"></div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- 極端動態波動圖 (ECG) -->
-                <div class="mt-6 border-t border-white/10 pt-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-[10px] text-gray-500 block">脈動監控 / 生物特徵</span>
-                        <span id="bpm-val" class="text-[10px] font-bold text-white animate-pulse">72 BPM</span>
-                    </div>
-                    <canvas id="ecg-canvas"></canvas>
                 </div>
             </div>
 
-            <div class="dashboard-panel p-4 h-64 flex flex-col justify-between">
-                <div>
-                    <h3 class="text-xs font-bold mb-2 border-l-2 border-white pl-2">INFRARED_VIEW / 簡介</h3>
-                    <p class="text-xs leading-relaxed text-gray-400 mt-4">
-                        CORE 是一個專注於數據視覺化與極致交互的數位工作室。
-                        我們不只開發軟體，我們是在建構數位有機體。
-                        致力於將複雜的數據轉化為直觀的「脈動」。
-                    </p>
+            <!-- 動態量化測試畫面 (Benchmark View) -->
+            <div class="dashboard-panel p-4 bg-black overflow-hidden">
+                <h3 class="text-[10px] font-bold mb-2 text-gray-400">STRESS_TEST / 壓力測試</h3>
+                <div class="relative h-24 border border-white/5 bg-[#050505] flex items-center justify-center overflow-hidden">
+                    <div class="benchmark-line opacity-20"></div>
+                    <div class="absolute inset-0 flex flex-wrap gap-1 p-1 opacity-40">
+                        <!-- 生成量化像素點 -->
+                        <script>
+                            for(let i=0; i<40; i++) document.write('<div class="w-1 h-1 bg-white/20"></div>');
+                        </script>
+                    </div>
+                    <div class="z-10 text-[10px] text-white/80 font-bold bg-black/80 px-2 py-1 border border-white/20" id="test-status">
+                        ANALYZING...
+                    </div>
                 </div>
-                <div class="thermal-map h-16 w-full rounded flex items-center justify-center">
-                    <span class="text-[8px] tracking-widest text-white/50">THERMAL_SENSING_ACTIVE</span>
+                <div class="mt-2 text-[9px] text-gray-600 font-mono">
+                    > TRACE_ID: 0x88FF01<br>
+                    > LATENCY: 0.002ms
                 </div>
+            </div>
+
+            <!-- 熱功耗監控 -->
+            <div class="dashboard-panel p-4">
+                <h3 class="text-[10px] font-bold mb-2 text-gray-400">BUS_PULSE / 匯流排脈動</h3>
+                <canvas id="ecg-canvas"></canvas>
             </div>
         </div>
 
-        <!-- 中間：遊戲區域 -->
-        <div class="lg:col-span-5 flex flex-col items-center">
-            <div class="dashboard-panel p-2 inline-block">
-                <canvas id="game-canvas" width="240" height="400"></canvas>
+        <!-- 中間：處理器核心邏輯 (Core Logic) -->
+        <div class="lg:col-span-6 flex flex-col items-center">
+            <div class="text-[10px] text-gray-600 mb-2 tracking-[0.3em]">CORE_EXECUTION_UNIT</div>
+            <div class="dashboard-panel p-3 shadow-2xl shadow-white/5">
+                <canvas id="game-canvas" width="260" height="440"></canvas>
             </div>
             
-            <!-- 手機控制項 -->
-            <div class="grid grid-cols-3 gap-2 mt-6 w-full max-w-[280px]">
-                <button class="control-btn p-4" id="btn-left">◀</button>
-                <button class="control-btn p-4" id="btn-rotate">旋轉</button>
-                <button class="control-btn p-4" id="btn-right">▶</button>
-                <div class="col-span-3 grid grid-cols-2 gap-2">
-                    <button class="control-btn p-3" id="btn-down">加速</button>
-                    <button class="control-btn p-3" id="btn-drop">重力降落</button>
-                </div>
+            <!-- 控制矩陣 (Control Matrix) -->
+            <div class="grid grid-cols-3 gap-2 mt-6 w-full max-w-[300px]">
+                <button class="control-btn h-14" id="btn-left">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="control-btn h-14" id="btn-rotate">
+                    <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                </button>
+                <button class="control-btn h-14" id="btn-right">
+                    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                <button class="control-btn h-14" id="btn-down">
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <button class="control-btn h-14 col-span-2" id="btn-drop">
+                    <svg viewBox="0 0 24 24"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"></path></svg>
+                </button>
             </div>
         </div>
 
-        <!-- 右側：遊戲數值 -->
-        <div class="lg:col-span-3 space-y-6">
+        <!-- 右側：系統寄存器 (Registers) -->
+        <div class="lg:col-span-3 space-y-4">
             <div class="dashboard-panel p-4">
-                <h3 class="text-xs font-bold mb-4 border-l-2 border-white pl-2">GAME_LOG / 紀錄</h3>
-                <div class="text-2xl font-bold mb-1" id="score">000000</div>
-                <div class="text-[10px] text-gray-500 uppercase">當前得分</div>
-                
-                <div class="mt-6">
-                    <div class="text-xl font-bold" id="level">1</div>
-                    <div class="text-[10px] text-gray-500 uppercase">安全等級</div>
+                <h3 class="text-[10px] font-bold mb-4 text-gray-400">REGISTERS / 暫存器內容</h3>
+                <div class="space-y-6">
+                    <div>
+                        <div class="text-[10px] text-gray-500 mb-1">累積得分 (ACCUMULATOR)</div>
+                        <div class="text-3xl font-bold tracking-tighter" id="score">000000</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 mb-1">優先級 (PRIORITY)</div>
+                        <div class="text-xl font-bold" id="level">01</div>
+                    </div>
                 </div>
 
                 <div class="mt-8">
-                    <button id="start-btn" class="w-full py-2 bg-white text-black text-xs font-bold hover:bg-gray-300 transition-colors">
-                        啟動程序 INITIALIZE
+                    <button id="start-btn" class="w-full py-3 bg-white text-black text-[10px] font-bold hover:bg-gray-200 transition-all tracking-widest">
+                        LOAD_KERNEL_EXE
                     </button>
                 </div>
             </div>
 
             <div class="dashboard-panel p-4">
-                <h3 class="text-xs font-bold mb-2">操作指南</h3>
-                <ul class="text-[10px] text-gray-400 space-y-1 list-disc list-inside">
-                    <li>PC: 鍵盤方向鍵控制移動與旋轉</li>
-                    <li>Space: 直接落下</li>
-                    <li>Mobile: 使用下方觸控按鈕</li>
-                </ul>
+                <h3 class="text-[10px] font-bold mb-2 text-gray-400">SYSTEM_LOG / 系統日誌</h3>
+                <div class="text-[9px] text-gray-500 font-mono leading-relaxed space-y-1">
+                    <p>> BOOT_SEQ_COMPLETE</p>
+                    <p>> INTERRUPT_VECTOR_INIT</p>
+                    <p>> MAPPING_VIRTUAL_ADDR</p>
+                    <p class="text-white animate-pulse">> WAITING_FOR_INPUT...</p>
+                </div>
             </div>
         </div>
     </main>
 
-    <footer class="mt-12 text-[10px] text-gray-600 flex justify-between">
-        <span>&copy; 2024 STUDIO_CORE. SYSTEM VERSION 1.05-X</span>
-        <span class="animate-pulse">● 信號已連線</span>
+    <footer class="mt-8 text-[9px] text-gray-700 flex justify-between uppercase tracking-widest">
+        <span>Architect: Studio_Core // Unit_07</span>
+        <span>Clock: <span id="clock-val">1.2ms</span></span>
     </footer>
 
     <script>
-        // --- ECG (極端動態波動) 邏輯 ---
+        // --- 處理器動態數據仿真 ---
+        let cycles = 48293;
+        setInterval(() => {
+            cycles += Math.floor(Math.random() * 10);
+            document.getElementById('cycle-count').innerText = cycles.toString().padStart(7, '0');
+            
+            const temp = (40 + Math.random() * 5).toFixed(1);
+            document.getElementById('temp-val').innerText = temp + "°C";
+
+            const l1 = Math.floor(10 + Math.random() * 20);
+            document.getElementById('l1-val').innerText = l1 + "%";
+            document.getElementById('l1-bar').style.width = l1 + "%";
+
+            const l2 = Math.floor(40 + Math.random() * 30);
+            document.getElementById('l2-val').innerText = l2 + "%";
+            document.getElementById('l2-bar').style.width = l2 + "%";
+
+            const status = ["ANALYZING...", "STRESSING...", "CALCULATING...", "OPTIMIZING..."];
+            document.getElementById('test-status').innerText = status[Math.floor(Math.random() * status.length)];
+            
+            document.getElementById('clock-val').innerText = (1.0 + Math.random() * 0.5).toFixed(1) + "ms";
+        }, 1000);
+
+        // --- ECG 脈動繪製 ---
         const ecgCanvas = document.getElementById('ecg-canvas');
         const ecgCtx = ecgCanvas.getContext('2d');
         let ecgPoints = [];
-        let ecgPhase = 0; 
-        let nextPeakDelay = 30; 
+        let ecgStep = 0;
 
         function initECG() {
             ecgCanvas.width = ecgCanvas.offsetWidth;
@@ -223,75 +294,34 @@
 
         function drawECG() {
             ecgCtx.clearRect(0, 0, ecgCanvas.width, ecgCanvas.height);
-            
-            // 背景網格
-            ecgCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-            ecgCtx.lineWidth = 1;
-            for(let i=0; i<ecgCanvas.width; i+=15) {
-                ecgCtx.beginPath();
-                ecgCtx.moveTo(i, 0); ecgCtx.lineTo(i, ecgCanvas.height);
-                ecgCtx.stroke();
+            ecgCtx.beginPath();
+            ecgCtx.strokeStyle = '#333';
+            ecgCtx.lineWidth = 0.5;
+            for(let i=0; i<ecgCanvas.height; i+=20) {
+                ecgCtx.moveTo(0, i); ecgCtx.lineTo(ecgCanvas.width, i);
             }
+            ecgCtx.stroke();
 
             ecgCtx.beginPath();
-            ecgCtx.strokeStyle = '#ffffff';
-            ecgCtx.lineWidth = 1.8;
-            ecgCtx.shadowBlur = Math.random() > 0.9 ? 15 : 4;
-            ecgCtx.shadowColor = '#ffffff';
-
-            let baseLine = ecgCanvas.height / 2;
-            let y = baseLine;
-
-            // 波動狀態機
-            if (ecgPhase === 1) { // P波
-                y -= 5 + Math.random() * 8;
-                ecgPhase++;
-            } else if (ecgPhase === 5) { // Q波
-                y += 8 + Math.random() * 5;
-                ecgPhase++;
-            } else if (ecgPhase === 7) { // R波 (極大波峰)
-                y -= 55 + Math.random() * 45; 
-                ecgPhase++;
-            } else if (ecgPhase === 9) { // S波 (極深波谷)
-                y += 65 + Math.random() * 35;
-                ecgPhase++;
-            } else if (ecgPhase === 15) { // T波
-                y -= 12 + Math.random() * 15;
-                ecgPhase++;
-            } else if (ecgPhase > 0 && ecgPhase < 40) {
-                ecgPhase++;
-            } else {
-                // 基線抖動與隨機干擾
-                y += (Math.random() - 0.5) * 8;
-                if (Math.random() > 0.98) { // 突發尖刺
-                    y += (Math.random() - 0.5) * 50;
-                }
-                nextPeakDelay--;
-                if (nextPeakDelay <= 0) {
-                    ecgPhase = 1;
-                    nextPeakDelay = 15 + Math.random() * 110; 
-                }
-            }
+            ecgCtx.strokeStyle = '#fff';
+            ecgCtx.lineWidth = 1.5;
+            
+            let y = ecgCanvas.height / 2;
+            ecgStep++;
+            if (ecgStep % 40 < 5) y -= (Math.random() * 30 + 10);
+            else if (ecgStep % 40 < 10) y += (Math.random() * 40 + 20);
+            else y += (Math.random() - 0.5) * 5;
 
             ecgPoints.push(y);
             if (ecgPoints.length > ecgCanvas.width) ecgPoints.shift();
-
+            
             ecgCtx.moveTo(0, ecgPoints[0]);
-            for (let i = 1; i < ecgPoints.length; i++) {
-                if (Math.random() > 0.999) { // 模擬斷訊
-                    ecgCtx.stroke();
-                    ecgCtx.beginPath();
-                    ecgCtx.moveTo(i, ecgPoints[i]);
-                } else {
-                    ecgCtx.lineTo(i, ecgPoints[i]);
-                }
-            }
+            for(let i=1; i<ecgPoints.length; i++) ecgCtx.lineTo(i, ecgPoints[i]);
             ecgCtx.stroke();
-            ecgCtx.shadowBlur = 0;
             requestAnimationFrame(drawECG);
         }
 
-        // --- 俄羅斯方塊邏輯 ---
+        // --- 俄羅斯方塊核心邏輯 ---
         const canvas = document.getElementById('game-canvas');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
@@ -319,10 +349,10 @@
             matrix.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
-                        context.fillStyle = '#ffffff';
+                        context.fillStyle = '#fff';
                         context.fillRect(x + offset.x, y + offset.y, 1, 1);
-                        context.lineWidth = 0.05;
                         context.strokeStyle = '#000';
+                        context.lineWidth = 0.05;
                         context.strokeRect(x + offset.x, y + offset.y, 1, 1);
                     }
                 });
@@ -423,7 +453,7 @@
 
         function updateScore() {
             scoreElement.innerText = player.score.toString().padStart(6, '0');
-            levelElement.innerText = Math.floor(player.score / 100) + 1;
+            levelElement.innerText = (Math.floor(player.score / 100) + 1).toString().padStart(2, '0');
         }
 
         let dropCounter = 0;
@@ -439,7 +469,7 @@
             requestAnimationFrame(update);
         }
 
-        const arena = createMatrix(12, 20);
+        const arena = createMatrix(13, 22);
         const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
 
         document.addEventListener('keydown', e => {
@@ -462,22 +492,10 @@
             player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore();
         };
 
-        startBtn.addEventListener('click', () => {
+        startBtn.onclick = () => {
             playerReset(); updateScore(); update();
-            startBtn.innerText = "重新啟動 RESTART";
-        });
-
-        // 定時更新隨機數據
-        setInterval(() => {
-            document.getElementById('uptime').innerText = (99.8 + Math.random() * 0.19).toFixed(2) + "%";
-            const load = Math.floor(40 + Math.random() * 55);
-            document.getElementById('load-val').innerText = load + "%";
-            document.getElementById('load-bar').style.width = load + "%";
-            const freq = (2.5 + Math.random() * 2.5).toFixed(1);
-            document.getElementById('freq-val').innerText = freq + "GHz";
-            document.getElementById('freq-bar').style.width = (freq / 5 * 100) + "%";
-            document.getElementById('bpm-val').innerText = Math.floor(60 + Math.random() * 65) + " BPM";
-        }, 800);
+            startBtn.innerText = "RELOAD_CORE";
+        };
 
         window.onload = () => { initECG(); drawECG(); };
         window.onresize = initECG;
