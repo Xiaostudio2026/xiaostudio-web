@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | XIAOSTUDIO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- 修正後的 Google Fonts 連結 -->
+<link href="https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DMontserrat:wght%40100%3B400%3B700%3B800%26family%3DJetBrains%2BMono:wght%40300%3B400%3B700%26display%3Dswap" rel="stylesheet">
+<style>
+body {
+background-color: #000;
+color: #fff;
+font-family: 'Montserrat', sans-serif;
+margin: 0;
+overflow-x: hidden;
+}
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* 背景網格系統 */
+    .grid-bg {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
+                          linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: -1;
+    }
+
+    .content-section {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 180px 40px;
+    }
+
+    .line {
+        height: 1px;
+        background: linear-gradient(90deg, #fff, transparent);
+        margin: 30px 0;
+        width: 0;
+        animation: grow 1.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes grow { to { width: 100%; } }
+
+    .faded-text { opacity: 0.3; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; }
+
+    .reveal-text {
+        animation: fadeInUp 1s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes fadeInUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hover-link:hover {
+        letter-spacing: 0.1em;
+        opacity: 1;
+    }
+
+    .nav-link {
+        transition: all 0.4s ease;
+    }
+    .nav-link:hover {
+        color: #fff;
+        padding-left: 10px;
+    }
+    
+    @keyframes scan {
+        0% { top: 0%; }
+        100% { top: 100%; }
+    }
+</style>
+
+
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- 頂部導覽 -->
+<nav class="fixed top-0 w-full z-50 p-8 md:p-12 flex justify-between items-center mix-blend-difference">
+    <!-- 如果您按方法一操作，首頁連結請設為 "/" -->
+    <a href="/" class="nav-link mono text-[11px] opacity-60 uppercase tracking-widest flex items-center gap-4">
+        <span class="text-lg">←</span> RETURN_TO_DASHBOARD
+    </a>
+    <div class="faded-text mono hidden md:block">DOMAIN: XIAOSTUDIO.XYZ</div>
+</nav>
+
+<main class="content-section">
+    <!-- 主標題區 -->
+    <section class="mb-48 reveal-text" style="animation-delay: 0.2s;">
+        <span class="faded-text mono">PROFILE_DATA_v2.6</span>
+        <h1 class="text-6xl md:text-8xl font-extrabold mt-6 mb-10 tracking-tighter uppercase italic">
+            XIAOSTUDIO
+        </h1>
+        <div class="line"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
+            <p class="md:col-span-2 text-2xl md:text-3xl leading-snug font-light">
+                致力於數位體驗的「提煉」與「重塑」。我們不只是設計師，更是數位世界的建築師，在秩序與混沌的邊界，構築具備靈魂的數位脈動。
+            </p>
+            <div class="flex flex-col justify-end">
+                <span class="mono text-[10px] opacity-40 mb-2 uppercase tracking-tighter">Official Domain</span>
+                <span class="text-2xl font-bold tracking-tighter italic">XIAOSTUDIO.XYZ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 深度介紹區 -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-24 mb-48">
+        <div class="reveal-text" style="animation-delay: 0.4s;">
+            <span class="faded-text mono">CORE_VISION / 核心願景</span>
+            <h3 class="text-2xl font-bold mt-4 mb-6 uppercase tracking-tight">設計即是邏輯的視覺延伸</h3>
+            <p class="mono text-sm leading-8 opacity-60">
+                我們相信每一種美感都源於深刻的邏輯結構。我們熱衷於處理複雜的數據、流動的律動感，並將其轉化為直觀的、能與使用者產生共振的介面與視覺。XIAOSTUDIO 的作品始終保持著「低調的張力」。
+            </p>
+        </div>
+        <div class="reveal-text" style="animation-delay: 0.6s;">
+            <span class="faded-text mono">SERVICES / 服務架構</span>
+            <h3 class="text-2xl font-bold mt-4 mb-6 uppercase tracking-tight">數位生態系統構建</h3>
+            <ul class="mono text-sm space-y-4 opacity-70">
+                <li class="flex items-center gap-3 text-white/90">
+                    <span class="w-2 h-[1px] bg-white"></span> 
+                    UI/UX DIGITAL ARCHITECTURE
+                </li>
+                <li class="flex items-center gap-3 text-white/90">
+                    <span class="w-2 h-[1px] bg-white"></span> 
+                    DYNAMIC MOTION & REEL PRODUCTION
+                </li>
+                <li class="flex items-center gap-3 text-white/90">
+                    <span class="w-2 h-[1px] bg-white"></span> 
+                    BRAND IDENTITY & PHYSICAL PRINT
+                </li>
+                <li class="flex items-center gap-3 text-white/90">
+                    <span class="w-2 h-[1px] bg-white"></span> 
+                    INTERACTIVE WEB DEVELOPMENT
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 結尾區 -->
+    <section class="border-t border-white/10 pt-20 reveal-text" style="animation-delay: 0.8s;">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+            <div>
+                <span class="faded-text mono">CONNECT / 聯絡資訊</span>
+                <h2 class="text-4xl font-bold tracking-tighter mt-4 mb-2">啟動下一個數位序列。</h2>
+                <a href="mailto:jewuenxiao@gmail.com" class="text-xl mono opacity-40 hover-link hover:opacity-100 transition-all border-b border-white/20 pb-1">
+                    jewuenxiao@gmail.com
+                </a>
+            </div>
+            <div class="flex flex-col items-end gap-2 mono text-[10px] opacity-30 text-right">
+                <span>WEB: WWW.XIAOSTUDIO.XYZ</span>
+                <span>ALL RIGHTS RESERVED BY XIAOSTUDIO</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- 背景動態掃描線效果 -->
+<div class="fixed top-0 left-0 w-full h-[1px] bg-white/5 pointer-events-none z-[100]" style="animation: scan 8s linear infinite;"></div>
+
+
+</body>
+</html>
