@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Studio Core - 數據與脈動</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #0a0a0a;
+            --accent-color: #ffffff;
+            --grid-color: #222222;
+            --panel-bg: #151515;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            z-index: 10;
+            top: 0;
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .crt-glow {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        #game-canvas {
+            border: 2px solid #333;
+            background-color: #000;
+            image-rendering: pixelated;
+        }
+
+        .dashboard-panel {
+            background: var(--panel-bg);
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #ecg-canvas {
+            width: 100%;
+            height: 120px;
+            background: #000;
+            border: 1px solid #222;
+        }
+
+        .thermal-map {
+            background: radial-gradient(circle at center, #666 0%, #333 40%, #111 100%);
+            opacity: 0.6;
+        }
+
+        .control-btn {
+            user-select: none;
+            touch-action: none;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background 0.1s;
+        }
+
+        .control-btn:active {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="scanline"></div>
+
+    <!-- 標題欄位 -->
+    <header class="mb-12 border-b border-white/20 pb-6 flex flex-col md:flex-row justify-between items-end">
+        <div>
+            <h1 class="text-4xl font-bold tracking-tighter crt-glow">STUDIO_CORE.exe</h1>
+            <p class="text-xs text-gray-500 mt-2">系統狀態: 正常運行 | 位置: 第七分區</p>
+        </div>
+        <div class="text-right mt-4 md:mt-0">
+            <div class="text-sm font-bold uppercase">運作率: <span id="uptime">99.98%</span></div>
+            <div class="w-32 h-1 bg-gray-800 inline-block mt-1">
+                <div class="h-full bg-white w-4/5 animate-pulse"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- 左側：數據面板 -->
+        <div class="lg:col-span-4 space-y-6">
+            <div class="dashboard-panel p-4">
+                <h3 class="text-xs font-bold mb-4 border-l-2 border-white pl-2">SYSTEM_STATS / 系統數值</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1">
+                            <span>攜運載荷 (LOAD)</span>
+                            <span id="load-val">78%</span>
+                        </div>
+                        <div class="h-2 bg-black border border-white/20">
+                            <div id="load-bar" class="h-full bg-gray-400" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1">
+                            <span>運算頻率 (FREQ)</span>
+                            <span id="freq-val">4.2GHz</span>
+                        </div>
+                        <div class="h-2 bg-black border border-white/20">
+                            <div id="freq-bar" class="h-full bg-gray-600" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 極端動態波動圖 (ECG) -->
+                <div class="mt-6 border-t border-white/10 pt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] text-gray-500 block">脈動監控 / 生物特徵</span>
+                        <span id="bpm-val" class="text-[10px] font-bold text-white animate-pulse">72 BPM</span>
+                    </div>
+                    <canvas id="ecg-canvas"></canvas>
+                </div>
+            </div>
+
+            <div class="dashboard-panel p-4 h-64 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xs font-bold mb-2 border-l-2 border-white pl-2">INFRARED_VIEW / 簡介</h3>
+                    <p class="text-xs leading-relaxed text-gray-400 mt-4">
+                        CORE 是一個專注於數據視覺化與極致交互的數位工作室。
+                        我們不只開發軟體，我們是在建構數位有機體。
+                        致力於將複雜的數據轉化為直觀的「脈動」。
+                    </p>
+                </div>
+                <div class="thermal-map h-16 w-full rounded flex items-center justify-center">
+                    <span class="text-[8px] tracking-widest text-white/50">THERMAL_SENSING_ACTIVE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 中間：遊戲區域 -->
+        <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="dashboard-panel p-2 inline-block">
+                <canvas id="game-canvas" width="240" height="400"></canvas>
+            </div>
+            
+            <!-- 手機控制項 -->
+            <div class="grid grid-cols-3 gap-2 mt-6 w-full max-w-[280px]">
+                <button class="control-btn p-4" id="btn-left">◀</button>
+                <button class="control-btn p-4" id="btn-rotate">旋轉</button>
+                <button class="control-btn p-4" id="btn-right">▶</button>
+                <div class="col-span-3 grid grid-cols-2 gap-2">
+                    <button class="control-btn p-3" id="btn-down">加速</button>
+                    <button class="control-btn p-3" id="btn-drop">重力降落</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側：遊戲數值 -->
+        <div class="lg:col-span-3 space-y-6">
+            <div class="dashboard-panel p-4">
+                <h3 class="text-xs font-bold mb-4 border-l-2 border-white pl-2">GAME_LOG / 紀錄</h3>
+                <div class="text-2xl font-bold mb-1" id="score">000000</div>
+                <div class="text-[10px] text-gray-500 uppercase">當前得分</div>
+                
+                <div class="mt-6">
+                    <div class="text-xl font-bold" id="level">1</div>
+                    <div class="text-[10px] text-gray-500 uppercase">安全等級</div>
+                </div>
+
+                <div class="mt-8">
+                    <button id="start-btn" class="w-full py-2 bg-white text-black text-xs font-bold hover:bg-gray-300 transition-colors">
+                        啟動程序 INITIALIZE
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-panel p-4">
+                <h3 class="text-xs font-bold mb-2">操作指南</h3>
+                <ul class="text-[10px] text-gray-400 space-y-1 list-disc list-inside">
+                    <li>PC: 鍵盤方向鍵控制移動與旋轉</li>
+                    <li>Space: 直接落下</li>
+                    <li>Mobile: 使用下方觸控按鈕</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-12 text-[10px] text-gray-600 flex justify-between">
+        <span>&copy; 2024 STUDIO_CORE. SYSTEM VERSION 1.05-X</span>
+        <span class="animate-pulse">● 信號已連線</span>
+    </footer>
+
+    <script>
+        // --- ECG (極端動態波動) 邏輯 ---
+        const ecgCanvas = document.getElementById('ecg-canvas');
+        const ecgCtx = ecgCanvas.getContext('2d');
+        let ecgPoints = [];
+        let ecgPhase = 0; 
+        let nextPeakDelay = 30; 
+
+        function initECG() {
+            ecgCanvas.width = ecgCanvas.offsetWidth;
+            ecgCanvas.height = ecgCanvas.offsetHeight;
+            ecgPoints = new Array(Math.floor(ecgCanvas.width)).fill(ecgCanvas.height / 2);
+        }
+
+        function drawECG() {
+            ecgCtx.clearRect(0, 0, ecgCanvas.width, ecgCanvas.height);
+            
+            // 背景網格
+            ecgCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            ecgCtx.lineWidth = 1;
+            for(let i=0; i<ecgCanvas.width; i+=15) {
+                ecgCtx.beginPath();
+                ecgCtx.moveTo(i, 0); ecgCtx.lineTo(i, ecgCanvas.height);
+                ecgCtx.stroke();
+            }
+
+            ecgCtx.beginPath();
+            ecgCtx.strokeStyle = '#ffffff';
+            ecgCtx.lineWidth = 1.8;
+            ecgCtx.shadowBlur = Math.random() > 0.9 ? 15 : 4;
+            ecgCtx.shadowColor = '#ffffff';
+
+            let baseLine = ecgCanvas.height / 2;
+            let y = baseLine;
+
+            // 波動狀態機
+            if (ecgPhase === 1) { // P波
+                y -= 5 + Math.random() * 8;
+                ecgPhase++;
+            } else if (ecgPhase === 5) { // Q波
+                y += 8 + Math.random() * 5;
+                ecgPhase++;
+            } else if (ecgPhase === 7) { // R波 (極大波峰)
+                y -= 55 + Math.random() * 45; 
+                ecgPhase++;
+            } else if (ecgPhase === 9) { // S波 (極深波谷)
+                y += 65 + Math.random() * 35;
+                ecgPhase++;
+            } else if (ecgPhase === 15) { // T波
+                y -= 12 + Math.random() * 15;
+                ecgPhase++;
+            } else if (ecgPhase > 0 && ecgPhase < 40) {
+                ecgPhase++;
+            } else {
+                // 基線抖動與隨機干擾
+                y += (Math.random() - 0.5) * 8;
+                if (Math.random() > 0.98) { // 突發尖刺
+                    y += (Math.random() - 0.5) * 50;
+                }
+                nextPeakDelay--;
+                if (nextPeakDelay <= 0) {
+                    ecgPhase = 1;
+                    nextPeakDelay = 15 + Math.random() * 110; 
+                }
+            }
+
+            ecgPoints.push(y);
+            if (ecgPoints.length > ecgCanvas.width) ecgPoints.shift();
+
+            ecgCtx.moveTo(0, ecgPoints[0]);
+            for (let i = 1; i < ecgPoints.length; i++) {
+                if (Math.random() > 0.999) { // 模擬斷訊
+                    ecgCtx.stroke();
+                    ecgCtx.beginPath();
+                    ecgCtx.moveTo(i, ecgPoints[i]);
+                } else {
+                    ecgCtx.lineTo(i, ecgPoints[i]);
+                }
+            }
+            ecgCtx.stroke();
+            ecgCtx.shadowBlur = 0;
+            requestAnimationFrame(drawECG);
+        }
+
+        // --- 俄羅斯方塊邏輯 ---
+        const canvas = document.getElementById('game-canvas');
+        const context = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const startBtn = document.getElementById('start-btn');
+        context.scale(20, 20);
+
+        function createMatrix(w, h) {
+            const matrix = [];
+            while (h--) matrix.push(new Array(w).fill(0));
+            return matrix;
+        }
+
+        function createPiece(type) {
+            if (type === 'I') return [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]];
+            if (type === 'L') return [[0, 2, 0], [0, 2, 0], [0, 2, 2]];
+            if (type === 'J') return [[0, 3, 0], [0, 3, 0], [3, 3, 0]];
+            if (type === 'O') return [[4, 4], [4, 4]];
+            if (type === 'Z') return [[5, 5, 0], [0, 5, 5], [0, 0, 0]];
+            if (type === 'S') return [[0, 6, 6], [6, 6, 0], [0, 0, 0]];
+            if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
+        }
+
+        function drawMatrix(matrix, offset) {
+            matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        context.fillStyle = '#ffffff';
+                        context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                        context.lineWidth = 0.05;
+                        context.strokeStyle = '#000';
+                        context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                    }
+                });
+            });
+        }
+
+        function draw() {
+            context.fillStyle = '#000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos);
+        }
+
+        function merge(arena, player) {
+            player.matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) arena[y + player.pos.y][x + player.pos.x] = value;
+                });
+            });
+        }
+
+        function rotate(matrix, dir) {
+            for (let y = 0; y < matrix.length; ++y) {
+                for (let x = 0; x < y; ++x) {
+                    [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+                }
+            }
+            dir > 0 ? matrix.forEach(row => row.reverse()) : matrix.reverse();
+        }
+
+        function playerDrop() {
+            player.pos.y++;
+            if (collide(arena, player)) {
+                player.pos.y--;
+                merge(arena, player);
+                playerReset();
+                arenaSweep();
+                updateScore();
+            }
+            dropCounter = 0;
+        }
+
+        function playerMove(offset) {
+            player.pos.x += offset;
+            if (collide(arena, player)) player.pos.x -= offset;
+        }
+
+        function playerReset() {
+            const pieces = 'TJLOSZI';
+            player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+            player.pos.y = 0;
+            player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+            if (collide(arena, player)) {
+                arena.forEach(row => row.fill(0));
+                player.score = 0;
+                updateScore();
+            }
+        }
+
+        function playerRotate(dir) {
+            const pos = player.pos.x;
+            let offset = 1;
+            rotate(player.matrix, dir);
+            while (collide(arena, player)) {
+                player.pos.x += offset;
+                offset = -(offset + (offset > 0 ? 1 : -1));
+                if (offset > player.matrix[0].length) {
+                    rotate(player.matrix, -dir);
+                    player.pos.x = pos;
+                    return;
+                }
+            }
+        }
+
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; ++y) {
+                for (let x = 0; x < m[y].length; ++x) {
+                    if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true;
+                }
+            }
+            return false;
+        }
+
+        function arenaSweep() {
+            let rowCount = 1;
+            outer: for (let y = arena.length - 1; y > 0; --y) {
+                for (let x = 0; x < arena[y].length; ++x) {
+                    if (arena[y][x] === 0) continue outer;
+                }
+                const row = arena.splice(y, 1)[0].fill(0);
+                arena.unshift(row);
+                ++y;
+                player.score += rowCount * 10;
+                rowCount *= 2;
+            }
+        }
+
+        function updateScore() {
+            scoreElement.innerText = player.score.toString().padStart(6, '0');
+            levelElement.innerText = Math.floor(player.score / 100) + 1;
+        }
+
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+
+        function update(time = 0) {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+            dropCounter += deltaTime;
+            if (dropCounter > dropInterval) playerDrop();
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        const arena = createMatrix(12, 20);
+        const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
+
+        document.addEventListener('keydown', e => {
+            if (e.keyCode === 37) playerMove(-1);
+            else if (e.keyCode === 39) playerMove(1);
+            else if (e.keyCode === 40) playerDrop();
+            else if (e.keyCode === 38) playerRotate(1);
+            else if (e.keyCode === 32) {
+                while(!collide(arena, player)) player.pos.y++;
+                player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore();
+            }
+        });
+
+        document.getElementById('btn-left').onclick = () => playerMove(-1);
+        document.getElementById('btn-right').onclick = () => playerMove(1);
+        document.getElementById('btn-rotate').onclick = () => playerRotate(1);
+        document.getElementById('btn-down').onclick = () => playerDrop();
+        document.getElementById('btn-drop').onclick = () => {
+            while(!collide(arena, player)) player.pos.y++;
+            player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore();
+        };
+
+        startBtn.addEventListener('click', () => {
+            playerReset(); updateScore(); update();
+            startBtn.innerText = "重新啟動 RESTART";
+        });
+
+        // 定時更新隨機數據
+        setInterval(() => {
+            document.getElementById('uptime').innerText = (99.8 + Math.random() * 0.19).toFixed(2) + "%";
+            const load = Math.floor(40 + Math.random() * 55);
+            document.getElementById('load-val').innerText = load + "%";
+            document.getElementById('load-bar').style.width = load + "%";
+            const freq = (2.5 + Math.random() * 2.5).toFixed(1);
+            document.getElementById('freq-val').innerText = freq + "GHz";
+            document.getElementById('freq-bar').style.width = (freq / 5 * 100) + "%";
+            document.getElementById('bpm-val').innerText = Math.floor(60 + Math.random() * 65) + " BPM";
+        }, 800);
+
+        window.onload = () => { initECG(); drawECG(); };
+        window.onresize = initECG;
+    </script>
+</body>
+</html>
