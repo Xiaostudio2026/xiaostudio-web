@@ -2,13 +2,13 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='black'/><path d='M35 35L65 65M65 35L35 65' stroke='white' stroke-width='8' stroke-linecap='round'/></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -17,206 +17,585 @@
             font-family: 'Montserrat', sans-serif;
             margin: 0;
             overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none;
         }
 
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .section {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
             overflow: hidden;
-            filter: brightness(0.95) contrast(1.1); 
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .video-background video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+        @media (min-width: 1024px) {
+            .section {
+                transform: scale(1.12);
+                transform-origin: center center;
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+
+        .grid-overlay {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-        }
-
-        .video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
             z-index: -1;
             pointer-events: none;
         }
 
-        .hero-main-title {
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            line-height: 1.2;
-            text-transform: uppercase;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+        @media (min-width: 1024px) {
+            .grid-overlay { background-size: 70px 70px; }
         }
 
-        .hero-sub-title {
-            font-weight: 700;
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .nav-link {
-            font-size: 10px;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.7);
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
+        .video-background {
             position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: white;
-            transition: width 0.3s ease;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            filter: brightness(0.9) contrast(1.1); 
         }
 
-        .nav-link:hover::after {
-            width: 100%;
+        .video-background video { width: 100%; height: 100%; object-fit: cover; }
+
+        .video-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.9) 100%);
+            z-index: -1;
         }
 
-        .nav-link:hover {
-            color: #fff;
+        .lang-switcher {
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+        .lang-btn {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+        .lang-btn.active { opacity: 1; font-weight: 700; }
+
+        @media (min-width: 1024px) {
+            .lang-switcher { gap: 20px; transform: scale(1.1); }
         }
 
-        /* 音訊控制鈕 */
-        .audio-toggle {
-            position: fixed;
-            right: 40px;
-            bottom: 40px;
+        .carbon-monitor {
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.6;
+            text-align: right;
+        }
+
+        @media (min-width: 1024px) {
+            .carbon-monitor { right: 100px; top: 120px; transform: scale(1.2); }
+        }
+
+        .carbon-value {
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 2;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .workflow-node {
+            position: absolute;
+            pointer-events: auto;
+            cursor: grab;
+            z-index: 10;
+            user-select: none;
+            touch-action: none;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .workflow-node.dragging {
+            cursor: grabbing;
             z-index: 100;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+            transition: none;
+        }
+
+        .node-box {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 12px;
+            border-radius: 2px;
+            min-width: 160px;
+        }
+
+        @media (min-width: 1024px) {
+            .node-box { padding: 20px 28px; min-width: 240px; }
+        }
+
+        .node-box.special {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .node-label { 
+            font-size: 13px; 
+            font-weight: 700; 
+            letter-spacing: 0.1em; 
+            text-transform: uppercase; 
+            color: #fff; 
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            gap: 10px;
+        }
+        @media (min-width: 1024px) { .node-label { font-size: 16px; } }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+            animation: status-pulse 3s infinite ease-in-out;
         }
 
-        .audio-toggle:hover {
-            border-color: #fff;
-            background: rgba(255,255,255,0.1);
+        @keyframes status-pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .line-path { stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.2; fill: none; }
+        .line-pulse { 
+            stroke: rgba(255, 255, 255, 0.8); 
+            stroke-width: 1.2; 
+            fill: none; 
+            stroke-dasharray: 6, 1000; 
+            animation: pulse-move 8s linear infinite; 
         }
 
-        .animate-fade {
-            animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        .data-particle {
+            fill: #fff;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.8));
         }
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
+
+        @keyframes pulse-move { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
+
+        /* 詳情頁修正 */
+        #overlay-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 200; overflow: hidden;
+            backdrop-filter: blur(25px);
+        }
+        #overlay-screen.active { display: block; animation: fadeIn 0.4s ease; }
+
+        #overlay-iframe-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .logo-container {
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            line-height: 1.9;
+        }
+        @media (min-width: 768px) {
+            .logo-text { font-size: 1.75rem; } 
+        }
+        .logo-underline {
+            height: 3px;
+            background-color: #fff;
+            width: 36%; 
+            margin-top: 2px;
+        }
+
+        @media (min-width: 1024px) {
+            nav { padding: 5rem 8rem; } 
+        }
     </style>
 </head>
 <body>
 
-    <div class="video-background">
-        <video id="bgVideo" autoplay loop playsinline>
-            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp4" type="video/mp4">
-        </video>
-    </div>
-    <div class="video-overlay"></div>
-
-    <nav class="fixed top-0 w-full z-50 p-10 md:p-16 flex justify-between items-start animate-fade">
-        <div class="flex flex-col gap-2">
-            <span class="text-xl font-bold tracking-[0.4em] uppercase">XIAOSTUDIO</span>
-            <div class="h-[2px] w-16 bg-white"></div>
+    <nav class="fixed top-0 w-full z-[100] p-8 md:p-16 flex justify-between items-center pointer-events-none">
+        <div class="logo-container pointer-events-auto cursor-pointer" onclick="window.location.reload()">
+            <span class="logo-text">XIAOSTUDIO</span>
+            <div class="logo-underline"></div>
         </div>
         
-        <div class="hidden md:flex flex-col items-end gap-4 mr-20">
-            <a href="#" class="nav-link">Visual Design</a>
-            <a href="#" class="nav-link">Motion Graphics</a>
-            <a href="#" class="nav-link">Graphic Design</a>
-            <a href="#" class="nav-link">Product Photography</a>
+        <div class="lang-switcher mono">
+            <span class="lang-btn" data-lang="zh">ZH</span>
+            <span class="lang-btn active" data-lang="en">EN</span>
+            <span class="lang-btn" data-lang="jp">JP</span>
+            <span class="lang-btn" data-lang="kr">KR</span>
+            <span class="lang-btn" data-lang="fr">FR</span>
         </div>
     </nav>
 
-    <main class="relative h-screen flex items-center px-10 md:px-24">
-        <div class="max-w-4xl">
-            <div class="mb-6">
-                <h2 class="hero-sub-title text-xs md:text-sm animate-fade delay-1">
-                    BUILT WITH INTENT
-                </h2>
-            </div>
-            
-            <!-- 標題縮小 50%：從 text-4xl/7xl/8xl 調整為 text-2xl/4xl/5xl -->
-            <h1 class="hero-main-title text-2xl md:text-4xl lg:text-5xl animate-fade delay-2">
-                REFINING THE<br>
-                DIGITAL<br>
-                EXPERIENCE
-            </h1>
+    <div class="section" id="main-view">
+        <div class="video-background">
+            <video id="bgVideo" autoplay loop playsinline muted preload="auto">
+                <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <div class="carbon-monitor">
+            <div id="label-carbon" class="text-[8px] mono uppercase opacity-50 mb-1">CO2 Emission Pipeline</div>
+            <div id="carbonValue" class="carbon-value mono">37,504,291,120</div>
+        </div>
 
-            <div class="mt-12 animate-fade delay-3">
-                <button class="bg-white text-black font-bold px-10 py-4 text-[10px] tracking-[0.5em] uppercase hover:bg-transparent hover:text-white border border-white transition-all duration-500">
-                    Explore Work
-                </button>
+        <div class="grid-overlay"></div>
+        <div class="video-overlay"></div>
+
+        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+            <path id="mainLinePath" class="line-path" d="" />
+            <path id="pulseLinePath" class="line-pulse" d="" />
+            <circle r="3" class="data-particle">
+                <animateMotion id="particleAnim" dur="4s" repeatCount="indefinite" path="" />
+            </circle>
+        </svg>
+
+        <div id="dashboard" class="dashboard-container">
+            <!-- Node 1: About -->
+            <div id="node1" class="workflow-node" data-depth="0.03">
+                <div class="node-box">
+                    <span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_01</span>
+                    <span class="node-label">
+                        <i class="status-indicator"></i>
+                        <span id="txt-about">About Xiao</span>
+                    </span>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center cursor-pointer" onclick="showOverlay('about')">
+                        <span id="btn-about" class="mono text-[9px] opacity-50 uppercase tracking-widest">View Profile</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 3: Motion -->
+            <div id="node3" class="workflow-node" data-depth="0.08">
+                <div class="node-box">
+                    <span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_03</span>
+                    <span class="node-label">
+                        <i class="status-indicator"></i>
+                        <span id="txt-motion">Motion Works</span>
+                    </span>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center cursor-pointer" onclick="showOverlay('motion')">
+                        <span id="btn-motion" class="mono text-[9px] opacity-50 uppercase tracking-widest">Motion Projects</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 2: Static -->
+            <div id="node2" class="workflow-node" data-depth="0.02">
+                <div class="node-box">
+                    <span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_02</span>
+                    <span class="node-label">
+                        <i class="status-indicator"></i>
+                        <span id="txt-static">Static Works</span>
+                    </span>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center cursor-pointer" onclick="showOverlay('static')">
+                        <span id="btn-static" class="mono text-[9px] opacity-50 uppercase tracking-widest">Archive</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 5: Web Design -->
+            <div id="node5" class="workflow-node" data-depth="0.06">
+                <div class="node-box">
+                    <span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_05</span>
+                    <span class="node-label">
+                        <i class="status-indicator"></i>
+                        <span id="txt-web">Web Design</span>
+                    </span>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center cursor-pointer" onclick="showOverlay('web')">
+                        <span id="btn-web" class="mono text-[9px] opacity-50 uppercase tracking-widest">Digital Experience</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 6: Contact Info -->
+            <div id="node6" class="workflow-node" data-depth="0.04">
+                <div class="node-box special">
+                    <span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_06</span>
+                    <div class="flex flex-col gap-1">
+                        <span class="node-label lowercase text-[11px] md:text-[13px] tracking-normal">
+                            <i class="status-indicator"></i>
+                            <a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a>
+                        </span>
+                        <span class="node-label text-[11px] md:text-[13px] tracking-widest opacity-80 pl-4 mono">
+                            <a href="tel:+886928558602" class="hover:underline">+886-928-558-602</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 4: Print/Packaging -->
+            <div id="node4" class="workflow-node" data-depth="0.05">
+                <div class="node-box">
+                    <span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_04</span>
+                    <span class="node-label">
+                        <i class="status-indicator"></i>
+                        <span id="txt-print">Print & Packaging</span>
+                    </span>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center cursor-pointer" onclick="showOverlay('print')">
+                        <span id="btn-print" class="mono text-[9px] opacity-50 uppercase tracking-widest">Physical Projects</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
 
-    <button id="audioToggle" class="audio-toggle animate-fade delay-3" aria-label="切換聲音">
-        <svg id="volumeOn" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-        <svg id="volumeOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
+            <h1 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">
+                Liquid Flow<br>Roll with the Form
+            </h1>
+            <p class="mt-6 text-[10px] mono tracking-[0.5em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
+        </div>
+    </div>
+
+    <div id="overlay-screen">
+        <div id="btn-close" class="fixed top-10 right-10 z-[250] bg-white text-black px-6 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono" onclick="hideOverlay()">Close</div>
+        <div id="overlay-content" class="w-full h-full"></div>
+    </div>
+
+    <button id="audioToggle" class="audio-toggle">
+        <svg id="volumeOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
     </button>
 
-    <footer class="fixed left-10 bottom-10 animate-fade delay-3">
-        <div class="flex flex-col gap-2">
-            <a href="mailto:jewuenxiao@gmail.com" class="text-[9px] tracking-[0.2em] font-bold uppercase hover:opacity-70 transition-opacity">jewuenxiao@gmail.com</a>
-            <div class="text-[8px] tracking-[0.3em] text-white/60 uppercase">
-                &copy; 2026 XIAOSTUDIO.
-            </div>
-        </div>
-    </footer>
-
     <script>
-        const video = document.getElementById('bgVideo');
-        const audioBtn = document.getElementById('audioToggle');
-        const volOn = document.getElementById('volumeOn');
-        const volOff = document.getElementById('volumeOff');
+        const translations = {
+            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", carbon: "二氧化碳排放監測", close: "關閉", updateSoon: "管道詳情即將更新。" },
+            en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", carbon: "CO2 Emission Pipeline", close: "Close", updateSoon: "Pipeline details updated soon." },
+            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", carbon: "CO2排出パイプライン", close: "閉じる", updateSoon: "詳細はまもなく更新されます。" },
+            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", carbon: "이산화탄소 배출 파이프라인", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다." },
+            fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", carbon: "Pipeline d'émission de CO2", close: "Fermer", updateSoon: "Détails mis à jour prochainement." }
+        };
 
-        video.muted = true;
+        let currentLang = 'en';
 
-        audioBtn.addEventListener('click', () => {
-            if (video.muted) {
-                video.muted = false;
-                volOn.classList.remove('hidden');
-                volOff.classList.add('hidden');
-            } else {
-                video.muted = true;
-                volOn.classList.add('hidden');
-                volOff.classList.remove('hidden');
-            }
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('hero-title').innerHTML = t.hero;
+            document.getElementById('txt-about').innerText = t.about;
+            document.getElementById('btn-about').innerText = t.viewAbout;
+            document.getElementById('txt-static').innerText = t.static;
+            document.getElementById('btn-static').innerText = t.viewStatic;
+            document.getElementById('txt-motion').innerText = t.motion;
+            document.getElementById('btn-motion').innerText = t.viewMotion;
+            document.getElementById('txt-print').innerText = t.print;
+            document.getElementById('btn-print').innerText = t.viewPrint;
+            document.getElementById('txt-web').innerText = t.web;
+            document.getElementById('btn-web').innerText = t.viewWeb;
+            document.getElementById('label-carbon').innerText = t.carbon;
+            document.getElementById('btn-close').innerText = t.close;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => changeLanguage(btn.getAttribute('data-lang')));
         });
 
-        window.addEventListener('load', () => {
-            video.play().catch(e => console.log("Auto-play prevented"));
+        const nodes = Array.from(document.querySelectorAll('.workflow-node'));
+        const mainLinePath = document.getElementById('mainLinePath');
+        const pulseLinePath = document.getElementById('pulseLinePath');
+        const particleAnim = document.getElementById('particleAnim');
+
+        function initNodePositions() {
+            const isMobile = window.innerWidth < 768;
+            const positions = isMobile ? [
+                { id: 'node1', top: '15%', left: '10%' },
+                { id: 'node3', top: '28%', left: '50%' },
+                { id: 'node2', top: '42%', left: '15%' },
+                { id: 'node5', top: '56%', left: '55%' },
+                { id: 'node6', top: '18%', left: '65%' },
+                { id: 'node4', top: '75%', left: '45%' }
+            ] : [
+                { id: 'node1', top: '18%', left: '12%' },  
+                { id: 'node3', top: '15%', left: '38%' },  
+                { id: 'node2', top: '48%', left: '25%' },  
+                { id: 'node5', top: '52%', left: '55%' },  
+                { id: 'node6', top: '25%', left: '76%' },  
+                { id: 'node4', top: '80%', left: '68%' }   
+            ];
+
+            positions.forEach(pos => {
+                const el = document.getElementById(pos.id);
+                if(el) { el.style.top = pos.top; el.style.left = pos.left; }
+            });
+            setTimeout(updateLines, 100);
+        }
+
+        function getCenter(el) {
+            const rect = el.getBoundingClientRect();
+            const scaleX = 1920 / window.innerWidth;
+            const scaleY = 1080 / window.innerHeight;
+            return {
+                x: (rect.left + rect.width / 2) * scaleX,
+                y: (rect.top + rect.height / 2) * scaleY
+            };
+        }
+
+        function createCurve(p1, p2) {
+            const cp1x = p1.x + (p2.x - p1.x) * 0.5;
+            return `C${cp1x},${p1.y} ${cp1x},${p2.y} ${p2.x},${p2.y} `;
+        }
+
+        function updateLines() {
+            const n1 = getCenter(document.getElementById('node1'));
+            const n2 = getCenter(document.getElementById('node2'));
+            const n3 = getCenter(document.getElementById('node3'));
+            const n4 = getCenter(document.getElementById('node4'));
+            const n5 = getCenter(document.getElementById('node5'));
+            const n6 = getCenter(document.getElementById('node6'));
+
+            let mainD = `M${n1.x},${n1.y} `;
+            mainD += createCurve(n1, n2);
+            mainD += createCurve(n2, n5);
+            mainD += createCurve(n5, n4);
+            mainD += createCurve(n4, n6);
+            
+            let fullNetwork = mainD;
+            fullNetwork += ` M${n1.x},${n1.y} ` + createCurve(n1, n5);
+            fullNetwork += ` M${n1.x},${n1.y} ` + createCurve(n1, n4);
+            fullNetwork += ` M${n5.x},${n5.y} ` + createCurve(n5, n6);
+            fullNetwork += ` M${n3.x},${n3.y} ` + createCurve(n3, n5);
+            fullNetwork += ` M${n1.x},${n1.y} ` + createCurve(n1, n3);
+            fullNetwork += ` M${n3.x},${n3.y} ` + createCurve(n3, n6);
+
+            mainLinePath.setAttribute('d', fullNetwork);
+            pulseLinePath.setAttribute('d', fullNetwork);
+            particleAnim.setAttribute('path', mainD); 
+        }
+
+        let activeNode = null;
+        let offset = { x: 0, y: 0 };
+
+        nodes.forEach(node => {
+            const startDrag = (clientX, clientY) => {
+                activeNode = node;
+                node.classList.add('dragging');
+                const rect = node.getBoundingClientRect();
+                offset = { x: clientX - rect.left, y: clientY - rect.top };
+            };
+            node.addEventListener('mousedown', (e) => { 
+                if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.clientX, e.clientY); 
+            });
+            node.addEventListener('touchstart', (e) => { 
+                if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.touches[0].clientX, e.touches[0].clientY); 
+            }, { passive: false });
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!activeNode) return;
+            activeNode.style.left = `${e.clientX - offset.x}px`;
+            activeNode.style.top = `${e.clientY - offset.y}px`;
+            updateLines();
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!activeNode) return;
+            activeNode.style.left = `${e.touches[0].clientX - offset.x}px`;
+            activeNode.style.top = `${e.touches[0].clientY - offset.y}px`;
+            updateLines();
+            e.preventDefault();
+        }, { passive: false });
+
+        const endDrag = () => { if (activeNode) { activeNode.classList.remove('dragging'); activeNode = null; } };
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+
+        window.addEventListener('mousemove', (e) => {
+            if (activeNode) return;
+            const moveX = (e.clientX - window.innerWidth / 2);
+            const moveY = (e.clientY - window.innerHeight / 2);
+            nodes.forEach(node => {
+                const depth = parseFloat(node.getAttribute('data-depth'));
+                node.style.transform = `translate(${moveX * depth}px, ${moveY * depth}px)`;
+            });
+            updateLines();
+        });
+
+        let currentCarbon = 37504291120;
+        function updateCarbon() {
+            currentCarbon += Math.floor(Math.random() * 200) + 100;
+            const el = document.getElementById('carbonValue');
+            if(el) el.innerText = currentCarbon.toLocaleString();
+            requestAnimationFrame(updateCarbon);
+        }
+        updateCarbon();
+
+        function showOverlay(type) {
+            const screen = document.getElementById('overlay-screen');
+            const content = document.getElementById('overlay-content');
+            const t = translations[currentLang];
+            
+            screen.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            if (type === 'about') {
+                // About 專屬：將當前語言作為參數傳遞 (?lang=zh)
+                const iframeUrl = `https://xiaostudio.xyz/core/?lang=${currentLang}`;
+                content.innerHTML = `
+                    <iframe src="${iframeUrl}" id="overlay-iframe-container" allow="autoplay"></iframe>
+                `;
+            } else {
+                let title = t[type] || "Project";
+                content.innerHTML = `
+                    <div class="flex flex-col items-center justify-center w-full h-full px-8 text-center">
+                        <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">${title}</h2>
+                        <div class="h-[1px] w-20 bg-white/20 mb-8"></div>
+                        <p class="text-xl opacity-40 mono uppercase tracking-widest">${t.updateSoon}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function hideOverlay() { 
+            const screen = document.getElementById('overlay-screen');
+            const content = document.getElementById('overlay-content');
+            screen.classList.remove('active'); 
+            document.body.style.overflow = ''; 
+            content.innerHTML = '';
+        }
+
+        window.addEventListener('load', initNodePositions);
+        window.addEventListener('resize', () => { initNodePositions(); updateLines(); });
+        
+        const bgVideo = document.getElementById('bgVideo');
+        document.getElementById('audioToggle').addEventListener('click', () => {
+            bgVideo.muted = !bgVideo.muted;
+            document.getElementById('audioToggle').style.borderColor = bgVideo.muted ? "rgba(255,255,255,0.2)" : "#fff";
         });
     </script>
-
 </body>
 </html>
