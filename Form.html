@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry | Xiao Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --accent-white: #ffffff;
+            --mono-gray: #333333;
+            --text-gray: #888888;
+        }
+
+        body {
+          background-color: #0a0a0a; /* 確保與主站底色一致 */
+    color: var(--accent-white);
+    font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    /* 移除 min-height: 100vh，改由內容撐開高度 */
+    padding: 40px 0;
+        }
+
+        .contact-container {
+            width: 100%;
+            max-width: 550px;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 1.2s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+
+        h2 {
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .sub-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-gray);
+            letter-spacing: 0.2em;
+            display: block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--mono-gray);
+            color: var(--accent-white);
+            padding: 12px 0;
+            font-size: 14px;
+            font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+            border-radius: 0;
+            outline: none;
+            transition: all 0.5s ease;
+            -webkit-appearance: none; /* 移除 iOS/Chrome 預設樣式 */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* 針對 select 加入自定義下拉符號 (SVG) */
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0 center;
+            background-size: 12px;
+            cursor: pointer;
+            padding-right: 20px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-bottom: 1px solid var(--accent-white);
+            transform: translateY(-1px);
+        }
+
+        /* 當 select 被聚焦時，箭頭顏色變亮 */
+        select:focus {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+
+        select option {
+            background-color: #111;
+            color: white;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 20px;
+            background-color: var(--accent-white);
+            color: #000;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .submit-btn:hover { 
+            background-color: #999; 
+            letter-spacing: 0.5em; 
+        }
+
+        #status-msg {
+            text-align: center;
+            margin: 100px 0;
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            line-height: 2;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="contact-container">
+    <h2>Inquiry / 需求表單</h2>
+    
+    <form id="contact-form" action="https://formspree.io/f/mreyrpjl" method="POST">
+        <div class="form-group">
+            <label>Name / 姓名</label>
+            <input type="text" name="name" required placeholder="Your Name">
+        </div>
+
+        <div class="form-group">
+            <label>Email / 電子郵件</label>
+            <input type="email" name="email" required placeholder="jewuenxiao@gmail.com">
+        </div>
+
+        <div class="form-group">
+            <label>Service / 項目</label>
+            <select name="service">
+                <option value="Brand Visual Design">品牌視覺設計</option>
+                <option value="Brand Motion Production">品牌影音製作</option>
+                <option value="Packaging Design">包裝設計</option>
+                <option value="Web Design">網頁設計</option>
+                <option value="Others">其他（書籍,海報,攝影等）</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Budget / 預算區間</label>
+            <select name="budget">
+                <option value="30k-50k">NT$ 30,000 - 50,000</option>
+                <option value="50k-100k">NT$ 50,000 - 100,000</option>
+                <option value="100k-200k">NT$ 100,000 - 200,000</option>
+                <option value="200k+">NT$ 200,000 以上</option>
+                <option value="discuss">尚未確認 / 需討論</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Reference Links / 參考範例 (Max 3)</label>
+            <div class="sub-group"><input type="url" name="ref_1" placeholder="Link 01 - https://..."></div>
+            <div class="sub-group"><input type="url" name="ref_2" placeholder="Link 02 - https://..."></div>
+            <div class="sub-group"><input type="url" name="ref_3" placeholder="Link 03 - https://..."></div>
+        </div>
+
+        <div class="form-group">
+            <label>Message / 詳情</label>
+            <textarea name="message" rows="4" placeholder="Tell me about your project"></textarea>
+        </div>
+
+        <button type="submit" id="submit-btn" class="submit-btn">Send Inquiry</button>
+    </form>
+    
+    <div id="status-msg"></div>
+</div>
+
+<script>
+    const form = document.getElementById("contact-form");
+    const statusMsg = document.getElementById("status-msg");
+    const btn = document.getElementById("submit-btn");
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.innerText = "SENDING...";
+
+        const data = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                form.style.display = "none";
+                statusMsg.style.display = "block";
+                statusMsg.innerHTML = "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT.";
+            } else { throw new Error(); }
+        } catch (err) {
+            btn.disabled = false;
+            btn.innerText = "ERROR, TRY AGAIN";
+        }
+    };
+</script>
+
+</body>
+</html>
