@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Core Processor Unit - 佈局對齊版</title>
+    <title>Core Processor Unit - Technical Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
 
         :root {
             --bg-color: #f7f7f7;
-            --panel-bg: rgba(255, 255, 255, 1);
-            --border-color: rgba(0, 0, 0, 0.1);
+            --panel-bg: transparent; /* 改為透明 */
+            --border-color: transparent; /* 移除預設邊框色 */
             --text-main: #1a1a1a;
             --accent-color: #000;
+            font-size: 21.16px;
         }
 
         body {
@@ -25,6 +26,7 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            position: relative;
         }
 
         .main-container {
@@ -35,17 +37,18 @@
         }
 
         #game-canvas {
-            border: 1px solid #333;
+            border: 1px solid #333; /* 遊戲畫布保留邊框 */
             background-color: #1a1a1a;
             image-rendering: pixelated;
         }
 
         .dashboard-panel {
             background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: none; /* 取消面板框線 */
+            box-shadow: none; /* 取消陰影 */
             position: relative;
-            height: 100%; /* 確保面板高度填滿 */
+            height: 100%;
+            z-index: 2;
         }
 
         .cache-video-wrapper {
@@ -53,7 +56,7 @@
             height: 160px;
             margin-bottom: 1.5rem;
             overflow: hidden;
-            border: 1px solid #eee;
+            border: none; /* 移除影片框線 */
             background: #000;
             position: relative;
         }
@@ -67,7 +70,7 @@
         }
 
         .experience-timer {
-            font-size: 11px;
+            font-size: 0.7rem;
             line-height: 1.6;
             color: #333;
         }
@@ -80,14 +83,15 @@
         }
 
         .ms-ticker {
-            font-size: 10px;
+            font-size: 0.6rem;
             color: #888;
             font-weight: 400;
         }
 
+        /* 遊戲按鈕：保留框線 */
         .control-btn {
             background: #fff;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(0, 0, 0, 0.15); 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -110,179 +114,228 @@
             stroke-width: 1.5;
         }
 
-        .location-marker {
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .location-marker::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            background: red;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: translateY(-50%) scale(1); opacity: 1; }
-            100% { transform: translateY(-50%) scale(3); opacity: 0; }
-        }
-
-        .pause-overlay {
+        .game-overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.6);
-            display: none;
+            background: rgba(0,0,0,0.8);
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
-            z-index: 20;
-            backdrop-filter: blur(2px);
+            z-index: 30;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
         }
 
-        .is-paused .pause-overlay {
+        .game-overlay.hidden {
+            display: none;
+        }
+
+        .service-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 2px;
+            border: 1px solid #ddd; /* 服務標籤保留輕微框線以區隔文字 */
+            border-radius: 2px;
+            font-size: 0.55rem;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .service-tag:hover {
+            border-color: #000;
+            color: #000;
+        }
+
+        #form-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+        }
+
+        #form-modal.active {
             display: flex;
+        }
+
+        .modal-header {
+            height: 50px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .order-mobile-1 { order: 1; }
+            .order-mobile-2 { order: 2; }
+            .order-mobile-3 { order: 3; }
+            .order-mobile-4 { order: 4; }
+            .order-mobile-5 { order: 5; }
         }
     </style>
 </head>
 <body class="p-6">
-    <div class="main-container">
 
-        <header class="mb-6 border-b border-black/10 pb-6 flex flex-col md:flex-row justify-between items-end">
+    <!-- Iframe 彈窗 -->
+    <div id="form-modal">
+        <div class="modal-header">
+            <span class="text-[0.6rem] font-bold uppercase tracking-widest text-gray-500">External_Form: Request_Consultation</span>
+            <button onclick="closeModal()" class="text-xs font-bold hover:text-red-500">CLOSE [X]</button>
+        </div>
+        <iframe src="https://xiaostudio.xyz/form/" class="w-full flex-grow border-none"></iframe>
+    </div>
+
+    <div class="main-container">
+        <!-- 移除 Header 底部線 -->
+        <header class="mb-6 flex flex-col md:flex-row justify-between items-end pb-6">
             <div>
-                <div class="text-[10px] text-gray-500 mb-1 tracking-[0.2em]">NODE_01</div>
-                <h1 class="text-3xl font-bold tracking-tighter text-gray-800">ABOUT_XIAO v2.6</h1>
+                <div class="text-[0.6rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
+                <h1 class="text-3xl font-bold tracking-tighter text-gray-800">ABOUT_XIAO v3.0</h1>
             </div>
             <div class="flex gap-8 mt-4 md:mt-0">
                 <div class="text-right">
-                    <div class="text-[10px] text-gray-400">指令週期</div>
+                    <div class="text-[0.6rem] text-gray-400 uppercase">Instruction_Cycles</div>
                     <div class="text-lg font-bold text-gray-700" id="cycle-count">0048293</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-[10px] text-gray-400">核心溫度</div>
+                    <div class="text-[0.6rem] text-gray-400 uppercase">Core_Temperature</div>
                     <div class="text-lg font-bold text-gray-700" id="temp-val">42.5°C</div>
                 </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex flex-col lg:grid">
             
-            <!-- 左側欄 -->
-            <div class="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1">
+            <!-- 左側面板 -->
+            <div class="lg:col-span-4 flex flex-col gap-6 order-mobile-1">
                 <div class="dashboard-panel p-6">
-                    <h3 class="text-[10px] font-bold mb-4 text-gray-500 uppercase tracking-widest">Memory Cache Visualizer</h3>
+                    <h3 class="text-[0.6rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Memory Cache Visualizer</h3>
                     <div class="cache-video-wrapper">
                         <video autoplay muted loop playsinline>
                             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1774171797/Video_5_1_qhp8yk.mp4" type="video/mp4">
                         </video>
-                        <div class="absolute top-2 left-2 bg-black/50 text-[8px] text-white px-1 font-mono">CORE_STREAM_01</div>
+                        <div class="absolute top-2 left-2 bg-black/50 text-[0.45rem] text-white px-1 font-mono">CORE_STREAM_01</div>
                     </div>
 
                     <div class="space-y-4">
                         <div>
-                            <div class="flex justify-between text-[10px] font-bold mb-2 border-b border-gray-100 pb-1">
+                            <!-- 移除底線 -->
+                            <div class="flex justify-between text-[0.6rem] font-bold mb-2 pb-1">
                                 <span>L1_CACHE (WORK_EXPERIENCE)</span>
                             </div>
-                            <!-- 高精度工作資歷計時器 -->
                             <div id="experience-display" class="experience-timer font-mono text-gray-700">
-                                載入高精度數據...
+                                LOADING_DATA...
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="dashboard-panel p-6">
-                    <h3 class="text-[10px] font-bold mb-3 text-gray-500 uppercase tracking-widest">System Location</h3>
-                    <div class="bg-gray-50 p-4 border border-gray-100 rounded">
-                        <div class="location-marker text-[11px] font-bold text-gray-800 mb-2">
-                            台灣新北市板橋區
+                <div class="dashboard-panel p-6 order-mobile-2">
+                    <h3 class="text-[0.6rem] font-bold mb-3 text-gray-500 uppercase tracking-widest">System Location</h3>
+                    <!-- 移除位置背景與邊框 -->
+                    <div class="p-0">
+                        <div class="relative pl-4 text-[0.7rem] font-bold text-gray-800 mb-2">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            BANQIAO_DIST, NEW_TAIPEI, TW
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-[10px] text-gray-500 font-mono">
+                        <div class="grid grid-cols-2 gap-2 text-[0.6rem] text-gray-500 font-mono">
                             <div>LAT: <span class="text-gray-800">25.0117° N</span></div>
                             <div>LNG: <span class="text-gray-800">121.4658° E</span></div>
-                            <div class="col-span-2 mt-2 pt-2 border-t border-gray-200 opacity-60">
-                                GRID_REF: 51N UH 06
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 中間遊戲區 -->
-            <div class="lg:col-span-5 flex flex-col items-center order-1 lg:order-2 gap-6">
+            <!-- 遊戲中心區 -->
+            <div class="lg:col-span-5 flex flex-col items-center gap-6 order-mobile-4">
+                <div class="dashboard-panel p-4 w-full order-mobile-3">
+                    <div class="flex justify-around items-center">
+                        <div class="text-center">
+                            <div class="text-[0.5rem] text-gray-400 uppercase tracking-widest">Total_Score</div>
+                            <div class="text-2xl font-bold tracking-tighter text-gray-800" id="score">000000</div>
+                        </div>
+                        <!-- 移除中間分隔線 -->
+                        <div class="text-center">
+                            <div class="text-[0.5rem] text-gray-400 uppercase tracking-widest">System_Level</div>
+                            <div class="text-2xl font-bold text-gray-600" id="level">01</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="w-full flex flex-col items-center">
-                    <div class="text-[10px] text-gray-400 mb-2 uppercase tracking-widest">Core Execution</div>
-                    <div class="dashboard-panel p-2 shadow-xl border-gray-200 relative overflow-hidden" id="canvas-container">
+                    <div class="text-[0.6rem] text-gray-400 mb-2 uppercase tracking-widest">Core Execution</div>
+                    <!-- 移除遊戲面板邊框 -->
+                    <div class="p-0 relative overflow-hidden" id="canvas-container">
                         <canvas id="game-canvas" width="260" height="420"></canvas>
-                        
-                        <!-- 暫停遮罩 -->
-                        <div class="pause-overlay">
+                        <div id="game-overlay" class="game-overlay">
+                            <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            </div>
+                            <div class="text-xs font-bold tracking-[0.3em]">INITIALIZE_KERNEL</div>
+                            <div class="text-[0.5rem] mt-2 opacity-50 uppercase tracking-widest">Click to Execute</div>
+                        </div>
+                        <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.6);">
                             <div class="text-xl font-bold tracking-widest mb-2">SYSTEM_HALTED</div>
-                            <div class="text-[10px] opacity-70">PRESS 'P' TO RESUME</div>
+                            <div class="text-[0.6rem] opacity-70">CLICK TO RESUME</div>
                         </div>
                     </div>
                 </div>
                 
+                <!-- 控制按鈕區：保留邊框 -->
                 <div class="grid grid-cols-3 gap-3 w-full max-w-[280px]">
-                    <button class="control-btn h-12" id="btn-left">
-                        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    </button>
-                    <button class="control-btn h-12" id="btn-rotate">
-                        <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                    </button>
-                    <button class="control-btn h-12" id="btn-right">
-                        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
-                    <button class="control-btn h-12" id="btn-pause">
-                        <svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-                    </button>
-                    <button class="control-btn h-12" id="btn-down">
-                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                    </button>
-                    <button class="control-btn h-12" id="btn-drop">
-                        <span class="text-[9px] font-bold">DROP</span>
-                    </button>
+                    <button class="control-btn h-12" id="btn-left"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                    <button class="control-btn h-12" id="btn-rotate"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
+                    <button class="control-btn h-12" id="btn-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    <button class="control-btn h-12" id="btn-pause"><svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>
+                    <button class="control-btn h-12" id="btn-down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <button class="control-btn h-12" id="btn-drop"><span class="text-[0.55rem] font-bold">DROP</span></button>
                 </div>
             </div>
 
-            <!-- 右側欄 -->
-            <div class="lg:col-span-3 flex flex-col gap-6 order-3 lg:order-3">
+            <!-- 右側面板 -->
+            <div class="lg:col-span-3 flex flex-col gap-6 order-mobile-5">
                 <div class="dashboard-panel p-6">
-                    <h3 class="text-[10px] font-bold mb-4 text-gray-500 uppercase">Registers</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="text-[10px] text-gray-400 mb-1">SCORE</div>
-                            <div class="text-3xl font-bold tracking-tighter text-gray-800" id="score">000000</div>
-                        </div>
-                        <div>
-                            <div class="text-[10px] text-gray-400 mb-1">LEVEL</div>
-                            <div class="text-xl font-bold text-gray-600" id="level">01</div>
-                        </div>
+                    <h3 class="text-[0.6rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Service_Capabilities</h3>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="service-tag">品牌視覺設計</span>
+                        <span class="service-tag">品牌影像製作</span>
+                        <span class="service-tag">包裝設計</span>
+                        <span class="service-tag">網頁設計</span>
+                        <span class="service-tag">主視覺設計</span>
+                        <span class="service-tag">海報設計</span>
+                        <span class="service-tag">書籍裝幀</span>
+                        <span class="service-tag">動態影像</span>
+                        <span class="service-tag">UI/UX</span>
                     </div>
-
-                    <div class="mt-8">
-                        <button id="start-btn" class="w-full py-4 bg-gray-800 text-white text-[10px] font-bold hover:bg-black transition-all tracking-widest shadow-md">
-                            INITIALIZE_KERNEL
-                        </button>
-                    </div>
-                </div>
-
-                <div class="dashboard-panel p-6">
-                    <h3 class="text-[10px] font-bold mb-4 text-gray-500 uppercase">System Log</h3>
-                    <div class="text-[9px] text-gray-400 font-mono leading-relaxed space-y-2 h-40 overflow-hidden" id="log-content">
-                        <p>> KERNEL_LOAD_READY</p>
-                        <p>> LOCATION_SYNC: BANQIAO_DIST</p>
-                        <p>> HI_RES_TIMER_ATTACHED</p>
-                        <p class="text-gray-800 animate-pulse font-bold" id="log-status">> AWAITING_EXECUTION...</p>
+                    <!-- 移除分隔線 -->
+                    <div class="mt-6 pt-0">
+                        <div class="text-[0.5rem] text-gray-400 mb-3 uppercase tracking-wider">Contact_Protocols</div>
+                        <div class="space-y-3">
+                            <a href="mailto:jewuenxiao@gmail.com" class="block group">
+                                <div class="text-[0.45rem] text-gray-400 mb-0.5 uppercase">01. MAIL_GATEWAY</div>
+                                <div class="text-[0.6rem] text-gray-700 font-mono group-hover:underline underline-offset-4 decoration-black/30">
+                                    jewuenxiao@gmail.com
+                                </div>
+                            </a>
+                            <div class="cursor-pointer group" onclick="openModal()">
+                                <div class="text-[0.45rem] text-gray-400 mb-0.5 uppercase">02. REQUEST_FORM</div>
+                                <div class="text-[0.6rem] text-gray-700 font-mono group-hover:underline underline-offset-4 decoration-black/30">
+                                    HTTPS://XIAOSTUDIO.XYZ/FORM/
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,20 +343,28 @@
     </div>
 
     <script>
-        // --- 處理器數據仿真 ---
+        // 彈窗控制
+        const modal = document.getElementById('form-modal');
+        function openModal() { modal.classList.add('active'); isPaused = true; }
+        function closeModal() { modal.classList.remove('active'); }
+
+        // 模擬數據
         let cycles = 48293;
         setInterval(() => {
             cycles += Math.floor(Math.random() * 10);
-            document.getElementById('cycle-count').innerText = cycles.toString().padStart(7, '0');
-            const temp = (38 + Math.random() * 4).toFixed(1);
-            document.getElementById('temp-val').innerText = temp + "°C";
+            const cycleEl = document.getElementById('cycle-count');
+            if (cycleEl) cycleEl.innerText = cycles.toString().padStart(7, '0');
+            const tempEl = document.getElementById('temp-val');
+            if (tempEl) {
+                const temp = (38 + Math.random() * 4).toFixed(1);
+                tempEl.innerText = temp + "°C";
+            }
         }, 1000);
 
-        // --- 高精度工作資歷計時器 ---
+        // 職業計時器
         function updateExperience() {
             const startDate = new Date('2010-03-01T00:00:00');
             const now = new Date();
-            
             let years = now.getFullYear() - startDate.getFullYear();
             let months = now.getMonth() - startDate.getMonth();
             let days = now.getDate() - startDate.getDate();
@@ -323,28 +384,29 @@
             if (months < 0) { months += 12; years--; }
 
             const display = document.getElementById('experience-display');
-            display.innerHTML = `
-                <div>YEARS: <span>${years}</span></div>
-                <div>MONTHS: <span>${months}</span></div>
-                <div>DAYS: <span>${days}</span></div>
-                <div class="text-[9px] mt-2 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
-                <div class="text-xs font-bold mt-1">
-                    ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker">.${milliseconds.toString().padStart(3,'0')}</span>
-                </div>
-            `;
+            if (display) {
+                display.innerHTML = `
+                    <div>YEARS: <span>${years}</span></div>
+                    <div>MONTHS: <span>${months}</span></div>
+                    <div>DAYS: <span>${days}</span></div>
+                    <div class="text-[0.5rem] mt-2 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
+                    <div class="text-xs font-bold mt-1">
+                        ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker">.${milliseconds.toString().padStart(3,'0')}</span>
+                    </div>
+                `;
+            }
             requestAnimationFrame(updateExperience);
         }
         requestAnimationFrame(updateExperience);
 
-        // --- 俄羅斯方塊邏輯 ---
+        // 俄羅斯方塊邏輯
         const canvas = document.getElementById('game-canvas');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
         const levelElement = document.getElementById('level');
-        const startBtn = document.getElementById('start-btn');
-        const canvasContainer = document.getElementById('canvas-container');
+        const gameOverlay = document.getElementById('game-overlay');
+        const pauseOverlay = document.getElementById('pause-overlay');
         const pauseBtn = document.getElementById('btn-pause');
-        const logStatus = document.getElementById('log-status');
         
         context.scale(20, 20);
 
@@ -430,6 +492,10 @@
                 arena.forEach(row => row.fill(0));
                 player.score = 0;
                 updateScore();
+                gameStarted = false;
+                isPaused = true;
+                gameOverlay.classList.remove('hidden');
+                pauseOverlay.classList.add('hidden');
             }
         }
 
@@ -507,17 +573,29 @@
             if (!gameStarted) return;
             isPaused = !isPaused;
             if (isPaused) {
-                canvasContainer.classList.add('is-paused');
-                logStatus.innerText = "> SYSTEM_HALTED";
+                pauseOverlay.classList.remove('hidden');
                 pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
             } else {
-                canvasContainer.classList.remove('is-paused');
-                logStatus.innerText = "> EXECUTING_THREADS...";
+                pauseOverlay.classList.add('hidden');
                 pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
                 lastTime = performance.now();
                 update();
             }
         };
+
+        const startGame = () => {
+            gameStarted = true;
+            isPaused = false;
+            gameOverlay.classList.add('hidden');
+            pauseOverlay.classList.add('hidden');
+            playerReset(); 
+            updateScore(); 
+            lastTime = performance.now();
+            update();
+        };
+
+        gameOverlay.onclick = startGame;
+        pauseOverlay.onclick = togglePause;
 
         document.getElementById('btn-left').onclick = () => playerMove(-1);
         document.getElementById('btn-right').onclick = () => playerMove(1);
@@ -527,16 +605,12 @@
         document.getElementById('btn-pause').onclick = togglePause;
 
         document.addEventListener('keydown', event => {
-            if (!gameStarted) return;
-            
-            // P 鍵或 Esc 鍵暫停
-            if (event.keyCode === 80 || event.keyCode === 27) {
-                togglePause();
+            if (!gameStarted) {
+                if (event.keyCode === 13 || event.keyCode === 32) startGame();
                 return;
             }
-
+            if (event.keyCode === 80 || event.keyCode === 27) { togglePause(); return; }
             if (isPaused) return;
-
             if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) event.preventDefault();
             switch (event.keyCode) {
                 case 37: case 65: playerMove(-1); break;
@@ -546,18 +620,6 @@
                 case 32: performDrop(); break;
             }
         });
-
-        startBtn.onclick = () => {
-            gameStarted = true;
-            isPaused = false;
-            canvasContainer.classList.remove('is-paused');
-            logStatus.innerText = "> EXECUTING_THREADS...";
-            playerReset(); 
-            updateScore(); 
-            lastTime = performance.now();
-            update();
-            startBtn.innerText = "RESTART_KERNEL";
-        };
     </script>
 </body>
 </html>
