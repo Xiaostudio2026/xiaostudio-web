@@ -14,14 +14,22 @@
         }
 
         body {
-          background-color: #0a0a0a; /* 確保與主站底色一致 */
-    color: var(--accent-white);
-    font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    /* 移除 min-height: 100vh，改由內容撐開高度 */
-    padding: 40px 0;
+            background-color: #0a0a0a;
+            color: var(--accent-white);
+            font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 預設靠上，方便填寫長表單 */
+            min-height: 100vh;
+            padding: 40px 0;
+            box-sizing: border-box;
+        }
+
+        /* 當成功送出後，讓容器置中 */
+        body.submitted {
+            align-items: center;
+            padding: 0;
         }
 
         .contact-container {
@@ -72,12 +80,11 @@
             border-radius: 0;
             outline: none;
             transition: all 0.5s ease;
-            -webkit-appearance: none; /* 移除 iOS/Chrome 預設樣式 */
+            -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
 
-        /* 針對 select 加入自定義下拉符號 (SVG) */
         select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -92,7 +99,6 @@
             transform: translateY(-1px);
         }
 
-        /* 當 select 被聚焦時，箭頭顏色變亮 */
         select:focus {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
         }
@@ -125,11 +131,12 @@
 
         #status-msg {
             text-align: center;
-            margin: 100px 0;
+            margin: 0;
             font-size: 12px;
             letter-spacing: 0.3em;
             line-height: 2;
             display: none;
+            animation: fadeIn 1.5s ease;
         }
 
         @keyframes fadeIn {
@@ -141,61 +148,79 @@
 <body>
 
 <div class="contact-container">
-    <h2>Inquiry / 需求表單</h2>
-    
-    <form id="contact-form" action="https://formspree.io/f/mreyrpjl" method="POST">
-        <div class="form-group">
-            <label>Name / 姓名</label>
-            <input type="text" name="name" required placeholder="Your Name">
-        </div>
+    <div id="form-content">
+        <h2>Inquiry / 需求表單</h2>
+        
+        <form id="contact-form" action="https://formspree.io/f/mreyrpjl" method="POST">
+            <div class="form-group">
+                <label>Name / 姓名</label>
+                <input type="text" name="name" required placeholder="Your Name">
+            </div>
 
-        <div class="form-group">
-            <label>Email / 電子郵件</label>
-            <input type="email" name="email" required placeholder="jewuenxiao@gmail.com">
-        </div>
+            <div class="form-group">
+                <label>Phone / 聯絡電話</label>
+                <input type="tel" name="phone" placeholder="0900-000-000">
+            </div>
 
-        <div class="form-group">
-            <label>Service / 項目</label>
-            <select name="service">
-                <option value="Brand Visual Design">品牌視覺設計</option>
-                <option value="Brand Motion Production">品牌影音製作</option>
-                <option value="Packaging Design">包裝設計</option>
-                <option value="Web Design">網頁設計</option>
-                <option value="Others">其他（書籍,海報,攝影等）</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>Email / 電子郵件</label>
+                <input type="email" name="email" required placeholder="jewuenxiao@gmail.com">
+            </div>
 
-        <div class="form-group">
-            <label>Budget / 預算區間</label>
-            <select name="budget">
-                <option value="30k-50k">NT$ 30,000 - 50,000</option>
-                <option value="50k-100k">NT$ 50,000 - 100,000</option>
-                <option value="100k-200k">NT$ 100,000 - 200,000</option>
-                <option value="200k+">NT$ 200,000 以上</option>
-                <option value="discuss">尚未確認 / 需討論</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>Available Time / 方便聯絡時間</label>
+                <select name="contact_time">
+                    <option value="Anytime">皆可 (Anytime)</option>
+                    <option value="Morning">上午 (Morning: 09:00 - 12:00)</option>
+                    <option value="Afternoon">下午 (Afternoon: 14:00 - 18:00)</option>
+                    <option value="Evening">晚上 (Evening: 19:00 - 21:00)</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label>Reference Links / 參考範例 (Max 3)</label>
-            <div class="sub-group"><input type="url" name="ref_1" placeholder="Link 01 - https://..."></div>
-            <div class="sub-group"><input type="url" name="ref_2" placeholder="Link 02 - https://..."></div>
-            <div class="sub-group"><input type="url" name="ref_3" placeholder="Link 03 - https://..."></div>
-        </div>
+            <div class="form-group">
+                <label>Service / 項目</label>
+                <select name="service">
+                    <option value="Brand Visual Design">品牌視覺設計</option>
+                    <option value="Brand Motion Production">品牌影音製作</option>
+                    <option value="Packaging Design">包裝設計</option>
+                    <option value="Web Design">網頁設計</option>
+                    <option value="Others">其他（書籍,海報,攝影等）</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label>Message / 詳情</label>
-            <textarea name="message" rows="4" placeholder="Tell me about your project"></textarea>
-        </div>
+            <div class="form-group">
+                <label>Budget / 預算區間</label>
+                <select name="budget">
+                    <option value="30k-50k">NT$ 30,000 - 50,000</option>
+                    <option value="50k-100k">NT$ 50,000 - 100,000</option>
+                    <option value="100k-200k">NT$ 100,000 - 200,000</option>
+                    <option value="200k+">NT$ 200,000 以上</option>
+                    <option value="discuss">尚未確認 / 需討論</option>
+                </select>
+            </div>
 
-        <button type="submit" id="submit-btn" class="submit-btn">Send Inquiry</button>
-    </form>
+            <div class="form-group">
+                <label>Reference Links / 參考範例 (Max 3)</label>
+                <div class="sub-group"><input type="url" name="ref_1" placeholder="Link 01 - https://..."></div>
+                <div class="sub-group"><input type="url" name="ref_2" placeholder="Link 02 - https://..."></div>
+                <div class="sub-group"><input type="url" name="ref_3" placeholder="Link 03 - https://..."></div>
+            </div>
+
+            <div class="form-group">
+                <label>Message / 詳情</label>
+                <textarea name="message" rows="4" placeholder="Tell me about your project"></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn" class="submit-btn">Send Inquiry</button>
+        </form>
+    </div>
     
     <div id="status-msg"></div>
 </div>
 
 <script>
     const form = document.getElementById("contact-form");
+    const formContent = document.getElementById("form-content");
     const statusMsg = document.getElementById("status-msg");
     const btn = document.getElementById("submit-btn");
 
@@ -213,9 +238,16 @@
             });
 
             if (response.ok) {
-                form.style.display = "none";
+                // 隱藏表單內容
+                formContent.style.display = "none";
+                // 讓 body 切換至置中模式
+                document.body.classList.add('submitted');
+                // 顯示感謝訊息
                 statusMsg.style.display = "block";
                 statusMsg.innerHTML = "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT.";
+                
+                // 自動捲動到最頂部確保完全置中於視窗
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else { throw new Error(); }
         } catch (err) {
             btn.disabled = false;
