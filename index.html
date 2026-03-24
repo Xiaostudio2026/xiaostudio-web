@@ -77,13 +77,6 @@
         .lang-btn { font-size: 10px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
 
-        /* 碳排放監測 */
-        .carbon-monitor {
-            position: absolute;
-            top: 100px; right: 20px; z-index: 50; pointer-events: none; opacity: 0.6; text-align: right;
-        }
-        .carbon-value { font-size: 0.875rem; font-weight: 500; letter-spacing: -0.02em; line-height: 2; font-variant-numeric: tabular-nums; }
-
         /* 儀表板節點 */
         .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
@@ -95,11 +88,23 @@
         
         @keyframes status-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
 
-        .line-path { stroke: rgba(255, 255, 255, 0.2); stroke-width: 1; fill: none; }
-        .line-pulse { stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.2; fill: none; stroke-dasharray: 6, 1000; animation: pulse-move 8s linear infinite; }
-        @keyframes pulse-move { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
+        /* 工作流連接線樣式 - 不透明度 70% */
+        .line-path { 
+            stroke: rgba(255, 255, 255, 0.5); 
+            stroke-width: 2; 
+            fill: none; 
+            transition: d 0.1s ease; 
+        }
+        .line-pulse { 
+            stroke: rgba(255, 255, 255, 0.7); 
+            stroke-width: 3; 
+            fill: none; 
+            stroke-dasharray: 6, 120; 
+            animation: pulse-move 6s linear infinite; 
+        }
+        @keyframes pulse-move { 0% { stroke-dashoffset: 240; } 100% { stroke-dashoffset: 0; } }
 
-        /* 彈跳視窗遮罩 - 稍微透明並露出底層 */
+        /* 彈跳視窗遮罩 */
         #overlay-screen {
             display: none;
             position: fixed;
@@ -109,15 +114,14 @@
             backdrop-filter: blur(10px); 
             align-items: center;
             justify-content: center;
-            padding: 10px; /* 縮小 Padding 爭取空間 */
+            padding: 10px;
         }
         #overlay-screen.active { display: flex; animation: fadeIn 0.3s ease; }
 
-        /* 表單彈窗容器 - 增加高度 */
         #overlay-container {
             width: 100%;
             max-width: 960px;
-            height: 92%; /* 提高高度，確保長度足夠 */
+            height: 92%;
             background: #0a0a0a;
             border: 1px solid rgba(255,255,255,0.15);
             position: relative;
@@ -128,26 +132,17 @@
             overflow: hidden;
         }
 
-        /* 內部內容區域設置捲軸 */
         #overlay-content { 
             width: 100%; 
             flex: 1; 
             overflow-y: auto; 
-            -webkit-overflow-scrolling: touch;
             background: #0a0a0a;
         }
 
-        /* 客製化捲軸樣式 */
-        #overlay-content::-webkit-scrollbar { width: 4px; }
-        #overlay-content::-webkit-scrollbar-track { background: transparent; }
-        #overlay-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        #overlay-content::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
-
-        /* iframe 確保滿版容器 */
         #overlay-iframe-container { 
             width: 100%; 
             height: 100%; 
-            min-height: 800px; /* 給予基本最小高度 */
+            min-height: 800px;
             border: none; 
             display: block;
         }
@@ -188,38 +183,34 @@
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp4" type="video/mp4">
             </video>
         </div>
-        
-        <div class="carbon-monitor">
-            <div id="label-carbon" class="text-[8px] mono uppercase opacity-50 mb-1">CO2 Emission Pipeline</div>
-            <div id="carbonValue" class="carbon-value mono">37,504,291,120</div>
-        </div>
 
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
 
+        <!-- SVG 畫布用於連接線 -->
         <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none">
-            <path id="mainLinePath" class="line-path" d="" />
-            <path id="pulseLinePath" class="line-pulse" d="" />
+            <!-- 線條由 JavaScript 生成 -->
         </svg>
 
         <div id="dashboard" class="dashboard-container">
-            <div id="node1" class="workflow-node" data-depth="0.03">
+            <!-- 節點 1-6 -->
+            <div id="node1" class="workflow-node">
                 <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">About Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="mono text-[9px] opacity-50 uppercase tracking-widest">View Profile</span></div></div>
             </div>
-            <div id="node3" class="workflow-node" data-depth="0.08">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="mono text-[9px] opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
-            </div>
-            <div id="node2" class="workflow-node" data-depth="0.02">
+            <div id="node2" class="workflow-node">
                 <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_02</span><span class="node-label"><i class="status-indicator"></i><span id="txt-static">Static Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('static')"><span id="btn-static" class="mono text-[9px] opacity-50 uppercase tracking-widest">Archive</span></div></div>
             </div>
-            <div id="node5" class="workflow-node" data-depth="0.06">
+            <div id="node3" class="workflow-node">
+                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="mono text-[9px] opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
+            </div>
+            <div id="node4" class="workflow-node">
+                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print & Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="mono text-[9px] opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
+            </div>
+            <div id="node5" class="workflow-node">
                 <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Web Design</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="mono text-[9px] opacity-50 uppercase tracking-widest">Digital Experience</span></div></div>
             </div>
-            <div id="node6" class="workflow-node" data-depth="0.04">
+            <div id="node6" class="workflow-node">
                 <div class="node-box special"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[11px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="mono text-[9px] opacity-50 uppercase tracking-widest">Request Project</span></div></div>
-            </div>
-            <div id="node4" class="workflow-node" data-depth="0.05">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print & Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="mono text-[9px] opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
             </div>
         </div>
 
@@ -229,10 +220,9 @@
         </div>
     </div>
 
-    <!-- 彈跳視窗遮罩與內容容器 -->
+    <!-- 彈跳視窗 -->
     <div id="overlay-screen" onclick="hideOverlay()">
         <div id="overlay-container" onclick="event.stopPropagation()">
-            <!-- 彈窗內的固定頂部控制列 -->
             <div class="flex justify-between items-center p-4 border-b border-white/10 bg-[#0a0a0a] z-50">
                 <div class="flex items-center gap-3 ml-2">
                     <span class="status-indicator"></span>
@@ -240,9 +230,7 @@
                 </div>
                 <div id="btn-close" class="px-5 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-colors" onclick="hideOverlay()">Close</div>
             </div>
-            <div id="overlay-content">
-                <!-- iframe 會動態注入於此 -->
-            </div>
+            <div id="overlay-content"></div>
         </div>
     </div>
 
@@ -252,11 +240,11 @@
 
     <script>
         const translations = {
-            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", carbon: "二氧化碳排放監測", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請" },
-            en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", carbon: "CO2 Emission Pipeline", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project" },
-            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", carbon: "CO2排出パイプライン", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼" },
-            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", carbon: "이산화탄소 배출 파이프라인", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청" },
-            fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", carbon: "Pipeline d'émission de CO2", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet" }
+            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請" },
+            en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project" },
+            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼" },
+            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청" },
+            fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet" }
         };
 
         let currentLang = 'en';
@@ -275,7 +263,6 @@
             document.getElementById('btn-print').innerText = t.viewPrint;
             document.getElementById('txt-web').innerText = t.web;
             document.getElementById('btn-web').innerText = t.viewWeb;
-            document.getElementById('label-carbon').innerText = t.carbon;
             document.getElementById('btn-close').innerText = t.close;
             document.getElementById('btn-form').innerText = t.request;
             document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -288,19 +275,30 @@
         });
 
         const nodes = Array.from(document.querySelectorAll('.workflow-node'));
-        const mainLinePath = document.getElementById('mainLinePath');
-        const pulseLinePath = document.getElementById('pulseLinePath');
+        const svgLines = document.getElementById('svgLines');
+
+        // 工作流連接關係
+        const connections = [
+            { from: 'node1', to: 'node2' }, // About -> Static (新增)
+            { from: 'node2', to: 'node6' }, 
+            { from: 'node3', to: 'node6' },
+            { from: 'node2', to: 'node3' },
+            { from: 'node2', to: 'node5' }, // Static -> Web (新增)
+            { from: 'node2', to: 'node4' }, // Static -> Print (新增)
+            { from: 'node5', to: 'node6' },
+            { from: 'node4', to: 'node6' }
+        ];
 
         function initNodePositions() {
             const isMobile = window.innerWidth < 768;
             const positions = isMobile ? [
-                { id: 'node1', top: '15%', left: '10%' }, { id: 'node3', top: '28%', left: '50%' },
-                { id: 'node2', top: '42%', left: '15%' }, { id: 'node5', top: '56%', left: '55%' },
-                { id: 'node6', top: '18%', left: '65%' }, { id: 'node4', top: '75%', left: '45%' }
+                { id: 'node1', top: '15%', left: '10%' }, { id: 'node3', top: '35%', left: '50%' },
+                { id: 'node2', top: '45%', left: '15%' }, { id: 'node5', top: '60%', left: '55%' },
+                { id: 'node6', top: '20%', left: '70%' }, { id: 'node4', top: '78%', left: '40%' }
             ] : [
-                { id: 'node1', top: '18%', left: '12%' }, { id: 'node3', top: '15%', left: '38%' },
-                { id: 'node2', top: '48%', left: '25%' }, { id: 'node5', top: '52%', left: '55%' },
-                { id: 'node6', top: '25%', left: '76%' }, { id: 'node4', top: '80%', left: '68%' }
+                { id: 'node1', top: '20%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
+                { id: 'node2', top: '45%', left: '15%' }, { id: 'node5', top: '65%', left: '45%' },
+                { id: 'node6', top: '35%', left: '78%' }, { id: 'node4', top: '75%', left: '72%' }
             ];
             positions.forEach(pos => {
                 const el = document.getElementById(pos.id);
@@ -309,23 +307,39 @@
             setTimeout(updateLines, 100);
         }
 
-        function getCenter(el) {
+        function getCenter(elId) {
+            const el = document.getElementById(elId);
+            if (!el) return { x: 0, y: 0 };
             const rect = el.getBoundingClientRect();
             const scaleX = 1920 / window.innerWidth;
             const scaleY = 1080 / window.innerHeight;
-            return { x: (rect.left + rect.width / 2) * scaleX, y: (rect.top + rect.height / 2) * scaleY };
-        }
-
-        function createCurve(p1, p2) {
-            const cp1x = p1.x + (p2.x - p1.x) * 0.5;
-            return `C${cp1x},${p1.y} ${cp1x},${p2.y} ${p2.x},${p2.y} `;
+            return { 
+                x: (rect.left + rect.width / 2) * scaleX, 
+                y: (rect.top + rect.height / 2) * scaleY 
+            };
         }
 
         function updateLines() {
-            const n = nodes.map(node => getCenter(node));
-            let d = `M${n[0].x},${n[0].y} ` + createCurve(n[0], n[2]) + createCurve(n[2], n[3]) + createCurve(n[3], n[5]);
-            mainLinePath.setAttribute('d', d);
-            pulseLinePath.setAttribute('d', d);
+            svgLines.innerHTML = '';
+            connections.forEach((conn, index) => {
+                const start = getCenter(conn.from);
+                const end = getCenter(conn.to);
+                const cp1x = start.x + (end.x - start.x) * 0.5;
+                const d = `M${start.x},${start.y} C${cp1x},${start.y} ${cp1x},${end.y} ${end.x},${end.y}`;
+                
+                // 底線
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", d);
+                path.setAttribute("class", "line-path");
+                svgLines.appendChild(path);
+                
+                // 脈衝線
+                const pulse = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                pulse.setAttribute("d", d);
+                pulse.setAttribute("class", "line-pulse");
+                pulse.style.animationDelay = `${index * 0.8}s`;
+                svgLines.appendChild(pulse);
+            });
         }
 
         let activeNode = null;
@@ -365,10 +379,7 @@
             const content = document.getElementById('overlay-content');
             const t = translations[currentLang];
             screen.classList.add('active');
-            
-            // 每次顯示前重置捲軸頂部
             content.scrollTop = 0;
-
             if (type === 'about') {
                 content.innerHTML = `<iframe src="https://xiaostudio.xyz/about/?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
             } else if (type === 'form') {
@@ -385,15 +396,6 @@
 
         window.addEventListener('load', initNodePositions);
         window.addEventListener('resize', initNodePositions);
-
-        let currentCarbon = 37504291120;
-        function updateCarbon() {
-            currentCarbon += Math.floor(Math.random() * 200) + 100;
-            const el = document.getElementById('carbonValue');
-            if(el) el.innerText = currentCarbon.toLocaleString();
-            requestAnimationFrame(updateCarbon);
-        }
-        updateCarbon();
     </script>
 </body>
 </html>
