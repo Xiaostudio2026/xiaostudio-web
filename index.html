@@ -564,7 +564,7 @@
 
             if (type === 'about') {
                 // About 專屬：將當前語言作為參數傳遞 (?lang=zh)
-                const iframeUrl = `https://xiaostudio.xyz/core/?lang=${currentLang}`;
+                const iframeUrl = `https://xiaostudio.xyz/about/?lang=${currentLang}`;
                 content.innerHTML = `
                     <iframe src="${iframeUrl}" id="overlay-iframe-container" allow="autoplay"></iframe>
                 `;
