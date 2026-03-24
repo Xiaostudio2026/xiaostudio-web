@@ -1,168 +1,563 @@
 <!DOCTYPE html>
-
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About | XIAOSTUDIO</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- 修正後的 Google Fonts 連結 -->
-<link href="https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DMontserrat:wght%40100%3B400%3B700%3B800%26family%3DJetBrains%2BMono:wght%40300%3B400%3B700%26display%3Dswap" rel="stylesheet">
-<style>
-body {
-background-color: #000;
-color: #fff;
-font-family: 'Montserrat', sans-serif;
-margin: 0;
-overflow-x: hidden;
-}
-.mono { font-family: 'JetBrains Mono', monospace; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Core Processor Unit - 佈局對齊版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-    /* 背景網格系統 */
-    .grid-bg {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
-                          linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-        background-size: 40px 40px;
-        z-index: -1;
-    }
+        :root {
+            --bg-color: #f7f7f7;
+            --panel-bg: rgba(255, 255, 255, 1);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --text-main: #1a1a1a;
+            --accent-color: #000;
+        }
 
-    .content-section {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 180px 40px;
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-    .line {
-        height: 1px;
-        background: linear-gradient(90deg, #fff, transparent);
-        margin: 30px 0;
-        width: 0;
-        animation: grow 1.8s forwards cubic-bezier(0.16, 1, 0.3, 1);
-    }
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            position: relative;
+            z-index: 1;
+        }
 
-    @keyframes grow { to { width: 100%; } }
+        #game-canvas {
+            border: 1px solid #333;
+            background-color: #1a1a1a;
+            image-rendering: pixelated;
+        }
 
-    .faded-text { opacity: 0.3; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; }
+        .dashboard-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            position: relative;
+            height: 100%; /* 確保面板高度填滿 */
+        }
 
-    .reveal-text {
-        animation: fadeInUp 1s ease forwards;
-        opacity: 0;
-        transform: translateY(20px);
-    }
+        .cache-video-wrapper {
+            width: 100%;
+            height: 160px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid #eee;
+            background: #000;
+            position: relative;
+        }
 
-    @keyframes fadeInUp {
-        to { opacity: 1; transform: translateY(0); }
-    }
+        .cache-video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
+            opacity: 0.8;
+        }
 
-    .hover-link:hover {
-        letter-spacing: 0.1em;
-        opacity: 1;
-    }
+        .experience-timer {
+            font-size: 11px;
+            line-height: 1.6;
+            color: #333;
+        }
 
-    .nav-link {
-        transition: all 0.4s ease;
-    }
-    .nav-link:hover {
-        color: #fff;
-        padding-left: 10px;
-    }
-    
-    @keyframes scan {
-        0% { top: 0%; }
-        100% { top: 100%; }
-    }
-</style>
+        .experience-timer span {
+            font-weight: 700;
+            color: var(--accent-color);
+            display: inline-block;
+            min-width: 20px;
+        }
 
+        .ms-ticker {
+            font-size: 10px;
+            color: #888;
+            font-weight: 400;
+        }
 
+        .control-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            color: #666;
+        }
+
+        .control-btn:active, .control-btn.active {
+            background: #f0f0f0;
+            border-color: #000;
+            color: #000;
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .location-marker {
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .location-marker::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: red;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); opacity: 1; }
+            100% { transform: translateY(-50%) scale(3); opacity: 0; }
+        }
+
+        .pause-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 20;
+            backdrop-filter: blur(2px);
+        }
+
+        .is-paused .pause-overlay {
+            display: flex;
+        }
+    </style>
 </head>
-<body>
+<body class="p-6">
+    <div class="main-container">
 
-<div class="grid-bg"></div>
-
-<!-- 頂部導覽 -->
-<nav class="fixed top-0 w-full z-50 p-8 md:p-12 flex justify-between items-center mix-blend-difference">
-    <!-- 如果您按方法一操作，首頁連結請設為 "/" -->
-    <a href="/" class="nav-link mono text-[11px] opacity-60 uppercase tracking-widest flex items-center gap-4">
-        <span class="text-lg">←</span> RETURN_TO_DASHBOARD
-    </a>
-    <div class="faded-text mono hidden md:block">DOMAIN: XIAOSTUDIO.XYZ</div>
-</nav>
-
-<main class="content-section">
-    <!-- 主標題區 -->
-    <section class="mb-48 reveal-text" style="animation-delay: 0.2s;">
-        <span class="faded-text mono">PROFILE_DATA_v2.6</span>
-        <h1 class="text-6xl md:text-8xl font-extrabold mt-6 mb-10 tracking-tighter uppercase italic">
-            XIAOSTUDIO
-        </h1>
-        <div class="line"></div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
-            <p class="md:col-span-2 text-2xl md:text-3xl leading-snug font-light">
-                致力於數位體驗的「提煉」與「重塑」。我們不只是設計師，更是數位世界的建築師，在秩序與混沌的邊界，構築具備靈魂的數位脈動。
-            </p>
-            <div class="flex flex-col justify-end">
-                <span class="mono text-[10px] opacity-40 mb-2 uppercase tracking-tighter">Official Domain</span>
-                <span class="text-2xl font-bold tracking-tighter italic">XIAOSTUDIO.XYZ</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- 深度介紹區 -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-24 mb-48">
-        <div class="reveal-text" style="animation-delay: 0.4s;">
-            <span class="faded-text mono">CORE_VISION / 核心願景</span>
-            <h3 class="text-2xl font-bold mt-4 mb-6 uppercase tracking-tight">設計即是邏輯的視覺延伸</h3>
-            <p class="mono text-sm leading-8 opacity-60">
-                我們相信每一種美感都源於深刻的邏輯結構。我們熱衷於處理複雜的數據、流動的律動感，並將其轉化為直觀的、能與使用者產生共振的介面與視覺。XIAOSTUDIO 的作品始終保持著「低調的張力」。
-            </p>
-        </div>
-        <div class="reveal-text" style="animation-delay: 0.6s;">
-            <span class="faded-text mono">SERVICES / 服務架構</span>
-            <h3 class="text-2xl font-bold mt-4 mb-6 uppercase tracking-tight">數位生態系統構建</h3>
-            <ul class="mono text-sm space-y-4 opacity-70">
-                <li class="flex items-center gap-3 text-white/90">
-                    <span class="w-2 h-[1px] bg-white"></span> 
-                    UI/UX DIGITAL ARCHITECTURE
-                </li>
-                <li class="flex items-center gap-3 text-white/90">
-                    <span class="w-2 h-[1px] bg-white"></span> 
-                    DYNAMIC MOTION & REEL PRODUCTION
-                </li>
-                <li class="flex items-center gap-3 text-white/90">
-                    <span class="w-2 h-[1px] bg-white"></span> 
-                    BRAND IDENTITY & PHYSICAL PRINT
-                </li>
-                <li class="flex items-center gap-3 text-white/90">
-                    <span class="w-2 h-[1px] bg-white"></span> 
-                    INTERACTIVE WEB DEVELOPMENT
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- 結尾區 -->
-    <section class="border-t border-white/10 pt-20 reveal-text" style="animation-delay: 0.8s;">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+        <header class="mb-6 border-b border-black/10 pb-6 flex flex-col md:flex-row justify-between items-end">
             <div>
-                <span class="faded-text mono">CONNECT / 聯絡資訊</span>
-                <h2 class="text-4xl font-bold tracking-tighter mt-4 mb-2">啟動下一個數位序列。</h2>
-                <a href="mailto:jewuenxiao@gmail.com" class="text-xl mono opacity-40 hover-link hover:opacity-100 transition-all border-b border-white/20 pb-1">
-                    jewuenxiao@gmail.com
-                </a>
+                <div class="text-[10px] text-gray-500 mb-1 tracking-[0.2em]">NODE_01</div>
+                <h1 class="text-3xl font-bold tracking-tighter text-gray-800">ABOUT_XIAO v2.6</h1>
             </div>
-            <div class="flex flex-col items-end gap-2 mono text-[10px] opacity-30 text-right">
-                <span>WEB: WWW.XIAOSTUDIO.XYZ</span>
-                <span>ALL RIGHTS RESERVED BY XIAOSTUDIO</span>
+            <div class="flex gap-8 mt-4 md:mt-0">
+                <div class="text-right">
+                    <div class="text-[10px] text-gray-400">指令週期</div>
+                    <div class="text-lg font-bold text-gray-700" id="cycle-count">0048293</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-[10px] text-gray-400">核心溫度</div>
+                    <div class="text-lg font-bold text-gray-700" id="temp-val">42.5°C</div>
+                </div>
             </div>
-        </div>
-    </section>
-</main>
+        </header>
 
-<!-- 背景動態掃描線效果 -->
-<div class="fixed top-0 left-0 w-full h-[1px] bg-white/5 pointer-events-none z-[100]" style="animation: scan 8s linear infinite;"></div>
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- 左側欄 -->
+            <div class="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1">
+                <div class="dashboard-panel p-6">
+                    <h3 class="text-[10px] font-bold mb-4 text-gray-500 uppercase tracking-widest">Memory Cache Visualizer</h3>
+                    <div class="cache-video-wrapper">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1774171797/Video_5_1_qhp8yk.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 left-2 bg-black/50 text-[8px] text-white px-1 font-mono">CORE_STREAM_01</div>
+                    </div>
 
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-[10px] font-bold mb-2 border-b border-gray-100 pb-1">
+                                <span>L1_CACHE (WORK_EXPERIENCE)</span>
+                            </div>
+                            <!-- 高精度工作資歷計時器 -->
+                            <div id="experience-display" class="experience-timer font-mono text-gray-700">
+                                載入高精度數據...
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="dashboard-panel p-6">
+                    <h3 class="text-[10px] font-bold mb-3 text-gray-500 uppercase tracking-widest">System Location</h3>
+                    <div class="bg-gray-50 p-4 border border-gray-100 rounded">
+                        <div class="location-marker text-[11px] font-bold text-gray-800 mb-2">
+                            台灣新北市板橋區
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[10px] text-gray-500 font-mono">
+                            <div>LAT: <span class="text-gray-800">25.0117° N</span></div>
+                            <div>LNG: <span class="text-gray-800">121.4658° E</span></div>
+                            <div class="col-span-2 mt-2 pt-2 border-t border-gray-200 opacity-60">
+                                GRID_REF: 51N UH 06
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中間遊戲區 -->
+            <div class="lg:col-span-5 flex flex-col items-center order-1 lg:order-2 gap-6">
+                <div class="w-full flex flex-col items-center">
+                    <div class="text-[10px] text-gray-400 mb-2 uppercase tracking-widest">Core Execution</div>
+                    <div class="dashboard-panel p-2 shadow-xl border-gray-200 relative overflow-hidden" id="canvas-container">
+                        <canvas id="game-canvas" width="260" height="420"></canvas>
+                        
+                        <!-- 暫停遮罩 -->
+                        <div class="pause-overlay">
+                            <div class="text-xl font-bold tracking-widest mb-2">SYSTEM_HALTED</div>
+                            <div class="text-[10px] opacity-70">PRESS 'P' TO RESUME</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3 w-full max-w-[280px]">
+                    <button class="control-btn h-12" id="btn-left">
+                        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="control-btn h-12" id="btn-rotate">
+                        <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    </button>
+                    <button class="control-btn h-12" id="btn-right">
+                        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                    <button class="control-btn h-12" id="btn-pause">
+                        <svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                    </button>
+                    <button class="control-btn h-12" id="btn-down">
+                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <button class="control-btn h-12" id="btn-drop">
+                        <span class="text-[9px] font-bold">DROP</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 右側欄 -->
+            <div class="lg:col-span-3 flex flex-col gap-6 order-3 lg:order-3">
+                <div class="dashboard-panel p-6">
+                    <h3 class="text-[10px] font-bold mb-4 text-gray-500 uppercase">Registers</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="text-[10px] text-gray-400 mb-1">SCORE</div>
+                            <div class="text-3xl font-bold tracking-tighter text-gray-800" id="score">000000</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-gray-400 mb-1">LEVEL</div>
+                            <div class="text-xl font-bold text-gray-600" id="level">01</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <button id="start-btn" class="w-full py-4 bg-gray-800 text-white text-[10px] font-bold hover:bg-black transition-all tracking-widest shadow-md">
+                            INITIALIZE_KERNEL
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-panel p-6">
+                    <h3 class="text-[10px] font-bold mb-4 text-gray-500 uppercase">System Log</h3>
+                    <div class="text-[9px] text-gray-400 font-mono leading-relaxed space-y-2 h-40 overflow-hidden" id="log-content">
+                        <p>> KERNEL_LOAD_READY</p>
+                        <p>> LOCATION_SYNC: BANQIAO_DIST</p>
+                        <p>> HI_RES_TIMER_ATTACHED</p>
+                        <p class="text-gray-800 animate-pulse font-bold" id="log-status">> AWAITING_EXECUTION...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- 處理器數據仿真 ---
+        let cycles = 48293;
+        setInterval(() => {
+            cycles += Math.floor(Math.random() * 10);
+            document.getElementById('cycle-count').innerText = cycles.toString().padStart(7, '0');
+            const temp = (38 + Math.random() * 4).toFixed(1);
+            document.getElementById('temp-val').innerText = temp + "°C";
+        }, 1000);
+
+        // --- 高精度工作資歷計時器 ---
+        function updateExperience() {
+            const startDate = new Date('2010-03-01T00:00:00');
+            const now = new Date();
+            
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+            let hours = now.getHours() - startDate.getHours();
+            let minutes = now.getMinutes() - startDate.getMinutes();
+            let seconds = now.getSeconds() - startDate.getSeconds();
+            let milliseconds = now.getMilliseconds();
+
+            if (seconds < 0) { seconds += 60; minutes--; }
+            if (minutes < 0) { minutes += 60; hours--; }
+            if (hours < 0) { hours += 24; days--; }
+            if (days < 0) {
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += prevMonth.getDate();
+                months--;
+            }
+            if (months < 0) { months += 12; years--; }
+
+            const display = document.getElementById('experience-display');
+            display.innerHTML = `
+                <div>YEARS: <span>${years}</span></div>
+                <div>MONTHS: <span>${months}</span></div>
+                <div>DAYS: <span>${days}</span></div>
+                <div class="text-[9px] mt-2 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
+                <div class="text-xs font-bold mt-1">
+                    ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker">.${milliseconds.toString().padStart(3,'0')}</span>
+                </div>
+            `;
+            requestAnimationFrame(updateExperience);
+        }
+        requestAnimationFrame(updateExperience);
+
+        // --- 俄羅斯方塊邏輯 ---
+        const canvas = document.getElementById('game-canvas');
+        const context = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const startBtn = document.getElementById('start-btn');
+        const canvasContainer = document.getElementById('canvas-container');
+        const pauseBtn = document.getElementById('btn-pause');
+        const logStatus = document.getElementById('log-status');
+        
+        context.scale(20, 20);
+
+        function createMatrix(w, h) {
+            const matrix = [];
+            while (h--) matrix.push(new Array(w).fill(0));
+            return matrix;
+        }
+
+        function createPiece(type) {
+            if (type === 'I') return [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]];
+            if (type === 'L') return [[0, 2, 0], [0, 2, 0], [0, 2, 2]];
+            if (type === 'J') return [[0, 3, 0], [0, 3, 0], [3, 3, 0]];
+            if (type === 'O') return [[4, 4], [4, 4]];
+            if (type === 'Z') return [[5, 5, 0], [0, 5, 5], [0, 0, 0]];
+            if (type === 'S') return [[0, 6, 6], [6, 6, 0], [0, 0, 0]];
+            if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
+        }
+
+        function drawMatrix(matrix, offset) {
+            matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        context.fillStyle = '#f0f0f0';
+                        context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                        context.strokeStyle = '#333';
+                        context.lineWidth = 0.05;
+                        context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                    }
+                });
+            });
+        }
+
+        function draw() {
+            context.fillStyle = '#1a1a1a';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos);
+        }
+
+        function merge(arena, player) {
+            player.matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) arena[y + player.pos.y][x + player.pos.x] = value;
+                });
+            });
+        }
+
+        function rotate(matrix, dir) {
+            for (let y = 0; y < matrix.length; ++y) {
+                for (let x = 0; x < y; ++x) {
+                    [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+                }
+            }
+            dir > 0 ? matrix.forEach(row => row.reverse()) : matrix.reverse();
+        }
+
+        function playerDrop() {
+            if (isPaused) return;
+            player.pos.y++;
+            if (collide(arena, player)) {
+                player.pos.y--;
+                merge(arena, player);
+                playerReset();
+                arenaSweep();
+                updateScore();
+            }
+            dropCounter = 0;
+        }
+
+        function playerMove(offset) {
+            if (isPaused) return;
+            player.pos.x += offset;
+            if (collide(arena, player)) player.pos.x -= offset;
+        }
+
+        function playerReset() {
+            const pieces = 'TJLOSZI';
+            player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+            player.pos.y = 0;
+            player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+            if (collide(arena, player)) {
+                arena.forEach(row => row.fill(0));
+                player.score = 0;
+                updateScore();
+            }
+        }
+
+        function playerRotate(dir) {
+            if (isPaused) return;
+            const pos = player.pos.x;
+            let offset = 1;
+            rotate(player.matrix, dir);
+            while (collide(arena, player)) {
+                player.pos.x += offset;
+                offset = -(offset + (offset > 0 ? 1 : -1));
+                if (offset > player.matrix[0].length) {
+                    rotate(player.matrix, -dir);
+                    player.pos.x = pos;
+                    return;
+                }
+            }
+        }
+
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; ++y) {
+                for (let x = 0; x < m[y].length; ++x) {
+                    if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true;
+                }
+            }
+            return false;
+        }
+
+        function arenaSweep() {
+            let rowCount = 1;
+            outer: for (let y = arena.length - 1; y > 0; --y) {
+                for (let x = 0; x < arena[y].length; ++x) {
+                    if (arena[y][x] === 0) continue outer;
+                }
+                const row = arena.splice(y, 1)[0].fill(0);
+                arena.unshift(row);
+                ++y;
+                player.score += rowCount * 10;
+                rowCount *= 2;
+            }
+        }
+
+        function updateScore() {
+            scoreElement.innerText = player.score.toString().padStart(6, '0');
+            levelElement.innerText = (Math.floor(player.score / 100) + 1).toString().padStart(2, '0');
+        }
+
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+        let isPaused = true;
+        let gameStarted = false;
+
+        function update(time = 0) {
+            if (isPaused) return;
+            const deltaTime = time - lastTime;
+            lastTime = time;
+            dropCounter += deltaTime;
+            if (dropCounter > dropInterval) playerDrop();
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        const arena = createMatrix(13, 21);
+        const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
+
+        const performDrop = () => {
+            if (isPaused) return;
+            while(!collide(arena, player)) player.pos.y++;
+            player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore();
+        };
+
+        const togglePause = () => {
+            if (!gameStarted) return;
+            isPaused = !isPaused;
+            if (isPaused) {
+                canvasContainer.classList.add('is-paused');
+                logStatus.innerText = "> SYSTEM_HALTED";
+                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+            } else {
+                canvasContainer.classList.remove('is-paused');
+                logStatus.innerText = "> EXECUTING_THREADS...";
+                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+                lastTime = performance.now();
+                update();
+            }
+        };
+
+        document.getElementById('btn-left').onclick = () => playerMove(-1);
+        document.getElementById('btn-right').onclick = () => playerMove(1);
+        document.getElementById('btn-rotate').onclick = () => playerRotate(1);
+        document.getElementById('btn-down').onclick = () => playerDrop();
+        document.getElementById('btn-drop').onclick = performDrop;
+        document.getElementById('btn-pause').onclick = togglePause;
+
+        document.addEventListener('keydown', event => {
+            if (!gameStarted) return;
+            
+            // P 鍵或 Esc 鍵暫停
+            if (event.keyCode === 80 || event.keyCode === 27) {
+                togglePause();
+                return;
+            }
+
+            if (isPaused) return;
+
+            if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) event.preventDefault();
+            switch (event.keyCode) {
+                case 37: case 65: playerMove(-1); break;
+                case 39: case 68: playerMove(1); break;
+                case 40: case 83: playerDrop(); break;
+                case 38: case 87: playerRotate(1); break;
+                case 32: performDrop(); break;
+            }
+        });
+
+        startBtn.onclick = () => {
+            gameStarted = true;
+            isPaused = false;
+            canvasContainer.classList.remove('is-paused');
+            logStatus.innerText = "> EXECUTING_THREADS...";
+            playerReset(); 
+            updateScore(); 
+            lastTime = performance.now();
+            update();
+            startBtn.innerText = "RESTART_KERNEL";
+        };
+    </script>
 </body>
 </html>
