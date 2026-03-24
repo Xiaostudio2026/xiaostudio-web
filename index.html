@@ -77,26 +77,43 @@
         .lang-btn { font-size: 10px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
 
-        /* 儀表板節點 */
+        /* 儀表板節點 - 面板文字放大 20% */
         .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
-        .node-box { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 2px; min-width: 160px; }
+        
+        .node-box { 
+            background: rgba(10, 10, 10, 0.6); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            padding: 14px; 
+            border-radius: 2px; 
+            min-width: 190px; /* 從 160px 增加以適應較大文字 */
+        }
         .node-box.special { border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.05); }
-        .node-label { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .status-indicator { width: 6px; height: 6px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
+        
+        /* 節點 ID: 9px -> 11px */
+        .node-id { font-size: 11px; } 
+        
+        /* 節點標題: 13px -> 16px */
+        .node-label { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 12px; }
+        
+        /* 按鈕文字: 9px -> 11px */
+        .node-btn-text { font-size: 11px; }
+
+        .status-indicator { width: 7px; height: 7px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
         
         @keyframes status-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
 
         /* 工作流連接線樣式 - 不透明度 70% */
         .line-path { 
-            stroke: rgba(255, 255, 255, 0.5); 
-            stroke-width: 2; 
+            stroke: rgba(255, 255, 255, 0.7); 
+            stroke-width: 2.5; 
             fill: none; 
             transition: d 0.1s ease; 
         }
         .line-pulse { 
-            stroke: rgba(255, 255, 255, 0.7); 
+            stroke: rgba(255, 255, 255, 1); 
             stroke-width: 3; 
             fill: none; 
             stroke-dasharray: 6, 120; 
@@ -152,7 +169,7 @@
 
         /* LOGO 樣式 */
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
-        .logo-text { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
+        .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
 
         .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); }
@@ -195,22 +212,22 @@
         <div id="dashboard" class="dashboard-container">
             <!-- 節點 1-6 -->
             <div id="node1" class="workflow-node">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">About Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="mono text-[9px] opacity-50 uppercase tracking-widest">View Profile</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">About Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="node-btn-text mono opacity-50 uppercase tracking-widest">View Profile</span></div></div>
             </div>
             <div id="node2" class="workflow-node">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_02</span><span class="node-label"><i class="status-indicator"></i><span id="txt-static">Static Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('static')"><span id="btn-static" class="mono text-[9px] opacity-50 uppercase tracking-widest">Archive</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_02</span><span class="node-label"><i class="status-indicator"></i><span id="txt-static">Static Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('static')"><span id="btn-static" class="node-btn-text mono opacity-50 uppercase tracking-widest">Archive</span></div></div>
             </div>
             <div id="node3" class="workflow-node">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="mono text-[9px] opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="node-btn-text mono opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
             </div>
             <div id="node4" class="workflow-node">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print & Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="mono text-[9px] opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print & Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
             </div>
             <div id="node5" class="workflow-node">
-                <div class="node-box"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Web Design</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="mono text-[9px] opacity-50 uppercase tracking-widest">Digital Experience</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Web Design</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="node-btn-text mono opacity-50 uppercase tracking-widest">Digital Experience</span></div></div>
             </div>
             <div id="node6" class="workflow-node">
-                <div class="node-box special"><span class="node-id mono text-[9px] block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[11px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="mono text-[9px] opacity-50 uppercase tracking-widest">Request Project</span></div></div>
+                <div class="node-box special"><span class="node-id mono block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[13px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Request Project</span></div></div>
             </div>
         </div>
 
@@ -279,12 +296,12 @@
 
         // 工作流連接關係
         const connections = [
-            { from: 'node1', to: 'node2' }, // About -> Static (新增)
+            { from: 'node1', to: 'node2' },
             { from: 'node2', to: 'node6' }, 
             { from: 'node3', to: 'node6' },
             { from: 'node2', to: 'node3' },
-            { from: 'node2', to: 'node5' }, // Static -> Web (新增)
-            { from: 'node2', to: 'node4' }, // Static -> Print (新增)
+            { from: 'node2', to: 'node5' },
+            { from: 'node2', to: 'node4' },
             { from: 'node5', to: 'node6' },
             { from: 'node4', to: 'node6' }
         ];
