@@ -1,1 +1,195 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Work Archive - XIAO_STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #f7f7f7;
+            --text-main: #1a1a1a;
+            --accent-color: #000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .main-container {
+            max-width: 1320px; 
+            margin: 0 auto;
+        }
+
+        .project-card {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            background: #000; 
+            border: 1px solid #eee;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            border-color: #000;
+            transform: translateY(-2px);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.9;
+        }
+
+        /* 懸停效果：圖片模糊變亮 */
+        .project-card:hover .project-image {
+            filter: grayscale(0%) blur(8px) brightness(1.2);
+            opacity: 0.4;
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            position: absolute;
+            inset: 0; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0); 
+            opacity: 0;
+            transition: all 0.4s ease;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* 懸停時資訊顯示 */
+        .project-card:hover .project-info {
+            background: rgba(255, 255, 255, 0.6); 
+            opacity: 1;
+        }
+
+        .project-title {
+            color: #000;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .view-btn {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #000;
+            border: 1px solid #000;
+            padding: 0.6rem 2.5rem;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.2em;
+        }
+
+        .view-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .header-line {
+            height: 1px;
+            background: #ddd;
+            margin: 1.5rem 0 3rem 0;
+            position: relative;
+        }
+
+        .status-dot {
+            color: #888;
+        }
+
+        .load-more-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 4rem;
+        }
+
+        .load-more-btn {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            padding: 1rem 3rem;
+            border: 1px solid #000;
+            background: transparent;
+            color: #000;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .load-more-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <header class="flex justify-between items-end mb-6">
+            <div>
+                <div class="text-[0.6rem] text-gray-400 mb-1 tracking-[0.2em]">FILE_STORAGE / ARCHIVE_2026</div>
+                <h1 class="text-4xl font-bold tracking-tighter text-gray-800 uppercase">Print_Works</h1>
+            </div>
+            <div class="text-right">
+                <div class="text-[0.6rem] text-gray-400 uppercase">System_Status</div>
+                <div class="text-xs font-bold status-dot tracking-widest">● BROWSING_MODE</div>
+            </div>
+        </header>
+
+        <div class="header-line"></div>
+
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <script>
+                const placeholderImg = "https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg";
+                
+                // 生成 10 個統一內容的作品卡片
+                for (let i = 1; i <= 10; i++) {
+                    document.write(`
+                        <div class="project-card">
+                            <img src="${placeholderImg}" alt="Print_Works_${i}" class="project-image">
+                            
+                            <div class="project-info">
+                                <div class="project-title">Print_Works</div>
+                                <div class="view-btn">VIEW</div>
+                            </div>
+                        </div>
+                    `);
+                }
+            </script>
+
+        </div>
+
+        <div class="load-more-container">
+            <button class="load-more-btn" onclick="this.innerText='SYNCING_DATABASE...'; setTimeout(()=>this.innerText='END_OF_ARCHIVE', 1500)">
+                Load_More_Entries
+            </button>
+        </div>
+
+        <footer class="mt-20 pt-8 border-t border-gray-200 text-center md:text-left">
+            <div class="text-[0.55rem] text-gray-400 uppercase tracking-[0.3em]">
+                End_of_Transmission // Xiao_Studio_Archive_v3.0
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
