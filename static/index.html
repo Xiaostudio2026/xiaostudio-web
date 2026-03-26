@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +30,7 @@
         .project-card {
             position: relative;
             aspect-ratio: 16 / 10;
-            background: #000; /* 底色改為黑色，增加模糊後的對比 */
+            background: #000; 
             border: 1px solid #eee;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -52,7 +51,7 @@
             opacity: 0.9;
         }
 
-        /* 懸停效果：整張圖片模糊並變亮 */
+        /* 懸停效果：圖片模糊變亮 */
         .project-card:hover .project-image {
             filter: grayscale(0%) blur(8px) brightness(1.2);
             opacity: 0.4;
@@ -61,35 +60,47 @@
 
         .project-info {
             position: absolute;
-            inset: 0; /* 撐滿整個容器 */
+            inset: 0; 
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0); /* 初始透明 */
-            transform: translateY(0);
+            background: rgba(255, 255, 255, 0); 
             opacity: 0;
             transition: all 0.4s ease;
             text-align: center;
+            z-index: 10;
         }
 
-        /* 懸停時資訊顯示：背景變亮白，文字黑色 */
+        /* 懸停時資訊顯示 */
         .project-card:hover .project-info {
-            background: rgba(255, 255, 255, 0.6); /* 亮色半透明背景 */
+            background: rgba(255, 255, 255, 0.6); 
             opacity: 1;
         }
 
-        /* 確保文字為深黑色 */
         .project-title {
             color: #000;
             font-weight: 800;
-            letter-spacing: -0.02em;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
 
-        .project-category {
-            color: #333;
+        .view-btn {
+            font-size: 0.6rem;
             font-weight: 700;
+            color: #000;
+            border: 1px solid #000;
+            padding: 0.6rem 2.5rem;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.2em;
+        }
+
+        .view-btn:hover {
+            background: #000;
+            color: #fff;
         }
 
         .header-line {
@@ -130,7 +141,6 @@
 <body>
 
     <div class="main-container">
-        <!-- 頁首標題 -->
         <header class="flex justify-between items-end mb-6">
             <div>
                 <div class="text-[0.6rem] text-gray-400 mb-1 tracking-[0.2em]">FILE_STORAGE / ARCHIVE_2026</div>
@@ -144,52 +154,34 @@
 
         <div class="header-line"></div>
 
-        <!-- 作品網格 -->
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <script>
                 const placeholderImg = "https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg";
-                const projects = [
-                    { id: "01", title: "Branding_Identity_V1", category: "IDENTITY" },
-                    { id: "02", title: "Motion_Graphics_Core", category: "VISUAL" },
-                    { id: "03", title: "Package_Architecture", category: "PACKAGING" },
-                    { id: "04", title: "System_Interface_04", category: "UI/UX" },
-                    { id: "05", title: "Poster_Series_Final", category: "PRINT" },
-                    { id: "06", title: "Interactive_Module", category: "INTERACTIVE" },
-                    { id: "07", title: "Publication_Layout", category: "EDITORIAL" },
-                    { id: "08", title: "Visual_Campaign_24", category: "CAMPAIGN" },
-                    { id: "09", title: "Type_Specimen_X", category: "TYPOGRAPHY" },
-                    { id: "10", title: "Web_Prototype_V3", category: "DEVELOPMENT" }
-                ];
-
-                projects.forEach(p => {
+                
+                // 生成 10 個統一內容的作品卡片
+                for (let i = 1; i <= 10; i++) {
                     document.write(`
                         <div class="project-card">
-                            <img src="${placeholderImg}" alt="${p.title}" class="project-image">
+                            <img src="${placeholderImg}" alt="Static_Works_${i}" class="project-image">
                             
                             <div class="project-info">
-                                <div class="project-category text-[0.6rem] uppercase tracking-[0.3em] mb-2">${p.category}</div>
-                                <div class="project-title text-xl uppercase">${p.title}</div>
-                                <div class="w-8 h-[2px] bg-black my-4"></div>
-                                <div class="text-[0.6rem] font-bold text-black border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
-                                    VIEW_ARCHIVE
-                                </div>
+                                <div class="project-title">Static_Works</div>
+                                <div class="view-btn">VIEW</div>
                             </div>
                         </div>
                     `);
-                });
+                }
             </script>
 
         </div>
 
-        <!-- 加載按鈕 -->
         <div class="load-more-container">
             <button class="load-more-btn" onclick="this.innerText='SYNCING_DATABASE...'; setTimeout(()=>this.innerText='END_OF_ARCHIVE', 1500)">
                 Load_More_Entries
             </button>
         </div>
 
-        <!-- 頁尾 -->
         <footer class="mt-20 pt-8 border-t border-gray-200 text-center md:text-left">
             <div class="text-[0.55rem] text-gray-400 uppercase tracking-[0.3em]">
                 End_of_Transmission // Xiao_Studio_Archive_v3.0
