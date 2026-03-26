@@ -10,11 +10,17 @@
 
         :root {
             --bg-color: #f7f7f7;
-            --panel-bg: transparent; /* 改為透明 */
-            --border-color: transparent; /* 移除預設邊框色 */
+            --panel-bg: transparent;
+            --border-color: transparent;
             --text-main: #1a1a1a;
             --accent-color: #000;
-            font-size: 21.16px;
+            font-size: 22px;
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                font-size: 20px;
+            }
         }
 
         body {
@@ -37,15 +43,15 @@
         }
 
         #game-canvas {
-            border: 1px solid #333; /* 遊戲畫布保留邊框 */
+            border: 1px solid #333;
             background-color: #1a1a1a;
             image-rendering: pixelated;
         }
 
         .dashboard-panel {
             background: var(--panel-bg);
-            border: none; /* 取消面板框線 */
-            box-shadow: none; /* 取消陰影 */
+            border: none;
+            box-shadow: none;
             position: relative;
             height: 100%;
             z-index: 2;
@@ -56,7 +62,7 @@
             height: 160px;
             margin-bottom: 1.5rem;
             overflow: hidden;
-            border: none; /* 移除影片框線 */
+            border: none;
             background: #000;
             position: relative;
         }
@@ -70,8 +76,8 @@
         }
 
         .experience-timer {
-            font-size: 0.7rem;
-            line-height: 1.6;
+            font-size: 0.9rem; 
+            line-height: 1.8;
             color: #333;
         }
 
@@ -83,12 +89,11 @@
         }
 
         .ms-ticker {
-            font-size: 0.6rem;
+            font-size: 0.72rem;
             color: #888;
             font-weight: 400;
         }
 
-        /* 遊戲按鈕：保留框線 */
         .control-btn {
             background: #fff;
             border: 1px solid rgba(0, 0, 0, 0.15); 
@@ -98,6 +103,7 @@
             border-radius: 4px;
             transition: all 0.2s ease;
             color: #666;
+            touch-action: manipulation;
         }
 
         .control-btn:active, .control-btn.active {
@@ -107,8 +113,8 @@
         }
 
         .control-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             fill: none;
             stroke: currentColor;
             stroke-width: 1.5;
@@ -138,11 +144,11 @@
 
         .service-tag {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 3px 10px;
             margin: 2px;
-            border: 1px solid #ddd; /* 服務標籤保留輕微框線以區隔文字 */
+            border: 1px solid #ddd;
             border-radius: 2px;
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             color: #666;
             transition: all 0.2s ease;
         }
@@ -169,12 +175,36 @@
         }
 
         .modal-header {
-            height: 50px;
+            height: 60px;
             background: #fff;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
+        }
+
+        /* 優化後的需求單按鈕樣式 */
+        .request-btn {
+            background: #000;
+            color: #fff;
+            padding: 12px 16px;
+            font-size: 0.6rem; /* 稍微縮小字體以適應寬度 */
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-align: center;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+            width: 100%;
+            min-height: 48px; /* 確保觸控面積 */
+            line-height: 1.2;
+            word-break: break-all;
+        }
+
+        .request-btn:hover {
+            opacity: 0.8;
         }
 
         @media (max-width: 1024px) {
@@ -188,7 +218,7 @@
 </head>
 <body class="p-6">
 
-    <!-- Iframe 彈窗 -->
+    <!-- Iframe Modal -->
     <div id="form-modal">
         <div class="modal-header">
             <span class="text-[0.6rem] font-bold uppercase tracking-widest text-gray-500">External_Form: Request_Consultation</span>
@@ -198,30 +228,29 @@
     </div>
 
     <div class="main-container">
-        <!-- 移除 Header 底部線 -->
         <header class="mb-6 flex flex-col md:flex-row justify-between items-end pb-6">
             <div>
-                <div class="text-[0.6rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
-                <h1 class="text-3xl font-bold tracking-tighter text-gray-800">ABOUT_XIAO v3.0</h1>
+                <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
+                <h1 class="text-4xl font-bold tracking-tighter text-gray-800">XIAO_STUDIO v3.0</h1>
             </div>
-            <div class="flex gap-8 mt-4 md:mt-0">
+            <div class="flex gap-8 mt-6 md:mt-0">
                 <div class="text-right">
                     <div class="text-[0.6rem] text-gray-400 uppercase">Instruction_Cycles</div>
-                    <div class="text-lg font-bold text-gray-700" id="cycle-count">0048293</div>
+                    <div class="text-xl font-bold text-gray-700" id="cycle-count">0048293</div>
                 </div>
                 <div class="text-right">
                     <div class="text-[0.6rem] text-gray-400 uppercase">Core_Temperature</div>
-                    <div class="text-lg font-bold text-gray-700" id="temp-val">42.5°C</div>
+                    <div class="text-xl font-bold text-gray-700" id="temp-val">42.5°C</div>
                 </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex flex-col lg:grid">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 flex flex-col lg:grid">
             
-            <!-- 左側面板 -->
-            <div class="lg:col-span-4 flex flex-col gap-6 order-mobile-1">
+            <!-- Left Panel -->
+            <div class="lg:col-span-4 flex flex-col gap-8 order-mobile-1">
                 <div class="dashboard-panel p-6">
-                    <h3 class="text-[0.6rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Memory Cache Visualizer</h3>
+                    <h3 class="text-[0.78rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Memory Cache Visualizer</h3>
                     <div class="cache-video-wrapper">
                         <video autoplay muted loop playsinline>
                             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1774171797/Video_5_1_qhp8yk.mp4" type="video/mp4">
@@ -231,8 +260,7 @@
 
                     <div class="space-y-4">
                         <div>
-                            <!-- 移除底線 -->
-                            <div class="flex justify-between text-[0.6rem] font-bold mb-2 pb-1">
+                            <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1">
                                 <span>L1_CACHE (WORK_EXPERIENCE)</span>
                             </div>
                             <div id="experience-display" class="experience-timer font-mono text-gray-700">
@@ -243,14 +271,13 @@
                 </div>
 
                 <div class="dashboard-panel p-6 order-mobile-2">
-                    <h3 class="text-[0.6rem] font-bold mb-3 text-gray-500 uppercase tracking-widest">System Location</h3>
-                    <!-- 移除位置背景與邊框 -->
+                    <h3 class="text-[0.65rem] font-bold mb-3 text-gray-500 uppercase tracking-widest">System Location</h3>
                     <div class="p-0">
-                        <div class="relative pl-4 text-[0.7rem] font-bold text-gray-800 mb-2">
+                        <div class="relative pl-4 text-[0.75rem] font-bold text-gray-800 mb-2">
                             <span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                             BANQIAO_DIST, NEW_TAIPEI, TW
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-[0.6rem] text-gray-500 font-mono">
+                        <div class="grid grid-cols-2 gap-2 text-[0.65rem] text-gray-500 font-mono">
                             <div>LAT: <span class="text-gray-800">25.0117° N</span></div>
                             <div>LNG: <span class="text-gray-800">121.4658° E</span></div>
                         </div>
@@ -258,82 +285,80 @@
                 </div>
             </div>
 
-            <!-- 遊戲中心區 -->
-            <div class="lg:col-span-5 flex flex-col items-center gap-6 order-mobile-4">
+            <!-- Game Center -->
+            <div class="lg:col-span-5 flex flex-col items-center gap-8 order-mobile-4">
                 <div class="dashboard-panel p-4 w-full order-mobile-3">
                     <div class="flex justify-around items-center">
                         <div class="text-center">
-                            <div class="text-[0.5rem] text-gray-400 uppercase tracking-widest">Total_Score</div>
-                            <div class="text-2xl font-bold tracking-tighter text-gray-800" id="score">000000</div>
+                            <div class="text-[0.55rem] text-gray-400 uppercase tracking-widest">Total_Score</div>
+                            <div class="text-3xl font-bold tracking-tighter text-gray-800" id="score">000000</div>
                         </div>
-                        <!-- 移除中間分隔線 -->
                         <div class="text-center">
-                            <div class="text-[0.5rem] text-gray-400 uppercase tracking-widest">System_Level</div>
-                            <div class="text-2xl font-bold text-gray-600" id="level">01</div>
+                            <div class="text-[0.55rem] text-gray-400 uppercase tracking-widest">System_Level</div>
+                            <div class="text-3xl font-bold text-gray-600" id="level">01</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="w-full flex flex-col items-center">
-                    <div class="text-[0.6rem] text-gray-400 mb-2 uppercase tracking-widest">Core Execution</div>
-                    <!-- 移除遊戲面板邊框 -->
+                    <div class="text-[0.65rem] text-gray-400 mb-2 uppercase tracking-widest">Core Execution</div>
                     <div class="p-0 relative overflow-hidden" id="canvas-container">
                         <canvas id="game-canvas" width="260" height="420"></canvas>
                         <div id="game-overlay" class="game-overlay">
                             <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
                                 <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                             </div>
-                            <div class="text-xs font-bold tracking-[0.3em]">INITIALIZE_KERNEL</div>
-                            <div class="text-[0.5rem] mt-2 opacity-50 uppercase tracking-widest">Click to Execute</div>
+                            <div class="text-sm font-bold tracking-[0.3em]">INITIALIZE_KERNEL</div>
+                            <div class="text-[0.6rem] mt-2 opacity-50 uppercase tracking-widest">Click to Execute</div>
                         </div>
                         <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.6);">
                             <div class="text-xl font-bold tracking-widest mb-2">SYSTEM_HALTED</div>
-                            <div class="text-[0.6rem] opacity-70">CLICK TO RESUME</div>
+                            <div class="text-xs opacity-70">CLICK TO RESUME</div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 控制按鈕區：保留邊框 -->
-                <div class="grid grid-cols-3 gap-3 w-full max-w-[280px]">
-                    <button class="control-btn h-12" id="btn-left"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                    <button class="control-btn h-12" id="btn-rotate"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
-                    <button class="control-btn h-12" id="btn-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                    <button class="control-btn h-12" id="btn-pause"><svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>
-                    <button class="control-btn h-12" id="btn-down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-                    <button class="control-btn h-12" id="btn-drop"><span class="text-[0.55rem] font-bold">DROP</span></button>
+                <!-- Game Controls -->
+                <div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">
+                    <button class="control-btn h-14" id="btn-left"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                    <button class="control-btn h-14" id="btn-rotate"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
+                    <button class="control-btn h-14" id="btn-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    <button class="control-btn h-14" id="btn-pause"><svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>
+                    <button class="control-btn h-14" id="btn-down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <button class="control-btn h-14" id="btn-drop"><span class="text-xs font-bold">DROP</span></button>
                 </div>
             </div>
 
-            <!-- 右側面板 -->
-            <div class="lg:col-span-3 flex flex-col gap-6 order-mobile-5">
+            <!-- Right Panel -->
+            <div class="lg:col-span-3 flex flex-col gap-8 order-mobile-5">
                 <div class="dashboard-panel p-6">
-                    <h3 class="text-[0.6rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Service_Capabilities</h3>
+                    <h3 class="text-[0.65rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Service_Capabilities</h3>
                     <div class="flex flex-wrap gap-1">
-                        <span class="service-tag">品牌視覺設計</span>
-                        <span class="service-tag">品牌影像製作</span>
-                        <span class="service-tag">包裝設計</span>
-                        <span class="service-tag">網頁設計</span>
-                        <span class="service-tag">主視覺設計</span>
-                        <span class="service-tag">海報設計</span>
-                        <span class="service-tag">書籍裝幀</span>
-                        <span class="service-tag">動態影像</span>
-                        <span class="service-tag">UI/UX</span>
+                        <span class="service-tag">Branding & Identity</span>
+                        <span class="service-tag">Visual Production</span>
+                        <span class="service-tag">Packaging Design</span>
+                        <span class="service-tag">Web Design</span>
+                        <span class="service-tag">Key Visual</span>
+                        <span class="service-tag">Poster Design</span>
+                        <span class="service-tag">Editorial Design</span>
+                        <span class="service-tag">Motion Graphics</span>
+                        <span class="service-tag">UI/UX Design</span>
                     </div>
-                    <!-- 移除分隔線 -->
-                    <div class="mt-6 pt-0">
-                        <div class="text-[0.5rem] text-gray-400 mb-3 uppercase tracking-wider">Contact_Protocols</div>
-                        <div class="space-y-3">
+                    
+                    <div class="mt-8 pt-0">
+                        <div class="text-[0.6rem] text-gray-400 mb-4 uppercase tracking-wider">Contact_Protocols</div>
+                        <div class="space-y-4">
                             <a href="mailto:jewuenxiao@gmail.com" class="block group">
-                                <div class="text-[0.45rem] text-gray-400 mb-0.5 uppercase">01. MAIL_GATEWAY</div>
-                                <div class="text-[0.6rem] text-gray-700 font-mono group-hover:underline underline-offset-4 decoration-black/30">
+                                <div class="text-[0.5rem] text-gray-400 mb-1 uppercase">01. MAIL_GATEWAY</div>
+                                <div class="text-[0.7rem] text-gray-700 font-mono group-hover:underline underline-offset-4 decoration-black/30">
                                     jewuenxiao@gmail.com
                                 </div>
                             </a>
-                            <div class="cursor-pointer group" onclick="openModal()">
-                                <div class="text-[0.45rem] text-gray-400 mb-0.5 uppercase">02. REQUEST_FORM</div>
-                                <div class="text-[0.6rem] text-gray-700 font-mono group-hover:underline underline-offset-4 decoration-black/30">
-                                    HTTPS://XIAOSTUDIO.XYZ/FORM/
-                                </div>
+                            <div class="group">
+                                <div class="text-[0.5rem] text-gray-400 mb-2 uppercase">02. CONSULTATION</div>
+                                <button onclick="openModal()" class="request-btn">
+                                    SUBMIT_REQUEST_FORM
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -343,12 +368,10 @@
     </div>
 
     <script>
-        // 彈窗控制
         const modal = document.getElementById('form-modal');
         function openModal() { modal.classList.add('active'); isPaused = true; }
         function closeModal() { modal.classList.remove('active'); }
 
-        // 模擬數據
         let cycles = 48293;
         setInterval(() => {
             cycles += Math.floor(Math.random() * 10);
@@ -361,7 +384,6 @@
             }
         }, 1000);
 
-        // 職業計時器
         function updateExperience() {
             const startDate = new Date('2010-03-01T00:00:00');
             const now = new Date();
@@ -389,8 +411,8 @@
                     <div>YEARS: <span>${years}</span></div>
                     <div>MONTHS: <span>${months}</span></div>
                     <div>DAYS: <span>${days}</span></div>
-                    <div class="text-[0.5rem] mt-2 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
-                    <div class="text-xs font-bold mt-1">
+                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
+                    <div class="text-base font-bold mt-1">
                         ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker">.${milliseconds.toString().padStart(3,'0')}</span>
                     </div>
                 `;
@@ -399,7 +421,6 @@
         }
         requestAnimationFrame(updateExperience);
 
-        // 俄羅斯方塊邏輯
         const canvas = document.getElementById('game-canvas');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
@@ -540,8 +561,10 @@
         }
 
         function updateScore() {
+            const level = Math.floor(player.score / 100) + 1;
             scoreElement.innerText = player.score.toString().padStart(6, '0');
-            levelElement.innerText = (Math.floor(player.score / 100) + 1).toString().padStart(2, '0');
+            levelElement.innerText = level.toString().padStart(2, '0');
+            dropInterval = Math.max(100, 1000 - (level - 1) * 100);
         }
 
         let dropCounter = 0;
