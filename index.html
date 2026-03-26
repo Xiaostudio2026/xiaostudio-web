@@ -96,17 +96,12 @@
             border: 1px solid rgba(255, 255, 255, 0.15); 
             padding: 14px; 
             border-radius: 2px; 
-            min-width: 190px; /* 從 160px 增加以適應較大文字 */
+            min-width: 190px;
         }
         .node-box.special { border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.05); }
         
-        /* 節點 ID: 9px -> 11px */
         .node-id { font-size: 11px; } 
-        
-        /* 節點標題: 13px -> 16px */
         .node-label { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 12px; }
-        
-        /* 按鈕文字: 9px -> 11px */
         .node-btn-text { font-size: 11px; }
 
         .status-indicator { width: 7px; height: 7px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
@@ -180,7 +175,8 @@
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
 
-        .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); }
+        .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); transition: all 0.3s ease; }
+        .audio-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
     </style>
 </head>
 <body>
@@ -208,6 +204,11 @@
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp4" type="video/mp4">
             </video>
         </div>
+
+        <!-- 音訊資源 -->
+        <audio id="bgAudio" loop preload="auto">
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp3" type="audio/mpeg">
+        </audio>
 
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
@@ -259,8 +260,14 @@
         </div>
     </div>
 
+    <!-- 音效切換按鈕 -->
     <button id="audioToggle" class="audio-toggle">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+            <!-- 初始為靜音圖示 -->
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line id="muteLine1" x1="23" y1="9" x2="17" y2="15"></line>
+            <line id="muteLine2" x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
     </button>
 
     <script>
@@ -297,6 +304,35 @@
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => changeLanguage(btn.getAttribute('data-lang')));
+        });
+
+        // 音效控制邏輯
+        const audioBtn = document.getElementById('audioToggle');
+        const bgAudio = document.getElementById('bgAudio');
+        const bgVideo = document.getElementById('bgVideo');
+        const audioIcon = document.getElementById('audioIcon');
+        let isMuted = true;
+
+        audioBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgAudio.muted = isMuted;
+            bgVideo.muted = isMuted;
+
+            if (!isMuted) {
+                bgAudio.play().catch(e => console.log("Audio play failed:", e));
+                // 切換為播放圖示 (波紋)
+                audioIcon.innerHTML = `
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                `;
+            } else {
+                // 切換為靜音圖示 (叉號)
+                audioIcon.innerHTML = `
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                `;
+            }
         });
 
         const nodes = Array.from(document.querySelectorAll('.workflow-node'));
