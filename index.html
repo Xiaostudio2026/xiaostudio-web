@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
     
-    <!-- 1. 瀏覽器標籤頁圖示 (Favicon) -->
+     <!-- 1. 瀏覽器標籤頁圖示 (Favicon) -->
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     
     <!-- 2. iOS / Safari 書籤與主畫面圖示 (Apple Touch Icon) -->
@@ -31,10 +31,7 @@
             height: 100vh;
             touch-action: none;
         }
-
         .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* 區塊容器 */
         .section {
             width: 100vw;
             height: 100vh;
@@ -42,17 +39,9 @@
             overflow: hidden;
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         @media (min-width: 1024px) {
-            .section {
-                transform: scale(1.12);
-                transform-origin: center center;
-                width: 100vw;
-                height: 100vh;
-            }
+            .section { transform: scale(1.12); transform-origin: center center; }
         }
-
-        /* 背景網格疊層 */
         .grid-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -62,34 +51,26 @@
             z-index: -1;
             pointer-events: none;
         }
-
-        /* 影片背景設置 */
         .video-background {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
             filter: brightness(0.9) contrast(1.1); 
         }
-
         .video-background video { width: 100%; height: 100%; object-fit: cover; }
-
         .video-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.9) 100%);
             z-index: -1;
         }
-
-        /* 語言切換器 */
         .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
         .lang-btn { font-size: 10px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
-
-        /* 儀表板節點 */
+        
         .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
-        
         .node-box { 
             background: rgba(10, 10, 10, 0.6); 
             backdrop-filter: blur(12px); 
@@ -99,93 +80,83 @@
             min-width: 190px; 
         }
         .node-box.special { border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.05); }
-        
-        .node-id { font-size: 11px; } 
         .node-label { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 12px; }
-        .node-btn-text { font-size: 11px; }
-
         .status-indicator { width: 7px; height: 7px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
-        
         @keyframes status-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
-
-        /* 工作流連接線樣式 */
-        .line-path { 
-            stroke: rgba(255, 255, 255, 0.7); 
-            stroke-width: 2.5; 
-            fill: none; 
-            transition: d 0.1s ease; 
-        }
-        .line-pulse { 
-            stroke: rgba(255, 255, 255, 1); 
-            stroke-width: 3; 
-            fill: none; 
-            stroke-dasharray: 6, 120; 
-            animation: pulse-move 6s linear infinite; 
-        }
+        
+        .line-path { stroke: rgba(255, 255, 255, 0.7); stroke-width: 2.5; fill: none; transition: d 0.1s ease; }
+        .line-pulse { stroke: rgba(255, 255, 255, 1); stroke-width: 3; fill: none; stroke-dasharray: 6, 120; animation: pulse-move 6s linear infinite; }
         @keyframes pulse-move { 0% { stroke-dashoffset: 240; } 100% { stroke-dashoffset: 0; } }
 
-        /* 彈跳視窗遮罩 */
+        /* 彈跳視窗基礎設定 */
         #overlay-screen {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.65); 
+            background: rgba(0,0,0,0.8); 
             z-index: 200;
-            backdrop-filter: blur(10px); 
+            backdrop-filter: blur(20px); 
             align-items: center;
             justify-content: center;
-            padding: 10px;
         }
         #overlay-screen.active { display: flex; animation: fadeIn 0.3s ease; }
-
+        
+        /* 視窗容器 - 預設為滿版，JS 會根據類型切換 */
         #overlay-container {
-            width: 100%;
-            max-width: 1100px; /* 寬度稍微增加以利作品展示 */
-            height: 92%;
-            background: #0a0a0a;
-            border: 1px solid rgba(255,255,255,0.15);
+            width: 100vw;
+            height: 100vh;
+            background: #000;
             position: relative;
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        #overlay-content { 
-            width: 100%; 
-            flex: 1; 
-            overflow-y: hidden; /* iframe 自行捲動 */
-            background: #0a0a0a;
+        /* 當類型為 'window' 時的樣式 (About & Form) */
+        #overlay-container.is-window {
+            width: 95%;
+            max-width: 1100px;
+            height: 92%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+            border-radius: 4px;
         }
-
+        
         #overlay-iframe-container { 
             width: 100%; 
             height: 100%; 
             border: none; 
-            display: block;
+            display: block; 
+            background: #000;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
 
-        /* LOGO 樣式 */
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
-
-        .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); }
+        
+        .audio-toggle { 
+            position: fixed; right: 20px; bottom: 20px; z-index: 100; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            width: 44px; height: 44px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.5); 
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .audio-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); }
     </style>
 </head>
 <body>
 
-    <!-- 導航欄位 -->
     <nav class="fixed top-0 w-full z-[100] p-8 md:p-16 flex justify-between items-center pointer-events-none">
         <div class="logo-container pointer-events-auto cursor-pointer" onclick="window.location.reload()">
             <span class="logo-text">XIAOSTUDIO</span>
             <div class="logo-underline"></div>
         </div>
-        
         <div class="lang-switcher mono">
             <span class="lang-btn" data-lang="zh">ZH</span>
             <span class="lang-btn active" data-lang="en">EN</span>
@@ -195,7 +166,6 @@
         </div>
     </nav>
 
-    <!-- 主視圖區塊 -->
     <div class="section" id="main-view">
         <div class="video-background">
             <video id="bgVideo" autoplay loop playsinline muted preload="auto">
@@ -203,16 +173,16 @@
             </video>
         </div>
 
+        <audio id="bgAudio" loop preload="auto">
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp3" type="audio/mpeg">
+        </audio>
+
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
 
-        <!-- SVG 畫布用於連接線 -->
-        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none">
-            <!-- 線條由 JavaScript 生成 -->
-        </svg>
+        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg>
 
         <div id="dashboard" class="dashboard-container">
-            <!-- 節點 1-6 -->
             <div id="node1" class="workflow-node">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">About Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="node-btn-text mono opacity-50 uppercase tracking-widest">View Profile</span></div></div>
             </div>
@@ -239,22 +209,27 @@
         </div>
     </div>
 
-    <!-- 彈跳視窗 -->
+    <!-- 彈跳視窗（支援動態切換滿版或視窗化） -->
     <div id="overlay-screen" onclick="hideOverlay()">
         <div id="overlay-container" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center p-4 border-b border-white/10 bg-[#0a0a0a] z-50">
-                <div class="flex items-center gap-3 ml-2">
+            <!-- 控制列 -->
+            <div id="overlay-nav" class="absolute top-0 left-0 w-full flex justify-between items-center p-6 z-50">
+                <div class="flex items-center gap-3">
                     <span class="status-indicator"></span>
-                    <span id="overlay-title" class="mono text-[10px] opacity-40 uppercase tracking-widest">Pipeline System</span>
+                    <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white">Pipeline System</span>
                 </div>
-                <div id="btn-close" class="px-5 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-colors" onclick="hideOverlay()">Close</div>
+                <div id="btn-close" class="px-6 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-all" onclick="hideOverlay()">Close</div>
             </div>
-            <div id="overlay-content"></div>
+            <div id="overlay-content" class="w-full h-full"></div>
         </div>
     </div>
 
     <button id="audioToggle" class="audio-toggle">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
     </button>
 
     <script>
@@ -262,11 +237,29 @@
             zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道" },
             en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System" },
             jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム" },
-            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 作品", viewStatic: "아카이브", motion: "동적 作品", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프라인 시스템" },
+            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프ライン 시스템" },
             fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet", pipelineTitle: "Système Pipeline" }
         };
 
         let currentLang = 'en';
+
+        const audioBtn = document.getElementById('audioToggle');
+        const audioIcon = document.getElementById('audioIcon');
+        const bgAudio = document.getElementById('bgAudio');
+        const bgVideo = document.getElementById('bgVideo');
+        let isMuted = true;
+
+        audioBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgAudio.muted = isMuted;
+            bgVideo.muted = isMuted;
+            if (!isMuted) {
+                bgAudio.play().catch(e => console.log("需點擊後才能播放聲音"));
+                audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+            } else {
+                audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
+            }
+        });
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -296,16 +289,11 @@
 
         const nodes = Array.from(document.querySelectorAll('.workflow-node'));
         const svgLines = document.getElementById('svgLines');
-
         const connections = [
-            { from: 'node1', to: 'node2' },
-            { from: 'node2', to: 'node6' }, 
-            { from: 'node3', to: 'node6' },
-            { from: 'node2', to: 'node3' },
-            { from: 'node2', to: 'node5' },
-            { from: 'node2', to: 'node4' },
-            { from: 'node5', to: 'node6' },
-            { from: 'node4', to: 'node6' }
+            { from: 'node1', to: 'node2' }, { from: 'node2', to: 'node6' }, 
+            { from: 'node3', to: 'node6' }, { from: 'node2', to: 'node3' },
+            { from: 'node2', to: 'node5' }, { from: 'node2', to: 'node4' },
+            { from: 'node5', to: 'node6' }, { from: 'node4', to: 'node6' }
         ];
 
         function initNodePositions() {
@@ -332,10 +320,7 @@
             const rect = el.getBoundingClientRect();
             const scaleX = 1920 / window.innerWidth;
             const scaleY = 1080 / window.innerHeight;
-            return { 
-                x: (rect.left + rect.width / 2) * scaleX, 
-                y: (rect.top + rect.height / 2) * scaleY 
-            };
+            return { x: (rect.left + rect.width / 2) * scaleX, y: (rect.top + rect.height / 2) * scaleY };
         }
 
         function updateLines() {
@@ -345,12 +330,10 @@
                 const end = getCenter(conn.to);
                 const cp1x = start.x + (end.x - start.x) * 0.5;
                 const d = `M${start.x},${start.y} C${cp1x},${start.y} ${cp1x},${end.y} ${end.x},${end.y}`;
-                
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path.setAttribute("d", d);
                 path.setAttribute("class", "line-path");
                 svgLines.appendChild(path);
-                
                 const pulse = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 pulse.setAttribute("d", d);
                 pulse.setAttribute("class", "line-pulse");
@@ -361,7 +344,6 @@
 
         let activeNode = null;
         let offset = { x: 0, y: 0 };
-
         nodes.forEach(node => {
             const startDrag = (clientX, clientY) => {
                 activeNode = node;
@@ -372,65 +354,55 @@
             node.addEventListener('mousedown', (e) => { if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.clientX, e.clientY); });
             node.addEventListener('touchstart', (e) => { if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.touches[0].clientX, e.touches[0].clientY); });
         });
-
         window.addEventListener('mousemove', (e) => {
             if (!activeNode) return;
             activeNode.style.left = `${e.clientX - offset.x}px`;
             activeNode.style.top = `${e.clientY - offset.y}px`;
             updateLines();
         });
-
         window.addEventListener('touchmove', (e) => {
             if (!activeNode) return;
             activeNode.style.left = `${e.touches[0].clientX - offset.x}px`;
             activeNode.style.top = `${e.touches[0].clientY - offset.y}px`;
             updateLines();
         });
-
         const endDrag = () => { if (activeNode) { activeNode.classList.remove('dragging'); activeNode = null; } };
         window.addEventListener('mouseup', endDrag);
         window.addEventListener('touchend', endDrag);
 
         function showOverlay(type) {
             const screen = document.getElementById('overlay-screen');
+            const container = document.getElementById('overlay-container');
+            const nav = document.getElementById('overlay-nav');
             const content = document.getElementById('overlay-content');
-            const overlayTitle = document.getElementById('overlay-title');
-            const t = translations[currentLang];
-            
-            screen.classList.add('active');
-            content.scrollTop = 0;
-
-            // 定義基礎路徑 (xiaostudio.xyz)
             const baseUrl = "https://xiaostudio.xyz";
             let targetUrl = "";
-
-            switch(type) {
-                case 'about':
-                    targetUrl = `${baseUrl}/about/`;
-                    break;
-                case 'static':
-                    targetUrl = `${baseUrl}/static/`;
-                    break;
-                case 'motion':
-                    targetUrl = `${baseUrl}/motion/`;
-                    break;
-                case 'print':
-                    targetUrl = `${baseUrl}/print/`;
-                    break;
-                case 'web':
-                    targetUrl = `${baseUrl}/web/`;
-                    break;
-                case 'form':
-                    targetUrl = `${baseUrl}/form/`;
-                    break;
+            
+            // 根據類型判斷是否需要滿版
+            const isWindowed = (type === 'about' || type === 'form');
+            
+            if (isWindowed) {
+                container.classList.add('is-window');
+                nav.classList.remove('bg-gradient-to-b', 'from-black/80');
+            } else {
+                container.classList.remove('is-window');
+                nav.classList.add('bg-gradient-to-b', 'from-black/80');
             }
 
+            switch(type) {
+                case 'about': targetUrl = `${baseUrl}/about/`; break;
+                case 'static': targetUrl = `${baseUrl}/static/`; break;
+                case 'motion': targetUrl = `${baseUrl}/motion/`; break;
+                case 'print': targetUrl = `${baseUrl}/print/`; break;
+                case 'web': targetUrl = `${baseUrl}/web/`; break;
+                case 'form': targetUrl = `${baseUrl}/form/`; break;
+            }
+
+            screen.classList.add('active');
             if (targetUrl) {
-                // 自動帶入語言參數
-                const finalUrl = `${targetUrl}?lang=${currentLang}`;
-                content.innerHTML = `<iframe src="${finalUrl}" id="overlay-iframe-container"></iframe>`;
+                content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
             } else {
-                content.innerHTML = `<div class="flex flex-col items-center justify-center h-full min-h-[400px] opacity-40 mono uppercase text-center"><p>${t.updateSoon}</p></div>`;
+                content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
             }
         }
 
@@ -438,7 +410,6 @@
             document.getElementById('overlay-screen').classList.remove('active');
             document.getElementById('overlay-content').innerHTML = '';
         }
-
         window.addEventListener('load', initNodePositions);
         window.addEventListener('resize', initNodePositions);
     </script>
