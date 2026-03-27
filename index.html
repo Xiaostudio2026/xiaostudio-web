@@ -1,21 +1,22 @@
-<!DOCTYPE html>
 <html lang="zh-Hant"><head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+       <!-- 更動 1: 加入 viewport-fit=cover，讓背景延伸至瀏海區域 (解決滿版問題) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+   
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
+  
+    <link rel="manifest" href="manifest.json"> 
+    <!-- PWA 與 桌面圖示設定 (解決滿版問題) -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="XIAOSTUDIO">
     
-     <!-- 1. 瀏覽器標籤頁圖示 (Favicon) -->
+    <!-- iOS 滿版圖示 (建議使用 180x180 png，背景填滿黑色) -->
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-    
-    <!-- 2. iOS / Safari 書籤與主畫面圖示 (Apple Touch Icon) -->
-    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 
-    <!-- 3. Safari 釘選標籤顏色 -->
-    <link rel="mask-icon" href="assets/images/apple-touch-icon.png" color="#000000">
-
-    <!-- 4. Android / Chrome 顏色設定 -->
-    <meta name="theme-color" content="#000000">
-
+    <!-- 引入 Tailwind CSS 與 Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&amp;family=JetBrains+Mono:wght@300;500&amp;display=swap" rel="stylesheet">
     
@@ -36,7 +37,7 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         @media (min-width: 1024px) {
             .section { transform: scale(1.12); transform-origin: center center; }
@@ -87,20 +88,25 @@
         .line-pulse { stroke: rgba(255, 255, 255, 1); stroke-width: 3; fill: none; stroke-dasharray: 6, 120; animation: pulse-move 6s linear infinite; }
         @keyframes pulse-move { 0% { stroke-dashoffset: 240; } 100% { stroke-dashoffset: 0; } }
 
-        /* 彈跳視窗基礎設定 */
+        /* 彈跳視窗基礎背景遮罩 */
         #overlay-screen {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); 
+            background: rgba(0,0,0,0);
             z-index: 200;
-            backdrop-filter: blur(20px); 
+            backdrop-filter: blur(0px); 
             align-items: center;
             justify-content: center;
+            transition: background 0.5s ease, backdrop-filter 0.5s ease;
         }
-        #overlay-screen.active { display: flex; animation: fadeIn 0.3s ease; }
+        #overlay-screen.active { 
+            display: flex; 
+            background: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(20px); 
+        }
         
-        /* 視窗容器 - 預設為滿版，JS 會根據類型切換 */
+        /* 視窗容器基礎設定 */
         #overlay-container {
             width: 100vw;
             height: 100vh;
@@ -109,19 +115,34 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
         }
 
-        /* 當類型為 'window' 時的樣式 (About & Form) */
-        #overlay-container.is-window {
+        /* 類型 1：快速彈出 (NODE_01, 06) */
+        #overlay-container.is-pop {
             width: 95%;
             max-width: 1100px;
             height: 92%;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
             border-radius: 4px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
         }
-        
+        #overlay-screen.active #overlay-container.is-pop {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* 類型 2：由上往下滑入 (其餘作品節點) */
+        #overlay-container.is-slide-down {
+            transform: translateY(-100%);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #overlay-screen.active #overlay-container.is-slide-down {
+            transform: translateY(0);
+        }
+
         #overlay-iframe-container { 
             width: 100%; 
             height: 100%; 
@@ -129,9 +150,6 @@
             display: block; 
             background: #000;
         }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
 
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
@@ -158,10 +176,10 @@
         </div>
         <div class="lang-switcher mono">
             <span class="lang-btn" data-lang="zh">ZH</span>
-            <span class="lang-btn" data-lang="en">EN</span>
+            <span class="lang-btn active" data-lang="en">EN</span>
             <span class="lang-btn" data-lang="jp">JP</span>
             <span class="lang-btn" data-lang="kr">KR</span>
-            <span class="lang-btn active" data-lang="fr">FR</span>
+            <span class="lang-btn" data-lang="fr">FR</span>
         </div>
     </nav>
 
@@ -179,45 +197,44 @@
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
 
-        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"><path d="M348.89154273343377,260.84852271820915 C388.02070783132535,260.84852271820915 388.02070783132535,563.2485256726998 427.1498729292169,563.2485256726998" class="line-path"></path><path d="M348.89154273343377,260.84852271820915 C388.02070783132535,260.84852271820915 388.02070783132535,563.2485256726998 427.1498729292169,563.2485256726998" class="line-pulse" style="animation-delay: 0s;"></path><path d="M427.1498729292169,563.2485256726998 C1094.6328007341867,563.2485256726998 1094.6328007341867,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-path"></path><path d="M427.1498729292169,563.2485256726998 C1094.6328007341867,563.2485256726998 1094.6328007341867,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-pulse" style="animation-delay: 0.8s;"></path><path d="M980.6457548945783,200.3647485862215 C1371.3807417168675,200.3647485862215 1371.3807417168675,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-path"></path><path d="M980.6457548945783,200.3647485862215 C1371.3807417168675,200.3647485862215 1371.3807417168675,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-pulse" style="animation-delay: 1.6s;"></path><path d="M427.1498729292169,563.2485256726998 C703.8978139118976,563.2485256726998 703.8978139118976,200.3647485862215 980.6457548945783,200.3647485862215" class="line-path"></path><path d="M427.1498729292169,563.2485256726998 C703.8978139118976,563.2485256726998 703.8978139118976,200.3647485862215 980.6457548945783,200.3647485862215" class="line-pulse" style="animation-delay: 2.4s;"></path><path d="M427.1498729292169,563.2485256726998 C744.6597444465363,563.2485256726998 744.6597444465363,805.164779115958 1062.1696159638554,805.164779115958" class="line-path"></path><path d="M427.1498729292169,563.2485256726998 C744.6597444465363,563.2485256726998 744.6597444465363,805.164779115958 1062.1696159638554,805.164779115958" class="line-pulse" style="animation-delay: 3.2s;"></path><path d="M427.1498729292169,563.2485256726998 C1066.8519978350905,563.2485256726998 1066.8519978350905,926.132261724586 1706.554122740964,926.132261724586" class="line-path"></path><path d="M427.1498729292169,563.2485256726998 C1066.8519978350905,563.2485256726998 1066.8519978350905,926.132261724586 1706.554122740964,926.132261724586" class="line-pulse" style="animation-delay: 4s;"></path><path d="M1062.1696159638554,805.164779115958 C1412.1426722515062,805.164779115958 1412.1426722515062,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-path"></path><path d="M1062.1696159638554,805.164779115958 C1412.1426722515062,805.164779115958 1412.1426722515062,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-pulse" style="animation-delay: 4.8s;"></path><path d="M1706.554122740964,926.132261724586 C1734.3349256400602,926.132261724586 1734.3349256400602,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-path"></path><path d="M1706.554122740964,926.132261724586 C1734.3349256400602,926.132261724586 1734.3349256400602,439.57963738308484 1762.1157285391566,439.57963738308484" class="line-pulse" style="animation-delay: 5.6s;"></path></svg>
+        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"><path d="M306.9320288968374,260.84852271820915 C341.7060017413404,260.84852271820915 341.7060017413404,563.2485256726998 376.47997458584337,563.2485256726998" class="line-path"></path><path d="M306.9320288968374,260.84852271820915 C341.7060017413404,260.84852271820915 341.7060017413404,563.2485256726998 376.47997458584337,563.2485256726998" class="line-pulse" style="animation-delay: 0s;"></path><path d="M376.47997458584337,563.2485256726998 C1061.1272002070782,563.2485256726998 1061.1272002070782,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C1061.1272002070782,563.2485256726998 1061.1272002070782,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 0.8s;"></path><path d="M967.792733433735,200.3647485862215 C1356.7835796310242,200.3647485862215 1356.7835796310242,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M967.792733433735,200.3647485862215 C1356.7835796310242,200.3647485862215 1356.7835796310242,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 1.6s;"></path><path d="M376.47997458584337,563.2485256726998 C672.1363540097891,563.2485256726998 672.1363540097891,200.3647485862215 967.792733433735,200.3647485862215" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C672.1363540097891,563.2485256726998 672.1363540097891,200.3647485862215 967.792733433735,200.3647485862215" class="line-pulse" style="animation-delay: 2.4s;"></path><path d="M376.47997458584337,563.2485256726998 C714.487210560994,563.2485256726998 714.487210560994,805.164779115958 1052.4944465361446,805.164779115958" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C714.487210560994,563.2485256726998 714.487210560994,805.164779115958 1052.4944465361446,805.164779115958" class="line-pulse" style="animation-delay: 3.2s;"></path><path d="M376.47997458584337,563.2485256726998 C1012.4072030308736,563.2485256726998 1012.4072030308736,926.132261724586 1648.3344314759038,926.132261724586" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C1012.4072030308736,563.2485256726998 1012.4072030308736,926.132261724586 1648.3344314759038,926.132261724586" class="line-pulse" style="animation-delay: 4s;"></path><path d="M1052.4944465361446,805.164779115958 C1399.134436182229,805.164779115958 1399.134436182229,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M1052.4944465361446,805.164779115958 C1399.134436182229,805.164779115958 1399.134436182229,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 4.8s;"></path><path d="M1648.3344314759038,926.132261724586 C1697.0544286521085,926.132261724586 1697.0544286521085,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M1648.3344314759038,926.132261724586 C1697.0544286521085,926.132261724586 1697.0544286521085,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 5.6s;"></path></svg>
 
         <div id="dashboard" class="dashboard-container">
             <div id="node1" class="workflow-node" style="top: 20%; left: 12%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">À propos de Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="node-btn-text mono opacity-50 uppercase tracking-widest">Voir le profil</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">About Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="node-btn-text mono opacity-50 uppercase tracking-widest">View Profile</span></div></div>
             </div>
             <div id="node2" class="workflow-node" style="top: 45%; left: 15%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_02</span><span class="node-label"><i class="status-indicator"></i><span id="txt-static">Travaux Statiques</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('static')"><span id="btn-static" class="node-btn-text mono opacity-50 uppercase tracking-widest">Archives</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_02</span><span class="node-label"><i class="status-indicator"></i><span id="txt-static">Static Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('static')"><span id="btn-static" class="node-btn-text mono opacity-50 uppercase tracking-widest">Archive</span></div></div>
             </div>
             <div id="node3" class="workflow-node" style="top: 15%; left: 42%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Travaux Animés</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="node-btn-text mono opacity-50 uppercase tracking-widest">Projets Motion</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="node-btn-text mono opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
             </div>
             <div id="node4" class="workflow-node" style="top: 75%; left: 72%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Impression &amp; Emballage</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Projets Physiques</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print &amp; Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
             </div>
             <div id="node5" class="workflow-node" style="top: 65%; left: 45%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Design Web</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="node-btn-text mono opacity-50 uppercase tracking-widest">Expérience Digitale</span></div></div>
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Web Design</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="node-btn-text mono opacity-50 uppercase tracking-widest">Digital Experience</span></div></div>
             </div>
             <div id="node6" class="workflow-node" style="top: 35%; left: 78%;">
-                <div class="node-box special"><span class="node-id mono block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[13px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Demander un Projet</span></div></div>
+                <div class="node-box special"><span class="node-id mono block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[13px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Request Project</span></div></div>
             </div>
         </div>
 
         <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
-            <h1 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Flux Liquide<br>Suivre la Forme</h1>
+            <h1 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h1>
             <p class="mt-6 text-[10px] mono tracking-[0.5em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
         </div>
     </div>
 
-    <!-- 彈跳視窗（支援動態切換滿版或視窗化） -->
-    <div id="overlay-screen" onclick="hideOverlay()" class="">
-        <div id="overlay-container" onclick="event.stopPropagation()" class="">
-            <!-- 控制列 -->
+    <!-- 彈跳視窗容器 -->
+    <div id="overlay-screen" onclick="hideOverlay()" class="" style="display: none;">
+        <div id="overlay-container" onclick="event.stopPropagation()" class="is-slide-down">
             <div id="overlay-nav" class="absolute top-0 left-0 w-full flex justify-between items-center p-6 z-50 bg-gradient-to-b from-black/80">
                 <div class="flex items-center gap-3">
                     <span class="status-indicator"></span>
-                    <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white">Système Pipeline</span>
+                    <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white">Pipeline System</span>
                 </div>
-                <div id="btn-close" class="px-6 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-all" onclick="hideOverlay()">Fermer</div>
+                <div id="btn-close" class="px-6 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-all" onclick="hideOverlay()">Close</div>
             </div>
             <div id="overlay-content" class="w-full h-full"></div>
         </div>
@@ -241,7 +258,6 @@
         };
 
         let currentLang = 'en';
-
         const audioBtn = document.getElementById('audioToggle');
         const audioIcon = document.getElementById('audioIcon');
         const bgAudio = document.getElementById('bgAudio');
@@ -253,7 +269,7 @@
             bgAudio.muted = isMuted;
             bgVideo.muted = isMuted;
             if (!isMuted) {
-                bgAudio.play().catch(e => console.log("需點擊後才能播放聲音"));
+                bgAudio.play().catch(e => console.log("Audio play blocked"));
                 audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
             } else {
                 audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
@@ -377,14 +393,16 @@
             const baseUrl = "https://xiaostudio.xyz";
             let targetUrl = "";
             
-            // 根據類型判斷是否需要滿版
-            const isWindowed = (type === 'about' || type === 'form');
+            // 決定動畫類型
+            const isPop = (type === 'about' || type === 'form');
             
-            if (isWindowed) {
-                container.classList.add('is-window');
+            // 重置與設定類別
+            container.classList.remove('is-pop', 'is-slide-down');
+            if (isPop) {
+                container.classList.add('is-pop');
                 nav.classList.remove('bg-gradient-to-b', 'from-black/80');
             } else {
-                container.classList.remove('is-window');
+                container.classList.add('is-slide-down');
                 nav.classList.add('bg-gradient-to-b', 'from-black/80');
             }
 
@@ -397,7 +415,10 @@
                 case 'form': targetUrl = `${baseUrl}/form/`; break;
             }
 
+            screen.style.display = 'flex';
+            void screen.offsetWidth; // 觸發重繪
             screen.classList.add('active');
+
             if (targetUrl) {
                 content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
             } else {
@@ -406,8 +427,20 @@
         }
 
         function hideOverlay() {
-            document.getElementById('overlay-screen').classList.remove('active');
-            document.getElementById('overlay-content').innerHTML = '';
+            const screen = document.getElementById('overlay-screen');
+            screen.classList.remove('active');
+            setTimeout(() => {
+                if (!screen.classList.contains('active')) {
+                    screen.style.display = 'none';
+                    document.getElementById('overlay-content').innerHTML = '';
+                }
+            }, 600);
+        }
+ if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // 指向根目錄下的 sw.js 檔案
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+            });
         }
         window.addEventListener('load', initNodePositions);
         window.addEventListener('resize', initNodePositions);
