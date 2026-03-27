@@ -5,12 +5,13 @@
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
+  "description": "Refining The Digital Experience",
   "icons": [
     {
-      "src": "assets/images/favicon_pwa.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "assets/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
