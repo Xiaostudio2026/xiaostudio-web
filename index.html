@@ -438,9 +438,9 @@
                 }
             }, 600);
         }
- if ('serviceWorker' in navigator) {
+ // 註冊 Service Worker
+        if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // 指向根目錄下的 sw.js 檔案
                 navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
             });
         }
