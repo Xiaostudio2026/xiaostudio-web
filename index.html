@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
     
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <!-- PWA 與 桌面圖示設定 (解決滿版問題) -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="XIAOSTUDIO">
+    
+    <!-- iOS 滿版圖示 (建議使用 180x180 png，背景填滿黑色) -->
     <link rel="apple-touch-icon" href="assets/images/favicon.svg">
-    <link rel="mask-icon" href="assets/images/favicon.svg" color="#000000">
-    <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 
+    <!-- 引入 Tailwind CSS 與 Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     
