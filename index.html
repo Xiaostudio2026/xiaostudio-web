@@ -2,9 +2,12 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+       <!-- 更動 1: 加入 viewport-fit=cover，讓背景延伸至瀏海區域 (解決滿版問題) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+   
     <title>XIAOSTUDIO | Refining The Digital Experience</title>
-    
+  
+    <link rel="manifest" href="manifest.json"> 
     <!-- PWA 與 桌面圖示設定 (解決滿版問題) -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -435,7 +438,12 @@
                 }
             }, 600);
         }
-
+ if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // 指向根目錄下的 sw.js 檔案
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+            });
+        }
         window.addEventListener('load', initNodePositions);
         window.addEventListener('resize', initNodePositions);
     </script>
