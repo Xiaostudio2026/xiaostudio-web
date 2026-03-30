@@ -1,25 +1,60 @@
 <!DOCTYPE html>
-<html lang="zh-Hant"><head>
+<html lang="zh-Hant">
+<head>
     <meta charset="UTF-8">
-       <!-- 更動 1: 加入 viewport-fit=cover，讓背景延伸至瀏海區域 (解決滿版問題) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
    
-    <title>XIAOSTUDIO | Refining The Digital Experience</title>
+    <!-- SEO 基礎設定 -->
+    <title>XIAOSTUDIO | 視覺設計工作室 - 數位體驗與品牌設計</title>
+    <meta name="description" content="XIAOSTUDIO 專注於提供品牌視覺設計、動態設計及網頁設計。以流體律動與技術整合，琢磨重新定義數位美學。">
+    <meta name="keywords" content="XIAOSTUDIO, 品牌設計, 網頁設計, 動態設計, 平面設計, 包裝設計, 商品視覺, Visual Design, Motion Graphics, Design Studio Taiwan">
+    <meta name="author" content="XIAOSTUDIO">
+    <link rel="canonical" href="https://xiaostudio.xyz/">
+
+    <!-- Social Media / Open Graph (分享預覽) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xiaostudio.xyz/">
+    <meta property="og:title" content="XIAOSTUDIO | Refining The Digital Experience">
+    <meta property="og:description" content="探索 XIAOSTUDIO 的數位設計領域。從視覺到包裝，致力於創造隨形起舞的流體美學。">
+    <meta property="og:image" content="https://xiaostudio.xyz/assets/images/og-image.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="XIAOSTUDIO | 數位體驗與品牌設計">
+    <meta name="twitter:description" content="視覺設計與數位整合。">
+
+    <!-- 結構化數據 (JSON-LD) - 告訴 Google 這是一家設計公司 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "DesignBusiness",
+      "name": "XIAOSTUDIO",
+      "url": "https://xiaostudio.xyz/",
+      "logo": "https://xiaostudio.xyz/assets/images/favicon.svg",
+      "sameAs": [
+        "https://www.instagram.com/xiaostudio",
+        "https://www.behance.net/xiaostudio"
+      ],
+      "description": "數位體驗與品牌設計工作室，服務涵蓋網頁設計、動態設計、平面與包裝。",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Taipei",
+        "addressCountry": "TW"
+      }
+    }
+    </script>
   
     <link rel="manifest" href="manifest.json"> 
-    <!-- PWA 與 桌面圖示設定 (解決滿版問題) -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="XIAOSTUDIO">
     
-    <!-- iOS 滿版圖示 (建議使用 180x180 png，背景填滿黑色) -->
     <link rel="apple-touch-icon" href="assets/images/favicon.svg">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 
-    <!-- 引入 Tailwind CSS 與 Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&amp;family=JetBrains+Mono:wght@300;500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -32,205 +67,125 @@
             height: 100vh;
             touch-action: none;
         }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .section {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @media (min-width: 1024px) {
-            .section { transform: scale(1.12); transform-origin: center center; }
-        }
-        .grid-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-            pointer-events: none;
-        }
-        .video-background {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
-            filter: brightness(0.9) contrast(1.1); 
-        }
-        .video-background video { width: 100%; height: 100%; object-fit: cover; }
-        .video-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.9) 100%);
-            z-index: -1;
-        }
-        .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
-        .lang-btn { font-size: 10px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
-        .lang-btn.active { opacity: 1; font-weight: 700; }
+        /* 隱藏 SEO 標題，專供爬蟲讀取 */
+        .seo-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .section { width: 100vw; height: 100vh; position: relative; overflow: hidden; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        @media (min-width: 1024px) { .section { transform: scale(1.12); transform-origin: center center; } }
+        .grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; pointer-events: none; }
+        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; filter: brightness(0.9) contrast(1.1); }
+        .video-background video { width: 100%; height: 100%; object-fit: cover; }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.9) 100%); z-index: -1; }
+        .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
+        .lang-btn { font-size: 12px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
+        .lang-btn.active { opacity: 1; font-weight: 700; }
         .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
-        .node-box { 
-            background: rgba(10, 10, 10, 0.6); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            padding: 14px; 
-            border-radius: 2px; 
-            min-width: 190px; 
-        }
+        .node-box { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 2px; min-width: 190px; }
         .node-box.special { border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.05); }
         .node-label { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 12px; }
         .status-indicator { width: 7px; height: 7px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
         @keyframes status-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
-        
         .line-path { stroke: rgba(255, 255, 255, 0.7); stroke-width: 2.5; fill: none; transition: d 0.1s ease; }
         .line-pulse { stroke: rgba(255, 255, 255, 1); stroke-width: 3; fill: none; stroke-dasharray: 6, 120; animation: pulse-move 6s linear infinite; }
         @keyframes pulse-move { 0% { stroke-dashoffset: 240; } 100% { stroke-dashoffset: 0; } }
-
-        /* 彈跳視窗基礎背景遮罩 */
-        #overlay-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0);
-            z-index: 200;
-            backdrop-filter: blur(0px); 
-            align-items: center;
-            justify-content: center;
-            transition: background 0.5s ease, backdrop-filter 0.5s ease;
-        }
-        #overlay-screen.active { 
-            display: flex; 
-            background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(20px); 
-        }
-        
-        /* 視窗容器基礎設定 */
-        #overlay-container {
-            width: 100vw;
-            height: 100vh;
-            background: #000;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            will-change: transform, opacity;
-        }
-
-        /* 類型 1：快速彈出 (NODE_01, 06) */
-        #overlay-container.is-pop {
-            width: 95%;
-            max-width: 1100px;
-            height: 92%;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
-        }
-        #overlay-screen.active #overlay-container.is-pop {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* 類型 2：由上往下滑入 (其餘作品節點) */
-        #overlay-container.is-slide-down {
-            transform: translateY(-100%);
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        #overlay-screen.active #overlay-container.is-slide-down {
-            transform: translateY(0);
-        }
-
-        #overlay-iframe-container { 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
-            display: block; 
-            background: #000;
-        }
-
+        .carbon-counter { display: flex; flex-direction: column; align-items: flex-end; margin-top: 12px; pointer-events: none; }
+        .carbon-value { color: #fff; font-variant-numeric: tabular-nums; opacity: 0.8; }
+        .carbon-dot { width: 3px; height: 3px; background: #fff; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; margin-right: 6px; }
+        @keyframes blink { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.1; } }
+        #overlay-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0); z-index: 200; backdrop-filter: blur(0px); align-items: center; justify-content: center; transition: background 0.5s ease, backdrop-filter 0.5s ease; }
+        #overlay-screen.active { display: flex; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); }
+        #overlay-container { width: 100vw; height: 100vh; background: #000; position: relative; display: flex; flex-direction: column; overflow: hidden; will-change: transform, opacity; }
+        #overlay-container.is-pop { width: 95%; max-width: 1100px; height: 92%; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 4px; opacity: 0; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out; }
+        #overlay-screen.active #overlay-container.is-pop { opacity: 1; transform: scale(1); }
+        #overlay-container.is-slide-down { transform: translateY(-100%); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+        #overlay-screen.active #overlay-container.is-slide-down { transform: translateY(0); }
+        #overlay-iframe-container { width: 100%; height: 100%; border: none; display: block; background: #000; }
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
-        
-        .audio-toggle { 
-            position: fixed; right: 20px; bottom: 20px; z-index: 100; 
-            border: 1px solid rgba(255,255,255,0.2); 
-            width: 44px; height: 44px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            background: rgba(0,0,0,0.5); 
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .audio-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); }
+        .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.bottom-24{bottom:6rem}.left-0{left:0px}.left-10{left:2.5rem}.top-0{top:0px}.z-10{z-index:10}.z-50{z-index:50}.z-\[100\]{z-index:100}.mb-2{margin-bottom:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.h-full{height:100%}.w-full{width:100%}.max-w-2xl{max-width:42rem}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.border-t{border-top-width:1px}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.from-black\/80{--tw-gradient-from:rgb(0 0 0 / 0.8) var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pt-3{padding-top:0.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[13px\]{font-size:13px}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.lowercase{text-transform:lowercase}.leading-tight{line-height:1.25}.tracking-\[0\.3em\]{letter-spacing:0.3em}.tracking-\[0\.5em\]{letter-spacing:0.5em}.tracking-normal{letter-spacing:0em}.tracking-tight{letter-spacing:-0.025em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-40{opacity:0.4}.opacity-50{opacity:0.5}.opacity-60{opacity:0.6}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 768px){.md\:left-28{left:7rem}.md\:p-16{padding:4rem}.md\:text-7xl{font-size:4.5rem;line-height:1}}</style></head>
+</head>
 <body>
 
-    <nav class="fixed top-0 w-full z-[100] p-8 md:p-16 flex justify-between items-center pointer-events-none">
+    <!-- SEO 隱藏結構：讓搜尋引擎理解網頁層級 -->
+    <h1 class="seo-hidden">XIAOSTUDIO | 設計與數位體驗工作室</h1>
+    <h2 class="seo-hidden">網頁設計、動態設計、品牌識別服務</h2>
+
+    <nav class="fixed top-0 w-full z-[100] p-8 md:p-16 flex justify-between items-start pointer-events-none">
         <div class="logo-container pointer-events-auto cursor-pointer" onclick="window.location.reload()">
             <span class="logo-text">XIAOSTUDIO</span>
             <div class="logo-underline"></div>
         </div>
-        <div class="lang-switcher mono">
-            <span class="lang-btn" data-lang="zh">ZH</span>
-            <span class="lang-btn active" data-lang="en">EN</span>
-            <span class="lang-btn" data-lang="jp">JP</span>
-            <span class="lang-btn" data-lang="kr">KR</span>
-            <span class="lang-btn" data-lang="fr">FR</span>
+        
+        <div class="flex flex-col items-end">
+            <div class="lang-switcher mono">
+                <span class="lang-btn" data-lang="zh">ZH</span>
+                <span class="lang-btn active" data-lang="en">EN</span>
+                <span class="lang-btn" data-lang="jp">JP</span>
+                <span class="lang-btn" data-lang="kr">KR</span>
+                <span class="lang-btn" data-lang="fr">FR</span>
+            </div>
+            
+            <div class="carbon-counter">
+                <div id="carbon-value" class="carbon-value mono text-[11px] md:text-[12px] font-light tracking-wider">0,000,000,000.000</div>
+                <div class="flex items-center mt-1">
+                    <span class="carbon-dot"></span>
+                    <span id="txt-carbon-label" class="mono text-[8px] tracking-[0.15em] uppercase opacity-30">Cumulative Global CO2 Emissions (Tons)</span>
+                </div>
+            </div>
         </div>
     </nav>
 
     <div class="section" id="main-view">
         <div class="video-background">
-            <video id="bgVideo" autoplay="" loop="" playsinline="" muted="" preload="auto">
+            <video id="bgVideo" autoplay loop playsinline muted preload="auto">
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp4" type="video/mp4">
             </video>
         </div>
 
-        <audio id="bgAudio" loop="" preload="auto">
+        <audio id="bgAudio" loop preload="auto">
             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1770797197/Xiaostudio_liquid_loop_03.mp3" type="audio/mpeg">
         </audio>
 
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
 
-        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"><path d="M306.9320288968374,260.84852271820915 C341.7060017413404,260.84852271820915 341.7060017413404,563.2485256726998 376.47997458584337,563.2485256726998" class="line-path"></path><path d="M306.9320288968374,260.84852271820915 C341.7060017413404,260.84852271820915 341.7060017413404,563.2485256726998 376.47997458584337,563.2485256726998" class="line-pulse" style="animation-delay: 0s;"></path><path d="M376.47997458584337,563.2485256726998 C1061.1272002070782,563.2485256726998 1061.1272002070782,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C1061.1272002070782,563.2485256726998 1061.1272002070782,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 0.8s;"></path><path d="M967.792733433735,200.3647485862215 C1356.7835796310242,200.3647485862215 1356.7835796310242,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M967.792733433735,200.3647485862215 C1356.7835796310242,200.3647485862215 1356.7835796310242,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 1.6s;"></path><path d="M376.47997458584337,563.2485256726998 C672.1363540097891,563.2485256726998 672.1363540097891,200.3647485862215 967.792733433735,200.3647485862215" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C672.1363540097891,563.2485256726998 672.1363540097891,200.3647485862215 967.792733433735,200.3647485862215" class="line-pulse" style="animation-delay: 2.4s;"></path><path d="M376.47997458584337,563.2485256726998 C714.487210560994,563.2485256726998 714.487210560994,805.164779115958 1052.4944465361446,805.164779115958" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C714.487210560994,563.2485256726998 714.487210560994,805.164779115958 1052.4944465361446,805.164779115958" class="line-pulse" style="animation-delay: 3.2s;"></path><path d="M376.47997458584337,563.2485256726998 C1012.4072030308736,563.2485256726998 1012.4072030308736,926.132261724586 1648.3344314759038,926.132261724586" class="line-path"></path><path d="M376.47997458584337,563.2485256726998 C1012.4072030308736,563.2485256726998 1012.4072030308736,926.132261724586 1648.3344314759038,926.132261724586" class="line-pulse" style="animation-delay: 4s;"></path><path d="M1052.4944465361446,805.164779115958 C1399.134436182229,805.164779115958 1399.134436182229,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M1052.4944465361446,805.164779115958 C1399.134436182229,805.164779115958 1399.134436182229,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 4.8s;"></path><path d="M1648.3344314759038,926.132261724586 C1697.0544286521085,926.132261724586 1697.0544286521085,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-path"></path><path d="M1648.3344314759038,926.132261724586 C1697.0544286521085,926.132261724586 1697.0544286521085,439.57963738308484 1745.7744258283133,439.57963738308484" class="line-pulse" style="animation-delay: 5.6s;"></path></svg>
+        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg>
 
         <div id="dashboard" class="dashboard-container">
-            <div id="node1" class="workflow-node" style="top: 20%; left: 12%;">
+            <div id="node1" class="workflow-node">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_01</span><span class="node-label"><i class="status-indicator"></i><span id="txt-about">About Xiao</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('about')"><span id="btn-about" class="node-btn-text mono opacity-50 uppercase tracking-widest">View Profile</span></div></div>
             </div>
-            <div id="node2" class="workflow-node" style="top: 45%; left: 15%;">
+            <div id="node2" class="workflow-node">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_02</span><span class="node-label"><i class="status-indicator"></i><span id="txt-static">Static Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('static')"><span id="btn-static" class="node-btn-text mono opacity-50 uppercase tracking-widest">Archive</span></div></div>
             </div>
-            <div id="node3" class="workflow-node" style="top: 15%; left: 42%;">
+            <div id="node3" class="workflow-node">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="node-btn-text mono opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
             </div>
-            <div id="node4" class="workflow-node" style="top: 75%; left: 72%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print &amp; Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
+            <div id="node4" class="workflow-node">
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print & Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
             </div>
-            <div id="node5" class="workflow-node" style="top: 65%; left: 45%;">
+            <div id="node5" class="workflow-node">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Web Design</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="node-btn-text mono opacity-50 uppercase tracking-widest">Digital Experience</span></div></div>
             </div>
-            <div id="node6" class="workflow-node" style="top: 35%; left: 78%;">
+            <div id="node6" class="workflow-node">
                 <div class="node-box special"><span class="node-id mono block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[13px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Request Project</span></div></div>
             </div>
         </div>
 
         <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
-            <h1 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h1>
+            <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
             <p class="mt-6 text-[10px] mono tracking-[0.5em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
         </div>
     </div>
 
-    <!-- 彈跳視窗容器 -->
-    <div id="overlay-screen" onclick="hideOverlay()" class="" style="display: none;">
-        <div id="overlay-container" onclick="event.stopPropagation()" class="is-slide-down">
-            <div id="overlay-nav" class="absolute top-0 left-0 w-full flex justify-between items-center p-6 z-50 bg-gradient-to-b from-black/80">
+    <div id="overlay-screen" onclick="hideOverlay()">
+        <div id="overlay-container" onclick="event.stopPropagation()">
+            <div id="overlay-nav" class="absolute top-0 left-0 w-full flex justify-between items-center p-6 z-50">
                 <div class="flex items-center gap-3">
                     <span class="status-indicator"></span>
                     <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white">Pipeline System</span>
@@ -251,11 +206,11 @@
 
     <script>
         const translations = {
-            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道" },
-            en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System" },
-            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム" },
-            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프ライン 시스템" },
-            fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet", pipelineTitle: "Système Pipeline" }
+            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道", carbon: "全球累計二氧化碳排放量 (公噸)" },
+            en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System", carbon: "Cumulative Global CO2 Emissions (Tons)" },
+            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム", carbon: "世界の累積二酸化炭素排出量 (トン)" },
+            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프라인 시스템", carbon: "전 세계 누적 이산화탄소 배출량 (톤)" },
+            fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet", pipelineTitle: "Système Pipeline", carbon: "Émissions mondiales de CO2 cumulées (Tonnes)" }
         };
 
         let currentLang = 'en';
@@ -265,12 +220,27 @@
         const bgVideo = document.getElementById('bgVideo');
         let isMuted = true;
 
+        // 碳排放計數器
+        const carbonValueEl = document.getElementById('carbon-value');
+        const annualEmissions = 40000000000; 
+        const perMsEmissions = annualEmissions / (365 * 24 * 60 * 60 * 1000);
+        const startDate = new Date('2024-01-01T00:00:00Z').getTime();
+        
+        function updateCarbonCounter() {
+            const now = Date.now();
+            const elapsed = now - startDate;
+            const currentTotal = (elapsed * perMsEmissions) + 2450000000000; 
+            carbonValueEl.innerText = currentTotal.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            requestAnimationFrame(updateCarbonCounter);
+        }
+        updateCarbonCounter();
+
         audioBtn.addEventListener('click', () => {
             isMuted = !isMuted;
             bgAudio.muted = isMuted;
             bgVideo.muted = isMuted;
             if (!isMuted) {
-                bgAudio.play().catch(e => console.log("Audio play blocked"));
+                bgAudio.play().catch(e => {});
                 audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
             } else {
                 audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
@@ -294,6 +264,7 @@
             document.getElementById('btn-close').innerText = t.close;
             document.getElementById('btn-form').innerText = t.request;
             document.getElementById('overlay-title').innerText = t.pipelineTitle;
+            document.getElementById('txt-carbon-label').innerText = t.carbon;
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
             });
@@ -370,18 +341,9 @@
             node.addEventListener('mousedown', (e) => { if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.clientX, e.clientY); });
             node.addEventListener('touchstart', (e) => { if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.touches[0].clientX, e.touches[0].clientY); });
         });
-        window.addEventListener('mousemove', (e) => {
-            if (!activeNode) return;
-            activeNode.style.left = `${e.clientX - offset.x}px`;
-            activeNode.style.top = `${e.clientY - offset.y}px`;
-            updateLines();
-        });
-        window.addEventListener('touchmove', (e) => {
-            if (!activeNode) return;
-            activeNode.style.left = `${e.touches[0].clientX - offset.x}px`;
-            activeNode.style.top = `${e.touches[0].clientY - offset.y}px`;
-            updateLines();
-        });
+
+        window.addEventListener('mousemove', (e) => { if (!activeNode) return; activeNode.style.left = `${e.clientX - offset.x}px`; activeNode.style.top = `${e.clientY - offset.y}px`; updateLines(); });
+        window.addEventListener('touchmove', (e) => { if (!activeNode) return; activeNode.style.left = `${e.touches[0].clientX - offset.x}px`; activeNode.style.top = `${e.touches[0].clientY - offset.y}px`; updateLines(); });
         const endDrag = () => { if (activeNode) { activeNode.classList.remove('dragging'); activeNode = null; } };
         window.addEventListener('mouseup', endDrag);
         window.addEventListener('touchend', endDrag);
@@ -393,20 +355,10 @@
             const content = document.getElementById('overlay-content');
             const baseUrl = "https://xiaostudio.xyz";
             let targetUrl = "";
-            
-            // 決定動畫類型
             const isPop = (type === 'about' || type === 'form');
-            
-            // 重置與設定類別
             container.classList.remove('is-pop', 'is-slide-down');
-            if (isPop) {
-                container.classList.add('is-pop');
-                nav.classList.remove('bg-gradient-to-b', 'from-black/80');
-            } else {
-                container.classList.add('is-slide-down');
-                nav.classList.add('bg-gradient-to-b', 'from-black/80');
-            }
-
+            if (isPop) { container.classList.add('is-pop'); nav.classList.remove('bg-gradient-to-b', 'from-black/80'); }
+            else { container.classList.add('is-slide-down'); nav.classList.add('bg-gradient-to-b', 'from-black/80'); }
             switch(type) {
                 case 'about': targetUrl = `${baseUrl}/about/`; break;
                 case 'static': targetUrl = `${baseUrl}/static/`; break;
@@ -415,36 +367,22 @@
                 case 'web': targetUrl = `${baseUrl}/web/`; break;
                 case 'form': targetUrl = `${baseUrl}/form/`; break;
             }
-
             screen.style.display = 'flex';
-            void screen.offsetWidth; // 觸發重繪
+            void screen.offsetWidth;
             screen.classList.add('active');
-
-            if (targetUrl) {
-                content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
-            } else {
-                content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
-            }
+            if (targetUrl) content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
+            else content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
         }
 
         function hideOverlay() {
             const screen = document.getElementById('overlay-screen');
             screen.classList.remove('active');
-            setTimeout(() => {
-                if (!screen.classList.contains('active')) {
-                    screen.style.display = 'none';
-                    document.getElementById('overlay-content').innerHTML = '';
-                }
-            }, 600);
+            setTimeout(() => { if (!screen.classList.contains('active')) { screen.style.display = 'none'; document.getElementById('overlay-content').innerHTML = ''; } }, 600);
         }
- if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                // 指向根目錄下的 sw.js 檔案
-                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
-            });
-        }
+
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); }); }
         window.addEventListener('load', initNodePositions);
         window.addEventListener('resize', initNodePositions);
     </script>
-
-</body></html>
+</body>
+</html>
