@@ -1,8 +1,14 @@
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        // 確保 sw.js 路徑正確
-        navigator.serviceWorker.register('./sw.js').catch((err) => {
-            console.log("Service Worker 註冊失敗:", err);
-        });
-    });
-}
+self.addEventListener('install', (event) => {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
+    // 滿足 Chrome PWA 安裝必要條件的 fetch 監聽
+    event.respondWith(
+        fetch(event.request).catch(() => caches.match(event.request))
+    );
+});
