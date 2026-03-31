@@ -2,8 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-   
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- SEO 基礎設定 -->
     <title>XIAOSTUDIO | 視覺設計工作室 - 數位體驗與品牌設計</title>
     <meta name="description" content="XIAOSTUDIO 專注於提供品牌視覺設計、動態設計及網頁設計。以流體律動與技術整合，琢磨重新定義數位美學。">
@@ -45,6 +44,11 @@
     </script>
   
     <link rel="manifest" href="manifest.json"> 
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+<link rel="apple-touch-icon" href="assets/images/icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
   
 
   
@@ -57,16 +61,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            touch-action: none;
-        }
+       body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    overflow: hidden;
+    width: 100vw;
+    height: 100dvh; /* 改用 dvh，自動適應網址列顯示/隱藏後的高度 */
+    touch-action: none;
+}
         /* 隱藏 SEO 標題，專供爬蟲讀取 */
         .seo-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         
