@@ -20,3 +20,19 @@
     }
   ]
 }
+"screenshots": [
+  {
+    "src": "assets/images/screenshot-mobile.png",
+    "sizes": "1080x1920",
+    "type": "image/png",
+    "form_factor": "narrow",
+    "label": "XIAOSTUDIO Mobile View"
+  },
+  {
+    "src": "assets/images/screenshot-desktop.png",
+    "sizes": "1920x1080",
+    "type": "image/png",
+    "form_factor": "wide",
+    "label": "XIAOSTUDIO Desktop View"
+  }
+]
