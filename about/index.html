@@ -33,6 +33,11 @@
             min-height: 100vh;
             margin: 0;
             position: relative;
+            /* 防止行動裝置下拉重新整理與過度捲動 */
+            overscroll-behavior-y: contain;
+            /* 禁止全域選取以優化遊戲體驗 */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .main-container {
@@ -43,12 +48,14 @@
         }
 
         #game-canvas {
-            border: 1px solid #333;
+            border: 2px solid #333;
             background-color: #1a1a1a;
             image-rendering: pixelated;
-            width: 100%;
-            max-width: 300px; /* 修正為 300px 以對齊 15 格網格 */
+            width: 288px; 
+            height: 552px; 
+            max-width: 100%;
             height: auto;
+            aspect-ratio: 12 / 23;
         }
 
         .dashboard-panel {
@@ -97,6 +104,7 @@
             font-weight: 400;
         }
 
+        /* 優化控制按鈕以適應觸控 */
         .control-btn {
             background: #fff;
             border: 1px solid rgba(0, 0, 0, 0.15); 
@@ -104,23 +112,27 @@
             align-items: center;
             justify-content: center;
             border-radius: 4px;
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
             color: #666;
-            touch-action: manipulation;
+            /* 重要：防止觸控縮放與預設行為 */
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .control-btn:active, .control-btn.active {
             background: #f0f0f0;
             border-color: #000;
             color: #000;
+            transform: scale(0.95);
         }
 
         .control-btn svg {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.5;
+            stroke-width: 2;
         }
 
         .game-overlay {
@@ -139,6 +151,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(4px);
+            touch-action: manipulation;
         }
 
         .game-overlay.hidden {
@@ -153,12 +166,6 @@
             border-radius: 2px;
             font-size: 0.6rem;
             color: #666;
-            transition: all 0.2s ease;
-        }
-
-        .service-tag:hover {
-            border-color: #000;
-            color: #000;
         }
 
         #form-modal {
@@ -192,21 +199,9 @@
             padding: 12px 16px;
             font-size: 0.6rem;
             font-weight: bold;
-            letter-spacing: 0.05em;
-            text-align: center;
             border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.2s;
             width: 100%;
-            min-height: 48px;
-            line-height: 1.2;
-            word-break: break-all;
-        }
-
-        .request-btn:hover {
-            opacity: 0.8;
+            touch-action: manipulation;
         }
     </style>
 </head>
@@ -222,7 +217,7 @@
     </div>
 
     <div class="main-container">
-        <!-- 頁首資訊 -->
+        <!-- 頁首區塊 -->
         <header class="mb-6 flex flex-col md:flex-row justify-between items-end pb-6 border-b border-gray-200">
             <div>
                 <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
@@ -242,7 +237,7 @@
 
         <main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- 左側：快取與位置 -->
+            <!-- 左側資訊 -->
             <div class="lg:col-span-4 flex flex-col gap-8">
                 <div class="dashboard-panel">
                     <h3 class="text-[0.78rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Memory Cache Visualization</h3>
@@ -252,35 +247,19 @@
                         </video>
                         <div class="absolute top-2 left-2 bg-black/50 text-[0.45rem] text-white px-1 font-mono">CORE_STREAM_01</div>
                     </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-gray-100">
-                                <span>L1 Cache (Experience Timer)</span>
-                            </div>
-                            <div id="experience-display" class="experience-timer font-mono text-gray-700">
-                                Fetching data...
-                            </div>
-                        </div>
-                    </div>
+                    <div id="experience-display" class="experience-timer font-mono text-gray-700">Fetching...</div>
                 </div>
 
                 <div class="dashboard-panel">
                     <h3 class="text-[0.65rem] font-bold mb-3 text-gray-500 uppercase tracking-widest">System Localization</h3>
-                    <div class="p-0">
-                        <div class="relative pl-4 text-[0.75rem] font-bold text-gray-800 mb-2">
-                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                            Taiwan, New Taipei City, Banqiao
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-[0.65rem] text-gray-500 font-mono">
-                            <div>Lat: <span class="text-gray-800">25.0117° N</span></div>
-                            <div>Lon: <span class="text-gray-800">121.4658° E</span></div>
-                        </div>
+                    <div class="relative pl-4 text-[0.75rem] font-bold text-gray-800 mb-2">
+                        <span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                        Taiwan, New Taipei, Banqiao
                     </div>
                 </div>
             </div>
 
-            <!-- 中間：遊戲中心 -->
+            <!-- 中間遊戲區 -->
             <div class="lg:col-span-5 flex flex-col items-center gap-6">
                 <div class="dashboard-panel w-full">
                     <div class="flex justify-around items-center py-4 bg-white/50 rounded">
@@ -289,73 +268,50 @@
                             <div class="text-3xl font-bold tracking-tighter text-gray-800" id="score">000000</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-[0.55rem] text-gray-400 uppercase tracking-widest">System Level</div>
+                            <div class="text-[0.55rem] text-gray-400 uppercase tracking-widest">Level</div>
                             <div class="text-3xl font-bold text-gray-600" id="level">01</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="w-full flex flex-col items-center">
-                    <div class="text-[0.65rem] text-gray-400 mb-2 uppercase tracking-widest">Core Execution Process</div>
-                    <div class="p-0 relative overflow-hidden shadow-2xl" id="canvas-container">
-                        <!-- 寬度 300 / 高度 460，剛好對應 15x23 網格 -->
-                        <canvas id="game-canvas" width="300" height="460"></canvas>
+                    <div class="text-[0.65rem] text-gray-400 mb-2 uppercase tracking-widest">Core Execution</div>
+                    <div class="p-0 relative overflow-hidden shadow-2xl border-4 border-gray-300 rounded bg-black" id="canvas-container">
+                        <canvas id="game-canvas" width="288" height="552"></canvas>
                         <div id="game-overlay" class="game-overlay">
-                            <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
+                            <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4">
                                 <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                             </div>
                             <div class="text-sm font-bold tracking-[0.2em]">INITIALIZE CORE</div>
-                            <div class="text-[0.4rem] mt-2 opacity-50 uppercase tracking-widest">Click to Execute</div>
                         </div>
                         <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.6);">
                             <div class="text-xl font-bold tracking-widest mb-2">SYSTEM PAUSED</div>
-                            <div class="text-xs opacity-70">Click to Resume Execution</div>
+                            <div class="text-xs opacity-70">Tap to Resume</div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 遊戲控制按鈕 -->
-                <div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">
-                    <button class="control-btn h-14" id="btn-left" aria-label="Move Left"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                    <button class="control-btn h-14" id="btn-rotate" aria-label="Rotate"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
-                    <button class="control-btn h-14" id="btn-right" aria-label="Move Right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-                    <button class="control-btn h-14" id="btn-pause" aria-label="Pause/Resume"><svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>
-                    <button class="control-btn h-14" id="btn-down" aria-label="Soft Drop"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
-                    <button class="control-btn h-14" id="btn-drop" aria-label="Hard Drop"><span class="text-xs font-bold">DROP</span></button>
+                <!-- 控制按鈕：針對觸控進行優化 -->
+                <div class="grid grid-cols-3 gap-3 w-full max-w-[300px] mt-2">
+                    <button class="control-btn h-16" id="btn-left" aria-label="Left"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                    <button class="control-btn h-16" id="btn-rotate" aria-label="Rotate"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></button>
+                    <button class="control-btn h-16" id="btn-right" aria-label="Right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                    
+                    <button class="control-btn h-16" id="btn-pause" aria-label="Pause"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>
+                    <button class="control-btn h-16" id="btn-down" aria-label="Down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+                    <button class="control-btn h-16" id="btn-drop" aria-label="Hard Drop"><span class="text-[0.7rem] font-bold">DROP</span></button>
                 </div>
             </div>
 
-            <!-- 右側：服務與聯繫 -->
+            <!-- 右側資訊 -->
             <div class="lg:col-span-3 flex flex-col gap-8">
                 <div class="dashboard-panel">
-                    <h3 class="text-[0.65rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Service Capability Set</h3>
+                    <h3 class="text-[0.65rem] font-bold mb-4 text-gray-500 uppercase tracking-widest">Capabilities</h3>
                     <div class="flex flex-wrap gap-1">
-                        <span class="service-tag">Branding & Identity</span>
-                        <span class="service-tag">Visual Identity</span>
-                        <span class="service-tag">Packaging Design</span>
-                        <span class="service-tag">Web Design</span>
-                        <span class="service-tag">Key Visual</span>
-                        <span class="service-tag">Poster Design</span>
-                        <span class="service-tag">Editorial Design</span>
-                        <span class="service-tag">Motion Graphics</span>
+                        <span class="service-tag">Branding</span><span class="service-tag">Web Design</span><span class="service-tag">Motion</span>
                     </div>
-                    
                     <div class="mt-8 pt-6 border-t border-gray-100">
-                        <div class="text-[0.6rem] text-gray-400 mb-4 uppercase tracking-wider">Communication Protocol</div>
-                        <div class="space-y-4">
-                            <a href="mailto:jewuenxiao@gmail.com" class="block group">
-                                <div class="text-[0.5rem] text-gray-400 mb-1 uppercase">01. Mail Gateway</div>
-                                <div class="text-[0.7rem] text-gray-700 font-mono group-hover:underline underline-offset-4 decoration-black/30">
-                                    jewuenxiao@gmail.com
-                                </div>
-                            </a>
-                            <div class="group">
-                                <div class="text-[0.5rem] text-gray-400 mb-2 uppercase">02. Consultant Service</div>
-                                <button onclick="openModal()" class="request-btn">
-                                    SUBMIT REQUEST FORM
-                                </button>
-                            </div>
-                        </div>
+                        <button onclick="openModal()" class="request-btn">SUBMIT REQUEST FORM</button>
                     </div>
                 </div>
             </div>
@@ -363,78 +319,27 @@
     </div>
 
     <script>
-        // UI 控制邏輯
-        const modal = document.getElementById('form-modal');
-        function openModal() { 
-            modal.classList.add('active'); 
-            if (gameStarted && !isPaused) togglePause(); 
-        }
-        function closeModal() { 
-            modal.classList.remove('active'); 
-        }
-
-        // 模擬系統數據更新
-        let cycles = 48293;
-        setInterval(() => {
-            cycles += Math.floor(Math.random() * 10);
-            const cycleEl = document.getElementById('cycle-count');
-            if (cycleEl) cycleEl.innerText = cycles.toString().padStart(7, '0');
-            const tempEl = document.getElementById('temp-val');
-            if (tempEl) {
-                const temp = (38 + Math.random() * 4).toFixed(1);
-                tempEl.innerText = temp + "°C";
-            }
-        }, 1000);
-
-        // 經驗計時器
-        function updateExperience() {
-            const startDate = new Date('2010-03-01T00:00:00');
-            const now = new Date();
-            let years = now.getFullYear() - startDate.getFullYear();
-            let months = now.getMonth() - startDate.getMonth();
-            let days = now.getDate() - startDate.getDate();
-            let hours = now.getHours() - startDate.getHours();
-            let minutes = now.getMinutes() - startDate.getMinutes();
-            let seconds = now.getSeconds() - startDate.getSeconds();
-            let milliseconds = now.getMilliseconds();
-
-            if (seconds < 0) { seconds += 60; minutes--; }
-            if (minutes < 0) { minutes += 60; hours--; }
-            if (hours < 0) { hours += 24; days--; }
-            if (days < 0) {
-                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-                days += prevMonth.getDate();
-                months--;
-            }
-            if (months < 0) { months += 12; years--; }
-
-            const display = document.getElementById('experience-display');
-            if (display) {
-                display.innerHTML = `
-                    <div>Years Accumulated: <span>${years}</span></div>
-                    <div>Months Progress: <span>${months}</span></div>
-                    <div>Days Elapsed: <span>${days}</span></div>
-                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">System Precision Clock:</div>
-                    <div class="text-base font-bold mt-1">
-                        ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker">.${milliseconds.toString().padStart(3,'0')}</span>
-                    </div>
-                `;
-            }
-            requestAnimationFrame(updateExperience);
-        }
-        requestAnimationFrame(updateExperience);
-
-        // 遊戲邏輯 (Tetris)
         const canvas = document.getElementById('game-canvas');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
         const levelElement = document.getElementById('level');
         const gameOverlay = document.getElementById('game-overlay');
         const pauseOverlay = document.getElementById('pause-overlay');
-        const pauseBtn = document.getElementById('btn-pause');
-        
-        const GRID_SIZE = 20;
+        const modal = document.getElementById('form-modal');
+
+        const GRID_SIZE = 24; 
+        const COLS = 12;      
+        const ROWS = 23;
         context.scale(GRID_SIZE, GRID_SIZE);
+
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+        let isPaused = true;
+        let gameStarted = false;
+
+        const arena = createMatrix(COLS, ROWS);
+        const player = { pos: {x: 0, y: 0}, matrix: null, score: 0, level: 1 };
 
         function createMatrix(w, h) {
             const matrix = [];
@@ -452,6 +357,13 @@
             if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
         }
 
+        function draw() {
+            context.fillStyle = '#1a1a1a';
+            context.fillRect(0, 0, COLS, ROWS);
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos);
+        }
+
         function drawMatrix(matrix, offset) {
             matrix.forEach((row, y) => {
                 row.forEach((value, x) => {
@@ -466,30 +378,29 @@
             });
         }
 
-        function draw() {
-            context.fillStyle = '#1a1a1a';
-            context.fillRect(0, 0, canvas.width / GRID_SIZE, canvas.height / GRID_SIZE);
-            drawMatrix(arena, {x: 0, y: 0});
-            drawMatrix(player.matrix, player.pos);
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; ++y) {
+                for (let x = 0; x < m[y].length; ++x) {
+                    if (m[y][x] !== 0 && (arena[y + o.y] === undefined || arena[y + o.y][x + o.x] === undefined || arena[y + o.y][x + o.x] !== 0)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         function merge(arena, player) {
             player.matrix.forEach((row, y) => {
                 row.forEach((value, x) => {
-                    if (value !== 0) {
-                        if (arena[y + player.pos.y]) {
-                            arena[y + player.pos.y][x + player.pos.x] = value;
-                        }
-                    }
+                    if (value !== 0) arena[y + player.pos.y][x + player.pos.x] = value;
                 });
             });
         }
 
         function rotate(matrix, dir) {
             for (let y = 0; y < matrix.length; ++y) {
-                for (let x = 0; x < y; ++x) {
-                    [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
-                }
+                for (let x = 0; x < y; ++x) [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
             }
             dir > 0 ? matrix.forEach(row => row.reverse()) : matrix.reverse();
         }
@@ -507,26 +418,25 @@
             dropCounter = 0;
         }
 
+        function performHardDrop() {
+            if (isPaused || !gameStarted) return;
+            while(!collide(arena, player)) {
+                player.pos.y++;
+            }
+            player.pos.y--;
+            merge(arena, player);
+            playerReset();
+            arenaSweep();
+            updateScore();
+            dropCounter = 0;
+            draw();
+        }
+
         function playerMove(offset) {
             if (isPaused) return;
             player.pos.x += offset;
             if (collide(arena, player)) player.pos.x -= offset;
-        }
-
-        function playerReset() {
-            const pieces = 'TJLOSZI';
-            player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
-            player.pos.y = 0;
-            player.pos.x = Math.floor((arena[0].length / 2) - (player.matrix[0].length / 2));
-            if (collide(arena, player)) {
-                arena.forEach(row => row.fill(0));
-                player.score = 0;
-                updateScore();
-                gameStarted = false;
-                isPaused = true;
-                gameOverlay.classList.remove('hidden');
-                pauseOverlay.classList.add('hidden');
-            }
+            draw();
         }
 
         function playerRotate(dir) {
@@ -543,49 +453,43 @@
                     return;
                 }
             }
+            draw();
         }
 
-        function collide(arena, player) {
-            const [m, o] = [player.matrix, player.pos];
-            for (let y = 0; y < m.length; ++y) {
-                for (let x = 0; x < m[y].length; ++x) {
-                    if (m[y][x] !== 0) {
-                        // 檢查網格邊界與既有方塊碰撞
-                        if (!arena[y + o.y] || arena[y + o.y][x + o.x] === undefined || arena[y + o.y][x + o.x] !== 0) {
-                            return true;
-                        }
-                    }
-                }
+        function playerReset() {
+            const pieces = 'TJLOSZI';
+            player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+            player.pos.y = 0;
+            player.pos.x = Math.floor(COLS / 2 - player.matrix[0].length / 2);
+            if (collide(arena, player)) {
+                arena.forEach(row => row.fill(0));
+                player.score = 0;
+                player.level = 1;
+                updateScore();
+                gameStarted = false;
+                isPaused = true;
+                gameOverlay.classList.remove('hidden');
             }
-            return false;
         }
 
         function arenaSweep() {
             let rowCount = 1;
             outer: for (let y = arena.length - 1; y > 0; --y) {
-                for (let x = 0; x < arena[y].length; ++x) {
-                    if (arena[y][x] === 0) continue outer;
-                }
+                for (let x = 0; x < arena[y].length; ++x) if (arena[y][x] === 0) continue outer;
                 const row = arena.splice(y, 1)[0].fill(0);
                 arena.unshift(row);
                 ++y;
                 player.score += rowCount * 10;
                 rowCount *= 2;
             }
+            player.level = Math.floor(player.score / 100) + 1;
+            dropInterval = Math.max(100, 1000 - (player.level - 1) * 100);
         }
 
         function updateScore() {
-            const level = Math.floor(player.score / 100) + 1;
             scoreElement.innerText = player.score.toString().padStart(6, '0');
-            levelElement.innerText = level.toString().padStart(2, '0');
-            dropInterval = Math.max(100, 1000 - (level - 1) * 100);
+            levelElement.innerText = player.level.toString().padStart(2, '0');
         }
-
-        let dropCounter = 0;
-        let dropInterval = 1000;
-        let lastTime = 0;
-        let isPaused = true;
-        let gameStarted = false;
 
         function update(time = 0) {
             if (isPaused) return;
@@ -597,67 +501,88 @@
             requestAnimationFrame(update);
         }
 
-        // 核心修正：將網格寬度設為 15 格，與 300px 寬度完全匹配 (300/20 = 15)
-        const arena = createMatrix(15, 23);
-        const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
-
-        const performDrop = () => {
-            if (isPaused) return;
-            while(!collide(arena, player)) player.pos.y++;
-            player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore();
-        };
-
-        const togglePause = () => {
+        function togglePause() {
             if (!gameStarted) return;
             isPaused = !isPaused;
-            if (isPaused) {
-                pauseOverlay.classList.remove('hidden');
-                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-            } else {
-                pauseOverlay.classList.add('hidden');
-                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+            pauseOverlay.classList.toggle('hidden', !isPaused);
+            if (!isPaused) {
                 lastTime = performance.now();
                 update();
             }
-        };
+        }
 
-        const startGame = () => {
-            gameStarted = true;
+        function startGame() {
+            gameStarted = true; 
             isPaused = false;
             gameOverlay.classList.add('hidden');
             pauseOverlay.classList.add('hidden');
             playerReset(); 
             updateScore(); 
-            lastTime = performance.now();
+            lastTime = performance.now(); 
             update();
-        };
+        }
 
-        gameOverlay.onclick = startGame;
-        pauseOverlay.onclick = togglePause;
+        // 輔助函式：綁定按鈕事件（支持觸控與點擊）
+        function bindControl(id, action) {
+            const el = document.getElementById(id);
+            const handler = (e) => {
+                e.preventDefault();
+                if (gameStarted) action();
+            };
+            el.addEventListener('touchstart', handler, {passive: false});
+            el.addEventListener('mousedown', (e) => {
+                // 如果是觸控設備，mousedown 會在 touchstart 後觸發，這裡過濾掉以防兩次觸發
+                if (e.detail === 0) return; 
+                action();
+            });
+        }
 
-        document.getElementById('btn-left').onclick = () => playerMove(-1);
-        document.getElementById('btn-right').onclick = () => playerMove(1);
-        document.getElementById('btn-rotate').onclick = () => playerRotate(1);
-        document.getElementById('btn-down').onclick = () => playerDrop();
-        document.getElementById('btn-drop').onclick = performDrop;
-        document.getElementById('btn-pause').onclick = togglePause;
+        bindControl('btn-left', () => playerMove(-1));
+        bindControl('btn-right', () => playerMove(1));
+        bindControl('btn-rotate', () => playerRotate(1));
+        bindControl('btn-down', () => playerDrop());
+        bindControl('btn-drop', performHardDrop);
+        
+        // 暫停按鈕獨立處理
+        const pBtn = document.getElementById('btn-pause');
+        pBtn.addEventListener('touchstart', (e) => { e.preventDefault(); togglePause(); });
+        pBtn.addEventListener('click', togglePause);
 
-        document.addEventListener('keydown', event => {
-            if (!gameStarted) {
-                if (event.keyCode === 13 || event.keyCode === 32) startGame();
+        // Overlay 點擊
+        gameOverlay.addEventListener('click', startGame);
+        pauseOverlay.addEventListener('click', togglePause);
+
+        // 鍵盤事件（保留並防止捲動）
+        document.addEventListener('keydown', e => {
+            const keysToBlock = [32, 37, 38, 39, 40];
+            if (keysToBlock.includes(e.keyCode)) e.preventDefault();
+            if (!gameStarted || isPaused) {
+                if (e.keyCode === 13) startGame();
                 return;
             }
-            if (event.keyCode === 80 || event.keyCode === 27) { togglePause(); return; }
-            if (isPaused) return;
-            if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) event.preventDefault();
-            switch (event.keyCode) {
-                case 37: case 65: playerMove(-1); break;
-                case 39: case 68: playerMove(1); break;
-                case 40: case 83: playerDrop(); break;
-                case 38: case 87: playerRotate(1); break;
-                case 32: performDrop(); break;
-            }
+            if (e.keyCode === 37) playerMove(-1);
+            if (e.keyCode === 39) playerMove(1);
+            if (e.keyCode === 40) playerDrop();
+            if (e.keyCode === 38) playerRotate(1);
+            if (e.keyCode === 32) performHardDrop();
+            if (e.keyCode === 80 || e.keyCode === 27) togglePause();
         });
+
+        // 系統與 UI 模擬
+        function updateExperience() {
+            const startDate = new Date('2010-03-01T00:00:00'), now = new Date();
+            let y = now.getFullYear() - startDate.getFullYear(), m = now.getMonth() - startDate.getMonth(), d = now.getDate() - startDate.getDate();
+            const display = document.getElementById('experience-display');
+            if (display) {
+                display.innerHTML = `<div class="text-xs">Years Active: <span>${y}</span> | Months: <span>${m}</span></div>
+                    <div class="text-lg font-bold">${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}</div>`;
+            }
+            requestAnimationFrame(updateExperience);
+        }
+        updateExperience();
+
+        function openModal() { modal.classList.add('active'); if (gameStarted && !isPaused) togglePause(); }
+        function closeModal() { modal.classList.remove('active'); }
     </script>
 </body>
 </html>
