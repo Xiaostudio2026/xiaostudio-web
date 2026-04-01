@@ -47,7 +47,7 @@
             background-color: #1a1a1a;
             image-rendering: pixelated;
             width: 100%;
-            max-width: 295px;
+            max-width: 300px; /* 修正為 300px 以對齊 15 格網格 */
             height: auto;
         }
 
@@ -298,8 +298,8 @@
                 <div class="w-full flex flex-col items-center">
                     <div class="text-[0.65rem] text-gray-400 mb-2 uppercase tracking-widest">Core Execution Process</div>
                     <div class="p-0 relative overflow-hidden shadow-2xl" id="canvas-container">
-                        <!-- 高度加高至 460 (原 440) -->
-                        <canvas id="game-canvas" width="295" height="460"></canvas>
+                        <!-- 寬度 300 / 高度 460，剛好對應 15x23 網格 -->
+                        <canvas id="game-canvas" width="300" height="460"></canvas>
                         <div id="game-overlay" class="game-overlay">
                             <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
                                 <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -386,7 +386,7 @@
             }
         }, 1000);
 
-        // 經驗計時器邏輯
+        // 經驗計時器
         function updateExperience() {
             const startDate = new Date('2010-03-01T00:00:00');
             const now = new Date();
@@ -433,7 +433,8 @@
         const pauseOverlay = document.getElementById('pause-overlay');
         const pauseBtn = document.getElementById('btn-pause');
         
-        context.scale(20, 20);
+        const GRID_SIZE = 20;
+        context.scale(GRID_SIZE, GRID_SIZE);
 
         function createMatrix(w, h) {
             const matrix = [];
@@ -467,7 +468,7 @@
 
         function draw() {
             context.fillStyle = '#1a1a1a';
-            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.fillRect(0, 0, canvas.width / GRID_SIZE, canvas.height / GRID_SIZE);
             drawMatrix(arena, {x: 0, y: 0});
             drawMatrix(player.matrix, player.pos);
         }
@@ -516,7 +517,7 @@
             const pieces = 'TJLOSZI';
             player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
             player.pos.y = 0;
-            player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+            player.pos.x = Math.floor((arena[0].length / 2) - (player.matrix[0].length / 2));
             if (collide(arena, player)) {
                 arena.forEach(row => row.fill(0));
                 player.score = 0;
@@ -548,7 +549,12 @@
             const [m, o] = [player.matrix, player.pos];
             for (let y = 0; y < m.length; ++y) {
                 for (let x = 0; x < m[y].length; ++x) {
-                    if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true;
+                    if (m[y][x] !== 0) {
+                        // 檢查網格邊界與既有方塊碰撞
+                        if (!arena[y + o.y] || arena[y + o.y][x + o.x] === undefined || arena[y + o.y][x + o.x] !== 0) {
+                            return true;
+                        }
+                    }
                 }
             }
             return false;
@@ -591,8 +597,8 @@
             requestAnimationFrame(update);
         }
 
-        // 調整矩陣高度為 23 (配合畫布高度 460px / 20px 縮放)
-        const arena = createMatrix(13, 23);
+        // 核心修正：將網格寬度設為 15 格，與 300px 寬度完全匹配 (300/20 = 15)
+        const arena = createMatrix(15, 23);
         const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
 
         const performDrop = () => {
@@ -629,7 +635,6 @@
         gameOverlay.onclick = startGame;
         pauseOverlay.onclick = togglePause;
 
-        // 按鈕控制事件綁定
         document.getElementById('btn-left').onclick = () => playerMove(-1);
         document.getElementById('btn-right').onclick = () => playerMove(1);
         document.getElementById('btn-rotate').onclick = () => playerRotate(1);
@@ -637,7 +642,6 @@
         document.getElementById('btn-drop').onclick = performDrop;
         document.getElementById('btn-pause').onclick = togglePause;
 
-        // 鍵盤控制事件綁定
         document.addEventListener('keydown', event => {
             if (!gameStarted) {
                 if (event.keyCode === 13 || event.keyCode === 32) startGame();
