@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Core Processor Unit - Keyboard Supported</title>
+    <title>Core Processor Unit - Technical Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Montserrat:wght@700;800&display=swap');
@@ -13,7 +13,7 @@
             --text-main: #1a1a1a;
             --text-muted: #888888;
             --accent-black: #000000;
-            font-size: 20px;
+            font-size: 18px;
         }
 
         body {
@@ -23,7 +23,7 @@
             overflow-x: hidden;
             display: flex;
             justify-content: center;
-            min-height: 250vh;
+            min-height: 100vh;
             margin: 0;
             user-select: none;
             -webkit-user-select: none;
@@ -33,13 +33,14 @@
             width: 100%;
             max-width: 1400px;
             padding: 2rem;
+            display: flex;
+            flex-direction: column;
         }
 
         #game-canvas {
             background-color: #000;
             image-rendering: pixelated;
             width: 288px; 
-            height: 552px; 
             max-width: 100%;
             height: auto;
             aspect-ratio: 12 / 23;
@@ -57,11 +58,12 @@
             overflow: hidden;
             border: 1px solid #e5e5e5;
             z-index: 5;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.03);
+            /* 修正：取消內外陰影 */
+            box-shadow: none;
         }
 
         @media (min-width: 1024px) {
-            .disc-drive-container {
+            .disc-drive-sticky {
                 position: sticky;
                 top: 2rem;
             }
@@ -115,8 +117,8 @@
         .experience-timer {
             position: relative;
             margin-top: -60px;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.6); 
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.7); 
             backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 0, 0, 0.05);
@@ -140,13 +142,13 @@
         }
 
         .date-value {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #1a1a1a; 
         }
 
         .ms-clock {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             letter-spacing: -0.05em;
             color: #1a1a1a; 
@@ -156,8 +158,101 @@
         }
 
         .ms-clock .milliseconds {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: rgba(0, 0, 0, 0.3); 
+        }
+
+        /* 曲目歌單樣式 */
+        .track-item {
+            display: grid;
+            grid-template-columns: 24px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .track-item:hover {
+            padding-left: 8px;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .track-item:hover .track-name {
+            color: #888;
+        }
+
+        .track-num {
+            font-size: 0.55rem;
+            color: #bbb;
+            font-weight: 700;
+        }
+
+        .track-name {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: 0.02em;
+        }
+
+        .track-meta {
+            font-size: 0.55rem;
+            color: #bbb;
+            text-align: right;
+        }
+
+        .track-tag {
+            display: inline-block;
+            border: 1px solid #ddd;
+            padding: 1px 4px;
+            margin-right: 6px;
+            font-size: 0.45rem;
+            color: #999;
+            vertical-align: middle;
+        }
+
+        .request-btn {
+            background: #000;
+            color: #fff;
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+        }
+
+        .game-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            z-index: 50;
+            backdrop-filter: blur(4px);
+        }
+
+        .game-overlay.hidden { display: none; }
+
+        .start-trigger {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.8rem 1.5rem;
+            color: #fff;
+            font-size: 0.55rem;
+            font-weight: bold;
+            letter-spacing: 0.4em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-trigger:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
         }
 
         .controls-container {
@@ -180,85 +275,6 @@
             background: #000;
             color: #fff;
         }
-
-        .control-btn svg {
-            width: 24px;
-            height: 24px;
-            stroke: currentColor;
-            stroke-width: 1.5;
-            fill: none;
-        }
-
-        .game-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.92);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            z-index: 50;
-            backdrop-filter: blur(4px);
-        }
-
-        .game-overlay.hidden { display: none; }
-
-        .start-trigger {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 1rem 2rem;
-            color: #fff;
-            font-size: 0.6rem;
-            font-weight: bold;
-            letter-spacing: 0.4em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .start-trigger:hover {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-        }
-
-        .service-tag {
-            font-size: 0.75rem; 
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid #ddd; 
-            padding: 0.8rem 0; 
-            width: 100%; 
-            display: block; 
-            transition: color 0.2s ease;
-        }
-
-        .service-tag:last-child {
-            border-bottom: none;
-        }
-        
-        .service-tag:hover {
-            color: #888;
-        }
-
-        .request-btn {
-            background: #000;
-            color: #fff;
-            width: 100%;
-            padding: 1rem;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-        }
-        
-        .kb-hint {
-            font-size: 10px;
-            color: #888;
-            margin-top: 10px;
-            text-align: center;
-            line-height: 1.4;
-        }
     </style>
 </head>
 <body>
@@ -272,102 +288,127 @@
     </div>
 
     <div class="main-container">
-        <header class="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end">
+        <!-- 標頭 -->
+        <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end">
             <div>
-                <div class="text-[0.55rem] text-gray-400 mb-2 tracking-[0.3em] font-bold">NODE_01 / ARCH_X64</div>
+                <div class="text-[0.5rem] text-gray-400 mb-2 tracking-[0.3em] font-bold">NODE_01 / ARCH_X64</div>
                 <h1 class="text-4xl font-bold tracking-tighter text-black">XIAO_STUDIO v3.0</h1>
             </div>
-            <div class="flex gap-10 mt-8 md:mt-0">
+            <div class="flex gap-8 mt-6 md:mt-0">
                 <div class="text-right">
-                    <div class="text-[0.5rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Coordinates (Banqiao)</div>
-                    <div class="text-[0.8rem] font-bold text-gray-800" id="coords-val">25.013°N / 121.459°E</div>
+                    <div class="text-[0.45rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Coordinates (Banqiao)</div>
+                    <div class="text-[0.7rem] font-bold text-gray-800" id="coords-val">25.013°N / 121.459°E</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-[0.5rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Local Weather</div>
-                    <div class="text-[0.8rem] font-bold text-gray-800" id="weather-val">24°C / 78% RH</div>
+                    <div class="text-[0.45rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Local Weather</div>
+                    <div class="text-[0.7rem] font-bold text-gray-800" id="weather-val">24°C / 78% RH</div>
                 </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <!-- 左側：光碟機與時間計時器 -->
-            <div class="lg:col-span-5 flex flex-col">
-                <section class="mb-10 w-full">
-                    <div class="disc-drive-container">
-                        <div class="case-border"></div>
-                        <div class="status-group">
-                            <div class="reading-pulse"></div>
-                            <span class="status-text">Storage_Access</span>
-                        </div>
-                        <svg id="main-disc" class="spinning-disc" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="48" fill="#000000" />
-                            <path d="M25 25 L38 25 L50 42 L62 25 L75 25 L57 50 L75 75 L62 75 L50 58 L38 75 L25 75 L43 50 Z" fill="white" />
-                            <circle cx="50" cy="50" r="8" fill="#111111" />
-                            <circle cx="50" cy="50" r="4" fill="#222222" />
-                            <circle cx="50" cy="50" r="1.5" fill="#444444" />
-                        </svg>
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- 左側：光碟與計時器 -->
+            <div class="lg:col-span-4 flex flex-col disc-drive-sticky">
+                <div class="disc-drive-container">
+                    <div class="case-border"></div>
+                    <div class="status-group">
+                        <div class="reading-pulse"></div>
+                        <span class="status-text">Storage_Access</span>
                     </div>
+                    <svg id="main-disc" class="spinning-disc" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="48" fill="#000000" />
+                        <path d="M25 25 L38 25 L50 42 L62 25 L75 25 L57 50 L75 75 L62 75 L50 58 L38 75 L25 75 L43 50 Z" fill="white" />
+                        <circle cx="50" cy="50" r="8" fill="#111111" />
+                        <circle cx="50" cy="50" r="4" fill="#222222" />
+                        <circle cx="50" cy="50" r="1.5" fill="#444444" />
+                    </svg>
+                </div>
 
-                    <div class="experience-timer">
-                        <div class="date-row">
-                            <div><span class="date-label">YEARS (LV)</span><span class="date-value" id="exp-years">00</span></div>
-                            <div><span class="date-label">MONTHS</span><span class="date-value" id="exp-months">00</span></div>
-                            <div><span class="date-label">DAYS</span><span class="date-value" id="exp-days">00</span></div>
-                        </div>
-                        <div class="ms-clock mt-6">
-                            <span id="exp-clock-main">00:00:00</span>
-                            <span class="milliseconds" id="exp-clock-ms">.000</span>
-                        </div>
+                <div class="experience-timer">
+                    <div class="date-row">
+                        <div><span class="date-label">YEARS (LV)</span><span class="date-value" id="exp-years">00</span></div>
+                        <div><span class="date-label">MONTHS</span><span class="date-value" id="exp-months">00</span></div>
+                        <div><span class="date-label">DAYS</span><span class="date-value" id="exp-days">00</span></div>
                     </div>
-                </section>
+                    <div class="ms-clock mt-4">
+                        <span id="exp-clock-main">00:00:00</span>
+                        <span class="milliseconds" id="exp-clock-ms">.000</span>
+                    </div>
+                </div>
 
-                <section class="mt-4">
-                    <h3 class="text-[0.6rem] font-bold mb-3 text-gray-400 uppercase tracking-widest">Localization</h3>
-                    <div class="text-[0.75rem] font-bold text-black flex items-center gap-2">
+                <div class="mt-6">
+                    <h3 class="text-[0.55rem] font-bold mb-2 text-gray-400 uppercase tracking-widest">Localization</h3>
+                    <div class="text-[0.7rem] font-bold text-black flex items-center gap-2">
                         <div class="w-1.5 h-1.5 bg-black rounded-full"></div>
                         Banqiao Dist., New Taipei
                     </div>
-                    <div class="inline-block text-[0.45rem] font-bold color-black bg-white px-1 border border-black mt-2">LATENCY: 14MS</div>
-                </section>
+                </div>
             </div>
 
-            <!-- 中間：服務項目 -->
-            <div class="lg:col-span-3">
-                <section class="mb-10">
-                    <h3 class="text-[0.6rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Active_Modules</h3>
+            <!-- 中間：服務清單 (曲目歌單形式) -->
+            <div class="lg:col-span-4">
+                <section class="mb-8">
+                    <h3 class="text-[0.55rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Selected_Tracks (Services)</h3>
                     <div class="flex flex-col">
-                        <span class="service-tag">Branding & Identity</span>
-                        <span class="service-tag">Visual Production</span>
-                        <span class="service-tag">Packaging Design</span>
-                        <span class="service-tag">Web Design</span>
-                        <span class="service-tag">Key Visual</span>
-                        <span class="service-tag">Poster Design</span>
-                        <span class="service-tag">Editorial Design</span>
+                        <div class="track-item">
+                            <span class="track-num">01</span>
+                            <span class="track-name"><span class="track-tag">VISUAL</span>Branding & Identity</span>
+                            <span class="track-meta">04:21</span>
+                        </div>
+                        <div class="track-item">
+                            <span class="track-num">02</span>
+                            <span class="track-name"><span class="track-tag">PROD</span>Visual Production</span>
+                            <span class="track-meta">03:45</span>
+                        </div>
+                        <div class="track-item">
+                            <span class="track-num">03</span>
+                            <span class="track-name"><span class="track-tag">PKGE</span>Packaging Design</span>
+                            <span class="track-meta">05:12</span>
+                        </div>
+                        <div class="track-item">
+                            <span class="track-num">04</span>
+                            <span class="track-name"><span class="track-tag">UIUX</span>Web Design</span>
+                            <span class="track-meta">02:58</span>
+                        </div>
+                        <div class="track-item">
+                            <span class="track-num">05</span>
+                            <span class="track-name"><span class="track-tag">CORE</span>Key Visual</span>
+                            <span class="track-meta">04:03</span>
+                        </div>
+                        <div class="track-item">
+                            <span class="track-num">06</span>
+                            <span class="track-name"><span class="track-tag">PRNT</span>Poster Design</span>
+                            <span class="track-meta">03:30</span>
+                        </div>
+                        <div class="track-item">
+                            <span class="track-num">07</span>
+                            <span class="track-name"><span class="track-tag">EDIT</span>Editorial Design</span>
+                            <span class="track-meta">06:15</span>
+                        </div>
                     </div>
                 </section>
                 <section>
                     <button onclick="openModal()" class="request-btn">INITIATE_TASK</button>
-                    <div class="text-[0.4rem] text-center mt-4 text-gray-400 tracking-widest uppercase">Response Rate: 99.8%</div>
+                    <div class="text-[0.4rem] text-center mt-3 text-gray-400 tracking-widest uppercase">Response Rate: 99.8%</div>
                 </section>
             </div>
 
-            <!-- 右側：遊戲區域 -->
+            <!-- 右側：遊戲模組 -->
             <div class="lg:col-span-4 flex flex-col items-center">
-                <div class="w-[288px] max-w-full flex justify-between items-baseline mb-6">
+                <div class="w-[288px] max-w-full flex justify-between items-baseline mb-4">
                     <div>
-                        <div class="text-[0.5rem] text-gray-400 uppercase tracking-widest mb-1">Session_Score</div>
-                        <div class="text-3xl font-bold tracking-tighter" id="score">000000</div>
+                        <div class="text-[0.45rem] text-gray-400 uppercase tracking-widest mb-1">Session_Score</div>
+                        <div class="text-2xl font-bold tracking-tighter" id="score">000000</div>
                     </div>
                     <div class="text-right">
-                        <div class="text-[0.5rem] text-gray-400 uppercase tracking-widest mb-1">Core_Level</div>
-                        <div class="text-3xl font-bold text-gray-400" id="level">01</div>
+                        <div class="text-[0.45rem] text-gray-400 uppercase tracking-widest mb-1">Core_Level</div>
+                        <div class="text-2xl font-bold text-gray-400" id="level">01</div>
                     </div>
                 </div>
 
                 <div class="relative mb-6">
                     <canvas id="game-canvas" width="288" height="552"></canvas>
                     <div id="game-overlay" class="game-overlay">
-                        <div class="text-[0.5rem] tracking-[0.6em] text-gray-500 mb-8 uppercase font-bold">System Status: Idle</div>
                         <button onclick="startGame()" class="start-trigger">START_SYSTEM</button>
                     </div>
                     <div id="pause-overlay" class="game-overlay hidden">
@@ -381,20 +422,20 @@
                 </div>
                 
                 <div class="controls-container grid grid-cols-3 gap-2">
-                    <button class="control-btn h-14" id="btn-left"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-                    <button class="control-btn h-14" id="btn-rotate"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
-                    <button class="control-btn h-14" id="btn-right"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-                    <button class="control-btn h-14" id="btn-pause"><svg viewBox="0 0 24 24"><path d="M10 4H6v16h4zm8 0h-4v16h4z"/></svg></button>
-                    <button class="control-btn h-14" id="btn-down"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-                    <button class="control-btn h-14" id="btn-drop"><span class="text-[0.6rem] font-bold">FALL</span></button>
-                </div>
-                
-                <div class="kb-hint">
-                    WASD / 方向鍵 : 移動與旋轉<br>
-                    空白鍵 : 快速下墜 | P : 暫停
+                    <button class="control-btn h-12" id="btn-left"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <button class="control-btn h-12" id="btn-rotate"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M23 4v6h-6M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+                    <button class="control-btn h-12" id="btn-right"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M9 18l6-6-6-6"/></svg></button>
+                    <button class="control-btn h-12" id="btn-pause"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M10 4H6v16h4zm8 0h-4v16h4z"/></svg></button>
+                    <button class="control-btn h-12" id="btn-down"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M6 9l6 6 6-6"/></svg></button>
+                    <button class="control-btn h-12" id="btn-drop"><span class="text-[0.5rem] font-bold">FALL</span></button>
                 </div>
             </div>
         </main>
+
+        <footer class="mt-20 pb-10 border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between text-[0.45rem] text-gray-400 font-bold uppercase tracking-widest">
+            <div>&copy; 2026 XIAO STUDIO. ALL RIGHTS RESERVED.</div>
+            <div class="mt-4 md:mt-0">DESIGNED BY XIAO / BUILT FOR PERFORMANCE</div>
+        </footer>
     </div>
 
     <script>
@@ -404,9 +445,9 @@
         let lastScrollY = window.scrollY;
         let targetVelocity = 0;
         let currentVelocity = 0;
-        const baseSpeed = 0.5; 
+        const baseSpeed = 0.4; 
         const friction = 0.95; 
-        const scrollFactor = 0.15; 
+        const scrollFactor = 0.12; 
 
         function animateDisc() {
             const scrollDelta = Math.abs(window.scrollY - lastScrollY);
@@ -474,7 +515,7 @@
                         context.fillStyle = '#f0f0f0';
                         context.fillRect(x + offset.x, y + offset.y, 1, 1);
                         context.strokeStyle = '#333';
-                        context.lineWidth = 0.02;
+                        context.lineWidth = 0.05;
                         context.strokeRect(x + offset.x, y + offset.y, 1, 1);
                     }
                 });
@@ -510,9 +551,7 @@
 
         function playerMove(dir) {
             player.pos.x += dir;
-            if (collide(arena, player)) {
-                player.pos.x -= dir;
-            }
+            if (collide(arena, player)) player.pos.x -= dir;
         }
 
         function playerRotate(dir) {
@@ -620,30 +659,16 @@
         }
 
         document.addEventListener('keydown', event => {
-            const keysToPrevent = ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD'];
-            if (keysToPrevent.includes(event.code)) {
-                event.preventDefault();
-            }
-
+            const keysToPrevent = ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+            if (keysToPrevent.includes(event.code)) event.preventDefault();
             if (!gameStarted) return;
-            if (event.code === 'KeyP' || event.code === 'Escape') {
-                togglePause();
-                return;
-            }
-
+            if (event.code === 'KeyP' || event.code === 'Escape') { togglePause(); return; }
             if (isPaused) return;
-
-            if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
-                playerMove(-1);
-            } else if (event.code === 'ArrowRight' || event.code === 'KeyD') {
-                playerMove(1);
-            } else if (event.code === 'ArrowDown' || event.code === 'KeyS') {
-                playerDrop();
-            } else if (event.code === 'ArrowUp' || event.code === 'KeyW') {
-                playerRotate(1);
-            } else if (event.code === 'Space') {
-                playerHardDrop();
-            }
+            if (event.code === 'ArrowLeft' || event.code === 'KeyA') playerMove(-1);
+            else if (event.code === 'ArrowRight' || event.code === 'KeyD') playerMove(1);
+            else if (event.code === 'ArrowDown' || event.code === 'KeyS') playerDrop();
+            else if (event.code === 'ArrowUp' || event.code === 'KeyW') playerRotate(1);
+            else if (event.code === 'Space') playerHardDrop();
             draw();
         });
 
@@ -659,7 +684,6 @@
         bindBtn('btn-rotate', () => playerRotate(1));
         bindBtn('btn-down', playerDrop);
         bindBtn('btn-drop', playerHardDrop);
-
         document.getElementById('btn-pause').onclick = togglePause;
 
         function updateExperience() {
@@ -680,26 +704,18 @@
             document.getElementById('exp-years').innerText = years.toString().padStart(2, '0');
             document.getElementById('exp-months').innerText = months.toString().padStart(2, '0');
             document.getElementById('exp-days').innerText = days.toString().padStart(2, '0');
-            const h = now.getHours().toString().padStart(2, '0');
-            const min = now.getMinutes().toString().padStart(2, '0');
-            const s = now.getSeconds().toString().padStart(2, '0');
-            const ms = now.getMilliseconds().toString().padStart(3, '0');
-            document.getElementById('exp-clock-main').innerText = `${h}:${min}:${s}`;
-            document.getElementById('exp-clock-ms').innerText = `.${ms}`;
+            document.getElementById('exp-clock-main').innerText = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            document.getElementById('exp-clock-ms').innerText = `.${now.getMilliseconds().toString().padStart(3, '0')}`;
             requestAnimationFrame(updateExperience);
         }
         updateExperience();
 
-        // 更新天氣與模擬數據
-        const updateEnvironmentalData = () => {
-            // 模擬氣溫與濕度小幅波動
-            const temp = (23.5 + Math.random() * 2).toFixed(0);
-            const humidity = (75 + Math.random() * 5).toFixed(0);
-            document.getElementById('weather-val').innerText = `${temp}°C / ${humidity}% RH`;
+        const updateEnv = () => {
+            const temp = (22 + Math.random() * 4).toFixed(0);
+            const hum = (70 + Math.random() * 10).toFixed(0);
+            document.getElementById('weather-val').innerText = `${temp}°C / ${hum}% RH`;
         };
-        
-        setInterval(updateEnvironmentalData, 5000);
-        updateEnvironmentalData();
+        setInterval(updateEnv, 5000); updateEnv();
 
         function openModal() { document.getElementById('form-modal').style.display = 'flex'; if (gameStarted && !isPaused) togglePause(); }
         function closeModal() { document.getElementById('form-modal').style.display = 'none'; }
