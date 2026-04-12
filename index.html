@@ -112,11 +112,10 @@
 #visualizer { 
     width: 320px; 
     height: 60px; 
-    margin-top: 20px; 
-    display: block; 
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); 
-    opacity: 0.8; 
-    pointer-events: none;
+    /* 增加雙層發光感 */
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.4)) drop-shadow(0 0 15px rgba(255,255,255,0.1)); 
+    opacity: 1; /* 提高透明度到滿 */
+    mix-blend-mode: screen; /* 讓粒子與背景影片融合時更亮 */
 }
 
 /* 聲波標籤文字 */
