@@ -107,47 +107,12 @@
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
         .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; }
-
-        /* 聲波畫布：位於標題下方，增加發光濾鏡提升能見度 */
-#visualizer { 
-    width: 340px; 
-    height: 80px; 
-    margin-top: 20px; 
-    display: block; 
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); 
-    opacity: 0.8; 
-}
-
-/* 聲波下方的技術文字標籤 */
-.wave-label {
-    margin-top: 1rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    opacity: 0.3;
-}
-
-/* 行動端縮放優化 */
-@media (max-width: 768px) {
-    #visualizer { 
-        width: 240px; 
-        height: 60px; 
-    }
-}
-    
     </style>
-    
-    
 </head>
 <body>
 
     <!-- SEO 隱藏結構：讓搜尋引擎理解網頁層級 -->
     <h1 class="seo-hidden">XIAOSTUDIO | 設計與數位體驗工作室</h1>
-    <!-- 找到 left-bottom-container -->
-
-
-</div>
     <h2 class="seo-hidden">網頁設計、動態設計、品牌識別服務</h2>
 
     <nav class="fixed top-0 w-full z-[100] p-8 md:p-16 flex justify-between items-start pointer-events-none">
@@ -182,9 +147,9 @@
             </video>
         </div>
 
-      <audio id="bgAudio" loop preload="auto" crossorigin="anonymous">
-    <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775810624/Xiaostudio_Lift__v1_lw7gfq.mp3" type="audio/mpeg">
-</audio>
+        <audio id="bgAudio" loop preload="auto">
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775810624/Xiaostudio_Lift__v1_lw7gfq.mp3" type="audio/mpeg">
+        </audio>
 
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
@@ -214,25 +179,6 @@
 
         <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
             <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
-            <div class="left-bottom-container">
-    <div class="hero-text">
-        <h1 class="uppercase" id="heroTitle">Refine<br>Data</h1>
-    </div>
-
-    <!-- === [在此處插入聲波結構] === -->
-    <!-- id="visualizer" 是供 JavaScript 抓取的 ID -->
-    <!-- width 和 height 屬性定義了畫布的解析度（建議設為顯示大小的兩倍以保持清晰） -->
-    <canvas id="visualizer" width="680" height="160"></canvas>
-    
-    <!-- 聲波下方的技術文字標籤，增加精緻感 -->
-    <div class="mt-4 flex items-center space-x-6">
-        <div class="mono text-[9px] tracking-[0.5em] opacity-30 uppercase">
-            Signal: Granular_v5.2
-        </div>
-        <!-- 您原本可能有的座標資訊可以並排放在這裡 -->
-        <div id="coords" class="mono text-[8px] opacity-10 hidden sm:block">25.0330 / 121.5654</div>
-    </div>
-    <!-- === [插入結束] === -->
             <p class="mt-6 text-[10px] mono tracking-[0.5em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
         </div>
     </div>
@@ -268,22 +214,9 @@
         };
 
         let currentLang = 'en';
+        const audioBtn = document.getElementById('audioToggle');
         const audioIcon = document.getElementById('audioIcon');
-            audioBtn.addEventListener('click', () => {
-             if (typeof initAudio === 'function') {
-        initAudio(); 
-    }
-
-    if (bgAudio.paused) {
-        bgAudio.play();
-        // ... 原本更換圖示為「播放中」的代碼 ...
-        isPlaying = true; // 讓聲波粒子知道可以開始抓取真實數據
-    } else {
-        bgAudio.pause();
-        // ... 原本更換圖示為「靜音」的代碼 ...
-        isPlaying = false; // 讓聲波粒子回到靜態擾動模式
-    }
-});
+        const bgAudio = document.getElementById('bgAudio');
         const bgVideo = document.getElementById('bgVideo');
         let isMuted = true;
 
@@ -302,84 +235,17 @@
         }
         updateCarbonCounter();
 
-    
-        // --- 聲波粒子系統變數 ---
-const vCanvas = document.getElementById('visualizer');
-const vCtx = vCanvas.getContext('2d');
-let audioCtx, analyser, source, dataArray;
-let particleHistory = [];
-
-// --- 初始化音訊分析器 ---
-function initAudio() {
-    if (audioCtx) return;
-    const bgAudio = document.getElementById('bgAudio');
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    source = audioCtx.createMediaElementSource(bgAudio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    
-    // 設定取樣密度
-    analyser.fftSize = 512;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    for(let i=0; i<dataArray.length; i++) particleHistory[i] = 0;
-    
-    renderVisualizer();
-}
-
-// --- 核心繪製迴圈 ---
-function renderVisualizer() {
-    requestAnimationFrame(renderVisualizer);
-    if (!analyser) return;
-    
-    analyser.getByteFrequencyData(dataArray);
-    vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
-
-    // 只取低頻到中高頻區段（視覺效果較佳）
-    const displayCount = Math.floor(dataArray.length * 0.7);
-    const barWidth = vCanvas.width / displayCount;
-
-    for (let i = 0; i < displayCount; i++) {
-        // 若沒播放則保持微小擾動
-        let value = isPlaying ? dataArray[i] : (Math.random() * 2 + 0.5);
-        
-        // 緩動下降處理
-        if (value > particleHistory[i]) particleHistory[i] = value;
-        else particleHistory[i] -= 2.5;
-        if (particleHistory[i] < 0) particleHistory[i] = 0;
-
-        const intensity = particleHistory[i] / 255;
-        const h = intensity * vCanvas.height;
-        const xBase = i * barWidth;
-
-        // 繪製粒子點陣
-        const yStep = 3.5; // 垂直密度
-        for (let y = 0; y < h; y += yStep) {
-            const jX = (Math.random() - 0.5) * 1.5; // 隨機水平擾動
-            const alpha = 0.15 + (y / h) * (intensity * 0.8 + 0.15);
-            vCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            vCtx.fillRect(xBase + jX, vCanvas.height - y, 1.5, 1.5);
-        }
-        
-        // 峰值高亮粒子
-        if (isPlaying && h > 10) {
-            vCtx.fillStyle = `rgba(255, 255, 255, ${intensity + 0.3})`;
-            vCtx.fillRect(xBase, vCanvas.height - h - 5, 1.8, 1.8);
-        }
-    }
-}
-
-// --- 在您的音訊開關事件中加入 initAudio() ---
-// 範例：
-// audioBtn.addEventListener('click', () => {
-//    initAudio(); // 確保使用者互動後才啟動音訊環境
-//    ... 原本的播放/暫停邏輯 ...
-// });
-
-// 頁面載入後先啟動靜態渲染
-window.addEventListener('load', () => {
-    renderVisualizer();
-});
+        audioBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgAudio.muted = isMuted;
+            bgVideo.muted = isMuted;
+            if (!isMuted) {
+                bgAudio.play().catch(e => {});
+                audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+            } else {
+                audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
+            }
+        });
 
         function changeLanguage(lang) {
             currentLang = lang;
