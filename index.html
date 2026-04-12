@@ -107,32 +107,6 @@
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
         .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; }
-/* 聲波畫布：位於 Hero Text 下方 */
-#visualizer { 
-    width: 320px; 
-    height: 60px; 
-    margin-top: 20px; 
-    display: block; 
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); 
-    opacity: 0.8; 
-    pointer-events: none;
-}
-
-/* 聲波標籤文字 */
-.wave-label {
-    margin-top: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    opacity: 0.3;
-}
-
-/* 行動端縮小尺寸 */
-@media (max-width: 768px) {
-    #visualizer { width: 200px; height: 40px; }
-}
-        
     </style>
 </head>
 <body>
@@ -203,16 +177,9 @@
             </div>
         </div>
 
-      <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
-    <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
-    
-    <canvas id="visualizer" width="640" height="120"></canvas>
-    
-    <div class="flex items-center gap-6">
-        <p class="mt-6 text-[10px] mono tracking-[0.5em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
-        <div class="wave-label mt-6">Signal: Granular_v5.2</div>
-    </div>
-</div>
+        <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
+            <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
+            <p class="mt-6 text-[10px] mono tracking-[0.5em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
         </div>
     </div>
 
@@ -238,61 +205,6 @@
     </button>
 
     <script>
-        let audioCtx, analyser, source, dataArray;
-let particleHistory = [];
-let isPlaying = false; // 新增此變數追蹤播放狀態
-
-function initAudio() {
-    if (audioCtx) return;
-    const bgAudio = document.getElementById('bgAudio');
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    source = audioCtx.createMediaElementSource(bgAudio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    
-    analyser.fftSize = 512;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    for(let i=0; i<dataArray.length; i++) particleHistory[i] = 0;
-    
-    renderVisualizer();
-}
-
-function renderVisualizer() {
-    const vCanvas = document.getElementById('visualizer');
-    if (!vCanvas) return;
-    const vCtx = vCanvas.getContext('2d');
-    
-    requestAnimationFrame(renderVisualizer);
-    if (analyser) analyser.getByteFrequencyData(dataArray);
-    
-    vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
-
-    const displayCount = Math.floor((dataArray ? dataArray.length : 128) * 0.7);
-    const barWidth = vCanvas.width / displayCount;
-
-    for (let i = 0; i < displayCount; i++) {
-        // 如果沒播放，給一點隨機微光感 (0.5~2.5)；播放時讀取真實數據
-        let value = (isPlaying && dataArray) ? dataArray[i] : (Math.random() * 2 + 0.5);
-        
-        if (value > particleHistory[i]) particleHistory[i] = value;
-        else particleHistory[i] -= 2.5;
-        if (particleHistory[i] < 0) particleHistory[i] = 0;
-
-        const intensity = particleHistory[i] / 255;
-        const h = intensity * vCanvas.height;
-        const xBase = i * barWidth;
-
-        // 繪製粒子點陣
-        const yStep = 4; 
-        for (let y = 0; y < h; y += yStep) {
-            const jX = (Math.random() - 0.5) * 2;
-            const alpha = 0.1 + (y / h) * (intensity * 0.7 + 0.1);
-            vCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            vCtx.fillRect(xBase + jX, vCanvas.height - y, 1.2, 1.2);
-        }
-    }
-}
         const translations = {
             zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道", carbon: "全球累計二氧化碳排放量 (公噸)" },
             en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System", carbon: "Cumulative Global CO2 Emissions (Tons)" },
@@ -323,28 +235,17 @@ function renderVisualizer() {
         }
         updateCarbonCounter();
 
-audioBtn.addEventListener('click', () => {
-    // 1. 重要：在點擊瞬間初始化或啟動 AudioContext (解鎖瀏覽器限制)
-    if (typeof initAudio === 'function') {
-        initAudio();
-    }
-
-    isMuted = !isMuted;
-    bgAudio.muted = isMuted;
-    bgVideo.muted = isMuted;
-
-    if (!isMuted) {
-        // 播放音樂並啟動聲波大跳動
-        bgAudio.play().catch(e => console.log("Audio play blocked"));
-        isPlaying = true; 
-        audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
-    } else {
-        // 暫停音樂並讓聲波回到微弱擾動模式
-        bgAudio.pause();
-        isPlaying = false; 
-        audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
-    }
-});
+        audioBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgAudio.muted = isMuted;
+            bgVideo.muted = isMuted;
+            if (!isMuted) {
+                bgAudio.play().catch(e => {});
+                audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+            } else {
+                audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
+            }
+        });
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -490,10 +391,6 @@ audioBtn.addEventListener('click', () => {
         window.addEventListener('load', initNodePositions);
         window.addEventListener('resize', initNodePositions);
         document.getElementById('bgVideo').muted = true;
-        window.addEventListener('load', () => {
-    initNodePositions();
-    renderVisualizer(); // 讓聲波畫布一開始就有微弱的粒子閃爍
-});
     </script>
 </body>
 </html>
