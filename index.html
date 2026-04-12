@@ -173,9 +173,9 @@
             </video>
         </div>
 
-        <audio id="bgAudio" loop preload="auto">
-            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775810624/Xiaostudio_Lift__v1_lw7gfq.mp3" type="audio/mpeg">
-        </audio>
+       <audio id="bgAudio" loop preload="auto" crossorigin="anonymous">
+    <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775810624/Xiaostudio_Lift__v1_lw7gfq.mp3" type="audio/mpeg">
+</audio>
 
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
@@ -322,21 +322,34 @@ function renderVisualizer() {
         }
         updateCarbonCounter();
 
-      audioBtn.addEventListener('click', () => {
-    // 關鍵：在使用者點擊按鈕時初始化 AudioContext
+ audioBtn.addEventListener('click', () => {
+    // 1. 初始化音訊環境
     initAudio();
 
+    // 2. 切換靜音狀態
     isMuted = !isMuted;
-    bgAudio.muted = isMuted;
-    bgVideo.muted = isMuted;
-
+    
+    // 如果現在是要「播放」 (isMuted 為 false)
     if (!isMuted) {
-        bgAudio.play().catch(e => {});
-        isPlaying = true; // 啟動聲波大跳動
-        audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+        bgAudio.muted = false;
+        bgVideo.muted = false;
+        
+        // 確保 AudioContext 是啟動狀態
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        // 執行播放
+        bgAudio.play().then(() => {
+            isPlaying = true;
+            audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+        }).catch(e => {
+            console.error("播放失敗:", e);
+        });
     } else {
-        bgAudio.pause(); // 或者僅靜音，視您的需求而定
-        isPlaying = false; // 恢復靜態微光模式
+        // 如果是要「靜音/暫停」
+        bgAudio.pause(); 
+        isPlaying = false;
         audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
     }
 });
