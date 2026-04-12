@@ -268,9 +268,22 @@
         };
 
         let currentLang = 'en';
-        const audioBtn = document.getElementById('audioToggle');
         const audioIcon = document.getElementById('audioIcon');
-        const bgAudio = document.getElementById('bgAudio');
+            audioBtn.addEventListener('click', () => {
+             if (typeof initAudio === 'function') {
+        initAudio(); 
+    }
+
+    if (bgAudio.paused) {
+        bgAudio.play();
+        // ... 原本更換圖示為「播放中」的代碼 ...
+        isPlaying = true; // 讓聲波粒子知道可以開始抓取真實數據
+    } else {
+        bgAudio.pause();
+        // ... 原本更換圖示為「靜音」的代碼 ...
+        isPlaying = false; // 讓聲波粒子回到靜態擾動模式
+    }
+});
         const bgVideo = document.getElementById('bgVideo');
         let isMuted = true;
 
@@ -289,21 +302,7 @@
         }
         updateCarbonCounter();
 
-        audioBtn.addEventListener('click', () => {
-             if (typeof initAudio === 'function') {
-        initAudio(); 
-    }
-
-    if (bgAudio.paused) {
-        bgAudio.play();
-        // ... 原本更換圖示為「播放中」的代碼 ...
-        isPlaying = true; // 讓聲波粒子知道可以開始抓取真實數據
-    } else {
-        bgAudio.pause();
-        // ... 原本更換圖示為「靜音」的代碼 ...
-        isPlaying = false; // 讓聲波粒子回到靜態擾動模式
-    }
-});
+    
         // --- 聲波粒子系統變數 ---
 const vCanvas = document.getElementById('visualizer');
 const vCtx = vCanvas.getContext('2d');
