@@ -58,8 +58,7 @@
             overflow: hidden;
             border: 1px solid #e5e5e5;
             z-index: 5;
-            /* 修正：取消內外陰影 */
-            box-shadow: none;
+            box-shadow: none; /* 已取消陰影 */
         }
 
         @media (min-width: 1024px) {
@@ -277,7 +276,7 @@
         }
     </style>
 </head>
-<body>
+<body class="pb-10"> <!-- 加上一些底部填充確保不貼邊 -->
 
     <div id="form-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex-col">
         <div class="h-[60px] bg-white flex justify-between items-center px-5">
@@ -431,11 +430,6 @@
                 </div>
             </div>
         </main>
-
-        <footer class="mt-20 pb-10 border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between text-[0.45rem] text-gray-400 font-bold uppercase tracking-widest">
-            <div>&copy; 2026 XIAO STUDIO. ALL RIGHTS RESERVED.</div>
-            <div class="mt-4 md:mt-0">DESIGNED BY XIAO / BUILT FOR PERFORMANCE</div>
-        </footer>
     </div>
 
     <script>
