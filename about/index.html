@@ -13,7 +13,8 @@
             --text-main: #1a1a1a;
             --text-muted: #888888;
             --accent-black: #000000;
-            font-size: 18px;
+            /* 字級加大 15%: 18px * 1.15 = 20.7px */
+            font-size: 20.7px;
         }
 
         body {
@@ -37,14 +38,56 @@
             flex-direction: column;
         }
 
+        .game-wrapper {
+            position: relative;
+            width: 288px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
         #game-canvas {
             background-color: #000;
             image-rendering: pixelated;
-            width: 288px; 
-            max-width: 100%;
+            width: 100%;
             height: auto;
             aspect-ratio: 12 / 23;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        /* 遊戲內分數與關卡顯示 */
+        .game-ui-overlay {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        .game-ui-box {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            padding: 4px 8px;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .game-ui-label {
+            display: block;
+            font-size: 0.45rem; /* 微調 */
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2px;
+        }
+
+        .game-ui-value {
+            font-size: 0.85rem; /* 微調 */
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.05em;
         }
 
         .disc-drive-container {
@@ -58,7 +101,7 @@
             overflow: hidden;
             border: 1px solid #e5e5e5;
             z-index: 5;
-            box-shadow: none; /* 已取消陰影 */
+            box-shadow: none;
         }
 
         @media (min-width: 1024px) {
@@ -134,20 +177,20 @@
         }
 
         .date-label {
-            font-size: 0.5rem;
+            font-size: 0.55rem; /* 加大 */
             color: rgba(0, 0, 0, 0.4); 
             display: block;
             margin-bottom: 0.1rem;
         }
 
         .date-value {
-            font-size: 1rem;
+            font-size: 1.1rem; /* 加大 */
             font-weight: 700;
             color: #1a1a1a; 
         }
 
         .ms-clock {
-            font-size: 1.6rem;
+            font-size: 1.7rem; /* 加大 */
             font-weight: 700;
             letter-spacing: -0.05em;
             color: #1a1a1a; 
@@ -157,17 +200,16 @@
         }
 
         .ms-clock .milliseconds {
-            font-size: 0.8rem;
+            font-size: 0.85rem; /* 加大 */
             color: rgba(0, 0, 0, 0.3); 
         }
 
-        /* 曲目歌單樣式 */
         .track-item {
             display: grid;
-            grid-template-columns: 24px 1fr auto;
+            grid-template-columns: 28px 1fr auto; /* 寬度微調適應字級 */
             align-items: center;
             gap: 12px;
-            padding: 0.7rem 0;
+            padding: 0.75rem 0;
             border-bottom: 1px solid #ddd;
             transition: all 0.2s ease;
             cursor: pointer;
@@ -183,20 +225,20 @@
         }
 
         .track-num {
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             color: #bbb;
             font-weight: 700;
         }
 
         .track-name {
-            font-size: 0.7rem;
+            font-size: 0.75rem; /* 加大 */
             font-weight: 700;
             color: var(--text-main);
             letter-spacing: 0.02em;
         }
 
         .track-meta {
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             color: #bbb;
             text-align: right;
         }
@@ -206,7 +248,7 @@
             border: 1px solid #ddd;
             padding: 1px 4px;
             margin-right: 6px;
-            font-size: 0.45rem;
+            font-size: 0.5rem;
             color: #999;
             vertical-align: middle;
         }
@@ -215,8 +257,8 @@
             background: #000;
             color: #fff;
             width: 100%;
-            padding: 0.8rem;
-            font-size: 0.6rem;
+            padding: 0.85rem;
+            font-size: 0.65rem; /* 加大 */
             font-weight: 700;
             letter-spacing: 0.2em;
         }
@@ -241,7 +283,7 @@
             border: 1px solid rgba(255,255,255,0.3);
             padding: 0.8rem 1.5rem;
             color: #fff;
-            font-size: 0.55rem;
+            font-size: 0.6rem; /* 加大 */
             font-weight: bold;
             letter-spacing: 0.4em;
             cursor: pointer;
@@ -254,29 +296,64 @@
             border-color: #fff;
         }
 
+        /* 擴大控制區域的容器 */
         .controls-container {
-            width: 288px;
-            max-width: 100%;
+            width: 100%;
+            max-width: 360px;
+            padding: 15px 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 95px); /* 高度微調 */
+            gap: 6px;
+            margin-top: 10px;
         }
 
         .control-btn {
-            background: #e0e0e0;
+            background: transparent;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s ease;
-            color: #444;
+            transition: all 0.15s ease;
+            color: #1a1a1a;
             border: none;
-            border-radius: 2px;
+            margin: 0;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            position: relative;
         }
 
-        .control-btn:active {
-            background: #000;
-            color: #fff;
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            width: 75px; /* 隨字級微調 */
+            height: 75px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+            transition: all 0.15s ease;
+        }
+
+        .control-btn:active::before {
+            background: rgba(0,0,0,0.05);
+            transform: scale(0.9);
+            border-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn svg {
+            width: 44px; /* 隨字級微調 */
+            height: 44px;
+            stroke-width: 1.2px;
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: 4.6rem; /* 加大 */
         }
     </style>
 </head>
-<body class="pb-10"> <!-- 加上一些底部填充確保不貼邊 -->
+<body class="pb-10">
 
     <div id="form-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex-col">
         <div class="h-[60px] bg-white flex justify-between items-center px-5">
@@ -290,22 +367,22 @@
         <!-- 標頭 -->
         <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end">
             <div>
-                <div class="text-[0.5rem] text-gray-400 mb-2 tracking-[0.3em] font-bold">NODE_01 / ARCH_X64</div>
+                <div class="text-[0.55rem] text-gray-400 mb-2 tracking-[0.3em] font-bold">NODE_01 / ARCH_X64</div>
                 <h1 class="text-4xl font-bold tracking-tighter text-black">XIAO_STUDIO v3.0</h1>
             </div>
             <div class="flex gap-8 mt-6 md:mt-0">
                 <div class="text-right">
-                    <div class="text-[0.45rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Coordinates (Banqiao)</div>
-                    <div class="text-[0.7rem] font-bold text-gray-800" id="coords-val">25.013°N / 121.459°E</div>
+                    <div class="text-[0.5rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Coordinates (Banqiao)</div>
+                    <div class="text-[0.75rem] font-bold text-gray-800" id="coords-val">25.013°N / 121.459°E</div>
                 </div>
                 <div class="text-right">
-                    <div class="text-[0.45rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Local Weather</div>
-                    <div class="text-[0.7rem] font-bold text-gray-800" id="weather-val">24°C / 78% RH</div>
+                    <div class="text-[0.5rem] text-gray-400 uppercase mb-1 tracking-widest font-bold">Local Weather</div>
+                    <div class="text-[0.75rem] font-bold text-gray-800" id="weather-val">24°C / 78% RH</div>
                 </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             <!-- 左側：光碟與計時器 -->
             <div class="lg:col-span-4 flex flex-col disc-drive-sticky">
                 <div class="disc-drive-container">
@@ -336,97 +413,84 @@
                 </div>
 
                 <div class="mt-6">
-                    <h3 class="text-[0.55rem] font-bold mb-2 text-gray-400 uppercase tracking-widest">Localization</h3>
-                    <div class="text-[0.7rem] font-bold text-black flex items-center gap-2">
-                        <div class="w-1.5 h-1.5 bg-black rounded-full"></div>
+                    <h3 class="text-[0.6rem] font-bold mb-2 text-gray-400 uppercase tracking-widest">Localization</h3>
+                    <div class="text-[0.75rem] font-bold text-black flex items-center gap-2">
+                        <div class="w-2 h-2 bg-black rounded-full"></div>
                         Banqiao Dist., New Taipei
                     </div>
                 </div>
             </div>
 
-            <!-- 中間：服務清單 (曲目歌單形式) -->
+            <!-- 中間：服務清單 -->
             <div class="lg:col-span-4">
                 <section class="mb-8">
-                    <h3 class="text-[0.55rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Selected_Tracks (Services)</h3>
+                    <h3 class="text-[0.6rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Selected_Tracks (Services)</h3>
                     <div class="flex flex-col">
-                        <div class="track-item">
-                            <span class="track-num">01</span>
-                            <span class="track-name"><span class="track-tag">VISUAL</span>Branding & Identity</span>
-                            <span class="track-meta">04:21</span>
-                        </div>
-                        <div class="track-item">
-                            <span class="track-num">02</span>
-                            <span class="track-name"><span class="track-tag">PROD</span>Visual Production</span>
-                            <span class="track-meta">03:45</span>
-                        </div>
-                        <div class="track-item">
-                            <span class="track-num">03</span>
-                            <span class="track-name"><span class="track-tag">PKGE</span>Packaging Design</span>
-                            <span class="track-meta">05:12</span>
-                        </div>
-                        <div class="track-item">
-                            <span class="track-num">04</span>
-                            <span class="track-name"><span class="track-tag">UIUX</span>Web Design</span>
-                            <span class="track-meta">02:58</span>
-                        </div>
-                        <div class="track-item">
-                            <span class="track-num">05</span>
-                            <span class="track-name"><span class="track-tag">CORE</span>Key Visual</span>
-                            <span class="track-meta">04:03</span>
-                        </div>
-                        <div class="track-item">
-                            <span class="track-num">06</span>
-                            <span class="track-name"><span class="track-tag">PRNT</span>Poster Design</span>
-                            <span class="track-meta">03:30</span>
-                        </div>
-                        <div class="track-item">
-                            <span class="track-num">07</span>
-                            <span class="track-name"><span class="track-tag">EDIT</span>Editorial Design</span>
-                            <span class="track-meta">06:15</span>
-                        </div>
+                        <div class="track-item"><span class="track-num">01</span><span class="track-name"><span class="track-tag">VISUAL</span>Branding & Identity</span><span class="track-meta">04:21</span></div>
+                        <div class="track-item"><span class="track-num">02</span><span class="track-name"><span class="track-tag">PROD</span>Visual Production</span><span class="track-meta">03:45</span></div>
+                        <div class="track-item"><span class="track-num">03</span><span class="track-name"><span class="track-tag">PKGE</span>Packaging Design</span><span class="track-meta">05:12</span></div>
+                        <div class="track-item"><span class="track-num">04</span><span class="track-name"><span class="track-tag">UIUX</span>Web Design</span><span class="track-meta">02:58</span></div>
+                        <div class="track-item"><span class="track-num">05</span><span class="track-name"><span class="track-tag">CORE</span>Key Visual</span><span class="track-meta">04:03</span></div>
+                        <div class="track-item"><span class="track-num">06</span><span class="track-name"><span class="track-tag">PRNT</span>Poster Design</span><span class="track-meta">03:30</span></div>
+                        <div class="track-item"><span class="track-num">07</span><span class="track-name"><span class="track-tag">EDIT</span>Editorial Design</span><span class="track-meta">06:15</span></div>
                     </div>
                 </section>
                 <section>
                     <button onclick="openModal()" class="request-btn">INITIATE_TASK</button>
-                    <div class="text-[0.4rem] text-center mt-3 text-gray-400 tracking-widest uppercase">Response Rate: 99.8%</div>
+                    <div class="text-[0.45rem] text-center mt-3 text-gray-400 tracking-widest uppercase">Response Rate: 99.8%</div>
                 </section>
             </div>
 
             <!-- 右側：遊戲模組 -->
             <div class="lg:col-span-4 flex flex-col items-center">
-                <div class="w-[288px] max-w-full flex justify-between items-baseline mb-4">
-                    <div>
-                        <div class="text-[0.45rem] text-gray-400 uppercase tracking-widest mb-1">Session_Score</div>
-                        <div class="text-2xl font-bold tracking-tighter" id="score">000000</div>
+                <div class="game-wrapper">
+                    <div class="game-ui-overlay">
+                        <div class="game-ui-box">
+                            <span class="game-ui-label">SCORE</span>
+                            <span class="game-ui-value" id="score">000000</span>
+                        </div>
+                        <div class="game-ui-box text-right">
+                            <span class="game-ui-label">LEVEL</span>
+                            <span class="game-ui-value" id="level">01</span>
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <div class="text-[0.45rem] text-gray-400 uppercase tracking-widest mb-1">Core_Level</div>
-                        <div class="text-2xl font-bold text-gray-400" id="level">01</div>
-                    </div>
-                </div>
 
-                <div class="relative mb-6">
                     <canvas id="game-canvas" width="288" height="552"></canvas>
+                    
                     <div id="game-overlay" class="game-overlay">
+                        <div class="text-[0.5rem] tracking-[0.6em] mb-4 text-white opacity-40 font-bold uppercase">Join the Ordeal</div>
                         <button onclick="startGame()" class="start-trigger">START_SYSTEM</button>
                     </div>
+                    
                     <div id="pause-overlay" class="game-overlay hidden">
                         <button onclick="togglePause()" class="start-trigger">RESUME_CORE</button>
                     </div>
                     <div id="gameover-overlay" class="game-overlay hidden">
-                        <div class="text-xs tracking-[0.5em] mb-4 text-gray-400">TERMINATED</div>
+                        <div class="text-sm tracking-[0.5em] mb-4 text-gray-400">TERMINATED</div>
                         <div class="text-5xl font-bold mb-8" id="final-score">000000</div>
                         <button onclick="startGame()" class="start-trigger">REBOOT_CORE</button>
                     </div>
                 </div>
                 
-                <div class="controls-container grid grid-cols-3 gap-2">
-                    <button class="control-btn h-12" id="btn-left"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M15 18l-6-6 6-6"/></svg></button>
-                    <button class="control-btn h-12" id="btn-rotate"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M23 4v6h-6M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
-                    <button class="control-btn h-12" id="btn-right"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M9 18l6-6-6-6"/></svg></button>
-                    <button class="control-btn h-12" id="btn-pause"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M10 4H6v16h4zm8 0h-4v16h4z"/></svg></button>
-                    <button class="control-btn h-12" id="btn-down"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path d="M6 9l6 6 6-6"/></svg></button>
-                    <button class="control-btn h-12" id="btn-drop"><span class="text-[0.5rem] font-bold">FALL</span></button>
+                <div class="controls-container">
+                    <button class="control-btn" id="btn-left">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-rotate">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M23 4v6h-6M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-right">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-pause">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 4H6v16h4zm8 0h-4v16h4z"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-down">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-drop">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                    </button>
                 </div>
             </div>
         </main>
@@ -455,7 +519,7 @@
         }
         animateDisc();
 
-        // 俄羅斯方塊邏輯
+        // 俄羅斯方塊核心邏輯
         const canvas = document.getElementById('game-canvas');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
@@ -666,18 +730,53 @@
             draw();
         });
 
-        function bindBtn(id, action) {
+        // 長按連擊邏輯
+        const repeatTimers = {};
+        function startRepeat(id, action, delay = 200, interval = 100) {
+            if (repeatTimers[id]) return;
+            if (!gameStarted || isPaused) return;
+            action(); draw();
+            repeatTimers[id] = setTimeout(() => {
+                repeatTimers[id] = setInterval(() => {
+                    if (!gameStarted || isPaused) { stopRepeat(id); return; }
+                    action(); draw();
+                }, interval);
+            }, delay);
+        }
+
+        function stopRepeat(id) {
+            clearTimeout(repeatTimers[id]);
+            clearInterval(repeatTimers[id]);
+            delete repeatTimers[id];
+        }
+
+        function bindRepeatBtn(id, action) {
             const btn = document.getElementById(id);
-            const trigger = (e) => { e.preventDefault(); if (gameStarted && !isPaused) { action(); draw(); } };
+            const start = (e) => { e.preventDefault(); startRepeat(id, action); };
+            const stop = (e) => { e.preventDefault(); stopRepeat(id); };
+            btn.addEventListener('touchstart', start, {passive: false});
+            btn.addEventListener('touchend', stop);
+            btn.addEventListener('touchcancel', stop);
+            btn.addEventListener('mousedown', start);
+            window.addEventListener('mouseup', () => stopRepeat(id)); 
+        }
+
+        bindRepeatBtn('btn-left', () => playerMove(-1));
+        bindRepeatBtn('btn-right', () => playerMove(1));
+        bindRepeatBtn('btn-down', playerDrop);
+
+        function bindSingleBtn(id, action) {
+            const btn = document.getElementById(id);
+            const trigger = (e) => { 
+                e.preventDefault(); 
+                if (gameStarted && !isPaused) { action(); draw(); } 
+            };
             btn.addEventListener('touchstart', trigger, {passive: false});
             btn.addEventListener('mousedown', trigger);
         }
 
-        bindBtn('btn-left', () => playerMove(-1));
-        bindBtn('btn-right', () => playerMove(1));
-        bindBtn('btn-rotate', () => playerRotate(1));
-        bindBtn('btn-down', playerDrop);
-        bindBtn('btn-drop', playerHardDrop);
+        bindSingleBtn('btn-rotate', () => playerRotate(1));
+        bindSingleBtn('btn-drop', playerHardDrop);
         document.getElementById('btn-pause').onclick = togglePause;
 
         function updateExperience() {
