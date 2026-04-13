@@ -280,9 +280,9 @@ function renderVisualizer() {
         const yStep = 4; 
         for (let y = 0; y < h; y += yStep) {
             const jX = (Math.random() - 0.5) * 2;
-            const alpha = 0.1 + (y / h) * (intensity * 0.7 + 0.1);
+         const alpha = Math.min(1.0, 0.3 + (y / h) * (intensity * 0.7 + 0.3));
             vCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            vCtx.fillRect(xBase + jX, vCanvas.height - y, 1.2, 1.2);
+         vCtx.fillRect(xBase + jX, vCanvas.height - y, 2.0, 2.0);
         }
     }
 }
