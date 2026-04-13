@@ -112,8 +112,10 @@
     height: 60px; 
     margin-top: 20px; 
     display: block; 
-    filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); 
-    opacity: 0.8; 
+    /* 核心調整：增加亮度與對比，並換成 screen 模式讓亮部疊加成純白 */
+    filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5)); 
+    mix-blend-mode: screen; 
+    opacity: 1; 
     pointer-events: none;
 }
 
@@ -318,33 +320,25 @@ function renderVisualizer() {
         }
         updateCarbonCounter();
 
- audioBtn.addEventListener('click', () => {
-    // 1. 初始化音訊環境
+audioBtn.addEventListener('click', () => {
     initAudio();
-
-    // 2. 切換靜音狀態
-    isMuted = !isMuted;
     
-    // 如果現在是要「播放」 (isMuted 為 false)
-    if (!isMuted) {
-        bgAudio.muted = false;
-        bgVideo.muted = false;
-        
-        // 確保 AudioContext 是啟動狀態
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+    // 關鍵修正：確保 AudioContext 處於 running 狀態
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
 
-        // 執行播放
+    isMuted = !isMuted;
+    bgAudio.muted = isMuted;
+    bgVideo.muted = isMuted;
+
+    if (!isMuted) {
         bgAudio.play().then(() => {
             isPlaying = true;
-            audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
-        }).catch(e => {
-            console.error("播放失敗:", e);
-        });
+        }).catch(e => console.log("Play failed:", e));
+        audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
     } else {
-        // 如果是要「靜音/暫停」
-        bgAudio.pause(); 
+        bgAudio.pause();
         isPlaying = false;
         audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
     }
