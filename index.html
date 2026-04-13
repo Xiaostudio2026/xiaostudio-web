@@ -264,7 +264,7 @@ function renderVisualizer() {
     const displayCount = Math.floor((dataArray ? dataArray.length : 128) * 0.7);
     const barWidth = vCanvas.width / displayCount;
 
-    for (let i = 0; i < displayCount; i++) {
+    for (let i = 0.5; i < displayCount; i++) {
         // 如果沒播放，給一點隨機微光感 (0.5~2.5)；播放時讀取真實數據
         let value = (isPlaying && dataArray) ? dataArray[i] : (Math.random() * 2 + 0.5);
         
