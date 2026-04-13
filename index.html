@@ -268,7 +268,7 @@ function renderVisualizer() {
 
     for (let i = 0; i < displayCount; i++) {
         // 如果沒播放，給一點隨機微光感 (0.5~2.5)；播放時讀取真實數據
-        let value = (isPlaying && dataArray) ? dataArray[i] : (Math.random() * 2 + 0.5);
+        let value = (isPlaying && dataArray) ? dataArray[i]* 1.5) : (Math.random() * 2 + 0.5);
         
         if (value > particleHistory[i]) particleHistory[i] = value;
         else particleHistory[i] -= 2.5;
@@ -279,12 +279,12 @@ function renderVisualizer() {
         const xBase = i * barWidth;
 
         // 繪製粒子點陣
-        const yStep = 4; 
+        const yStep = 5; 
         for (let y = 0; y < h; y += yStep) {
             const jX = (Math.random() - 0.5) * 2;
-            const alpha = 0.1 + (y / h) * (intensity * 0.7 + 0.1);
+            const alpha = 0.1 + (y / h) * (intensity * 0.8 + 0.2);
             vCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            vCtx.fillRect(xBase + jX, vCanvas.height - y, 1.2, 1.2);
+            vCtx.fillRect(xBase + jX, vCanvas.height - y, 1.8, 1.8);
         }
     }
 }
