@@ -1,0 +1,62 @@
+/* 基礎設定 */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* 動態進場動畫基礎 */
+.reveal-item {
+    opacity: 0;
+    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in-up {
+    transform: translateY(30px);
+}
+
+.slide-in-left {
+    transform: translateX(-50px);
+}
+
+.slide-in-right {
+    transform: translateX(50px);
+}
+
+/* 啟動狀態 */
+.is-visible {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+}
+
+/* Hero 縮放動畫 */
+.hero-reveal {
+    transform: scale(1.1);
+    transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-reveal.is-visible {
+    transform: scale(1);
+}
+
+/* 圖片容器與懸停效果 */
+.image-container {
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+
+.project-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.image-container:hover .project-image {
+    transform: scale(1.05);
+}
+
+/* 影片區塊圓角與溢出處理 */
+.video-wrapper {
+    border-radius: 4px;
+}
