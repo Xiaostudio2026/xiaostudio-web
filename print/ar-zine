@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XiaoStudio | AR VISUAL (Print)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
+  
+</head>
+<body class="selection:bg-gray-200">
+
+    <!-- 專案主視覺 (Hero Image) -->
+    <section class="w-full h-[70vh] md:h-[90vh] overflow-hidden bg-gray-100 relative">
+        <div class="hero-reveal w-full h-full">
+            <img 
+                src="https://res.cloudinary.com/dssycfvxr/image/upload/f_auto,q_auto/v1773134894/AR_cover_te9ids.jpg" 
+                alt="[AR 主視覺圖片]" 
+                class="w-full h-full object-cover grayscale-[0.2]"
+            >
+        </div>
+    </section>
+
+    <!-- 內容區塊 -->
+    <main class="max-w-[1400px] mx-auto px-8 py-20 md:py-32 space-y-32">
+        
+        <!-- 專案標題與敘述 -->
+        <section class="max-w-5xl mx-auto">
+            <div class="reveal-item fade-in-up mb-6">
+                <span class="text-[10px] text-indigo-600 font-bold tracking-[0.3em] uppercase mb-2 block">Category: Print Design</span>
+                <h1 class="text-black text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]">
+                    AR VISUAL
+                </h1>
+            </div>
+
+            <!-- 關鍵字標籤 -->
+            <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500"># 自然實驗室</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500"># 天然</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500"># 科技</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500"># 永續</span>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-16 border-b border-gray-100 pb-24 reveal-item fade-in-up">
+                <div class="md:w-2/3">
+                    <p class="text-xl md:text-3xl text-gray-900 font-medium leading-tight tracking-tight">
+                        以自然實驗室為概念設計的品牌介紹畫報，結合天然，科技，社會責任，永續。透過精準的幾何美學與排版，將複雜的概念轉化為強而有力的視覺語言。
+                    </p>
+                </div>
+                
+                <div class="md:w-1/3 text-[10px] uppercase tracking-[0.3em] text-gray-300 font-bold">
+                    Services
+                    <div class="mt-4 space-y-1.5 text-[13px] text-gray-600 font-medium normal-case tracking-normal">
+                        <p>Visual Integration</p>
+                        <p>Visual Design</p>
+                        <p>Storyboarding</p>
+                        <p>Post-Production</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 圖片展示網格 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            <div class="image-container reveal-item slide-in-left">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/f_auto,q_auto,w_1200/v1772795534/%E7%95%AB%E5%A0%B1_2025_flip_%E9%A0%81%E9%9D%A2_2_luhuwl.jpg" alt="[設計展示 1]" class="project-image">
+            </div>
+            
+            <div class="image-container reveal-item slide-in-right">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/f_auto,q_auto,w_1200/v1772795532/%E7%95%AB%E5%A0%B1_2025_flip_%E9%A0%81%E9%9D%A2_3_y2ouxb.jpg" alt="[設計展示 2]" class="project-image">
+            </div>
+
+            <div class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/f_auto,q_auto,w_2000/v1772795530/%E7%95%AB%E5%A0%B1_2025_flip_%E9%A0%81%E9%9D%A2_4_lanoof.jpg" alt="[設計展示 3]" class="project-image">
+            </div>
+        </div>
+
+        <!-- 影片展示 -->
+        <section class="pt-12 pb-24 reveal-item fade-in-up">
+            <div class="video-wrapper aspect-video w-full bg-neutral-900 relative overflow-hidden">
+                <video class="w-full h-full object-cover opacity-80" autoplay muted loop playsinline>
+                    <source src="https://res.cloudinary.com/demo/video/upload/flower.mp4" type="video/mp4">
+                </video>
+            </div>
+        </section>
+
+        <footer class="text-center pb-20 reveal-item fade-in-up">
+            <p class="text-[10px] text-gray-300 tracking-[0.4em] uppercase font-bold">© XiaoStudio All Rights Reserved.</p>
+        </footer>
+    </main>
+
+    <script>
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        window.onload = () => {
+            document.querySelectorAll('.hero-reveal, .reveal-item').forEach(el => observer.observe(el));
+        };
+    </script>
+</body>
+</html>
