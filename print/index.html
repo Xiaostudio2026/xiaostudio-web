@@ -11,8 +11,8 @@
     <!-- 2. 外部資源：Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
     
-    <!-- 3. 本地資源：自定義 CSS 檔案 -->
-    <link rel="stylesheet" href="style.css">
+    <!-- 3. 修正路徑：指向上一層目錄的 CSS -->
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body class="p-8 md:p-12 lg:p-16">
 
@@ -26,7 +26,7 @@
         
         <div class="masthead-border">
             <div class="flex items-center justify-center md:justify-start">
-                <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none md:leading-none">
+                <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none">
                     PRINT<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>PACKAGING
                 </h1>
             </div>
@@ -40,7 +40,6 @@
 
     <!-- 作品網格區 -->
     <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        
         <!-- 專案 01 -->
         <a href="https://xiaostudio.xyz/print/ar-zine" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg">
             <div class="project-image-container aspect-square md:aspect-[4/3]">
@@ -49,23 +48,24 @@
             </div>
         </a>
 
-        <!-- 其餘預留位置 (Coming Soon) -->
-        <!-- 此處重複結構，實際應用建議改由 JS 或後端生成 -->
+        <!-- 其餘預留位置 -->
         <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
             <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
         </div>
-        <!-- ... (略過重複代碼，結構與上方一致) -->
+        <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
+        </div>
     </div>
 
     <!-- 全螢幕作品彈窗 -->
     <div id="project-overlay">
         <div class="close-overlay" onclick="closeProject()">
-            <div class="close-icon"></div>
+            <span>CLOSE</span>
         </div>
         <iframe id="project-iframe" src="" frameborder="0"></iframe>
     </div>
 
-    <!-- 4. 本地資源：自定義 JavaScript 檔案 (放置於 body 底部確保 DOM 已加載) -->
-    <script src="script.js"></script>
+    <!-- 4. 修正路徑：指向上一層目錄的 JS -->
+    <script src="../script.js"></script>
 </body>
 </html>
