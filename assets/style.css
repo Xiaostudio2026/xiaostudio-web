@@ -1,222 +1,156 @@
-/* 基礎設定 */
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #ffffff;
-    color: #000000;
-}
+ body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #ffffff; 
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 2rem 2rem 8rem 2rem; /* 頂部從 p-8 (2rem) 開始，減少上方空白 */
+        }
+        
+        @media (min-width: 768px) {
+            body { padding: 3rem 3rem 12rem 3rem; } /* 調整響應式邊距 */
+        }
+        @media (min-width: 1024px) {
+            body { padding: 4rem 4rem 16rem 4rem; } 
+        }
 
-/* 動態進場動畫基礎 */
-.reveal-item {
-    opacity: 0;
-    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
+        .mono-text { font-family: 'JetBrains Mono', monospace; }
+        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; font-style: normal; text-transform: none; }
 
-.fade-in-up {
-    transform: translateY(30px);
-}
+        /* 內容容器 */
+        .content-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
 
-.slide-in-left {
-    transform: translateX(-50px);
-}
+        /* 縮減標題區域上下行距 50% */
+        .masthead-border { 
+            border-top: 1px solid #000; 
+            border-bottom: 1px solid #000; 
+            padding: 0.2rem 0; /* 原為 0.8rem */
+            margin: 0.3rem 0;
+        }
 
-.slide-in-right {
-    transform: translateX(50px);
-}
+        @media (min-width: 768px) {
+            .masthead-border { padding: 1.25rem 0; } /* 原為 2.5rem */
+        }
+        
+        /* 專案卡片 */
+        .project-card {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            background-color: #f3f3f3;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .project-card.reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-/* 啟動狀態 */
-.is-visible {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-}
+        .project-image-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
 
-/* Hero 縮放動畫 */
-.hero-reveal {
-    transform: scale(1.1);
-    transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1);
-}
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .project-image.loaded { opacity: 1; }
+        .project-card:hover .project-image { transform: scale(1.05); }
 
-.hero-reveal.is-visible {
-    transform: scale(1);
-}
+        .loading-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            z-index: 1;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
 
-/* 圖片容器與懸停效果 */
-.image-container {
-    overflow: hidden;
-    background-color: #f9f9f9;
-}
+        /* --- 專案彈窗設定 --- */
+        #project-overlay {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: transparent;
+            z-index: 500;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: center;
+            visibility: hidden;
+        }
 
-.project-image {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-}
+        #project-overlay.active {
+            transform: translateX(0);
+            visibility: visible;
+        }
 
-.image-container:hover .project-image {
-    transform: scale(1.05);
-}
+        .project-modal-content {
+            width: 100%;
+            max-width: 1400px; 
+            height: 100%;
+            position: relative;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 0 2rem; 
+        }
 
-/* 影片區塊圓角與溢出處理 */
-.video-wrapper {
-    border-radius: 4px;
-}
+        @media (min-width: 768px) { .project-modal-content { padding: 0 3rem; } }
+        @media (min-width: 1024px) { .project-modal-content { padding: 0 4rem; } }
 
-/* 基本設定 */
-body { 
-    font-family: 'Montserrat', sans-serif; 
-    background-color: #ffffff; 
-    overflow-x: hidden; 
-}
+        /* 拼貼效果關閉按鈕 */
+        .close-project-btn {
+            position: absolute;
+            top: -14px; 
+            right: calc(2rem - 14px); 
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 601;
+            transition: all 0.3s ease;
+            box-shadow: none;
+        }
+        
+        @media (min-width: 768px) { .close-project-btn { right: calc(3rem - 14px); } }
+        @media (min-width: 1024px) { .close-project-btn { right: calc(4rem - 14px); } }
 
-/* 字體類別 */
-.mono-text { 
-    font-family: 'JetBrains Mono', monospace; 
-}
+        .close-project-btn:hover {
+            background: #000000;
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
 
-/* Fraunces Semi-bold 600 用於 & 符號 */
-.ampersand { 
-    font-family: 'Fraunces', serif; 
-    font-weight: 600; 
-    font-style: normal;
-    text-transform: none;
-}
+        #project-iframe {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+            background: #fff;
+            border-top: 1px solid #000;
+        }
 
-/* 雜誌風格標題線條 */
-.masthead-border { 
-    border-top: 1px solid #000; 
-    border-bottom: 1px solid #000; 
-    padding: 0.8rem 0; /* 手機版內距，文字佔比約 70% */
-    margin: 0.5rem 0;
-}
-
-@media (min-width: 768px) {
-    .masthead-border {
-        padding: 2.5rem 0; 
-    }
-}
-
-/* 作品卡片樣式 */
-.project-card {
-    position: relative;
-    display: block;
-    overflow: hidden;
-    background-color: #f3f3f3;
-    transition: all 0.5s ease;
-    cursor: pointer;
-}
-
-.project-image-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-}
-
-.project-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    opacity: 0;
-    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.project-image.loaded { 
-    opacity: 1; 
-}
-
-.project-card:hover .project-image { 
-    transform: scale(1.05); 
-}
-
-/* 尚未開放專案的樣式 */
-.project-coming-soon {
-    cursor: default;
-    opacity: 0.5;
-}
-.project-coming-soon:hover .project-image { 
-    transform: none; 
-}
-
-/* 載入中動畫 (Shimmer Effect) */
-.loading-shimmer {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-/* 滾動進場動畫 (Reveal) */
-.reveal { 
-    opacity: 0; 
-    transform: translateY(20px); 
-    transition: all 1s ease; 
-}
-
-.reveal.is-visible { 
-    opacity: 1; 
-    transform: translateY(0); 
-}
-
-/* 全螢幕彈窗樣式 (Overlay) */
-#project-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    z-index: 1000;
-    transform: translateY(100%);
-    transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-    display: flex;
-    flex-direction: column;
-}
-
-#project-overlay.active { 
-    transform: translateY(0); 
-}
-
-.close-overlay { 
-    position: fixed; 
-    top: 40px; 
-    right: 40px; 
-    z-index: 1001; 
-    cursor: pointer; 
-    mix-blend-mode: difference; 
-}
-
-.close-icon { 
-    width: 30px; 
-    height: 30px; 
-    position: relative; 
-}
-
-.close-icon::before, .close-icon::after { 
-    content: ''; 
-    position: absolute; 
-    top: 50%; 
-    left: 0; 
-    width: 100%; 
-    height: 2px; 
-    background-color: #ffffff; 
-}
-
-.close-icon::before { 
-    transform: rotate(45deg); 
-}
-
-.close-icon::after { 
-    transform: rotate(-45deg); 
-}
-
-#project-iframe { 
-    width: 100%; 
-    flex-grow: 1; 
-    border: none; 
-}
+        .no-scroll { overflow: hidden; }
