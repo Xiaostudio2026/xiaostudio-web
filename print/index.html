@@ -14,89 +14,62 @@
     <!-- 3. 修正路徑：指向上一層目錄的 CSS -->
   <link rel="stylesheet" href="../assets/style.css">
 </head>
-<body>
+<body class="p-8 md:p-12 lg:p-16">
 
-     <div class="content-container">
-        <!-- 頁首標題區 -->
-        <header id="main-header" class="mb-10 md:mb-16">
-            <div class="flex justify-between items-end mb-3 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-black">
-                <div>NODE_04 // 2026 ISSUE</div>
-                <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
-                <div>PHYSICAL PROJECTS</div>
+    <!-- 雜誌編排風格 Header -->
+    <header class="mb-8 md:mb-12">
+        <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-black">
+            <div>NODE_03 // 2026 ISSUE</div>
+            <div class="hidden md:block">PHYSICAL PROJECTS</div>
+            <div>PRINT & PACKAGING</div>
+        </div>
+        
+        <div class="masthead-border">
+            <div class="flex items-center justify-center md:justify-start">
+                <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none">
+                   MOTION<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>VIDEO
+                </h1>
             </div>
-            
-            <div class="masthead-border">
-                <div class="flex items-center justify-center md:justify-start">
-                    <h1 class="text-[9vw] md:text-7xl lg:text-[120px] font-[900] tracking-[-0.05em] uppercase leading-[0.9] text-black">
-                        PRINT<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>PACKAGING
-                    </h1>
-                </div>
-            </div>
-            
-            <div class="mt-4 flex justify-between mono-text text-[9px] md:text-[10px] font-medium tracking-wider text-gray-500 uppercase">
-                <span>Specializing in Graphic Design & Layout</span>
-                <span>Vol. 001</span>
-            </div>
-        </header>
+        </div>
+        
+        <div class="mt-4 flex justify-between mono-text text-[9px] md:text-[10px] font-medium tracking-wider text-black-400 uppercase">
+            <span>Specializing in Graphic Design & Layout</span>
+            <span>Vol. 001</span>
+        </div>
+    </header>
 
-        <!-- 作品網格 -->
-        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-            
-            <!-- 實際連結專案 -->
-            <a href="https://xiaostudio.xyz/print/ar-zine" class="project-card" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg">
-                <div class="project-image-container aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg" alt="AR VISUAL" class="project-image auto-thumb">
-                </div>
-            </a>
-            
-            <!-- 佔位專案 -->
-            <div class="project-card" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg" class="project-image auto-thumb">
-                </div>
-            </div>
+    <!-- 作品網格區 -->
+    <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
+        </div>
+         <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
+        </div>
+         <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
+        </div>
+         <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
+        </div>
 
-            <div class="project-card" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-image auto-thumb grayscale opacity-50">
-                </div>
-            </div>
-
-            <div class="project-card" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1774519177/soon_sumlkv.jpg" class="project-image auto-thumb grayscale opacity-50">
-                </div>
-            </div>
-
-            <div class="project-card" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1774519177/soon_sumlkv.jpg" class="project-image auto-thumb grayscale opacity-50">
-                </div>
-            </div>
-
-            <div class="project-card" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1774519177/soon_sumlkv.jpg" class="project-image auto-thumb grayscale opacity-50">
-                </div>
-            </div>
-
+     
+        <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
+        </div>
+        <div class="project-card reveal project-coming-soon" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+            <div class="project-image-container aspect-square md:aspect-[4/3]"><div class="loading-shimmer"></div><img src="" alt="Coming Soon" class="project-image auto-thumb grayscale"></div>
         </div>
     </div>
 
-    <!-- 專案展開視窗 -->
+    <!-- 全螢幕作品彈窗 -->
     <div id="project-overlay">
-        <div class="project-modal-content">
-            <!-- 關閉按鈕 -->
-            <button class="close-project-btn" onclick="closeProject()" aria-label="Close project">✕</button>
-            <iframe id="project-iframe" src="" frameborder="0"></iframe>
+        <div class="close-overlay" onclick="closeProject()">
+            <span>CLOSE</span>
         </div>
+        <iframe id="project-iframe" src="" frameborder="0"></iframe>
     </div>
+
     <!-- 4. 修正路徑：指向上一層目錄的 JS -->
     <script src="../assets/script.js"></script>
 </body>
