@@ -1,86 +1,95 @@
-
 /**
- * 開啟專案彈窗
- * @param {string} url - 專案頁面的連結
+ * XIAOSTUDIO Portfolio Core Logic
+ * 用於處理圖片懶加載、滾動動畫與專案視窗彈出
  */
-function openProject(url) {
-    const overlay = document.getElementById('project-overlay');
-    const iframe = document.getElementById('project-iframe');
-    iframe.src = url;
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // 禁止背景滾動
-}
 
-/**
- * 關閉專案彈窗
- */
-function closeProject() {
-    const overlay = document.getElementById('project-overlay');
-    const iframe = document.getElementById('project-iframe');
-    overlay.classList.remove('active');
-    document.body.style.overflow = 'auto'; // 恢復背景滾動
-    setTimeout(() => { 
-        iframe.src = ''; // 清空 iframe 以免背景繼續運行
-    }, 600);
-}
+const Portfolio = {
+    elements: {
+        header: document.getElementById('main-header'),
+        overlay: document.getElementById('project-overlay'),
+        iframe: document.getElementById('project-iframe'),
+        cards: document.querySelectorAll('.project-card')
+    },
 
-/**
- * 載入作品縮圖
- * 從 data-thumb 屬性讀取 URL 並處理載入狀態
- */
-function loadProjectThumbnails() {
-    const cards = document.querySelectorAll('.project-card[data-thumb]');
-    cards.forEach(card => {
-        const thumbUrl = card.getAttribute('data-thumb');
-        const imgElement = card.querySelector('.auto-thumb');
-        const shimmer = card.querySelector('.loading-shimmer');
-        
-        if (thumbUrl && imgElement) {
-            imgElement.src = thumbUrl;
-            imgElement.onload = () => {
-                imgElement.classList.add('loaded');
-                if (shimmer) shimmer.style.display = 'none';
-            };
-        }
-    });
-}
+    init() {
+        if (!this.elements.header) return; // 安全檢查
+        this.bindEvents();
+        this.setupIntersectionObserver();
+    },
 
-/**
- * 初始化專案卡片的點擊事件
- */
-function initCardEvents() {
-    document.querySelectorAll('a.project-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            e.preventDefault();
-            const url = this.getAttribute('href');
-            if (url && url !== '#') {
-                openProject(url);
+    bindEvents() {
+        this.elements.cards.forEach(card => {
+            if (card.tagName === 'A') {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.open(card.getAttribute('href'));
+                });
             }
         });
-    });
-}
 
-/**
- * 滾動進場動畫觀察器 (Intersection Observer)
- */
-const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-        }
-    });
-}, { threshold: 0.1 });
+        window.addEventListener('resize', () => {
+            if (this.elements.overlay.classList.contains('active')) {
+                this.updateOverlayPosition();
+            }
+        });
+    },
 
-/**
- * 視窗載入完成後執行
- */
-window.onload = () => {
-    // 啟動進場動畫觀察
-    document.querySelectorAll('.reveal').forEach(el => {
-        revealObserver.observe(el);
-    });
-    
-    // 初始化事件與縮圖
-    initCardEvents();
-    loadProjectThumbnails();
+    setupIntersectionObserver() {
+        const options = {
+            threshold: 0.01,
+            rootMargin: '200px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    card.classList.add('is-visible');
+                    
+                    const img = card.querySelector('.auto-thumb');
+                    const thumbUrl = card.getAttribute('data-thumb');
+                    
+                    if (img && thumbUrl && !img.getAttribute('src')) {
+                        this.loadImage(img, thumbUrl, card);
+                    }
+                }
+            });
+        }, options);
+
+        this.elements.cards.forEach(card => observer.observe(card));
+    },
+
+    loadImage(img, url, card) {
+        img.src = url;
+        img.onload = () => {
+            img.classList.add('loaded');
+            const shimmer = card.querySelector('.loading-shimmer');
+            if (shimmer) shimmer.style.display = 'none';
+        };
+        img.onerror = () => {
+            console.error("Image load failed:", url);
+            const shimmer = card.querySelector('.loading-shimmer');
+            if (shimmer) shimmer.style.background = '#e0e0e0';
+        };
+    },
+
+    open(url) {
+        this.updateOverlayPosition();
+        this.elements.iframe.src = url;
+        this.elements.overlay.classList.add('active');
+        document.body.classList.add('no-scroll');
+    },
+
+    close() {
+        this.elements.overlay.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+        setTimeout(() => { this.elements.iframe.src = ''; }, 600);
+    },
+
+    updateOverlayPosition() {
+        const headerRect = this.elements.header.getBoundingClientRect();
+        this.elements.overlay.style.top = (headerRect.bottom + 20) + 'px';
+    }
 };
+
+document.addEventListener('DOMContentLoaded', () => Portfolio.init());
