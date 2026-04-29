@@ -27,14 +27,12 @@
         .mono-text { font-family: 'JetBrains Mono', monospace; }
         .ampersand { font-family: 'Fraunces', serif; font-weight: 600; font-style: normal; text-transform: none; }
 
-        /* 內容容器 */
         .content-container {
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
         }
 
-        /* 標題區域裝飾線 */
         .masthead-border { 
             border-top: 1px solid #000; 
             border-bottom: 1px solid #000; 
@@ -46,7 +44,6 @@
             .masthead-border { padding: 1.25rem 0; }
         }
         
-        /* 專案卡片樣式 */
         .project-card {
             position: relative;
             display: block;
@@ -58,8 +55,7 @@
             transform: translateY(20px);
         }
         
-        /* 揭示動畫 */
-        .project-card.reveal.is-visible {
+        .project-card.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -68,6 +64,7 @@
             width: 100%;
             overflow: hidden;
             position: relative;
+            background-color: #eee; /* 增加底色防止空白 */
         }
 
         .project-image {
@@ -81,7 +78,6 @@
         .project-image.loaded { opacity: 1; }
         .project-card:hover .project-image { transform: scale(1.05); }
 
-        /* 載入閃爍動畫 */
         .loading-shimmer {
             position: absolute;
             inset: 0;
@@ -89,13 +85,14 @@
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
             z-index: 1;
+            pointer-events: none;
         }
+
         @keyframes shimmer {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
 
-        /* 專案展開視窗 (Overlay) */
         #project-overlay {
             position: fixed;
             left: 0;
@@ -129,7 +126,6 @@
         @media (min-width: 768px) { .project-modal-content { padding: 0 3rem; } }
         @media (min-width: 1024px) { .project-modal-content { padding: 0 4rem; } }
 
-        /* 關閉按鈕 */
         .close-project-btn {
             position: absolute;
             top: -20px; 
@@ -169,7 +165,6 @@
 <body>
 
     <div class="content-container">
-        <!-- 頁首區塊 -->
         <header id="main-header" class="mb-6 md:mb-8">
             <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase">
                 <div>NODE_05 // 2026 ISSUE</div>
@@ -191,7 +186,6 @@
             </div>
         </header>
 
-        <!-- 作品展示網格 -->
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             <!-- 專案 01 -->
             <a href="https://xiaostudio.xyz/print/ar-zine" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg">
@@ -201,14 +195,7 @@
                 </div>
             </a>
             
-            <!-- 佔位專案 (待補充) -->
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-image auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-
+            <!-- 佔位專案 -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
                     <div class="loading-shimmer"></div>
@@ -223,13 +210,7 @@
                 </div>
             </div>
             
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-image auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-
+            <!-- 重複佔位符 (可視需求增減) -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
                     <div class="loading-shimmer"></div>
@@ -239,7 +220,6 @@
         </div>
     </div>
 
-    <!-- 專案內容載入視窗 -->
     <div id="project-overlay">
         <div class="project-modal-content">
             <div class="close-project-btn" onclick="closeProject()" title="關閉專案">✕</div>
@@ -248,10 +228,6 @@
     </div>
 
     <script>
-        /**
-         * 開啟專案詳情
-         * 計算 header 位置以確保內容對齊標題下方
-         */
         function openProject(url) {
             const header = document.getElementById('main-header');
             const overlay = document.getElementById('project-overlay');
@@ -261,48 +237,56 @@
             const headerBottom = headerRect.bottom + 20; 
             
             overlay.style.top = headerBottom + 'px';
-            
             iframe.src = url;
             overlay.classList.add('active');
             document.body.classList.add('no-scroll');
         }
 
-        /**
-         * 關閉專案詳情
-         */
         function closeProject() {
             const overlay = document.getElementById('project-overlay');
             const iframe = document.getElementById('project-iframe');
             overlay.classList.remove('active');
             document.body.classList.remove('no-scroll');
-            // 延遲清空 src 以確保動畫流暢
             setTimeout(() => { iframe.src = ''; }, 600);
         }
 
-        /**
-         * 初始化畫廊效果
-         * 使用 IntersectionObserver 達成滾動揭示與懶加載
-         */
         function initGallery() {
             const cards = document.querySelectorAll('.project-card');
+            
+            // 使用更寬鬆的 threshold 和 rootMargin 確保在 GitHub Pages 上提前加載
+            const observerOptions = {
+                threshold: 0.01,
+                rootMargin: '200px 0px' 
+            };
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        const img = entry.target.querySelector('.auto-thumb');
-                        const thumbUrl = entry.target.getAttribute('data-thumb');
+                        const card = entry.target;
+                        card.classList.add('is-visible');
                         
-                        if (img && thumbUrl && !img.src) {
+                        const img = card.querySelector('.auto-thumb');
+                        const thumbUrl = card.getAttribute('data-thumb');
+                        
+                        if (img && thumbUrl && !img.getAttribute('src')) {
+                            // 預先檢查網址是否有效
                             img.src = thumbUrl;
+                            
                             img.onload = () => {
                                 img.classList.add('loaded');
-                                const shimmer = entry.target.querySelector('.loading-shimmer');
-                                if (shimmer) shimmer.style.opacity = '0';
+                                const shimmer = card.querySelector('.loading-shimmer');
+                                if (shimmer) shimmer.style.display = 'none';
+                            };
+
+                            img.onerror = () => {
+                                console.error("圖片加載失敗:", thumbUrl);
+                                const shimmer = card.querySelector('.loading-shimmer');
+                                if (shimmer) shimmer.style.background = '#e0e0e0';
                             };
                         }
                     }
                 });
-            }, { threshold: 0.1 });
+            }, observerOptions);
 
             cards.forEach(card => {
                 observer.observe(card);
@@ -315,12 +299,16 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', initGallery);
+        // 確保 DOM 加載完成後再執行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGallery);
+        } else {
+            initGallery();
+        }
         
-        // 視窗縮放時重新計算 overlay 位置
         window.addEventListener('resize', () => {
             const overlay = document.getElementById('project-overlay');
-            if (overlay.classList.contains('active')) {
+            if (overlay && overlay.classList.contains('active')) {
                 const header = document.getElementById('main-header');
                 const headerRect = header.getBoundingClientRect();
                 overlay.style.top = (headerRect.bottom + 20) + 'px';
