@@ -4,167 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XiaoStudio | Print Works</title>
+    
+    <!-- 外部資源 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
-    <style>
-        /* 基礎設定與字體 */
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background-color: #ffffff; 
-            overflow-x: hidden; 
-            margin: 0; 
-            padding: 2rem 2rem 8rem 2rem;
-            color: #000;
-        }
-        
-        @media (min-width: 768px) {
-            body { padding: 3rem 3rem 12rem 3rem; }
-        }
-        @media (min-width: 1024px) {
-            body { padding: 4rem 4rem 16rem 4rem; } 
-        }
-
-        .mono-text { font-family: 'JetBrains Mono', monospace; }
-        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; font-style: normal; text-transform: none; }
-
-        .content-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .masthead-border { 
-            border-top: 1px solid #000; 
-            border-bottom: 1px solid #000; 
-            padding: 0.2rem 0;
-            margin: 0.5rem 0;
-        }
-
-        @media (min-width: 768px) {
-            .masthead-border { padding: 1.25rem 0; }
-        }
-        
-        .project-card {
-            position: relative;
-            display: block;
-            overflow: hidden;
-            background-color: #f3f3f3;
-            transition: all 0.5s ease;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .project-card.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .project-image-container {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            background-color: #eee; /* 增加底色防止空白 */
-        }
-
-        .project-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        
-        .project-image.loaded { opacity: 1; }
-        .project-card:hover .project-image { transform: scale(1.05); }
-
-        .loading-shimmer {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        #project-overlay {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #fff;
-            z-index: 500;
-            transform: translateX(100%);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            justify-content: center;
-            visibility: hidden;
-        }
-
-        #project-overlay.active {
-            transform: translateX(0);
-            visibility: visible;
-        }
-
-        .project-modal-content {
-            width: 100%;
-            max-width: 1400px; 
-            height: 100%;
-            position: relative;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 0 2rem; 
-        }
-
-        @media (min-width: 768px) { .project-modal-content { padding: 0 3rem; } }
-        @media (min-width: 1024px) { .project-modal-content { padding: 0 4rem; } }
-
-        .close-project-btn {
-            position: absolute;
-            top: -20px; 
-            right: 2rem; 
-            width: 40px;
-            height: 40px;
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #000000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 601;
-            transition: all 0.3s ease;
-        }
-
-        .close-project-btn:hover {
-            background: #000000;
-            color: #ffffff;
-            transform: rotate(90deg);
-        }
-
-        #project-iframe {
-            width: 100%;
-            flex-grow: 1;
-            border: none;
-            background: #fff;
-            border-top: 1px solid #000;
-        }
-
-        .no-scroll { overflow: hidden; }
-
-    </style>
+   <link rel="stylesheet" href="/..assets/style.css"> 
+   
 </head>
 <body>
 
     <div class="content-container">
+        <!-- 頁首標題區 -->
         <header id="main-header" class="mb-6 md:mb-8">
             <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase">
                 <div>NODE_05 // 2026 ISSUE</div>
@@ -186,8 +36,9 @@
             </div>
         </header>
 
-        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            <!-- 專案 01 -->
+        <!-- 作品網格 -->
+        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            <!-- 專案 01: AR-zine -->
             <a href="https://xiaostudio.xyz/print/ar-zine" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
                     <div class="loading-shimmer"></div>
@@ -195,7 +46,7 @@
                 </div>
             </a>
             
-            <!-- 佔位專案 -->
+            <!-- 佔位專案區 -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
                     <div class="loading-shimmer"></div>
@@ -210,110 +61,37 @@
                 </div>
             </div>
             
-            <!-- 重複佔位符 (可視需求增減) -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
                     <div class="loading-shimmer"></div>
                     <img src="" class="project-image auto-thumb grayscale opacity-40">
                 </div>
             </div>
-        </div>
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+                <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="loading-shimmer"></div>
+                    <img src="" class="project-image auto-thumb grayscale opacity-40">
+                </div>
+            </div>
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+                <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="loading-shimmer"></div>
+                    <img src="" class="project-image auto-thumb grayscale opacity-40">
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div id="project-overlay">
+    <!-- 專案展示視窗 -->
+    <aside id="project-overlay" aria-hidden="true">
         <div class="project-modal-content">
-            <div class="close-project-btn" onclick="closeProject()" title="關閉專案">✕</div>
-            <iframe id="project-iframe" src="" frameborder="0"></iframe>
+            <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
+            <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
         </div>
-    </div>
+    </aside>
 
-    <script>
-        function openProject(url) {
-            const header = document.getElementById('main-header');
-            const overlay = document.getElementById('project-overlay');
-            const iframe = document.getElementById('project-iframe');
-            
-            const headerRect = header.getBoundingClientRect();
-            const headerBottom = headerRect.bottom + 20; 
-            
-            overlay.style.top = headerBottom + 'px';
-            iframe.src = url;
-            overlay.classList.add('active');
-            document.body.classList.add('no-scroll');
-        }
-
-        function closeProject() {
-            const overlay = document.getElementById('project-overlay');
-            const iframe = document.getElementById('project-iframe');
-            overlay.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-            setTimeout(() => { iframe.src = ''; }, 600);
-        }
-
-        function initGallery() {
-            const cards = document.querySelectorAll('.project-card');
-            
-            // 使用更寬鬆的 threshold 和 rootMargin 確保在 GitHub Pages 上提前加載
-            const observerOptions = {
-                threshold: 0.01,
-                rootMargin: '200px 0px' 
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const card = entry.target;
-                        card.classList.add('is-visible');
-                        
-                        const img = card.querySelector('.auto-thumb');
-                        const thumbUrl = card.getAttribute('data-thumb');
-                        
-                        if (img && thumbUrl && !img.getAttribute('src')) {
-                            // 預先檢查網址是否有效
-                            img.src = thumbUrl;
-                            
-                            img.onload = () => {
-                                img.classList.add('loaded');
-                                const shimmer = card.querySelector('.loading-shimmer');
-                                if (shimmer) shimmer.style.display = 'none';
-                            };
-
-                            img.onerror = () => {
-                                console.error("圖片加載失敗:", thumbUrl);
-                                const shimmer = card.querySelector('.loading-shimmer');
-                                if (shimmer) shimmer.style.background = '#e0e0e0';
-                            };
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            cards.forEach(card => {
-                observer.observe(card);
-                if (card.tagName === 'A') {
-                    card.onclick = (e) => {
-                        e.preventDefault();
-                        openProject(card.getAttribute('href'));
-                    };
-                }
-            });
-        }
-
-        // 確保 DOM 加載完成後再執行
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initGallery);
-        } else {
-            initGallery();
-        }
-        
-        window.addEventListener('resize', () => {
-            const overlay = document.getElementById('project-overlay');
-            if (overlay && overlay.classList.contains('active')) {
-                const header = document.getElementById('main-header');
-                const headerRect = header.getBoundingClientRect();
-                overlay.style.top = (headerRect.bottom + 20) + 'px';
-            }
-        });
-    </script>
+  <script src="../assets/script.js"></script>
 </body>
 </html>
