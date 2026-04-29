@@ -1,5 +1,5 @@
-  <script>
-        /**
+
+      /**
          * XIAOSTUDIO Portfolio Core Logic
          */
         const Portfolio = {
@@ -142,4 +142,4 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => Portfolio.init());
-    </script>
+   
