@@ -141,5 +141,18 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', () => Portfolio.init());
+        document.addEventListener('DOMContentLoaded', () => {
+  // 1. 執行你原本的網頁初始化
+  Portfolio.init();
+  
+  // 2. 注入防止右鍵下載影片的自保防線
+  const projectGrid = document.getElementById('project-grid');
+  if (projectGrid) {
+    projectGrid.addEventListener('contextmenu', (e) => {
+      if (e.target.closest('.project-card') || e.target.tagName === 'VIDEO') {
+        e.preventDefault(); // 完美攔截右鍵選單
+      }
+    });
+  }
+});
    
