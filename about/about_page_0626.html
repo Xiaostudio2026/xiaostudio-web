@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Core Processor Unit - Technical Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Herr+Von+Muellerhoff&display=swap');
+
+        :root {
+            --bg-color: #000000; /* 背景設為純黑色 */
+            --panel-bg: rgba(12, 12, 15, 0.35); /* 保持微調底色不透明度，取消霧面後仍保持高易讀性 */
+            --border-color: transparent;
+            --text-main: #f3f4f6; /* 極簡灰白 */
+            --accent-color: #ffffff;
+            font-size: 22px;
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                font-size: 20px;
+            }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        /* 背景影片與遮罩設定：固定控制在螢幕寬度的 70% 且置中 */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 15vw; /* 置中定位：(100vw - 70vw) / 2 = 15vw */
+            width: 70vw; /* 固定控制在螢幕寬度的 70% */
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
+            background-color: #000000;
+        }
+
+        #bg-video {
+            width: 100%;
+            height: auto; /* 等比例完整顯示寬度，高度自適應 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 垂直與水平精準置中 */
+            opacity: 0.95; /* 保持背景影片高能見度 */
+            filter: grayscale(10%) contrast(105%);
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 15vw; /* 與影片容器同步置中 */
+            width: 70vw; /* 限制遮罩寬度與影片一致 */
+            height: 100vh;
+            z-index: -1;
+            /* 調整暗色放射漸層，往邊緣自然淡出至純黑 */
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%);
+            pointer-events: none;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        #game-canvas {
+            border: 1px solid #444;
+            background-color: rgba(26, 26, 26, 0.9); /* 稍微加深遊戲區域背景，確保方塊對比度 */
+            image-rendering: pixelated;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #game-canvas.overdrive-active {
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        #next-canvas {
+            background-color: transparent;
+            image-rendering: pixelated;
+        }
+
+        .dashboard-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            /* 已取消 backdrop-filter 霧面效果 */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            position: relative;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .experience-timer {
+            font-size: 0.9rem; 
+            line-height: 1.8;
+            color: #d1d5db;
+        }
+
+        .experience-timer span {
+            font-weight: 700;
+            color: var(--accent-color);
+            display: inline-block;
+            min-width: 20px;
+            font-size: 1.35rem; 
+        }
+
+        .ms-ticker {
+            font-size: 0.72rem;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .control-btn {
+            background: rgba(18, 18, 20, 0.75); 
+            /* 已取消 backdrop-filter 霧面效果 */
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            color: #b3b3b3;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .control-btn:active, .control-btn.active {
+            background: #252529;
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .control-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 30;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            /* 加入左右側安全邊距，防止內容貼齊邊緣 */
+            padding: 0 24px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .game-overlay.hidden {
+            display: none;
+        }
+
+        /* Herr Von Muellerhoff 專屬字體設定 */
+        .font-herr-von-muellerhoff {
+            font-family: 'Herr Von Muellerhoff', cursive;
+            font-weight: 400;
+            text-transform: none; /* 保持優美書寫感不強制全大寫 */
+        }
+
+        .service-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            margin: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            font-size: 0.6rem;
+            color: #a3a3a3;
+            transition: all 0.2s ease;
+            background: rgba(10, 10, 13, 0.6);
+        }
+
+        .service-tag:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #form-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+        }
+
+        #form-modal.active {
+            display: flex;
+        }
+
+        .modal-header {
+            height: 60px;
+            background: #121214;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .request-btn {
+            background: #ffffff;
+            color: #000000;
+            padding: 12px 16px;
+            font-size: 0.6rem; 
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-align: center;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+            width: 100%;
+            min-height: 48px; 
+            line-height: 1.2;
+            word-break: break-all;
+        }
+
+        .request-btn:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <!-- 影片背景容器與疊加濾鏡（寬度限制為 70% 且置中） -->
+    <div class="video-bg-container">
+        <video id="bg-video" autoplay loop muted playsinline>
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1782379553/Liquid_Glitch_nysog5.mp4" type="video/mp4">
+            您的瀏覽器不支援 HTML5 影片播放。
+        </video>
+    </div>
+    <div class="video-overlay"></div>
+
+    <div id="form-modal">
+        <div class="modal-header">
+            <span class="text-[0.6rem] font-bold uppercase tracking-widest text-gray-400">External_Form: Request_Consultation</span>
+            <button onclick="closeModal()" class="text-xs font-bold hover:text-red-500">CLOSE [X]</button>
+        </div>
+        <iframe src="https://xiaostudio.xyz/form/" class="w-full flex-grow border-none bg-black"></iframe>
+    </div>
+
+    <div class="main-container">
+        <header class="mb-6 flex flex-col lg:flex-row justify-between items-end pb-6 border-b border-white/10 gap-6">
+            <div>
+                <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
+                <h1 class="text-4xl font-bold tracking-tighter text-white">XIAO_STUDIO v3.0</h1>
+            </div>
+            
+            <div class="flex flex-wrap gap-x-6 gap-y-3 font-mono text-left w-full lg:w-auto">
+                <div class="border-r border-white/10 pr-6 min-w-[110px]">
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">LATITUDE</div>
+                    <div class="text-xl font-bold text-white">25.0117° N</div>
+                </div>
+                <div class="border-r border-white/10 pr-6 min-w-[110px]">
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">LONGITUDE</div>
+                    <div class="text-xl font-bold text-white">121.4658° E</div>
+                </div>
+                <div class="border-r border-white/10 pr-6 min-w-[155px]">
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">HUMIDITY / TEMP</div>
+                    <div class="text-xl font-bold text-white">
+                        <span id="humidity-val">-- %</span><span class="text-gray-600 text-sm mx-1">/</span><span id="temp-val" class="text-red-400">--°C</span>
+                    </div>
+                </div>
+                <div class="border-r border-white/10 pr-6 min-w-[110px]">
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">PM2.5</div>
+                    <div class="text-xl font-bold text-white" id="pm25-val">-- μg/m³</div>
+                </div>
+                <div class="min-w-[120px]">
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">SYSTEM_LOC</div>
+                    <div class="text-xs font-bold text-white flex items-center gap-1.5 mt-1.5">
+                        <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+                        BANQIAO, TAIWAN
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex flex-col gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-6 flex flex-col gap-8">
+                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full">
+                        <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
+                                    <span class="text-gray-300">L1_CACHE (WORK_EXPERIENCE)</span>
+                                </div>
+                                <div id="experience-display" class="experience-timer font-mono text-gray-300">
+                                    LOADING_DATA...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 flex flex-col gap-8">
+                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full">
+                        <h3 class="text-[0.65rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Service_Capabilities</h3>
+                        <div class="flex flex-wrap gap-1 mb-6">
+                            <span class="service-tag">Branding & Identity</span>
+                            <span class="service-tag">Visual Production</span>
+                            <span class="service-tag">Packaging Design</span>
+                            <span class="service-tag">Web Design</span>
+                            <span class="service-tag">Key Visual</span>
+                            <span class="service-tag">Poster Design</span>
+                            <span class="service-tag">Editorial Design</span>
+                            <span class="service-tag">Motion Graphics</span>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-white/5">
+                            <div class="text-[0.6rem] text-gray-500 mb-4 uppercase tracking-wider">Contact_Protocols</div>
+                            <div class="space-y-4">
+                                <a href="mailto:jewuenxiao@gmail.com" class="block group">
+                                    <div class="text-[0.5rem] text-gray-500 mb-1 uppercase">01. MAIL_GATEWAY</div>
+                                    <div class="text-[0.7rem] text-gray-300 font-mono group-hover:underline underline-offset-4 decoration-white/30">
+                                        jewuenxiao@gmail.com
+                                    </div>
+                                </a>
+                                <div class="group">
+                                    <div class="text-[0.5rem] text-gray-500 mb-2 uppercase">02. CONSULTATION</div>
+                                    <button onclick="openModal()" class="request-btn">
+                                        SUBMIT_REQUEST_FORM
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex flex-col items-center gap-8 border-t border-white/10 pt-12">
+                <div class="flex flex-col sm:flex-row items-stretch justify-center gap-6 w-full max-w-[520px]">
+                    <div class="flex flex-col items-center">
+                        <div class="text-[0.65rem] text-gray-500 mb-2 uppercase tracking-widest">Core Execution</div>
+                        <div class="p-0 relative overflow-hidden" id="canvas-container">
+                            <canvas id="game-canvas" width="260" height="420"></canvas>
+                            
+                            <!-- 遊戲起始畫面 -->
+                            <div id="game-overlay" class="game-overlay">
+                                <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
+                                    <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                </div>
+                                <!-- 已套用 Herr Von Muellerhoff 字型、首字大寫、分行顯示並設置置中與左右 px-4 邊距 -->
+                                <div class="text-3xl font-herr-von-muellerhoff text-white leading-normal tracking-[0.05em] px-4">
+                                    Initialize<br>Kernel
+                                </div>
+                                <div class="text-[0.6rem] mt-4 opacity-50 uppercase tracking-widest">Click to Execute</div>
+                            </div>
+
+                            <!-- 遊戲暫停畫面 -->
+                            <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.85);">
+                                <!-- 已套用 Herr Von Muellerhoff 字型、首字大寫、分行顯示並設置置中與左右 px-4 邊距 -->
+                                <div class="text-3xl font-herr-von-muellerhoff text-white leading-normal tracking-[0.05em] px-4 mb-4">
+                                    System<br>Halted
+                                </div>
+                                <div class="text-xs opacity-70 uppercase tracking-widest">Click to Resume</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 已取消計分板外容器的 backdrop-blur-sm 霧面類別 -->
+                    <div class="flex flex-row sm:flex-col justify-between items-center sm:justify-start gap-4 sm:gap-6 p-4 border border-white/10 rounded bg-[#121214]/75 w-full sm:w-[160px]">
+                        <div class="text-center sm:w-full">
+                            <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">Score</div>
+                            <div class="text-2xl font-bold tracking-tighter text-white" id="score">000000</div>
+                        </div>
+                        <div class="text-center sm:w-full">
+                            <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">Level</div>
+                            <div class="text-2xl font-bold text-gray-400" id="level">01</div>
+                        </div>
+                        <div class="text-center flex flex-col items-center sm:w-full">
+                            <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest mb-2">Boost</div>
+                            <button id="btn-boost" class="relative inline-flex h-6 w-11 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none focus:ring-0">
+                                <span id="boost-dot" class="inline-block h-4 w-4 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-1"></span>
+                            </button>
+                        </div>
+                        <div class="text-center flex flex-col items-center justify-center sm:w-full">
+                            <canvas id="next-canvas" width="80" height="80" style="width: 40px; height: 40px; background: transparent;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">
+                    <button class="control-btn h-14" id="btn-left">
+                        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="control-btn h-14" id="btn-rotate">
+                        <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    </button>
+                    <button class="control-btn h-14" id="btn-right">
+                        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                    <button class="control-btn h-14" id="btn-pause">
+                        <svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                    </button>
+                    <button class="control-btn h-14" id="btn-down">
+                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <button class="control-btn h-14" id="btn-drop">
+                        <span class="text-xs font-bold text-white">DROP</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const modal = document.getElementById('form-modal');
+        function openModal() { modal.classList.add('active'); isPaused = true; }
+        function closeModal() { modal.classList.remove('active'); }
+
+        // 模擬氣象數據更新
+        setInterval(() => {
+            const humidityEl = document.getElementById('humidity-val');
+            if (humidityEl) humidityEl.innerText = (73 + Math.sin(Date.now() / 15000) * 4 + Math.random()).toFixed(0) + " %";
+            const tempEl = document.getElementById('temp-val');
+            if (tempEl) tempEl.innerText = (29.5 + Math.sin(Date.now() / 18000) * 1.5 + Math.random() * 0.3).toFixed(1) + "°C";
+            const pm25El = document.getElementById('pm25-val');
+            if (pm25El) pm25El.innerText = Math.max(5, (16 + Math.cos(Date.now() / 20000) * 3 + Math.random() * 2).toFixed(0)) + " μg/m³";
+        }, 1000);
+
+        // 工作經驗精確計時器
+        function updateExperience() {
+            const startDate = new Date('2011-03-01T00:00:00');
+            const now = new Date();
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+            let hours = now.getHours() - startDate.getHours();
+            let minutes = now.getMinutes() - startDate.getMinutes();
+            let seconds = now.getSeconds() - startDate.getSeconds();
+            let milliseconds = now.getMilliseconds();
+            if (seconds < 0) { seconds += 60; minutes--; }
+            if (minutes < 0) { minutes += 60; hours--; }
+            if (hours < 0) { hours += 24; days--; }
+            if (days < 0) { const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += prevMonth.getDate(); months--; }
+            if (months < 0) { months += 12; years--; }
+            const display = document.getElementById('experience-display');
+            if (display) {
+                display.innerHTML = `
+                    <div>YEARS: <span>${years}</span></div>
+                    <div>MONTHS: <span>${months}</span></div>
+                    <div>DAYS: <span>${days}</span></div>
+                    <div class="text-[0.65rem] mt-4 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
+                    <div class="text-3xl font-bold mt-1 text-white">
+                        ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker text-xs">.${milliseconds.toString().padStart(3,'0')}</span>
+                    </div>
+                `;
+            }
+            requestAnimationFrame(updateExperience);
+        }
+        requestAnimationFrame(updateExperience);
+
+        // 遊戲系統核心代碼
+        const canvas = document.getElementById('game-canvas');
+        const context = canvas.getContext('2d');
+        const nextCanvas = document.getElementById('next-canvas');
+        const nextContext = nextCanvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const levelElement = document.getElementById('level');
+        const gameOverlay = document.getElementById('game-overlay');
+        const pauseOverlay = document.getElementById('pause-overlay');
+        const pauseBtn = document.getElementById('btn-pause');
+        const boostBtn = document.getElementById('btn-boost');
+        const boostDot = document.getElementById('boost-dot');
+        
+        context.scale(20, 20);
+        nextContext.scale(20, 20);
+        let isBoostActive = false;
+        boostBtn.onclick = (e) => {
+            e.preventDefault();
+            isBoostActive = !isBoostActive;
+            if (isBoostActive) {
+                boostBtn.classList.remove('bg-neutral-800');
+                boostBtn.classList.add('bg-red-600');
+                boostDot.classList.remove('translate-x-1', 'bg-neutral-400');
+                boostDot.classList.add('translate-x-6', 'bg-white');
+                canvas.classList.add('overdrive-active');
+            } else {
+                boostBtn.classList.remove('bg-red-600');
+                boostBtn.classList.add('bg-neutral-800');
+                boostDot.classList.remove('translate-x-6', 'bg-white');
+                boostDot.classList.add('translate-x-1', 'bg-neutral-400');
+                canvas.classList.remove('overdrive-active');
+            }
+            updateScore();
+        };
+
+        function createMatrix(w, h) { const matrix = []; while (h--) matrix.push(new Array(w).fill(0)); return matrix; }
+        function createPiece(type) {
+            if (type === 'I') return [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]];
+            if (type === 'L') return [[0, 2, 0], [0, 2, 0], [0, 2, 2]];
+            if (type === 'J') return [[0, 3, 0], [0, 3, 0], [3, 3, 0]];
+            if (type === 'O') return [[4, 4], [4, 4]];
+            if (type === 'Z') return [[5, 5, 0], [0, 5, 5], [0, 0, 0]];
+            if (type === 'S') return [[0, 6, 6], [6, 6, 0], [0, 0, 0]];
+            if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
+        }
+        function drawMatrix(matrix, offset) {
+            matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        context.fillStyle = '#f3f4f6';
+                        context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                        context.strokeStyle = '#111';
+                        context.lineWidth = 0.05;
+                        context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                    }
+                });
+            });
+        }
+        function draw() {
+            context.fillStyle = '#1a1a1a';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos);
+        }
+        function drawNext() {
+            nextContext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+            if (!nextPieceMatrix) return;
+            const xOffset = (4 - nextPieceMatrix[0].length) / 2;
+            const yOffset = (4 - nextPieceMatrix.length) / 2;
+            nextPieceMatrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        nextContext.fillStyle = '#f3f4f6';
+                        nextContext.fillRect(x + xOffset, y + yOffset, 1, 1);
+                        nextContext.strokeStyle = '#111';
+                        nextContext.lineWidth = 0.05;
+                        nextContext.strokeRect(x + xOffset, y + yOffset, 1, 1);
+                    }
+                });
+            });
+        }
+        function merge(arena, player) { player.matrix.forEach((row, y) => { row.forEach((value, x) => { if (value !== 0) arena[y + player.pos.y][x + player.pos.x] = value; }); }); }
+        function rotate(matrix, dir) { for (let y = 0; y < matrix.length; ++y) { for (let x = 0; x < y; ++x) { [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]]; } } dir > 0 ? matrix.forEach(row => row.reverse()) : matrix.reverse(); }
+        function playerDrop() {
+            if (isPaused) return;
+            player.pos.y++;
+            if (collide(arena, player)) { player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore(); }
+            dropCounter = 0;
+        }
+        function playerMove(offset) { if (isPaused) return; player.pos.x += offset; if (collide(arena, player)) player.pos.x -= offset; }
+        let nextPieceMatrix = null;
+        function playerReset() {
+            const pieces = 'TJLOSZI';
+            if (!nextPieceMatrix) { player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]); nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]); }
+            else { player.matrix = nextPieceMatrix; nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]); }
+            player.pos.y = 0; player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+            drawNext();
+            if (collide(arena, player)) { arena.forEach(row => row.fill(0)); player.score = 0; updateScore(); gameStarted = false; isPaused = true; gameOverlay.classList.remove('hidden'); pauseOverlay.classList.add('hidden'); }
+        }
+        function playerRotate(dir) { if (isPaused) return; const pos = player.pos.x; let offset = 1; rotate(player.matrix, dir); while (collide(arena, player)) { player.pos.x += offset; offset = -(offset + (offset > 0 ? 1 : -1)); if (offset > player.matrix[0].length) { rotate(player.matrix, -dir); player.pos.x = pos; return; } } }
+        function collide(arena, player) { const [m, o] = [player.matrix, player.pos]; for (let y = 0; y < m.length; ++y) { for (let x = 0; x < m[y].length; ++x) { if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true; } } return false; }
+        function arenaSweep() {
+            let rowCount = 1;
+            outer: for (let y = arena.length - 1; y > 0; --y) {
+                for (let x = 0; x < arena[y].length; ++x) { if (arena[y][x] === 0) continue outer; }
+                const row = arena.splice(y, 1)[0].fill(0); arena.unshift(row); ++y;
+                player.score += isBoostActive ? Math.floor(rowCount * 10 * 1.5) : rowCount * 10;
+                rowCount *= 2;
+            }
+        }
+        function updateScore() {
+            const level = Math.floor(player.score / 100) + 1;
+            scoreElement.innerText = player.score.toString().padStart(6, '0');
+            levelElement.innerText = level.toString().padStart(2, '0');
+            dropInterval = isBoostActive ? Math.max(50, 1000 - (level - 1) * 180) : Math.max(100, 1000 - (level - 1) * 100);
+        }
+        let dropCounter = 0, dropInterval = 1000, lastTimeFrame = null, isPaused = true, gameStarted = false;
+        const DAS_DELAY = 180, ARR_INTERVAL = 40;
+        const inputState = { left: { pressed: false, dasTime: 0, arrTime: 0 }, right: { pressed: false, dasTime: 0, arrTime: 0 }, down: { pressed: false, dasTime: 0, arrTime: 0 } };
+        const keyMap = { 37: 'left', 65: 'left', 39: 'right', 68: 'right', 40: 'down', 83: 'down' };
+        const keyStates = {};
+        function handleInputPrecision(dt) {
+            ['left', 'right', 'down'].forEach(key => {
+                if (inputState[key].pressed) {
+                    inputState[key].dasTime += dt;
+                    if (inputState[key].dasTime >= DAS_DELAY) {
+                        inputState[key].arrTime += dt;
+                        while (inputState[key].arrTime >= ARR_INTERVAL) {
+                            if (key === 'left') playerMove(-1); else if (key === 'right') playerMove(1); else playerDrop();
+                            inputState[key].arrTime -= ARR_INTERVAL;
+                        }
+                    }
+                }
+            });
+        }
+        function update(time) {
+            if (isPaused) { lastTimeFrame = null; return; }
+            if (lastTimeFrame === null) { lastTimeFrame = time; requestAnimationFrame(update); return; }
+            let dt = Math.min(time - lastTimeFrame, 100); lastTimeFrame = time;
+            handleInputPrecision(dt);
+            dropCounter += dt;
+            if (dropCounter > dropInterval) playerDrop();
+            draw();
+            requestAnimationFrame(update);
+        }
+        const arena = createMatrix(13, 21), player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
+        const performDrop = () => { if (isPaused) return; while(!collide(arena, player)) player.pos.y++; player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore(); };
+        
+        // 暫停切換與還原
+        const togglePause = () => {
+            if (!gameStarted) return;
+            isPaused = !isPaused;
+            if (isPaused) { 
+                pauseOverlay.classList.remove('hidden'); 
+                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; // 轉為播放符號
+            }
+            else { 
+                pauseOverlay.classList.add('hidden'); 
+                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; // 轉為暫停符號
+                lastTimeFrame = null; 
+                requestAnimationFrame(update); 
+            }
+        };
+        const startGame = () => { 
+            gameStarted = true; 
+            isPaused = false; 
+            gameOverlay.classList.add('hidden'); 
+            pauseOverlay.classList.add('hidden');
+            pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; // 開始時設為雙豎線 (暫停符號)
+            playerReset(); 
+            updateScore(); 
+            lastTimeFrame = null; 
+            requestAnimationFrame(update); 
+        };
+        gameOverlay.onclick = startGame;
+        pauseOverlay.onclick = togglePause;
+
+        // 觸控與控制按鈕事件設定
+        function configureControl(btnId, action, isContinuous) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            const start = (e) => { 
+                e.preventDefault(); 
+                
+                // 暫停鍵特殊判定：允許在暫停或未啟動狀態下點擊
+                if (btnId === 'btn-pause') {
+                    if (!gameStarted) {
+                        startGame();
+                    } else {
+                        togglePause();
+                    }
+                    return;
+                }
+
+                if (isPaused || !gameStarted) return; 
+                if(isContinuous) { 
+                    inputState[action].pressed = true; 
+                    inputState[action].dasTime = 0; 
+                    inputState[action].arrTime = 0; 
+                    if(action==='left')playerMove(-1); 
+                    if(action==='right')playerMove(1); 
+                    if(action==='down')playerDrop(); 
+                } else {
+                    action(); 
+                }
+            };
+            const stop = (e) => { e.preventDefault(); if(isContinuous) { inputState[action].pressed = false; } };
+            btn.addEventListener('mousedown', start); btn.addEventListener('mouseup', stop); btn.addEventListener('mouseleave', stop);
+            btn.addEventListener('touchstart', start, { passive: false }); btn.addEventListener('touchend', stop, { passive: false });
+        }
+        configureControl('btn-left', 'left', true); configureControl('btn-right', 'right', true); configureControl('btn-down', 'down', true);
+        configureControl('btn-rotate', () => playerRotate(1), false); configureControl('btn-drop', performDrop, false); configureControl('btn-pause', togglePause, false);
+        
+        // 鍵盤操控核心邏輯
+        document.addEventListener('keydown', e => {
+            // 阻擋網頁默認滾動行為 (方向鍵 37-40 以及空白鍵 32)
+            const preventKeys = [32, 37, 38, 39, 40];
+            if (preventKeys.includes(e.keyCode)) {
+                e.preventDefault();
+            }
+
+            // 暫停鍵切換：Esc (27) 或 P (80)
+            // 先行判定暫停/啟動機制，避免 return 被阻攔
+            if (e.keyCode === 80 || e.keyCode === 27) {
+                if (!keyStates[e.keyCode]) {
+                    keyStates[e.keyCode] = true;
+                    if (!gameStarted) {
+                        startGame();
+                    } else {
+                        togglePause();
+                    }
+                }
+                return;
+            }
+
+            // 未開始遊戲時按 Enter (13) 或 Space (32) 開始
+            if (!gameStarted && (e.keyCode === 13 || e.keyCode === 32)) {
+                startGame();
+                return;
+            }
+
+            // 若目前處於暫停狀態，其他遊戲操作按鍵皆不響應
+            if (isPaused) return;
+
+            // 旋轉方塊：W (87) 或 Up Arrow (38)
+            if (e.keyCode === 38 || e.keyCode === 87) { 
+                if (!keyStates[e.keyCode]) { 
+                    keyStates[e.keyCode] = true; 
+                    playerRotate(1); 
+                } 
+            }
+            // 瞬間下落：Space (32)
+            else if (e.keyCode === 32) { 
+                if (!keyStates[e.keyCode]) { 
+                    keyStates[e.keyCode] = true; 
+                    performDrop(); 
+                } 
+            }
+            // 持續位移鍵監聽 (左、右、下)
+            else if (keyMap[e.keyCode]) { 
+                const a = keyMap[e.keyCode]; 
+                if (!inputState[a].pressed) { 
+                    inputState[a].pressed = true; 
+                    inputState[a].dasTime = 0; 
+                    inputState[a].arrTime = 0; 
+                    if (a === 'left') playerMove(-1); 
+                    if (a === 'right') playerMove(1); 
+                    if (a === 'down') playerDrop(); 
+                } 
+            }
+        });
+
+        document.addEventListener('keyup', e => { 
+            keyStates[e.keyCode] = false; 
+            if (keyMap[e.keyCode]) inputState[keyMap[e.keyCode]].pressed = false; 
+        });
+    </script>
+</body>
+</html>
