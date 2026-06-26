@@ -179,11 +179,12 @@
             display: none;
         }
 
-        /* Herr Von Muellerhoff 專屬字體設定 */
+        /* Herr Von Muellerhoff 專屬字體與行距設定 */
         .font-herr-von-muellerhoff {
             font-family: 'Herr Von Muellerhoff', cursive;
             font-weight: 400;
             text-transform: none; /* 保持優美書寫感不強制全大寫 */
+            line-height: 1;      /* 調整為單行適合的行高設定 */
         }
 
         .service-tag {
@@ -231,9 +232,11 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* 諮詢單按鈕設定 */
         .request-btn {
             background: #ffffff;
             color: #000000;
+            border: 1px solid #ffffff; /* 預設邊框與底色融合 */
             padding: 12px 16px;
             font-size: 0.6rem; 
             font-weight: bold;
@@ -243,15 +246,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 平滑過渡所有樣式 */
             width: 100%;
             min-height: 48px; 
             line-height: 1.2;
             word-break: break-all;
         }
 
+        /* Hover 時呈現白框線、白字、半透明模糊底色 */
         .request-btn:hover {
-            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.12); /* 半透明白底 */
+            color: #ffffff; /* 白字 */
+            border-color: #ffffff; /* 白邊框 */
+            backdrop-filter: blur(8px); /* 模糊底層 */
+            -webkit-backdrop-filter: blur(8px);
         }
     </style>
 </head>
@@ -375,18 +383,18 @@
                                 <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
                                     <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 </div>
-                                <!-- 已套用 Herr Von Muellerhoff 字型、首字大寫、分行顯示並設置置中與左右 px-4 邊距 -->
-                                <div class="text-3xl font-herr-von-muellerhoff text-white leading-normal tracking-[0.05em] px-4">
-                                    Initialize<br>Kernel
+                                <!-- 已修正為單行不分行顯示，並添加 whitespace-nowrap 限制 -->
+                                <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 whitespace-nowrap">
+                                    Initialize Kernel
                                 </div>
                                 <div class="text-[0.6rem] mt-4 opacity-50 uppercase tracking-widest">Click to Execute</div>
                             </div>
 
                             <!-- 遊戲暫停畫面 -->
                             <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.85);">
-                                <!-- 已套用 Herr Von Muellerhoff 字型、首字大寫、分行顯示並設置置中與左右 px-4 邊距 -->
-                                <div class="text-3xl font-herr-von-muellerhoff text-white leading-normal tracking-[0.05em] px-4 mb-4">
-                                    System<br>Halted
+                                <!-- 已修正為單行不分行顯示，並添加 whitespace-nowrap 限制 -->
+                                <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-4 whitespace-nowrap">
+                                    System Halted
                                 </div>
                                 <div class="text-xs opacity-70 uppercase tracking-widest">Click to Resume</div>
                             </div>
