@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 1. 首頁 -->
+  <url>
+    <loc>https://xiaostudio.xyz/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <priority>1.00</priority>
+  </url>
+  
+  <!-- 2. 關於工作室 -->
+  <url>
+    <loc>https://xiaostudio.xyz/about/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+  
+  <!-- 3. 動態影像作品 -->
+  <url>
+    <loc>https://xiaostudio.xyz/motion/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 4. 網頁與互動設計作品 -->
+  <url>
+    <loc>https://xiaostudio.xyz/web/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 5. 印刷與平面設計作品 -->
+  <url>
+    <loc>https://xiaostudio.xyz/print/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 6. 靜態視覺/影像 -->
+  <url>
+    <loc>https://xiaostudio.xyz/static/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <priority>0.80</priority>
+  </url>
+</urlset>
