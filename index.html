@@ -3,7 +3,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- SEO 基礎設定 -->
     <title>XIAOSTUDIO | 視覺設計工作室 - 數位體驗與品牌設計</title>
-    <meta name="description" content="XIAOSTUDIO 專注於提供品牌視覺設計、動態設計及網頁設計。在形態的生成與轉化之間，探索設計、動態與科技交織而成的數位美學。">
+    <meta name="description" content="XIAOSTUDIO 專注於提供 brand 視覺設計、動態設計及網頁設計。在形態的生成與轉化之間，探索設計、動態與科技交織而成的數位美學。">
     <meta name="keywords" content="XIAOSTUDIO, 品牌設計, 網頁設計, 動態設計, 平面設計, 包裝設計, 商品視覺, Visual Design, Motion Graphics, Design Studio Taiwan">
     <meta name="author" content="XIAOSTUDIO">
     <link rel="canonical" href="https://xiaostudio.xyz/">
@@ -25,15 +25,14 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
-<!-- 同步設定 Google 偏好的 PageMap 資料 (非必填，但能加強引導) -->
- 
+<!-- 同步設定 Google 偏好的 PageMap 資料 -->
 <PageMap>
   <DataObject type="thumbnail">
     <Attribute name="src" value="https://xiaostudio.xyz/assets/images/Xiaostudio_cover.jpg"/>
   </DataObject>
 </PageMap> 
 
-    <!-- 結構化數據 (JSON-LD) - 告訴 Google 這是一家設計公司 -->
+    <!-- 結構化數據 (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -86,9 +85,41 @@
         .section { width: 100vw; height: 100dvh; position: relative; overflow: hidden; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         @media (min-width: 1024px) { .section { transform: scale(1.12); transform-origin: center center; } }
         .grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; pointer-events: none; }
-        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; filter: brightness(0.9) contrast(1.1); }
+        
+        /* 預設標準背景影片 (當 WebGL 失敗或 CORS 阻擋時的 Fallback 自動顯現) */
+        .video-background { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -3; /* 層級下調為 -3 */
+            filter: brightness(0.9) contrast(1.1); 
+        }
         .video-background video { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* WebGL 畫布：覆蓋在預設 Fallback 影片之上 */
+        #webgl-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* 位於背景影片與網頁覆蓋層之間 */
+            pointer-events: none;
+        }
+
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.9) 100%); z-index: -1; }
+        
+        /* 用於 WebGL 紋理輸入的離屏隱藏影片 (不使用 display:none 避免部分瀏覽器休眠解碼) */
+        #textureVideo {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            opacity: 0.01;
+            pointer-events: none;
+            bottom: 0;
+            left: 0;
+            z-index: -10;
+        }
+
         .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
         .lang-btn { font-size: 14px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
@@ -118,15 +149,38 @@
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
-        .audio-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 100; border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease; }
+        
+        /* 提升音效按鈕層級並套用高端毛玻璃質感 */
+        .audio-toggle { 
+            position: fixed; 
+            right: 20px; 
+            bottom: 20px; 
+            z-index: 250; /* 提升層級至 250，防遮擋 */
+            border: 1px solid rgba(255,255,255,0.25); 
+            width: 44px; 
+            height: 44px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: rgba(10, 10, 10, 0.75); /* 加深底色 */
+            backdrop-filter: blur(8px); /* 高階毛玻璃 */
+            -webkit-backdrop-filter: blur(8px);
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .audio-toggle:hover {
+            transform: scale(1.08);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(20, 20, 20, 0.9);
+        }
  
 /* 聲波畫布：位於 Hero Text 下方 */
 #visualizer { 
-    width: 1200px; 
+    width: 1600px; 
     height: 60px; 
     margin-top: 20px; 
     display: block; 
-    /* 核心調整：增加亮度與對比，並換成 screen 模式讓亮部疊加成純白 */
     filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5)); 
     mix-blend-mode: screen; 
     opacity: 1; 
@@ -145,11 +199,10 @@
 
 /* 行動端縮小尺寸 */
 @media (max-width: 768px) {
-    #visualizer { width: 300px; height: 40px; }
-
+    #visualizer { width: 350px; height: 40px; }
 }    
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.bottom-24{bottom:6rem}.left-0{left:0px}.left-10{left:2.5rem}.top-0{top:0px}.z-10{z-index:10}.z-50{z-index:50}.z-\[100\]{z-index:100}.mb-2{margin-bottom:0.5rem}.mt-1{margin-top:0.25rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.h-full{height:100%}.w-full{width:100%}.max-w-2xl{max-width:42rem}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-end{align-items:flex-end;margin-top:15px;}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-6{gap:1.5rem}.border-t{border-top-width:1px}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pt-3{padding-top:0.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[8px\]{font-size:8px}.font-bold{font-weight:700}.font-light{font-weight:300}.uppercase{text-transform:uppercase}.lowercase{text-transform:lowercase}.leading-tight{line-height:1.25}.tracking-\[0\.15em\]{letter-spacing:0.15em}.tracking-\[0\.3em\]{letter-spacing:0.3em}.tracking-\[0\.5em\]{letter-spacing:0.5em}.tracking-normal{letter-spacing:0em}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-30{opacity:0.3}.opacity-40{opacity:0.4}.opacity-50{opacity:0.5}.opacity-60{opacity:0.6}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 768px){.md\:left-28{left:7rem}.md\:p-16{padding:4rem}.md\:text-7xl{font-size:4.5rem;line-height:1}.md\:text-\[12px\]{font-size:12px}}</style></head>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.bottom-24{bottom:6rem}.left-0{left:0px}.left-10{left:2.5rem}.top-0{top:0px}.z-10{z-index:10}.z-50{z-index:50}.z-\[100\]{z-index:100}.mb-2{margin-bottom:0.5rem}.mt-1{margin-top:0.25rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.h-full{height:100%}.w-full{width:100%}.max-w-2xl{max-width:42rem}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-end{align-items:flex-end;margin-top:15px;}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-6{gap:1.5rem}.border-t{border-top-width:1px}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pt-3{padding-top:0.75rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[8px\]{font-size:8px}.font-bold{font-weight:700}.font-light{font-weight:300}.uppercase{text-transform:uppercase}.lowercase{text-transform:lowercase}.leading-tight{line-height:1.25}.tracking-\[0\.15em\]{letter-spacing:0.15em}.tracking-\[0\.3em\]{letter-spacing:0.3em}.tracking-\[0\.5em\]{letter-spacing:0.5em}.tracking-normal{letter-spacing:0em}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-30{opacity:0.3}.opacity-40{opacity:0.4}.opacity-50{opacity:0.5}.opacity-60{opacity:0.6}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 768px){.md\:left-28{left:7rem}.md\:p-16{padding:4rem}.md\:text-7xl{font-size:4.5rem;line-height:1}.md\:text-\[12px\]{font-size:12px}}</style></head>
 <body>
 
     <!-- SEO 隱藏結構：讓搜尋引擎理解網頁層級 -->
@@ -182,11 +235,20 @@
     </nav>
 
     <div class="section" id="main-view">
-        <div class="video-background">
+        <!-- 標準背景影片：作為 WebGL 載入失敗時的 Fallback 降級備案 -->
+        <div class="video-background" id="fallback-bg">
             <video id="bgVideo" autoplay="" loop="" playsinline="" muted="" preload="auto">
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
             </video>
         </div>
+
+        <!-- 專門用來安全解碼 WebGL 紋理的影片 (加上 crossorigin 繞過 CORS 安全限制) -->
+        <video id="textureVideo" autoplay loop playsinline muted preload="auto" crossorigin="anonymous">
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
+        </video>
+        
+        <!-- WebGL 高光折射扭曲畫布 -->
+        <canvas id="webgl-canvas"></canvas>
 
        <audio id="bgAudio" loop="" preload="auto" crossorigin="anonymous">
     <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1777020592/Liquid_Lobby_Loop_Edit_hqoh72.mp3" type="audio/mpeg">
@@ -195,7 +257,7 @@
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
 
-        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"><path d="M612.5593285421722,220.67436266651114 C668.8714155178625,220.67436266651114 668.8714155178625,551.9208918565424 725.1835024935527,551.9208918565424" class="line-path"></path><path d="M612.5593285421722,220.67436266651114 C668.8714155178625,220.67436266651114 668.8714155178625,551.9208918565424 725.1835024935527,551.9208918565424" class="line-pulse" style="animation-delay: 0s;"></path><path d="M725.1835024935527,551.9208918565424 C1286.5478485996282,551.9208918565424 1286.5478485996282,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1286.5478485996282,551.9208918565424 1286.5478485996282,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 0.8s;"></path><path d="M1423.5458225879854,455.95131484953095 C1635.7290086468447,455.95131484953095 1635.7290086468447,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M1423.5458225879854,455.95131484953095 C1635.7290086468447,455.95131484953095 1635.7290086468447,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 1.6s;"></path><path d="M725.1835024935527,551.9208918565424 C1074.3646625407691,551.9208918565424 1074.3646625407691,455.95131484953095 1423.5458225879854,455.95131484953095" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1074.3646625407691,551.9208918565424 1074.3646625407691,455.95131484953095 1423.5458225879854,455.95131484953095" class="line-pulse" style="animation-delay: 2.4s;"></path><path d="M725.1835024935527,551.9208918565424 C1111.2277043907386,551.9208918565424 1111.2277043907386,731.9885228098573 1497.2719062879246,731.9885228098573" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1111.2277043907386,551.9208918565424 1111.2277043907386,731.9885228098573 1497.2719062879246,731.9885228098573" class="line-pulse" style="animation-delay: 3.2s;"></path><path d="M725.1835024935527,551.9208918565424 C1025.2139815543462,551.9208918565424 1025.2139815543462,930.73830602537 1325.2444606151396,930.73830602537" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1025.2139815543462,551.9208918565424 1025.2139815543462,930.73830602537 1325.2444606151396,930.73830602537" class="line-pulse" style="animation-delay: 4s;"></path><path d="M1497.2719062879246,731.9885228098573 C1672.5920504968142,731.9885228098573 1672.5920504968142,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M1497.2719062879246,731.9885228098573 C1672.5920504968142,731.9885228098573 1672.5920504968142,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 4.8s;"></path><path d="M1325.2444606151396,930.73830602537 C1586.5783276604216,930.73830602537 1586.5783276604216,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M1325.2444606151396,930.73830602537 C1586.5783276604216,930.73830602537 1586.5783276604216,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 5.6s;"></path></svg>
+        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"><path d="M612.5593285421722,220.67436266651114 C668.8714155178625,220.67436266651114 C668.8714155178625,551.9208918565424 725.1835024935527,551.9208918565424" class="line-path"></path><path d="M612.5593285421722,220.67436266651114 C668.8714155178625,220.67436266651114 C668.8714155178625,551.9208918565424 725.1835024935527,551.9208918565424" class="line-pulse" style="animation-delay: 0s;"></path><path d="M725.1835024935527,551.9208918565424 C1286.5478485996282,551.9208918565424 1286.5478485996282,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1286.5478485996282,551.9208918565424 1286.5478485996282,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 0.8s;"></path><path d="M1423.5458225879854,455.95131484953095 C1635.7290086468447,455.95131484953095 1635.7290086468447,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M1423.5458225879854,455.95131484953095 C1635.7290086468447,455.95131484953095 1635.7290086468447,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 1.6s;"></path><path d="M725.1835024935527,551.9208918565424 C1074.3646625407691,551.9208918565424 1074.3646625407691,455.95131484953095 1423.5458225879854,455.95131484953095" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1074.3646625407691,551.9208918565424 1074.3646625407691,455.95131484953095 1423.5458225879854,455.95131484953095" class="line-pulse" style="animation-delay: 2.4s;"></path><path d="M725.1835024935527,551.9208918565424 C1111.2277043907386,551.9208918565424 1111.2277043907386,731.9885228098573 1497.2719062879246,731.9885228098573" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1111.2277043907386,551.9208918565424 1111.2277043907386,731.9885228098573 1497.2719062879246,731.9885228098573" class="line-pulse" style="animation-delay: 3.2s;"></path><path d="M725.1835024935527,551.9208918565424 C1025.2139815543462,551.9208918565424 1025.2139815543462,930.73830602537 1325.2444606151396,930.73830602537" class="line-path"></path><path d="M725.1835024935527,551.9208918565424 C1025.2139815543462,551.9208918565424 1025.2139815543462,930.73830602537 1325.2444606151396,930.73830602537" class="line-pulse" style="animation-delay: 4s;"></path><path d="M1497.2719062879246,731.9885228098573 C1672.5920504968142,731.9885228098573 1672.5920504968142,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M1497.2719062879246,731.9885228098573 C1672.5920504968142,731.9885228098573 1672.5920504968142,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 4.8s;"></path><path d="M1325.2444606151396,930.73830602537 C1586.5783276604216,930.73830602537 1586.5783276604216,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-path"></path><path d="M1325.2444606151396,930.73830602537 C1586.5783276604216,930.73830602537 1586.5783276604216,273.1744797688458 1847.9121947057038,273.1744797688458" class="line-pulse" style="animation-delay: 5.6s;"></path></svg>
 
         <div id="dashboard" class="dashboard-container">
             <div id="node1" class="workflow-node" style="top: 15%; left: 10%;">
@@ -308,8 +370,8 @@ function renderVisualizer() {
         const translations = {
             zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道", carbon: "全球累計二氧化碳排放量 (公噸)" },
             en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System", carbon: "Cumulative Global CO2 Emissions (Tons)" },
-            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム", carbon: "世界の累積二酸化炭素排出量 (トン)" },
-            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프라인 시스템", carbon: "전 세계 누적 이산화탄소 배출량 (톤)" },
+            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム", carbon: "世界の累積二酸化碳素排出量 (トン)" },
+            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", viewWeb: "디지털 경험", close: "닫기", updateSoon: "파이프ライン 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프라인 시스템", carbon: "전 세계 누적 이산화탄소 배출량 (톤)" },
             fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet", pipelineTitle: "Système Pipeline", carbon: "Émissions mondiales de CO2 cumulées (Tonnes)" }
         };
 
@@ -330,7 +392,9 @@ function renderVisualizer() {
             const now = Date.now();
             const elapsed = now - startDate;
             const currentTotal = (elapsed * perMsEmissions) + 2450000000000; 
-            carbonValueEl.innerText = currentTotal.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            if (carbonValueEl) {
+                carbonValueEl.innerText = currentTotal.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+            }
             requestAnimationFrame(updateCarbonCounter);
         }
         updateCarbonCounter();
@@ -346,18 +410,26 @@ audioBtn.addEventListener('click', () => {
     isMuted = !isMuted;
     bgAudio.muted = isMuted;
     bgVideo.muted = isMuted;
+    if (typeof textureVideo !== 'undefined') {
+        textureVideo.muted = isMuted; // 同步靜音 WebGL 影片
+    }
 
     if (!isMuted) {
         bgAudio.play().then(() => {
             isPlaying = true;
         }).catch(e => console.log("Play failed:", e));
-        audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+        if (audioIcon) {
+            audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+        }
     } else {
         bgAudio.pause();
         isPlaying = false;
-        audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
+        if (audioIcon) {
+            audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
+        }
     }
 });
+
         function changeLanguage(lang) {
             currentLang = lang;
             const t = translations[lang];
@@ -422,16 +494,19 @@ audioBtn.addEventListener('click', () => {
         }
 
         function updateLines() {
+            if (!svgLines) return;
             svgLines.innerHTML = '';
             connections.forEach((conn, index) => {
                 const start = getCenter(conn.from);
                 const end = getCenter(conn.to);
                 const cp1x = start.x + (end.x - start.x) * 0.5;
                 const d = `M${start.x},${start.y} C${cp1x},${start.y} ${cp1x},${end.y} ${end.x},${end.y}`;
+                
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path.setAttribute("d", d);
                 path.setAttribute("class", "line-path");
                 svgLines.appendChild(path);
+                
                 const pulse = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 pulse.setAttribute("d", d);
                 pulse.setAttribute("class", "line-pulse");
@@ -453,8 +528,27 @@ audioBtn.addEventListener('click', () => {
             node.addEventListener('touchstart', (e) => { if (!e.target.closest('.cursor-pointer') && !e.target.closest('a')) startDrag(e.touches[0].clientX, e.touches[0].clientY); });
         });
 
-        window.addEventListener('mousemove', (e) => { if (!activeNode) return; activeNode.style.left = `${e.clientX - offset.x}px`; activeNode.style.top = `${e.clientY - offset.y}px`; updateLines(); });
-        window.addEventListener('touchmove', (e) => { if (!activeNode) return; activeNode.style.left = `${e.touches[0].clientX - offset.x}px`; activeNode.style.top = `${e.touches[0].clientY - offset.y}px`; updateLines(); });
+        // 匿名事件監聽器：向 WebGL 拋射扭曲波紋
+        window.addEventListener('mousemove', (e) => { 
+            if (typeof pushDistortionRipple === 'function') {
+                pushDistortionRipple(e.clientX, e.clientY);
+            }
+            if (!activeNode) return; 
+            activeNode.style.left = `${e.clientX - offset.x}px`; 
+            activeNode.style.top = `${e.clientY - offset.y}px`; 
+            updateLines(); 
+        });
+        
+        window.addEventListener('touchmove', (e) => { 
+            if (typeof pushDistortionRipple === 'function') {
+                pushDistortionRipple(e.touches[0].clientX, e.touches[0].clientY);
+            }
+            if (!activeNode) return; 
+            activeNode.style.left = `${e.touches[0].clientX - offset.x}px`; 
+            activeNode.style.top = `${e.touches[0].clientY - offset.y}px`; 
+            updateLines(); 
+        });
+
         const endDrag = () => { if (activeNode) { activeNode.classList.remove('dragging'); activeNode = null; } };
         window.addEventListener('mouseup', endDrag);
         window.addEventListener('touchend', endDrag);
@@ -464,12 +558,20 @@ audioBtn.addEventListener('click', () => {
             const container = document.getElementById('overlay-container');
             const nav = document.getElementById('overlay-nav');
             const content = document.getElementById('overlay-content');
+            
             const baseUrl = "https://xiaostudio.xyz";
             let targetUrl = "";
             const isPop = (type === 'about' || type === 'form');
-            container.classList.remove('is-pop', 'is-slide-down');
-            if (isPop) { container.classList.add('is-pop'); nav.classList.remove('bg-gradient-to-b', 'from-black/80'); }
-            else { container.classList.add('is-slide-down'); nav.classList.add('bg-gradient-to-b', 'from-black/80'); }
+            if (container) {
+                container.classList.remove('is-pop', 'is-slide-down');
+                if (isPop) { 
+                    container.classList.add('is-pop'); 
+                    if (nav) nav.classList.remove('bg-gradient-to-b', 'from-black/80'); 
+                } else { 
+                    container.classList.add('is-slide-down'); 
+                    if (nav) nav.classList.add('bg-gradient-to-b', 'from-black/80'); 
+                }
+            }
             switch(type) {
                 case 'about': targetUrl = `${baseUrl}/about/`; break;
                 case 'static': targetUrl = `${baseUrl}/static/`; break;
@@ -478,35 +580,276 @@ audioBtn.addEventListener('click', () => {
                 case 'web': targetUrl = `${baseUrl}/web/`; break;
                 case 'form': targetUrl = `${baseUrl}/form/`; break;
             }
-            screen.style.display = 'flex';
-            void screen.offsetWidth;
-            screen.classList.add('active');
-            if (targetUrl) content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
-            else content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
+            if (screen) {
+                screen.style.display = 'flex';
+                void screen.offsetWidth;
+                screen.classList.add('active');
+            }
+            if (content) {
+                if (targetUrl) content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
+                else content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
+            }
         }
 
         function hideOverlay() {
             const screen = document.getElementById('overlay-screen');
-            screen.classList.remove('active');
-            setTimeout(() => { if (!screen.classList.contains('active')) { screen.style.display = 'none'; document.getElementById('overlay-content').innerHTML = ''; } }, 600);
+            if (screen) {
+                screen.classList.remove('active');
+                setTimeout(() => { if (!screen.classList.contains('active')) { screen.style.display = 'none'; document.getElementById('overlay-content').innerHTML = ''; } }, 600);
+            }
         }
 
     if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // 指向根目錄的 sw.js
         navigator.serviceWorker.register('./sw.js')
             .then(reg => console.log('SW Registered!', reg))
             .catch(err => console.log('SW Register Failed!', err));
     });
 }
-        window.addEventListener('load', initNodePositions);
-        window.addEventListener('resize', initNodePositions);
-        document.getElementById('bgVideo').muted = true;
+
+        // ----------------- WebGL 高端液態折射引擎 -----------------
+        const webglCanvas = document.getElementById('webgl-canvas');
+        const textureVideo = document.getElementById('textureVideo');
+        const gl = webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl');
+
+        let isWebGLActive = false;
+
+        // WebGL Vertex Shader
+        const vsSource = `
+            attribute vec2 position;
+            varying vec2 vTexCoord;
+            void main() {
+                vTexCoord = position * 0.5 + 0.5;
+                vTexCoord.y = 1.0 - vTexCoord.y; 
+                gl_Position = vec4(position, 0.0, 1.0);
+            }
+        `;
+
+        // WebGL Fragment Shader
+        const fsSource = `
+            precision mediump float;
+            varying vec2 vTexCoord;
+            uniform sampler2D uVideoTexture;
+            uniform vec2 uResolution;
+            uniform vec2 uTextureScale; 
+            
+            uniform vec3 uRipples[16];
+            uniform int uRippleCount;
+
+            void main() {
+                vec2 uvScreen = vTexCoord;
+                vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
+                vec2 totalOffset = vec2(0.0);
+
+                for (int i = 0; i < 16; i++) {
+                    if (i >= uRippleCount) break;
+
+                    vec2 center = uRipples[i].xy;
+                    float age = uRipples[i].z; 
+
+                    vec2 toPixel = (uvScreen - center) * aspect;
+                    float dist = length(toPixel);
+
+                    float currentRadius = age * 0.15; 
+                    float waveWidth = 0.03;          
+                    
+                    if (dist < currentRadius + waveWidth && dist > currentRadius - waveWidth) {
+                        float progress = (dist - (currentRadius - waveWidth)) / (waveWidth * 2.0);
+                        float wave = sin(progress * 3.14159265);
+                        float strength = (1.0 - age) * 0.045 * wave; 
+                        
+                        totalOffset += normalize(toPixel) * strength;
+                    }
+                }
+
+                vec2 distortedUvScreen = clamp(uvScreen - totalOffset, 0.0, 1.0);
+                vec2 finalUv = (distortedUvScreen - 0.5) * uTextureScale + 0.5;
+                vec4 videoColor = texture2D(uVideoTexture, finalUv);
+                float highlights = length(totalOffset) * 1.8;
+                gl_FragColor = videoColor + vec4(vec3(highlights), 0.0);
+            }
+        `;
+
+        let program, positionLocation, uVideoTextureLoc, uResolutionLoc, uTextureScaleLoc, uRipplesLoc, uRippleCountLoc, buffer, videoTexture;
+
+        if (gl) {
+            try {
+                const vs = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vs, vsSource);
+                gl.compileShader(vs);
+
+                const fs = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fs, fsSource);
+                gl.compileShader(fs);
+
+                program = gl.createProgram();
+                gl.attachShader(program, vs);
+                gl.attachShader(program, fs);
+                gl.linkProgram(program);
+
+                if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    positionLocation = gl.getAttribLocation(program, 'position');
+                    uVideoTextureLoc = gl.getUniformLocation(program, 'uVideoTexture');
+                    uResolutionLoc = gl.getUniformLocation(program, 'uResolution');
+                    uTextureScaleLoc = gl.getUniformLocation(program, 'uTextureScale');
+                    uRipplesLoc = gl.getUniformLocation(program, 'uRipples');
+                    uRippleCountLoc = gl.getUniformLocation(program, 'uRippleCount');
+
+                    buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                        -1, -1,   1, -1,  -1,  1,
+                        -1,  1,   1, -1,   1,  1,
+                    ]), gl.STATIC_DRAW);
+
+                    videoTexture = gl.createTexture();
+                    gl.bindTexture(gl.TEXTURE_2D, videoTexture);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+                    isWebGLActive = true;
+                    // 防禦型編程：加入 null 判斷，防止 crash 中斷後續腳本
+                    const fallbackBg = document.getElementById('fallback-bg');
+                    if (fallbackBg) {
+                        fallbackBg.style.display = 'none';
+                    }
+                } else {
+                    throw new Error('Link failed');
+                }
+            } catch (e) {
+                console.warn('WebGL init failed, using CSS fallback: ', e);
+                isWebGLActive = false;
+                webglCanvas.style.display = 'none';
+            }
+        } else {
+            isWebGLActive = false;
+            webglCanvas.style.display = 'none';
+        }
+
+        // 水波物理點管理器
+        let ripples = [];
+        const maxRipples = 16;
+        let lastMousePos = { x: 0, y: 0 };
+
+        function pushDistortionRipple(clientX, clientY) {
+            const overlay = document.getElementById('overlay-screen');
+            if (overlay && overlay.classList.contains('active')) return;
+
+            const x = clientX / window.innerWidth;
+            const y = clientY / window.innerHeight;
+
+            const speed = Math.hypot(clientX - lastMousePos.x, clientY - lastMousePos.y);
+            if (speed > 5) {
+                ripples.push({ x, y, age: 0.0 });
+                if (ripples.length > maxRipples) {
+                    ripples.shift();
+                }
+            }
+            lastMousePos = { x: clientX, y: clientY };
+        }
+
+        function resizeWebGLCanvas() {
+            if (!isWebGLActive || !webglCanvas) return;
+            webglCanvas.width = window.innerWidth;
+            webglCanvas.height = window.innerHeight;
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        }
+
+        // WebGL 每幀渲染循環
+        function renderLoop() {
+            if (!isWebGLActive) return;
+
+            // 安全讀取且強制播放
+            if (textureVideo && textureVideo.readyState >= textureVideo.HAVE_CURRENT_DATA) {
+                try {
+                    gl.bindTexture(gl.TEXTURE_2D, videoTexture);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureVideo);
+                } catch (err) {
+                    console.error('Texture binding cross-origin blocked. Falling back.', err);
+                    isWebGLActive = false;
+                    if (webglCanvas) webglCanvas.style.display = 'none';
+                    const fallbackBg = document.getElementById('fallback-bg');
+                    if (fallbackBg) fallbackBg.style.display = 'block';
+                    return;
+                }
+            }
+
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            gl.useProgram(program);
+
+            gl.enableVertexAttribArray(positionLocation);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            gl.uniform2f(uResolutionLoc, webglCanvas.width, webglCanvas.height);
+
+            let scaleX = 1.0;
+            let scaleY = 1.0;
+            if (textureVideo && textureVideo.videoWidth > 0 && textureVideo.videoHeight > 0) {
+                const screenRatio = webglCanvas.width / webglCanvas.height;
+                const videoRatio = textureVideo.videoWidth / textureVideo.videoHeight;
+                if (screenRatio > videoRatio) {
+                    scaleY = videoRatio / screenRatio;
+                } else {
+                    scaleX = screenRatio / videoRatio;
+                }
+            }
+            gl.uniform2f(uTextureScaleLoc, scaleX, scaleY);
+
+            const rippleData = [];
+            for (let i = 0; i < ripples.length; i++) {
+                ripples[i].age += 0.018; 
+                rippleData.push(ripples[i].x, ripples[i].y, ripples[i].age);
+            }
+            ripples = ripples.filter(r => r.age < 1.0);
+
+            while (rippleData.length < 16 * 3) {
+                rippleData.push(0.0, 0.0, 999.0); 
+            }
+
+            gl.uniform3fv(uRipplesLoc, new Float32Array(rippleData));
+            gl.uniform1i(uRippleCountLoc, ripples.length);
+
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        // 強制解鎖自動播放 (解決 Safari/Chrome Autoplay 靜止問題)
+        function forcePlayVideos() {
+            const bgV = document.getElementById('bgVideo');
+            const texV = document.getElementById('textureVideo');
+            if (bgV) bgV.play().catch(e => console.log("bgVideo auto-play triggered."));
+            if (texV) texV.play().catch(e => console.log("textureVideo auto-play triggered."));
+        }
+
+        // 監聽全局載入與首擊手勢解鎖
         window.addEventListener('load', () => {
-    initNodePositions();
-    renderVisualizer(); // 讓聲波畫布一開始就有微弱的粒子閃爍
-});
+            initNodePositions();
+            resizeWebGLCanvas();
+            forcePlayVideos();
+            if (isWebGLActive) {
+                renderLoop(); 
+            }
+            renderVisualizer(); 
+            changeLanguage('en'); 
+        });
+
+        // 觸控、點擊時二次強解解鎖
+        window.addEventListener('click', forcePlayVideos, { once: true });
+        window.addEventListener('touchstart', forcePlayVideos, { once: true });
+
+        window.addEventListener('resize', () => { 
+            initNodePositions(); 
+            resizeWebGLCanvas();
+            updateLines(); 
+        });
+
+        const initialBgV = document.getElementById('bgVideo');
+        if (initialBgV) initialBgV.muted = true;
     </script>
-
-
 </body></html>
