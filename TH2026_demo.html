@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XiaoStudio | AR VISUAL (Print)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            scroll-behavior: smooth;
+        }
+
+        /* 滾動動畫效果定義 */
+        .reveal-item {
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* 各種動畫進入方向 */
+        .fade-in-up {
+            transform: translateY(40px);
+        }
+
+        .slide-in-left {
+            transform: translateX(-40px);
+        }
+
+        .slide-in-right {
+            transform: translateX(40px);
+        }
+
+        /* 當元素進入視口時啟動動畫 */
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* 圖片容器與懸停縮放效果 */
+        .image-container {
+            overflow: hidden;
+            background-color: #f7f7f7;
+            border-radius: 4px;
+            scroll-margin-top: 80px; /* 滾動定位時保留上方間距，避免貼頂 */
+        }
+
+        .project-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-container:hover .project-image {
+            transform: scale(1.02);
+        }
+
+        /* 頁首主視覺動畫 */
+        .hero-reveal {
+            opacity: 0;
+            transform: scale(1.05);
+            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+        }
+
+        .hero-reveal.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="selection:bg-gray-200">
+
+    <!-- 專案主視覺 (Hero Image) -->
+    <section class="w-full h-[90vh] md:h-[60vh] overflow-hidden bg-gray-100 relative">
+        <div class="hero-reveal w-full h-full">
+            <img 
+                src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784095720/TH_Yearbook_demo_iltqvj.jpg" 
+                alt="[TH2026]" 
+                class="w-full h-full object-cover grayscale-[0.1]"
+            >
+        </div>
+    </section>
+
+    <!-- 內容區塊 -->
+    <main class="max-w-[1400px] mx-auto px-8 py-20 md:py-32 space-y-24">
+        
+        <!-- 專案標題與敘述 -->
+        <section class="max-w-5xl mx-auto">
+            <div class="reveal-item fade-in-up mb-6">
+                <span class="text-[10px] text-gray-800 font-bold tracking-[0.3em] uppercase mb-2 block">Category: Print Design</span>
+                <h1 class="text-black text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]">
+                    TREE HOUSE YEARBOOK <br class="hidden md:block">2026 DEMO#01
+                </h1>
+            </div>
+
+            <!-- 關鍵字標籤 -->
+            <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># 樹屋</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># 自然</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># 復古</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># 童年</span>
+            </div>
+
+            <!-- 專案簡介區塊 -->
+            <div class="flex flex-col md:flex-row gap-16 border-b border-gray-100 pb-16 reveal-item fade-in-up">
+               
+                
+                <div class="md:w-1/3 text-[10px] uppercase tracking-[0.3em] text-gray-800 font-bold border-t md:border-t-0 pt-6 md:pt-0">
+                    Services
+                    <div class="mt-4 space-y-2 text-[13px] text-gray-600 font-medium normal-case tracking-normal">
+                        <p>Visual Integration</p>
+                        <p>Visual Design</p>
+                        <p>Packaging & Print</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 圖片展示網格 (每一張圖片都配有對應的 id="project-img-X") -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+            
+            <!-- 左右對稱小圖 -->
+            <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784097724/cover_01_jwt97k.jpg" alt="[設計展示 1]" class="project-image">
+            </div>
+            
+            <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784097734/cover_02_t0kbim.jpg" alt="[設計展示 2]" class="project-image">
+            </div>
+
+            <!-- 以下均為滿版大圖 -->
+            <div id="project-img-3" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098040/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_17_yewihd.jpg" alt="[設計展示 3]" class="project-image">
+            </div>
+       
+            <div id="project-img-4" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098441/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_5_%E8%A4%87%E6%9C%AC_xms2ia.jpg" alt="[設計展示 4]" class="project-image">
+            </div>
+
+            <div id="project-img-5" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098457/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_14_qlkoz6.jpg" alt="[設計展示 5]" class="project-image">
+            </div>
+        
+            <div id="project-img-6" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098447/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_2_qcj5ig.jpg" alt="[設計展示 6]" class="project-image">
+            </div>
+          
+            <div id="project-img-7" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098415/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_34_cszsab.jpg" alt="[設計展示 7]" class="project-image">
+            </div>
+          
+            <div id="project-img-8" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098440/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_11_b7ou4u.jpg" alt="[設計展示 8]" class="project-image">
+            </div>
+          
+            <div id="project-img-9" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098444/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_16_ukhwqr.jpg" alt="[設計展示 9]" class="project-image">
+            </div>
+           
+            <div id="project-img-10" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784099493/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_it4hwy.jpg" alt="[設計展示 10]" class="project-image">
+            </div>
+           
+            <div id="project-img-11" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098446/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_3_hy2lx4.jpg" alt="[設計展示 11]" class="project-image">
+            </div>
+           
+            <div id="project-img-12" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098443/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_5_d4vcf1.jpg" alt="[設計展示 12]" class="project-image">
+            </div>
+           
+            <div id="project-img-13" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784099482/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_25_wntepc.jpg" alt="[設計展示 13]" class="project-image">
+            </div>
+           
+            <div id="project-img-14" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098441/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_6_vl1sff.jpg" alt="[設計展示 14]" class="project-image">
+            </div>
+           
+            <div id="project-img-15" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098445/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_4_a5xiis.jpg" alt="[設計展示 15]" class="project-image">
+            </div>
+           
+            <div id="project-img-16" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098438/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_19_qc7iqu.jpg" alt="[設計展示 16]" class="project-image">
+            </div>
+           
+            <div id="project-img-17" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098415/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_32_bvifdn.jpg" alt="[設計展示 17]" class="project-image">
+            </div>
+           
+            <div id="project-img-18" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098417/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_21_kegr30.jpg" alt="[設計展示 18]" class="project-image">
+            </div>
+            
+            <div id="project-img-19" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098443/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_qdqwnb.jpg" alt="[設計展示 19]" class="project-image">
+            </div>
+          
+            <div id="project-img-20" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098421/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_22_qhihpt.jpg" alt="[設計展示 20]" class="project-image">
+            </div>
+          
+            <div id="project-img-21" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784100992/TH_Yearbook_demo_iltqvj.jpg" alt="[設計展示 21]" class="project-image">
+            </div>
+          
+            <div id="project-img-22" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098637/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_26_%E8%A4%87%E6%9C%AC_gjcpxa.jpg" alt="[設計展示 22]" class="project-image">
+            </div>
+           
+        </div>
+
+        <!-- 縮圖總覽快速導覽區塊 (更新為全彩色網格) -->
+        <section class="reveal-item fade-in-up border-t border-gray-100 pt-16 mt-32">
+            <div class="mb-10">
+                <span class="text-[10px] text-gray-400 font-bold tracking-[0.3em] uppercase mb-1 block">Overview / Gallery Map</span>
+                <h3 class="text-black text-2xl font-black uppercase tracking-tight">INDEX PREVIEW</h3>
+               
+            </div>
+
+            <!-- 無捲軸、自適應彩色網格容器 (桌機端 11 等分，兩排剛好完美排完 22 張) -->
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-11 gap-4 pt-2">
+                
+                <!-- 縮圖 1 -->
+                <button onclick="scrollToImage(1)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784097724/cover_01_jwt97k.jpg" alt="01" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">01. COVER 01</span>
+                </button>
+
+                <!-- 縮圖 2 -->
+                <button onclick="scrollToImage(2)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784097734/cover_02_t0kbim.jpg" alt="02" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">02. COVER 02</span>
+                </button>
+
+                <!-- 縮圖 3 -->
+                <button onclick="scrollToImage(3)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098040/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_17_yewihd.jpg" alt="03" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">03. PAGE 03</span>
+                </button>
+
+                <!-- 縮圖 4 -->
+                <button onclick="scrollToImage(4)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098441/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_5_%E8%A4%87%E6%9C%AC_xms2ia.jpg" alt="04" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">04. PAGE 04</span>
+                </button>
+
+                <!-- 縮圖 5 -->
+                <button onclick="scrollToImage(5)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098457/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_14_qlkoz6.jpg" alt="05" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">05. PAGE 05</span>
+                </button>
+
+                <!-- 縮圖 6 -->
+                <button onclick="scrollToImage(6)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098447/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_2_qcj5ig.jpg" alt="06" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">06. PAGE 06</span>
+                </button>
+
+                <!-- 縮圖 7 -->
+                <button onclick="scrollToImage(7)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098415/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_34_cszsab.jpg" alt="07" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">07. PAGE 07</span>
+                </button>
+
+                <!-- 縮圖 8 -->
+                <button onclick="scrollToImage(8)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098440/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_11_b7ou4u.jpg" alt="08" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">08. PAGE 08</span>
+                </button>
+
+                <!-- 縮圖 9 -->
+                <button onclick="scrollToImage(9)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098444/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_16_ukhwqr.jpg" alt="09" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">09. PAGE 09</span>
+                </button>
+
+                <!-- 縮圖 10 -->
+                <button onclick="scrollToImage(10)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784099493/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_it4hwy.jpg" alt="10" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">10. PAGE 10</span>
+                </button>
+
+                <!-- 縮圖 11 -->
+                <button onclick="scrollToImage(11)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098446/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_3_hy2lx4.jpg" alt="11" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">11. PAGE 11</span>
+                </button>
+
+                <!-- 縮圖 12 -->
+                <button onclick="scrollToImage(12)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098443/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_5_d4vcf1.jpg" alt="12" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">12. PAGE 12</span>
+                </button>
+
+                <!-- 縮圖 13 -->
+                <button onclick="scrollToImage(13)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784099482/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_25_wntepc.jpg" alt="13" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">13. PAGE 13</span>
+                </button>
+
+                <!-- 縮圖 14 -->
+                <button onclick="scrollToImage(14)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098441/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_6_vl1sff.jpg" alt="14" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">14. PAGE 14</span>
+                </button>
+
+                <!-- 縮圖 15 -->
+                <button onclick="scrollToImage(15)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098445/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_4_a5xiis.jpg" alt="15" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">15. PAGE 15</span>
+                </button>
+
+                <!-- 縮圖 16 -->
+                <button onclick="scrollToImage(16)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098438/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_19_qc7iqu.jpg" alt="16" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">16. PAGE 16</span>
+                </button>
+
+                <!-- 縮圖 17 -->
+                <button onclick="scrollToImage(17)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098415/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_32_bvifdn.jpg" alt="17" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">17. PAGE 17</span>
+                </button>
+
+                <!-- 縮圖 18 -->
+                <button onclick="scrollToImage(18)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098417/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_21_kegr30.jpg" alt="18" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">18. PAGE 18</span>
+                </button>
+
+                <!-- 縮圖 19 -->
+                <button onclick="scrollToImage(19)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098443/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_qdqwnb.jpg" alt="19" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">19. PAGE 19</span>
+                </button>
+
+                <!-- 縮圖 20 -->
+                <button onclick="scrollToImage(20)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098421/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_22_qhihpt.jpg" alt="20" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">20. PAGE 20</span>
+                </button>
+
+                <!-- 縮圖 21 -->
+                <button onclick="scrollToImage(21)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784100992/TH_Yearbook_demo_iltqvj.jpg" alt="21" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">21. COVER VISUAL 01</span>
+                </button>
+
+                <!-- 縮圖 22 -->
+                <button onclick="scrollToImage(22)" class="group focus:outline-none text-left w-full">
+                    <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1784098637/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_26_%E8%A4%87%E6%9C%AC_gjcpxa.jpg" alt="22" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                    </div>
+                    <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">22. COVER VISUAL 02</span>
+                </button>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- 頁尾版權 -->
+    <footer class="w-full py-12 border-t border-gray-100 text-center text-xs text-gray-400 tracking-[0.2em] uppercase">
+        &copy; 2026 XiaoStudio. All Rights Reserved.
+    </footer>
+
+    <script>
+        // 設定 Intersection Observer 參數
+        const observerOptions = { 
+            threshold: 0.05, 
+            rootMargin: "0px 0px -100px 0px" 
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // 觸發後即停止監聽，避免重複動畫
+                }
+            });
+        }, observerOptions);
+
+        window.onload = () => {
+            // 監聽主視覺與所有展示區塊
+            document.querySelectorAll('.hero-reveal, .reveal-item').forEach(el => {
+                observer.observe(el);
+            });
+        };
+
+        // 平滑滾動至指定的圖片
+        function scrollToImage(index) {
+            const element = document.getElementById(`project-img-${index}`);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+    </script>
+</body>
+</html>
