@@ -157,7 +157,7 @@
             position: fixed; 
             right: 20px; 
             bottom: 20px; 
-            z-index: 250; 
+            z-index: 150; 
             border: 1px solid rgba(255,255,255,0.25); 
             width: 44px; 
             height: 44px; 
@@ -181,7 +181,7 @@
             position: fixed; 
             right: 20px; 
             bottom: 74px; 
-            z-index: 250; 
+            z-index: 150; 
             border: 1px solid rgba(255,255,255,0.25); 
             width: 44px; 
             height: 44px; 
@@ -210,7 +210,6 @@
         /* Soundwave Visualizer Canvas */
         #visualizer { 
             width: 1450px; 
-        
             height: 60px; 
             margin-top: 20px; 
             display: block; 
@@ -233,7 +232,7 @@
             #visualizer { width: 320px; height: 40px; }
         }   
 
-        /* AI Assistant Iframe & Mask Styling - 覆蓋 Powered by Dify */
+        /* AI Assistant Iframe & Mask Styling */
         .ai-iframe-wrapper {
             position: relative;
             width: 100%;
@@ -242,36 +241,49 @@
             background-color: #18181b;
         }
 
+        /* 電腦版 (預設) 滿版無位移，確保操作正常 */
         .ai-iframe {
             width: 100%;
-            height: calc(100% + 42px) !important;
+            height: 100% !important;
+            margin-top: 0 !important;
             border: none;
             display: block;
         }
 
-        .ai-mask-bottom {
+        /* 電腦版右上角遮罩蓋住 POWERED BY Dify */
+        .ai-mask-top-right {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 42px;
-            background-color: #18181b; /* 對應 Dify 暗色主題背景色 */
+            top: 0;
+            right: 0;
+            width: 160px;
+            height: 48px;
+            background-color: #222224;
             z-index: 20;
             pointer-events: none;
         }
 
-        /* 手機版開啟 AI 對話視窗時隱藏音樂與 AI 按鈕 */
+        /* 手機版樣式調整 */
         @media (max-width: 767px) {
-            body.ai-active .audio-toggle,
-            body.ai-active .ai-toggle {
-                opacity: 0;
-                pointer-events: none;
-                visibility: hidden;
-                transform: scale(0.8);
+            /* 1. 電腦版遮色塊在手機版必須關閉顯示 */
+            .ai-mask-top-right {
+                display: none !important;
             }
-.hero-text.absolute.bottom-24.left-10.md\:left-28.z-10.pointer-events-none.max-w-2xl {
-    bottom: 20px;
-}
+
+            /* 2. 手機版採用頂部推移方式，隱藏頂部標頭與 POWERED BY 字樣 */
+            .ai-iframe {
+                margin-top: -50px !important;
+                height: calc(100% + 50px) !important;
+            }
+
+            /* 3. 音樂與 AI 按鈕層級設在 overlay (z-index: 200) 之下 */
+            .audio-toggle,
+            .ai-toggle {
+                z-index: 150 !important;
+            }
+
+            .hero-text.absolute.bottom-24.left-10.md\:left-28.z-10.pointer-events-none.max-w-2xl {
+                bottom: 20px;
+            }
         }
 
         @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
@@ -280,10 +292,9 @@
             -webkit-backdrop-filter: none !important;
           }
         } 
-.flex.items-center.gap-6 {
-    margin-top: -15px;
-}
-
+        .flex.items-center.gap-6 {
+            margin-top: -15px;
+        }
     </style>
 </head>
 <body>
@@ -670,7 +681,7 @@
                     content.innerHTML = `
                         <div class="ai-iframe-wrapper">
                             <iframe src="https://udify.app/chatbot/7BVdiSir1ny6AxWJ" class="ai-iframe" allow="microphone"></iframe>
-                            <div class="ai-mask-bottom"></div>
+                            <div class="ai-mask-top-right"></div>
                         </div>
                     `;
                 } else if (targetUrl) {
@@ -698,6 +709,7 @@
             });
         }
 
+        /* WebGL Background Simulation Logic */
         const webglCanvas = document.getElementById('webgl-canvas');
         const textureVideo = document.getElementById('textureVideo');
         const gl = webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl');
