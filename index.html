@@ -2,17 +2,17 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>XIAOSTUDIO 蕭氏設計工作室 | 視覺設計與數位體驗</title>
     <meta name="description" content="蕭氏設計工作室 XIAOSTUDIO 專注於提供品牌視覺設計、動態設計及網頁設計。在形態的生成與轉化之間，探索設計、動態與科技交織而成的數位美學。">
     <meta name="keywords" content="蕭氏設計工作室, 蕭氏設計, XIAOSTUDIO, 品牌設計, 網頁設計, 動態設計, 平面設計, 包裝設計, 商品視覺, Visual Design, Motion Graphics, Design Studio Taiwan">
-    <meta name="author" content="XIAOSTUDIO 蕭氏設計工作室 ">
+    <meta name="author" content="XIAOSTUDIO 蕭氏設計工作室">
     <link rel="canonical" href="https://xiaostudio.xyz/">
 
     <!-- Social Media / Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://xiaostudio.xyz/">
-    <meta property="og:title" content="XIAOSTUDIO | Refining The Digital Experience">
+    <meta property="og:title" content="XIAOSTUDIO 蕭氏設計工作室 | Refining The Digital Experience">
     <meta property="og:description" content="探索XIAOSTUDIO 蕭氏設計工作室的數位設計領域。從視覺到包裝，致力於創造隨形起舞的流體美學。">
     <meta property="og:image" content="https://xiaostudio.xyz/assets/images/Xiaostudio_cover.jpg">
     <meta property="og:image:width" content="1200">
@@ -32,7 +32,9 @@
       "alternateName": "蕭氏設計工作室",
       "url": "https://xiaostudio.xyz/",
       "logo": "https://xiaostudio.xyz/assets/images/favicon.svg",
-    
+      "sameAs": [
+        "https://www.behance.net/xiaostudio"
+      ],
       "description": "XIAOSTUDIO 蕭氏設計工作室 - 數位體驗與品牌設計工作室，服務涵蓋網頁設計、動態設計、平面與包裝。",
       "address": {
         "@type": "PostalAddress",
@@ -58,6 +60,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
+        html {
+            background-color: #000;
+            transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 負片效果：轉換為反轉高對比度灰階 (Inverted High Contrast Grayscale Mode) */
+        body.negative-mode #main-view,
+        body.negative-mode nav,
+        body.negative-mode .action-btn,
+        body.negative-mode #music-marquee-bar {
+            filter: invert(1) grayscale(100%) contrast(140%) hue-rotate(180deg);
+        }
+
+        /* 開啟彈窗時保持專案真實色彩與品質 */
+        #overlay-screen #overlay-container {
+            filter: none !important;
+        }
+
         body {
             background-color: #000;
             color: #fff;
@@ -67,8 +87,11 @@
             width: 100vw;
             height: 100dvh;
             touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
-        /* 隱藏 SEO 標題，專供爬蟲讀取 */
+        
+        /* 隱藏 SEO 標題 */
         .seo-hidden { 
             position: absolute; 
             width: 1px; 
@@ -81,17 +104,49 @@
         }
         
         .mono { font-family: 'JetBrains Mono', monospace; }
-        .section { width: 100vw; height: 100dvh; position: relative; overflow: hidden; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        @media (min-width: 1024px) { .section { transform: scale(1.12); transform-origin: center center; } }
-        .grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; pointer-events: none; }
+        .section { 
+            width: 100vw; 
+            height: 100dvh; 
+            position: relative; 
+            overflow: hidden; 
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
+            /* 多層後備液態漸變底色，防止黑屏 */
+            background: radial-gradient(circle at 50% 50%, #151821 0%, #08090d 50%, #000000 100%);
+        }
+
+        @media (min-width: 1024px) { 
+            .section { transform: scale(1.12); transform-origin: center center; } 
+        }
+
+        .grid-overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); 
+            background-size: 40px 40px; 
+            z-index: 1; 
+            pointer-events: none; 
+        }
         
         .video-background { 
             position: absolute; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -3; 
-            filter: brightness(0.9) contrast(1.1); 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 0; 
+            filter: brightness(0.95) contrast(1.1); 
+            background: #000;
         }
-        .video-background video { width: 100%; height: 100%; object-fit: cover; }
+
+        .video-background video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
         
         #webgl-canvas {
             position: absolute;
@@ -99,11 +154,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2; 
+            z-index: 0; 
             pointer-events: none;
         }
 
-        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.9) 100%); z-index: -1; }
+        .video-overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: radial-gradient(circle at center, transparent 25%, rgba(0,0,0,0.85) 100%); 
+            z-index: 1; 
+            pointer-events: none;
+        }
         
         #textureVideo {
             position: absolute;
@@ -119,27 +183,27 @@
         .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
         .lang-btn { font-size: 14px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
-        .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+        .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
-        .node-box { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 2px; min-width: 190px; }
-        .node-box.special { border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.05); }
-        .node-label { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 12px; }
+        .node-box { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 14px; border-radius: 2px; min-width: 190px; }
+        .node-box.special { border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.08); }
+        .node-label { font-size: 15px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 10px; }
         .status-indicator { width: 7px; height: 7px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
         @keyframes status-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
-        .line-path { stroke: rgba(255, 255, 255, 0.7); stroke-width: 2.5; fill: none; transition: d 0.1s ease; }
-        .line-pulse { stroke: rgba(255, 255, 255, 1); stroke-width: 3; fill: none; stroke-dasharray: 6, 120; animation: pulse-move 6s linear infinite; }
+        .line-path { stroke: rgba(255, 255, 255, 0.6); stroke-width: 2; fill: none; }
+        .line-pulse { stroke: rgba(255, 255, 255, 1); stroke-width: 2.5; fill: none; stroke-dasharray: 6, 120; animation: pulse-move 6s linear infinite; }
         @keyframes pulse-move { 0% { stroke-dashoffset: 240; } 100% { stroke-dashoffset: 0; } }
         .carbon-counter { display: flex; flex-direction: column; align-items: flex-end; margin-top: 12px; pointer-events: none; }
-        .carbon-value { color: #fff; font-variant-numeric: tabular-nums; opacity: 0.8; }
+        .carbon-value { color: #fff; font-variant-numeric: tabular-nums; opacity: 0.85; }
         .carbon-dot { width: 3px; height: 3px; background: #fff; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; margin-right: 6px; }
         @keyframes blink { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.1; } }
         
         /* Overlay Modals */
         #overlay-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0); z-index: 200; backdrop-filter: blur(0px); align-items: center; justify-content: center; transition: background 0.5s ease, backdrop-filter 0.5s ease; }
-        #overlay-screen.active { display: flex; background: rgba(0,0,0,0.45); backdrop-filter: blur(10px); }
+        #overlay-screen.active { display: flex; background: rgba(0,0,0,0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         #overlay-container { width: 100vw; height: 100vh; background: #000; position: relative; display: flex; flex-direction: column; overflow: hidden; will-change: transform, opacity; }
-        #overlay-container.is-pop { width: 95%; max-width: 1100px; height: 90%; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; opacity: 0; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out; }
+        #overlay-container.is-pop { width: 95%; max-width: 1100px; height: 90%; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; opacity: 0; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out; }
         #overlay-screen.active #overlay-container.is-pop { opacity: 1; transform: scale(1); }
         #overlay-container.is-slide-down { transform: translateY(-100%); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
         #overlay-screen.active #overlay-container.is-slide-down { transform: translateY(0); }
@@ -149,83 +213,131 @@
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
         
-        /* Audio & AI Action Buttons */
-        .audio-toggle { 
+        /* 右下角操作按鈕 */
+        .action-btn { 
             position: fixed; 
             right: 20px; 
-            bottom: 20px; 
             z-index: 150; 
-            border: 1px solid rgba(255,255,255,0.25); 
+            border: 1px solid rgba(255,255,255,0.3); 
             width: 44px; 
             height: 44px; 
             border-radius: 50%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            background: rgba(10, 10, 10, 0.75); 
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px);
-            cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
-        .audio-toggle:hover {
-            transform: scale(1.08);
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(20, 20, 20, 0.9);
-        }
-
-        .ai-toggle { 
-            position: fixed; 
-            right: 20px; 
-            bottom: 74px; 
-            z-index: 150; 
-            border: 1px solid rgba(255,255,255,0.25); 
-            width: 44px; 
-            height: 44px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: rgba(10, 10, 10, 0.75); 
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(10, 10, 10, 0.8); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
             cursor: pointer; 
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             color: #fff;
             font-family: 'Montserrat', sans-serif;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.05em;
+            user-select: none;
         }
-        .ai-toggle:hover {
+        .action-btn:hover {
             transform: scale(1.08);
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(20, 20, 20, 0.9);
-            box-shadow: 0 0 12px rgba(255,255,255,0.2);
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(20, 20, 20, 0.95);
+            box-shadow: 0 0 12px rgba(255,255,255,0.3);
         }
+        .action-btn.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+
+        .audio-toggle { bottom: 20px; }
+        .ai-toggle { bottom: 74px; font-size: 12px; }
+        .negative-toggle { bottom: 128px; }
  
         #visualizer { 
-            width: 1450px; 
-            height: 60px; 
-            margin-top: 20px; 
+            width: 100%; 
+            max-width: 640px; 
+            height: 50px; 
+            margin-top: 15px; 
             display: block; 
             filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5)); 
             mix-blend-mode: screen; 
-            opacity: 1; 
+            opacity: 0.95; 
             pointer-events: none;
         }
 
         .wave-label {
-            margin-top: 10px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 8px;
-            letter-spacing: 0.5em;
+          
+           font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
-            opacity: 0.3;
+            opacity: 0.4;
+        }
+
+        /* 底部音樂跑馬燈列 (Music Marquee Bar) */
+        #music-marquee-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 120;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            pointer-events: none;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #music-marquee-bar.active {
+            transform: translateY(0);
+        }
+
+        .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            will-change: transform;
+            animation: marquee-scroll 18s linear infinite;
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85);
+            padding-right: 50px;
+        }
+
+        .marquee-icon {
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 6px rgba(255,255,255,0.8);
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
         }
 
         @media (max-width: 768px) {
-            #visualizer { width: 320px; height: 40px; }
+            #visualizer { width: 280px; height: 35px; }
+            .node-box { min-width: 135px; padding: 10px; }
+            .node-label { font-size: 12px; }
+            .hero-text { bottom: 45px !important; left: 20px !important; right: 20px; }
+            .hero-text h2 { font-size: 1.85rem !important; line-height: 1.25 !important; }
         }   
 
         /* AI Assistant Iframe & Mask Styling */
@@ -257,33 +369,9 @@
         }
 
         @media (max-width: 767px) {
-            .ai-mask-top-right {
-                display: none !important;
-            }
-
-            .ai-iframe {
-                margin-top: -50px !important;
-                height: calc(100% + 100px) !important;
-            }
-
-            .audio-toggle,
-            .ai-toggle {
-                z-index: 150 !important;
-            }
-
-            .hero-text.absolute.bottom-24.left-10.md\:left-28.z-10.pointer-events-none.max-w-2xl {
-                bottom: 20px;
-            }
-        }
-
-        @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
-          ::i-amphtml-sizer, .node-box{
-            background-color: #0f0f0f !important;
-            -webkit-backdrop-filter: none !important;
-          }
-        } 
-        .flex.items-center.gap-6 {
-            margin-top: -15px;
+            .ai-mask-top-right { display: none !important; }
+            .ai-iframe { margin-top: -50px !important; height: calc(100% + 100px) !important; }
+            .action-btn { z-index: 150 !important; }
         }
     </style>
 </head>
@@ -292,7 +380,7 @@
     <h1 class="seo-hidden">蕭氏設計工作室 XIAOSTUDIO | 設計與數位體驗工作室</h1>
     <h2 class="seo-hidden">視覺設計、網頁設計、動態設計、印刷包裝</h2>
 
-    <nav class="fixed top-0 w-full z-[100] p-8 md:p-16 flex justify-between items-start pointer-events-none">
+    <nav class="fixed top-0 w-full z-[100] p-6 md:p-14 flex justify-between items-start pointer-events-none">
         <div class="logo-container pointer-events-auto cursor-pointer" onclick="window.location.reload()">
             <span class="logo-text">XIAOSTUDIO</span>
             <div class="logo-underline"></div>
@@ -311,20 +399,21 @@
                 <div id="carbon-value" class="carbon-value mono text-[11px] md:text-[12px] font-light tracking-wider">2,541,334,776,321.664</div>
                 <div class="flex items-center mt-1">
                     <span class="carbon-dot"></span>
-                    <span id="txt-carbon-label" class="mono text-[8px] tracking-[0.15em] uppercase opacity-30">Cumulative Global CO2 Emissions (Tons)</span>
+                    <span id="txt-carbon-label" class="mono text-[8px] tracking-[0.15em] uppercase opacity-40">Cumulative Global CO2 Emissions (Tons)</span>
                 </div>
             </div>
         </div>
     </nav>
 
     <div class="section" id="main-view">
+        <!-- 後備 HTML5 Video 播放器 -->
         <div class="video-background" id="fallback-bg">
-            <video id="bgVideo" autoplay loop playsinline muted preload="auto">
+            <video id="bgVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto">
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
             </video>
         </div>
 
-        <video id="textureVideo" autoplay loop playsinline muted preload="auto" crossorigin="anonymous">
+        <video id="textureVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" crossorigin="anonymous">
             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
         </video>
         
@@ -337,7 +426,7 @@
         <div class="grid-overlay"></div>
         <div class="video-overlay"></div>
 
-        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 4;" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg>
+        <svg id="svgLines" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 5;"></svg>
 
         <div id="dashboard" class="dashboard-container">
             <div id="node1" class="workflow-node" style="top: 15%; left: 10%;">
@@ -349,11 +438,11 @@
             <div id="node3" class="workflow-node" style="top: 35%; left: 50%;">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_03</span><span class="node-label"><i class="status-indicator"></i><span id="txt-motion">Motion Works</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('motion')"><span id="btn-motion" class="node-btn-text mono opacity-50 uppercase tracking-widest">Motion Projects</span></div></div>
             </div>
-            <div id="node4" class="workflow-node" style="top: 78%; left: 40%;">
-                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print &amp; Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
-            </div>
-            <div id="node5" class="workflow-node" style="top: 60%; left: 55%;">
+            <div id="node4" class="workflow-node" style="top: 60%; left: 55%;">
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_04</span><span class="node-label"><i class="status-indicator"></i><span id="txt-web">Web Design</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('web')"><span id="btn-web" class="node-btn-text mono opacity-50 uppercase tracking-widest">Digital Experience</span></div></div>
+            </div>
+            <div id="node5" class="workflow-node" style="top: 78%; left: 40%;">
+                <div class="node-box"><span class="node-id mono block opacity-40 mb-2">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print &amp; Packaging</span></span><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
             </div>
             <div id="node6" class="workflow-node" style="top: 20%; left: 70%;">
                 <div class="node-box special"><span class="node-id mono block opacity-40 mb-2">NODE_06</span><div class="flex flex-col gap-2"><span class="node-label lowercase text-[13px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-4 pt-3 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Request Project</span></div></div>
@@ -361,12 +450,36 @@
         </div>
 
         <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
-            <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
-            <div class="flex items-center gap-6">
-                <p class="mt-6 text-[12px] mono tracking-[0.1em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
-                <div class="wave-label mt-6">Signal: Granular_v5.2</div>
+            <h2 id="hero-title" class="text-3xl md:text-6xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
+            <div class="flex items-center gap-6 mt-4">
+                <p class="text-[11px] mono tracking-[0.1em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
+                <div class="wave-label">Signal: Granular_v5.2</div>
             </div>
-            <canvas id="visualizer" width="640" height="120"></canvas>
+            <canvas id="visualizer" width="640" height="100"></canvas>
+        </div>
+    </div>
+
+    <!-- 音樂跑馬燈播放條 -->
+    <div id="music-marquee-bar">
+        <div class="marquee-track">
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
+        
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
+ <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
+        
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
+  
+ <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
+        
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
+  
+ <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
+        
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
+  
+ 
+  
+           
         </div>
     </div>
 
@@ -383,12 +496,17 @@
         </div>
     </div>
 
-    <button id="aiToggle" class="ai-toggle" aria-label="Open AI Assistant" onclick="showOverlay('ai')">
+    <!-- 右下角操作按鈕區：負片切換、AI助理、音樂控制 -->
+    <button id="negativeToggle" class="action-btn negative-toggle" aria-label="Toggle Negative Effect" title="Negative Mode">
+        INV
+    </button>
+
+    <button id="aiToggle" class="action-btn ai-toggle" aria-label="Open AI Assistant" onclick="showOverlay('ai')">
         AI
     </button>
 
-    <button id="audioToggle" class="audio-toggle" aria-label="Toggle Music">
-        <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+    <button id="audioToggle" class="action-btn audio-toggle" aria-label="Toggle Music">
+        <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
     </button>
 
     <script>
@@ -399,16 +517,19 @@
         function initAudio() {
             if (audioCtx) return;
             const bgAudio = document.getElementById('bgAudio');
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioCtx.createAnalyser();
-            source = audioCtx.createMediaElementSource(bgAudio);
-            source.connect(analyser);
-            analyser.connect(audioCtx.destination);
-            
-            analyser.fftSize = 512;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            for(let i=0; i<dataArray.length; i++) particleHistory[i] = 0;
-            
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                source = audioCtx.createMediaElementSource(bgAudio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                
+                analyser.fftSize = 512;
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                for(let i=0; i<dataArray.length; i++) particleHistory[i] = 0;
+            } catch (e) {
+                console.log("Audio API not supported or blocked", e);
+            }
             renderVisualizer();
         }
 
@@ -418,11 +539,11 @@
             const vCtx = vCanvas.getContext('2d');
             
             requestAnimationFrame(renderVisualizer);
-            if (analyser) analyser.getByteFrequencyData(dataArray);
+            if (analyser && isPlaying) analyser.getByteFrequencyData(dataArray);
             
             vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
 
-            const displayCount = Math.floor((dataArray ? dataArray.length : 128) * 0.7);
+            const displayCount = 80;
             const barWidth = vCanvas.width / displayCount;
 
             for (let i = 0; i < displayCount; i++) {
@@ -457,9 +578,19 @@
         let currentLang = 'en';
         const audioBtn = document.getElementById('audioToggle');
         const audioIcon = document.getElementById('audioIcon');
+        const negativeBtn = document.getElementById('negativeToggle');
+        const musicMarqueeBar = document.getElementById('music-marquee-bar');
         const bgAudio = document.getElementById('bgAudio');
         const bgVideo = document.getElementById('bgVideo');
         let isMuted = true;
+        let isNegative = false;
+
+        /* 負片效果切換 */
+        negativeBtn.addEventListener('click', () => {
+            isNegative = !isNegative;
+            document.body.classList.toggle('negative-mode', isNegative);
+            negativeBtn.classList.toggle('active', isNegative);
+        });
 
         const carbonValueEl = document.getElementById('carbon-value');
         const annualEmissions = 40000000000; 
@@ -477,6 +608,7 @@
         }
         updateCarbonCounter();
 
+        /* 音樂開關及跑馬燈驅動 */
         audioBtn.addEventListener('click', () => {
             initAudio();
             
@@ -486,21 +618,19 @@
 
             isMuted = !isMuted;
             bgAudio.muted = isMuted;
-            bgVideo.muted = isMuted;
-            if (typeof textureVideo !== 'undefined') {
-                textureVideo.muted = isMuted;
-            }
 
             if (!isMuted) {
                 bgAudio.play().then(() => {
                     isPlaying = true;
-                }).catch(e => console.log("Play failed:", e));
+                    if (musicMarqueeBar) musicMarqueeBar.classList.add('active');
+                }).catch(e => console.log("Play audio failed:", e));
                 if (audioIcon) {
                     audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
                 }
             } else {
                 bgAudio.pause();
                 isPlaying = false;
+                if (musicMarqueeBar) musicMarqueeBar.classList.remove('active');
                 if (audioIcon) {
                     audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
                 }
@@ -537,22 +667,21 @@
         const nodes = Array.from(document.querySelectorAll('.workflow-node'));
         const svgLines = document.getElementById('svgLines');
         const connections = [
-            { from: 'node1', to: 'node2' },  { from: 'node1', to: 'node3' },{ from: 'node2', to: 'node6' }, 
-            { from: 'node3', to: 'node6' }, { from: 'node2', to: 'node3' },
-            { from: 'node2', to: 'node5' }, { from: 'node2', to: 'node4' },
-            { from: 'node5', to: 'node6' }, { from: 'node4', to: 'node6' }
+            { from: 'node1', to: 'node2' }, { from: 'node1', to: 'node3' }, { from: 'node2', to: 'node6' }, 
+            { from: 'node3', to: 'node6' }, { from: 'node2', to: 'node3' }, { from: 'node2', to: 'node4' }, 
+            { from: 'node2', to: 'node5' }, { from: 'node4', to: 'node6' }, { from: 'node5', to: 'node6' }
         ];
 
         function initNodePositions() {
             const isMobile = window.innerWidth < 768;
             const positions = isMobile ? [
-                { id: 'node1', top: '12%', left: '5%' }, { id: 'node3', top: '20%', left: '43%' },
-                { id: 'node2', top: '37%', left: '1%' }, { id: 'node5', top: '38%', left: '55%' },
-                { id: 'node6', top: '65%', left: '60%' }, { id: 'node4', top: '58%', left: '10%' }	
+                { id: 'node1', top: '10%', left: '5%' }, { id: 'node3', top: '18%', left: '45%' },
+                { id: 'node2', top: '34%', left: '2%' }, { id: 'node4', top: '36%', left: '55%' },
+                { id: 'node6', top: '60%', left: '58%' }, { id: 'node5', top: '56%', left: '6%' }	
             ] : [
                 { id: 'node1', top: '20%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
-                { id: 'node2', top: '40%', left: '25%' }, { id: 'node5', top: '64%', left: '45%' },
-                { id: 'node6', top: '30%', left: '76%' }, { id: 'node4', top: '52%', left: '66%' }
+                { id: 'node2', top: '40%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
+                { id: 'node6', top: '30%', left: '76%' }, { id: 'node5', top: '52%', left: '66%' }
             ];
             positions.forEach(pos => {
                 const el = document.getElementById(pos.id);
@@ -565,9 +694,7 @@
             const el = document.getElementById(elId);
             if (!el) return { x: 0, y: 0 };
             const rect = el.getBoundingClientRect();
-            const scaleX = 1920 / window.innerWidth;
-            const scaleY = 1080 / window.innerHeight;
-            return { x: (rect.left + rect.width / 2) * scaleX, y: (rect.top + rect.height / 2) * scaleY };
+            return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
         }
 
         function updateLines() {
@@ -647,11 +774,12 @@
                 }
             }
 
+            /* 各 Node 開啟相對應連結 */
             switch(type) {
                 case 'about': targetUrl = `${baseUrl}/about/`; break;
                 case 'static': targetUrl = `${baseUrl}/static/`; break;
                 case 'motion': targetUrl = `${baseUrl}/motion/`; break;
-                case 'print': targetUrl = `${baseUrl}/print/`; break;
+                case 'print': targetUrl = `https://xiaostudio.xyz/print/TH2026_demo_0730.html`; break;
                 case 'web': targetUrl = `${baseUrl}/web/`; break;
                 case 'form': targetUrl = `${baseUrl}/form/`; break;
             }
@@ -675,7 +803,7 @@
                         </div>
                     `;
                 } else if (targetUrl) {
-                    content.innerHTML = `<iframe src="${targetUrl}?lang=${currentLang}" id="overlay-iframe-container"></iframe>`;
+                    content.innerHTML = `<iframe src="${targetUrl}" id="overlay-iframe-container"></iframe>`;
                 } else {
                     content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
                 }
@@ -699,9 +827,10 @@
             });
         }
 
+        /* WebGL 流體波紋與影片渲染 */
         const webglCanvas = document.getElementById('webgl-canvas');
         const textureVideo = document.getElementById('textureVideo');
-        const gl = webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl');
+        const gl = webglCanvas ? (webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl')) : null;
 
         let isWebGLActive = false;
 
@@ -798,22 +927,19 @@
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
+                    /* 預設維持後備影片層開啟，確保安全載入 */
                     isWebGLActive = true;
-                    const fallbackBg = document.getElementById('fallback-bg');
-                    if (fallbackBg) {
-                        fallbackBg.style.display = 'none';
-                    }
                 } else {
                     throw new Error('Link failed');
                 }
             } catch (e) {
-                console.warn('WebGL init failed, using CSS fallback: ', e);
+                console.warn('WebGL setup failed, using HTML5 video fallback: ', e);
                 isWebGLActive = false;
-                webglCanvas.style.display = 'none';
+                if (webglCanvas) webglCanvas.style.display = 'none';
             }
         } else {
             isWebGLActive = false;
-            webglCanvas.style.display = 'none';
+            if (webglCanvas) webglCanvas.style.display = 'none';
         }
 
         let ripples = [];
@@ -838,25 +964,23 @@
         }
 
         function resizeWebGLCanvas() {
-            if (!isWebGLActive || !webglCanvas) return;
+            if (!webglCanvas) return;
             webglCanvas.width = window.innerWidth;
             webglCanvas.height = window.innerHeight;
-            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            if (gl) gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         }
 
         function renderLoop() {
-            if (!isWebGLActive) return;
+            if (!isWebGLActive || !gl) return;
 
             if (textureVideo && textureVideo.readyState >= textureVideo.HAVE_CURRENT_DATA) {
                 try {
                     gl.bindTexture(gl.TEXTURE_2D, videoTexture);
                     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureVideo);
                 } catch (err) {
-                    console.error('Texture binding cross-origin blocked. Falling back.', err);
+                    console.warn('CORS / Video texture stream blocked. Falling back to HTML5 Video.', err);
                     isWebGLActive = false;
                     if (webglCanvas) webglCanvas.style.display = 'none';
-                    const fallbackBg = document.getElementById('fallback-bg');
-                    if (fallbackBg) fallbackBg.style.display = 'block';
                     return;
                 }
             }
@@ -907,8 +1031,14 @@
         function forcePlayVideos() {
             const bgV = document.getElementById('bgVideo');
             const texV = document.getElementById('textureVideo');
-            if (bgV) bgV.play().catch(e => console.log("bgVideo auto-play triggered."));
-            if (texV) texV.play().catch(e => console.log("textureVideo auto-play triggered."));
+            if (bgV) {
+                bgV.muted = true;
+                bgV.play().catch(e => console.log("bgVideo auto-play handled."));
+            }
+            if (texV) {
+                texV.muted = true;
+                texV.play().catch(e => console.log("textureVideo auto-play handled."));
+            }
         }
 
         window.addEventListener('load', () => {
