@@ -211,11 +211,37 @@
         .request-btn:hover { 
             background: rgba(255, 255, 255, 0.12); color: #ffffff; backdrop-filter: blur(8px); 
         }
-        .service-tag { 
-            display: inline-block; padding: 3px 10px; margin: 2px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 2px; font-size: 0.6rem; color: #a3a3a3; background: rgba(10, 10, 13, 0.6); transition: all 0.2s ease; 
+        
+        @keyframes tagScan {
+            0%, 100% {
+                border-color: rgba(255, 255, 255, 0.15);
+                color: #a3a3a3;
+                background: rgba(10, 10, 13, 0.6);
+                box-shadow: none;
+            }
+            12%, 28% {
+                border-color: #ffffff;
+                color: #ffffff;
+                background: rgba(255, 255, 255, 0.2);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            }
         }
+
+        .service-tag { 
+            display: inline-block; padding: 3px 10px; margin: 2px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 2px; font-size: 0.6rem; color: #a3a3a3; background: rgba(10, 10, 13, 0.6); transition: all 0.3s ease; 
+            animation: tagScan 6s infinite ease-in-out;
+        }
+        .service-tag:nth-child(1) { animation-delay: 0s; }
+        .service-tag:nth-child(2) { animation-delay: 0.75s; }
+        .service-tag:nth-child(3) { animation-delay: 1.5s; }
+        .service-tag:nth-child(4) { animation-delay: 2.25s; }
+        .service-tag:nth-child(5) { animation-delay: 3.0s; }
+        .service-tag:nth-child(6) { animation-delay: 3.75s; }
+        .service-tag:nth-child(7) { animation-delay: 4.5s; }
+        .service-tag:nth-child(8) { animation-delay: 5.25s; }
+
         .service-tag:hover { 
-            border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1); 
+            border-color: #ffffff !important; color: #ffffff !important; background: rgba(255, 255, 255, 0.25) !important; box-shadow: 0 0 12px rgba(255, 255, 255, 0.6) !important; animation-play-state: paused;
         }
     </style>
 </head>
