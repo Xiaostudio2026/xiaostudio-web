@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XiaoStudio | Print Works</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-gray: #f3f3f3;
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 30px 1.5rem 6rem 1.5rem;
+            transition: var(--transition-smooth);
+        }
+        
+        @media (min-width: 768px) { body { padding: 30px 3rem 8rem 3rem; } }
+        @media (min-width: 1024px) { body { padding: 30px 4rem 10rem 4rem; } }
+
+        .mono-text { font-family: 'JetBrains Mono', monospace; }
+        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
+        .no-scroll { overflow: hidden; }
+
+        .content-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .masthead-border { 
+            border-top: 1px solid var(--text-color); 
+            border-bottom: 1px solid var(--text-color); 
+            padding: 0.5rem 0;
+            margin: 0.5rem 0;
+            transition: var(--transition-smooth);
+        }
+
+        .header-collapsible {
+            max-height: 500px;
+            opacity: 1;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, margin 0.3s ease;
+        }
+
+        /* 專案開啟時：僅保留頂部文字及上方底線 */
+        body.project-active .header-collapsible {
+            max-height: 0 !important;
+            opacity: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.project-active .masthead-border {
+            padding: 0 !important;
+            margin-top: 0.5rem !important;
+            margin-bottom: 0 !important;
+            border-bottom: none !important; /* 隱藏下底線，僅留上底線 */
+            border-top: 1px solid var(--text-color) !important;
+        }
+
+        body.project-active {
+            padding-top: 15px !important;
+        }
+
+        .project-card {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            background-color: #000000;
+            color: #ffffff;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            border: 1px solid #000000;
+        }
+
+        .card-bg-image {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.35); /* 預設圖片壓暗，保證白字讀取清晰 */
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        }
+
+        .project-card:hover .card-bg-image {
+            transform: scale(1.06);
+            filter: brightness(0.55); /* 滑鼠懸停提亮 */
+        }
+
+        .project-image-container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent; /* 改為透明以露底圖片 */
+        }
+
+        #project-overlay {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-color);
+            z-index: 500;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), top 0.3s ease;
+            display: flex;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+        #project-overlay.active {
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .project-modal-content {
+            width: 100%;
+            max-width: 100%; 
+            height: 100%;
+            position: relative;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            padding: 0 1.5rem; 
+        }
+
+        @media (min-width: 768px) { .project-modal-content { padding: 0 3rem; } }
+        @media (min-width: 1024px) { .project-modal-content { padding: 0 4rem; } }
+
+        /* 關閉按鈕：緊貼上方底線（即 PHYSICAL PROJECTS 排正下方） */
+        .close-project-btn {
+            position: absolute;
+            top: 0; 
+            right: 1.5rem; 
+            width: 36px;
+            height: 36px;
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid #000000;
+            border-top: none; /* 無縫與頂部底線相接 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 601;
+            transition: var(--transition-smooth);
+        }
+
+        @media (min-width: 768px) { .close-project-btn { right: 3rem; } }
+        @media (min-width: 1024px) { .close-project-btn { right: 4rem; } }
+
+        .close-project-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: rotate(90deg);
+        }
+
+        #project-iframe {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+            background: #fff;
+            border-top: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content-container">
+        <!-- 頁首標題區 -->
+        <header id="main-header" class="mb-6 md:mb-8 transition-all duration-500">
+            <!-- 頂部系統資訊列 -->
+            <div id="top-info-bar" class="flex justify-between items-center mb-3 mono-text text-[9px] sm:text-[10px] md:text-[11px] font-bold tracking-widest uppercase gap-2">
+                <div>// 2026 ISSUE</div>
+                
+                <!-- Live Status 呼吸綠點主站連結 -->
+                <a href="https://xiaostudio.xyz" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 md:gap-2 normal-case opacity-90 hover:opacity-100 transition-all group py-1 px-2 rounded-full hover:bg-neutral-100">
+                    <span class="relative flex h-2 w-2 shrink-0">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="group-hover:underline underline-offset-4 tracking-wider font-semibold">XIAOSTUDIO.XYZ</span>
+                </a>
+
+                <div>PHYSICAL PROJECTS</div>
+            </div>
+            
+            <!-- 可動態收合的主標題區塊 -->
+            <div class="masthead-border" id="masthead-line">
+                <div class="header-collapsible">
+                    <div class="flex items-center justify-between overflow-x-auto no-scrollbar py-2 md:py-4">
+                        <h1 class="text-[5.2vw] sm:text-[5vw] md:text-5xl lg:text-7xl xl:text-8xl font-[900] tracking-[-0.04em] uppercase leading-none whitespace-nowrap w-full text-center md:text-left">
+                            TREE HOUSE YEARBOOK 2026
+                        </h1>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </header>
+
+        <!-- 作品網格 (黑底白字文字 + 暗色背景封面展示版) -->
+        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            
+            <div class="project-card" data-url="https://xiaostudio.xyz/TH_yearbook2026_demo.html" data-bg="https://res.cloudinary.com/dssycfvxr/image/upload/v1784100992/TH_Yearbook_demo_iltqvj.jpg">
+                <div class="card-bg-image"></div>
+                <div class="card-overlay"></div>
+                <div class="project-image-container aspect-square md:aspect-[3/4] p-6 text-center select-none">
+                    <div class="mono-text text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-3 font-['Montserrat']">0715</div>
+                    <div class="mono-text text-xs md:text-sm tracking-[0.2em] uppercase opacity-90 font-medium">demo_01</div>
+                </div>
+            </div>
+
+            <div class="project-card" data-url="https://xiaostudio.xyz/TH_yearbook2026_demo.html" data-bg="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+                <div class="card-bg-image"></div>
+                <div class="card-overlay"></div>
+                <div class="project-image-container aspect-square md:aspect-[3/4] p-6 text-center select-none">
+                    <div class="mono-text text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-3 font-['Montserrat']">0730</div>
+                    <div class="mono-text text-xs md:text-sm tracking-[0.2em] uppercase opacity-90 font-medium">demo_02</div>
+                </div>
+            </div>
+
+            <div class="project-card" data-url="https://xiaostudio.xyz/TH_yearbook2026_demo.html" data-bg="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
+                <div class="card-bg-image"></div>
+                <div class="card-overlay"></div>
+                <div class="project-image-container aspect-square md:aspect-[3/4] p-6 text-center select-none">
+                    <div class="mono-text text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-3 font-['Montserrat']">0805</div>
+                    <div class="mono-text text-xs md:text-sm tracking-[0.2em] uppercase opacity-90 font-medium">demo_03</div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <aside id="project-overlay" aria-hidden="true">
+        <div class="project-modal-content">
+            <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
+            <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
+        </div>
+    </aside>
+
+    <script>
+        /**
+         * XIAOSTUDIO Portfolio Core Logic
+         */
+        const Portfolio = {
+            elements: {
+                header: document.getElementById('main-header'),
+                mastheadLine: document.getElementById('masthead-line'),
+                overlay: document.getElementById('project-overlay'),
+                iframe: document.getElementById('project-iframe'),
+                cards: document.querySelectorAll('.project-card')
+            },
+
+            init() {
+                this.setupCardBackgrounds();
+                this.bindEvents();
+            },
+
+            setupCardBackgrounds() {
+                this.elements.cards.forEach(card => {
+                    const bgUrl = card.getAttribute('data-bg');
+                    if (bgUrl) {
+                        const bgEl = card.querySelector('.card-bg-image');
+                        if (bgEl) {
+                            bgEl.style.backgroundImage = `url('${bgUrl}')`;
+                        }
+                    }
+                });
+            },
+
+            bindEvents() {
+                this.elements.cards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const targetUrl = card.getAttribute('data-url');
+                        if (targetUrl) {
+                            this.open(targetUrl);
+                        }
+                    });
+                });
+
+                window.addEventListener('resize', () => {
+                    if (this.elements.overlay.classList.contains('active')) {
+                        this.updateOverlayPosition();
+                    }
+                });
+            },
+
+            open(url) {
+                document.body.classList.add('project-active');
+                
+                // 預先設置 iframe
+                this.elements.iframe.src = url;
+
+                // 等待標題收合動畫完成後計算精確定位（貼合於頂部橫線）
+                setTimeout(() => {
+                    this.updateOverlayPosition();
+                    this.elements.overlay.classList.add('active');
+                    document.body.classList.add('no-scroll');
+                }, 300);
+            },
+
+            close() {
+                this.elements.overlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+                document.body.classList.remove('project-active');
+                
+                setTimeout(() => { 
+                    this.elements.iframe.src = ''; 
+                }, 500);
+            },
+
+            updateOverlayPosition() {
+                // 精確取得頂部分隔底線位置
+                if (this.elements.mastheadLine) {
+                    const lineRect = this.elements.mastheadLine.getBoundingClientRect();
+                    // 貼合於該底線的正下方
+                    const topPos = Math.max(lineRect.top + 1, 35);
+                    this.elements.overlay.style.top = topPos + 'px';
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => Portfolio.init());
+    </script>
+</body>
+</html>
