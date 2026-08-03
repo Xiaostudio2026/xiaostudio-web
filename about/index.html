@@ -36,7 +36,6 @@
             position: relative;
         }
 
-        /* 背景影片與遮罩設定：固定控制在螢幕寬度的 70% 且置中 */
         .video-bg-container {
             position: fixed;
             top: 0;
@@ -99,7 +98,6 @@
         .dashboard-panel {
             background: var(--panel-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            /* 已取消 backdrop-filter 霧面效果 */
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
             position: relative;
             height: 100%;
@@ -128,7 +126,6 @@
 
         .control-btn {
             background: rgba(18, 18, 20, 0.75); 
-            /* 已取消 backdrop-filter 霧面效果 */
             border: 1px solid rgba(255, 255, 255, 0.15); 
             display: flex;
             align-items: center;
@@ -169,7 +166,6 @@
             z-index: 30;
             cursor: pointer;
             transition: all 0.3s ease;
-            /* 加入左右側安全邊距，防止內容貼齊邊緣 */
             padding: 0 24px;
             text-align: center;
             box-sizing: border-box;
@@ -179,56 +175,52 @@
             display: none;
         }
 
-        /* Herr Von Muellerhoff 專屬字體與行距設定 */
         .font-herr-von-muellerhoff {
             font-family: 'Herr Von Muellerhoff', cursive;
             font-weight: 400;
-            text-transform: none; /* 保持優美書寫感不強制全大寫 */
-            line-height: 1;      /* 調整為單行適合的行高設定 */
+            text-transform: none;
+            line-height: 1;
         }
 
-
-
         #form-modal {
- position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px;
- }
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px;
+        }
         #form-modal.active {
- display: flex;
- }
+            display: flex;
+        }
         .modal-content {
- border: 1px solid #ffffff; width: 100%; max-width: 700px; height: 85vh; position: relative; display: flex; flex-direction: column; background: #000000; 
-}
+            border: 1px solid #ffffff; width: 100%; max-width: 700px; height: 85vh; position: relative; display: flex; flex-direction: column; background: #000000; 
+        }
         .close-btn {
- position: absolute; top: 20px; right: 20px; border: 1px solid #ffffff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #ffffff; cursor: pointer; transition: all 0.2s;
- }
+            position: absolute; top: 20px; right: 20px; border: 1px solid #ffffff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #ffffff; cursor: pointer; transition: all 0.2s;
+        }
         .close-btn:hover {
- background: #ffffff; color: #000000; 
-}
+            background: #ffffff; color: #000000; 
+        }
         
         .modal-title { 
-padding: 40px 20px 20px 40px; font-size: 0.5rem; letter-spacing: 0.2em; color: #ffffff; opacity: 0.6;
-}
+            padding: 40px 20px 20px 40px; font-size: 0.5rem; letter-spacing: 0.2em; color: #ffffff; opacity: 0.6;
+        }
         .iframe-container { 
-flex-grow: 1; position: relative; width: 100%; overflow: hidden; padding: 0 40px 40px 40px;
- }
+            flex-grow: 1; position: relative; width: 100%; overflow: hidden; padding: 0 40px 40px 40px;
+        }
 
-       .request-btn { 
-background: #ffffff; color: #000000; border: 1px solid #ffffff; padding: 12px 16px; font-size: 0.6rem; font-weight: bold; letter-spacing: 0.05em; text-align: center; border-radius: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; width: 100%; min-height: 48px; 
-}
+        .request-btn { 
+            background: #ffffff; color: #000000; border: 1px solid #ffffff; padding: 12px 16px; font-size: 0.6rem; font-weight: bold; letter-spacing: 0.05em; text-align: center; border-radius: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; width: 100%; min-height: 48px; 
+        }
         .request-btn:hover { 
-background: rgba(255, 255, 255, 0.12); color: #ffffff; backdrop-filter: blur(8px); 
-}
+            background: rgba(255, 255, 255, 0.12); color: #ffffff; backdrop-filter: blur(8px); 
+        }
         .service-tag { 
-display: inline-block; padding: 3px 10px; margin: 2px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 2px; font-size: 0.6rem; color: #a3a3a3; background: rgba(10, 10, 13, 0.6); transition: all 0.2s ease; 
-}
+            display: inline-block; padding: 3px 10px; margin: 2px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 2px; font-size: 0.6rem; color: #a3a3a3; background: rgba(10, 10, 13, 0.6); transition: all 0.2s ease; 
+        }
         .service-tag:hover { 
-border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1); 
-}
+            border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1); 
+        }
     </style>
 </head>
 <body class="p-6">
 
-    <!-- 影片背景容器與疊加濾鏡（寬度限制為 70% 且置中） -->
     <div class="video-bg-container">
         <video id="bg-video" autoplay loop muted playsinline>
             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1782379553/Liquid_Glitch_nysog5.mp4" type="video/mp4">
@@ -237,7 +229,7 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
     </div>
     <div class="video-overlay"></div>
 
- <div id="form-modal">
+    <div id="form-modal">
         <div class="modal-content">
             <div class="modal-title">External_Form: Request_Consultation</div>
             <div class="close-btn" onclick="closeModal()">✕</div>
@@ -246,7 +238,6 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
             </div>
         </div>
     </div>
-
 
     <div class="main-container">
         <header class="mb-6 flex flex-col lg:flex-row justify-between items-end pb-6 border-b border-white/10 gap-6">
@@ -287,15 +278,27 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
         <main class="flex flex-col gap-12">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-6 flex flex-col gap-8">
-                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full">
-                        <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
-                                    <span class="text-gray-300">L1_CACHE (WORK_EXPERIENCE)</span>
-                                </div>
-                                <div id="experience-display" class="experience-timer font-mono text-gray-300">
-                                    LOADING_DATA...
+                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
+                            
+                            <!-- 影片展示區塊 (寬度 300px 置中，修正 Cloudinary 轉碼與相容性來源) -->
+                            <div class="flex justify-center mb-4 overflow-hidden rounded border border-white/10 bg-black/40">
+                                <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[300px] max-w-full h-auto object-cover rounded">
+                                    <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1785757678/gboy_1_qmneqs.mp4" type="video/mp4">
+                                    
+                                    您的瀏覽器不支援 HTML5 影片播放。
+                                </video>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
+                                        <span class="text-gray-300">L1_CACHE (WORK_EXPERIENCE)</span>
+                                    </div>
+                                    <div id="experience-display" class="experience-timer font-mono text-gray-300">
+                                        LOADING_DATA...
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -349,7 +352,6 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
                                 <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
                                     <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 </div>
-                                <!-- 已修正為單行不分行顯示，並添加 whitespace-nowrap 限制 -->
                                 <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 whitespace-nowrap">
                                     Initialize Kernel
                                 </div>
@@ -358,21 +360,20 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
 
                             <!-- 遊戲暫停畫面 -->
                             <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.85);">
-                                <!-- 已修正為單行不分行顯示，並添加 whitespace-nowrap 限制 -->
                                 <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-4 whitespace-nowrap">
                                     System Halted
                                 </div>
                                 <div class="text-xs opacity-70 uppercase tracking-widest">Click to Resume</div>
                             </div>
                         </div>
-                         <!-- 操作說明新增區 -->
+
                         <div class="mt-4 text-[0.65rem] text-gray-400 font-mono tracking-wider flex gap-4">
                             <span><span class="text-white">P</span>: PAUSE</span>
                             <span><span class="text-white">SPACE</span>: DROP</span>
                         </div>
                     </div>
 
-                    <!-- 已取消計分板外容器的 backdrop-blur-sm 霧面類別 -->
+                    <!-- 計分板區塊 -->
                     <div class="flex flex-row sm:flex-col justify-between items-center sm:justify-start gap-4 sm:gap-6 p-4 border border-white/10 rounded bg-[#121214]/75 w-full sm:w-[160px]">
                         <div class="text-center sm:w-full">
                             <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">Score</div>
@@ -394,6 +395,7 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
                     </div>
                 </div>
                 
+                <!-- 控制按鈕區 -->
                 <div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">
                     <button class="control-btn h-14" id="btn-left">
                         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -422,6 +424,13 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
         const modal = document.getElementById('form-modal');
         function openModal() { modal.classList.add('active'); isPaused = true; }
         function closeModal() { modal.classList.remove('active'); }
+
+        // 強制確保所有 autoplay 影片在載入後嘗試自動播放
+        window.addEventListener('load', () => {
+            document.querySelectorAll('video').forEach(vid => {
+                vid.play().catch(() => {});
+            });
+        });
 
         // 模擬氣象數據更新
         setInterval(() => {
@@ -452,10 +461,14 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
             const display = document.getElementById('experience-display');
             if (display) {
                 display.innerHTML = `
-                    <div>YEARS: <span>${years}</span></div>
-                    <div>MONTHS: <span>${months}</span></div>
-                    <div>DAYS: <span>${days}</span></div>
-                    <div class="text-[0.65rem] mt-4 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
+                    <div class="flex items-center gap-x-2 sm:gap-x-3 text-xs sm:text-sm font-mono whitespace-nowrap">
+                        <div>YEARS: <span>${years}</span></div>
+                        <span class="text-gray-600">/</span>
+                        <div>MONTHS: <span>${months}</span></div>
+                        <span class="text-gray-600">/</span>
+                        <div>DAYS: <span>${days}</span></div>
+                    </div>
+                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
                     <div class="text-3xl font-bold mt-1 text-white">
                         ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker text-xs">.${milliseconds.toString().padStart(3,'0')}</span>
                     </div>
@@ -465,7 +478,6 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
         }
         requestAnimationFrame(updateExperience);
 
-        // 遊戲系統核心代碼
         const canvas = document.getElementById('game-canvas');
         const context = canvas.getContext('2d');
         const nextCanvas = document.getElementById('next-canvas');
@@ -613,17 +625,16 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
         const arena = createMatrix(13, 21), player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
         const performDrop = () => { if (isPaused) return; while(!collide(arena, player)) player.pos.y++; player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore(); };
         
-        // 暫停切換與還原
         const togglePause = () => {
             if (!gameStarted) return;
             isPaused = !isPaused;
             if (isPaused) { 
                 pauseOverlay.classList.remove('hidden'); 
-                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; // 轉為播放符號
+                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
             }
             else { 
                 pauseOverlay.classList.add('hidden'); 
-                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; // 轉為暫停符號
+                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
                 lastTimeFrame = null; 
                 requestAnimationFrame(update); 
             }
@@ -633,7 +644,7 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
             isPaused = false; 
             gameOverlay.classList.add('hidden'); 
             pauseOverlay.classList.add('hidden');
-            pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; // 開始時設為雙豎線 (暫停符號)
+            pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
             playerReset(); 
             updateScore(); 
             lastTimeFrame = null; 
@@ -642,14 +653,12 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
         gameOverlay.onclick = startGame;
         pauseOverlay.onclick = togglePause;
 
-        // 觸控與控制按鈕事件設定
         function configureControl(btnId, action, isContinuous) {
             const btn = document.getElementById(btnId);
             if (!btn) return;
             const start = (e) => { 
                 e.preventDefault(); 
                 
-                // 暫停鍵特殊判定：允許在暫停或未啟動狀態下點擊
                 if (btnId === 'btn-pause') {
                     if (!gameStarted) {
                         startGame();
@@ -678,16 +687,12 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
         configureControl('btn-left', 'left', true); configureControl('btn-right', 'right', true); configureControl('btn-down', 'down', true);
         configureControl('btn-rotate', () => playerRotate(1), false); configureControl('btn-drop', performDrop, false); configureControl('btn-pause', togglePause, false);
         
-        // 鍵盤操控核心邏輯
         document.addEventListener('keydown', e => {
-            // 阻擋網頁默認滾動行為 (方向鍵 37-40 以及空白鍵 32)
             const preventKeys = [32, 37, 38, 39, 40];
             if (preventKeys.includes(e.keyCode)) {
                 e.preventDefault();
             }
 
-            // 暫停鍵切換：Esc (27) 或 P (80)
-            // 先行判定暫停/啟動機制，避免 return 被阻攔
             if (e.keyCode === 80 || e.keyCode === 27) {
                 if (!keyStates[e.keyCode]) {
                     keyStates[e.keyCode] = true;
@@ -700,30 +705,25 @@ border-color: #ffffff; color: #ffffff; background: rgba(255, 255, 255, 0.1);
                 return;
             }
 
-            // 未開始遊戲時按 Enter (13) 或 Space (32) 開始
             if (!gameStarted && (e.keyCode === 13 || e.keyCode === 32)) {
                 startGame();
                 return;
             }
 
-            // 若目前處於暫停狀態，其他遊戲操作按鍵皆不響應
             if (isPaused) return;
 
-            // 旋轉方塊：W (87) 或 Up Arrow (38)
             if (e.keyCode === 38 || e.keyCode === 87) { 
                 if (!keyStates[e.keyCode]) { 
                     keyStates[e.keyCode] = true; 
                     playerRotate(1); 
                 } 
             }
-            // 瞬間下落：Space (32)
             else if (e.keyCode === 32) { 
                 if (!keyStates[e.keyCode]) { 
                     keyStates[e.keyCode] = true; 
                     performDrop(); 
                 } 
             }
-            // 持續位移鍵監聽 (左、右、下)
             else if (keyMap[e.keyCode]) { 
                 const a = keyMap[e.keyCode]; 
                 if (!inputState[a].pressed) { 
