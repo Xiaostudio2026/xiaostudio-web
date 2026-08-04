@@ -310,7 +310,7 @@
                             
                             <!-- 影片展示區塊 (寬度 300px 置中，修正 Cloudinary 轉碼與相容性來源) -->
                             <div class="flex justify-center mb-4 overflow-hidden rounded border border-white/10 bg-black/40">
-                                <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[400px] max-w-full h-auto object-cover rounded">
+                                <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[420px] max-w-full h-auto object-cover rounded">
                                     <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1785757678/gboy_1_qmneqs.mp4" type="video/mp4">
                                     
                                     您的瀏覽器不支援 HTML5 影片播放。
@@ -320,7 +320,7 @@
                             <div class="space-y-3">
                                 <div>
                                     <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
-                                        <span class="text-gray-300">L1_CACHE (WORK_EXPERIENCE)</span>
+                                        <span class="text-gray-300">WORK EXPERIENCE</span>
                                     </div>
                                     <div id="experience-display" class="experience-timer font-mono text-gray-300">
                                         LOADING_DATA...
@@ -488,13 +488,13 @@
             if (display) {
                 display.innerHTML = `
                     <div class="flex items-center gap-x-2 sm:gap-x-3 text-xs sm:text-sm font-mono whitespace-nowrap">
-                        <div>YEARS: <span>${years}</span></div>
-                        <span class="text-gray-600">/</span>
-                        <div>MONTHS: <span>${months}</span></div>
-                        <span class="text-gray-600">/</span>
-                        <div>DAYS: <span>${days}</span></div>
+                        <div><span>${years}</span> YEARS </div>
+                        
+                        <div><span>${months}</span> MONTHS </div>
+                       
+                        <div><span>${days}</span> DAYS</div>
                     </div>
-                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision:</div>
+                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision</div>
                     <div class="text-3xl font-bold mt-1 text-white">
                         ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker text-xs">.${milliseconds.toString().padStart(3,'0')}</span>
                     </div>
