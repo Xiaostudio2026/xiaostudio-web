@@ -10,10 +10,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Herr+Von+Muellerhoff&display=swap');
 
         :root {
-            --bg-color: #000000; /* 背景設為純黑色 */
-            --panel-bg: rgba(12, 12, 15, 0.35); /* 保持微調底色不透明度，取消霧面後仍保持高易讀性 */
+            --bg-color: #000000;
+            --panel-bg: rgba(12, 12, 15, 0.35);
             --border-color: transparent;
-            --text-main: #f3f4f6; /* 極簡灰白 */
+            --text-main: #f3f4f6;
             --accent-color: #ffffff;
             font-size: 22px;
         }
@@ -39,8 +39,8 @@
         .video-bg-container {
             position: fixed;
             top: 0;
-            left: 15vw; /* 置中定位：(100vw - 70vw) / 2 = 15vw */
-            width: 70vw; /* 固定控制在螢幕寬度的 70% */
+            left: 15vw;
+            width: 70vw;
             height: 100vh;
             z-index: -2;
             overflow: hidden;
@@ -50,23 +50,22 @@
 
         #bg-video {
             width: 100%;
-            height: auto; /* 等比例完整顯示寬度，高度自適應 */
+            height: auto;
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* 垂直與水平精準置中 */
-            opacity: 0.95; /* 保持背景影片高能見度 */
+            transform: translate(-50%, -50%);
+            opacity: 0.95;
             filter: grayscale(10%) contrast(105%);
         }
 
         .video-overlay {
             position: fixed;
             top: 0;
-            left: 15vw; /* 與影片容器同步置中 */
-            width: 70vw; /* 限制遮罩寬度與影片一致 */
+            left: 15vw;
+            width: 70vw;
             height: 100vh;
             z-index: -1;
-            /* 調整暗色放射漸層，往邊緣自然淡出至純黑 */
             background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%);
             pointer-events: none;
         }
@@ -80,7 +79,7 @@
 
         #game-canvas {
             border: 1px solid #444;
-            background-color: rgba(26, 26, 26, 0.9); /* 稍微加深遊戲區域背景，確保方塊對比度 */
+            background-color: rgba(26, 26, 26, 0.9);
             image-rendering: pixelated;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -212,36 +211,68 @@
             background: rgba(255, 255, 255, 0.12); color: #ffffff; backdrop-filter: blur(8px); 
         }
         
-        @keyframes tagScan {
-            0%, 100% {
-                border-color: rgba(255, 255, 255, 0.15);
-                color: #a3a3a3;
-                background: rgba(10, 10, 13, 0.6);
-                box-shadow: none;
-            }
-            12%, 28% {
-                border-color: #ffffff;
-                color: #ffffff;
-                background: rgba(255, 255, 255, 0.2);
-                box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-            }
-        }
-
         .service-tag { 
-            display: inline-block; padding: 3px 10px; margin: 2px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 2px; font-size: 0.75rem; color: #a3a3a3; background: rgba(10, 10, 13, 0.6); transition: all 0.3s ease; 
-            animation: tagScan 6s infinite ease-in-out;
+            aspect-ratio: 1 / 1;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8px; 
+            border: 1px solid var(--pad-solid-bg); 
+            border-radius: 6px; 
+            background: var(--pad-solid-bg); 
+            filter: brightness(0.3);
+            transition: filter 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
+            position: relative;
+            user-select: none;
+            cursor: pointer;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
         }
-        .service-tag:nth-child(1) { animation-delay: 0s; }
-        .service-tag:nth-child(2) { animation-delay: 0.75s; }
-        .service-tag:nth-child(3) { animation-delay: 1.5s; }
-        .service-tag:nth-child(4) { animation-delay: 2.25s; }
-        .service-tag:nth-child(5) { animation-delay: 3.0s; }
-        .service-tag:nth-child(6) { animation-delay: 3.75s; }
-        .service-tag:nth-child(7) { animation-delay: 4.5s; }
-        .service-tag:nth-child(8) { animation-delay: 5.25s; }
 
-        .service-tag:hover { 
-            border-color: #ffffff !important; color: #ffffff !important; background: rgba(255, 255, 255, 0.25) !important; box-shadow: 0 0 12px rgba(255, 255, 255, 0.6) !important; animation-play-state: paused;
+        .service-tag span {
+            font-size: 0.6rem; 
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: var(--pad-text);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        /* 12 組參考實體 ORCA PAD MIDI 控制器之矽膠背光色彩與文字顏色 */
+        .service-tag:nth-child(1) { --pad-solid-bg: #ff6b81; --pad-text: #1a0509; --pad-glow: rgba(255, 107, 129, 0.85); }
+        .service-tag:nth-child(2) { --pad-solid-bg: #ffbe5d; --pad-text: #261600; --pad-glow: rgba(255, 190, 93, 0.85); }
+        .service-tag:nth-child(3) { --pad-solid-bg: #e2ff3d; --pad-text: #1c2600; --pad-glow: rgba(226, 255, 61, 0.85); }
+        .service-tag:nth-child(4) { --pad-solid-bg: #f368e0; --pad-text: #260021; --pad-glow: rgba(243, 104, 224, 0.85); }
+        .service-tag:nth-child(5) { --pad-solid-bg: #55efc4; --pad-text: #00241b; --pad-glow: rgba(85, 239, 196, 0.85); }
+        .service-tag:nth-child(6) { --pad-solid-bg: #48dbfb; --pad-text: #00222b; --pad-glow: rgba(72, 219, 251, 0.85); }
+        .service-tag:nth-child(7) { --pad-solid-bg: #a29bfe; --pad-text: #0f0c38; --pad-glow: rgba(162, 155, 254, 0.85); }
+        .service-tag:nth-child(8) { --pad-solid-bg: #70a1ff; --pad-text: #001238; --pad-glow: rgba(112, 161, 255, 0.85); }
+        .service-tag:nth-child(9) { --pad-solid-bg: #ff7675; --pad-text: #2b0808; --pad-glow: rgba(255, 118, 117, 0.85); }
+        .service-tag:nth-child(10) { --pad-solid-bg: #f5f6fa; --pad-text: #111111; --pad-glow: rgba(245, 246, 250, 0.85); }
+        .service-tag:nth-child(11) { --pad-solid-bg: #ff3838; --pad-text: #200000; --pad-glow: rgba(255, 56, 56, 0.85); }
+        .service-tag:nth-child(12) { --pad-solid-bg: #18dcff; --pad-text: #001f3f; --pad-glow: rgba(24, 220, 255, 0.85); }
+
+        /* 觸發亮燈狀態 (透過 JS 隨機點亮或 Hover 觸發) */
+        .service-tag.active, .service-tag:hover { 
+            filter: brightness(1) !important; 
+            box-shadow: 0 0 22px var(--pad-glow), inset 0 0 10px rgba(255, 255, 255, 0.4) !important; 
+            transform: scale(1.06) !important;
+        }
+
+        .service-tag.active span, .service-tag:hover span {
+            opacity: 1 !important;
+        }
+
+        /* 畫面地震震動動畫 */
+        .shake {
+            animation: shake 0.18s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, -2px, 0); }
+            20%, 80% { transform: translate3d(2px, 1px, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 3px, 0); }
+            40%, 60% { transform: translate3d(4px, -1px, 0); }
         }
     </style>
 </head>
@@ -308,11 +339,9 @@
                         <div>
                             <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
                             
-                            <!-- 影片展示區塊 (寬度 300px 置中，修正 Cloudinary 轉碼與相容性來源) -->
                             <div class="flex justify-center mb-4 overflow-hidden rounded border border-white/10 bg-black/40">
                                 <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[460px] max-w-full h-auto object-cover rounded">
                                     <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1785757678/gboy_1_qmneqs.mp4" type="video/mp4">
-                                    
                                     您的瀏覽器不支援 HTML5 影片播放。
                                 </video>
                             </div>
@@ -334,15 +363,19 @@
                 <div class="lg:col-span-6 flex flex-col gap-8">
                     <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full">
                         <h3 class="text-[0.65rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Service_Capabilities</h3>
-                        <div class="flex flex-wrap gap-1 mb-6">
-                            <span class="service-tag">Branding & Identity</span>
-                            <span class="service-tag">Visual Production</span>
-                            <span class="service-tag">Packaging Design</span>
-                            <span class="service-tag">Web Design</span>
-                            <span class="service-tag">Key Visual</span>
-                            <span class="service-tag">Poster Design</span>
-                            <span class="service-tag">Editorial Design</span>
-                            <span class="service-tag">Motion Graphics</span>
+                        <div class="grid grid-cols-4 gap-2.5 mb-6 max-w-[420px]">
+                            <div class="service-tag"><span>Branding & Identity</span></div>
+                            <div class="service-tag"><span>Visual Production</span></div>
+                            <div class="service-tag"><span>Packaging Design</span></div>
+                            <div class="service-tag"><span>Web Design</span></div>
+                            <div class="service-tag"><span>Key Visual</span></div>
+                            <div class="service-tag"><span>Poster Design</span></div>
+                            <div class="service-tag"><span>Editorial Design</span></div>
+                            <div class="service-tag"><span>Motion Graphics</span></div>
+                            <div class="service-tag"><span>Product Photography</span></div>
+                            <div class="service-tag"><span>Asahi</span></div>
+                            <div class="service-tag"><span>KIRIN</span></div>
+                            <div class="service-tag"><span>Orion</span></div>
                         </div>
                         
                         <div class="pt-4 border-t border-white/5">
@@ -370,10 +403,10 @@
                 <div class="flex flex-col sm:flex-row items-stretch justify-center gap-6 w-full max-w-[520px]">
                     <div class="flex flex-col items-center">
                         <div class="text-[0.65rem] text-gray-500 mb-2 uppercase tracking-widest">Core Execution</div>
-                        <div class="p-0 relative overflow-hidden" id="canvas-container">
+                        <div class="p-0 relative overflow-hidden rounded" id="canvas-container">
                             <canvas id="game-canvas" width="260" height="420"></canvas>
                             
-                            <!-- 遊戲起始畫面 -->
+                            <!-- Game Start Overlay -->
                             <div id="game-overlay" class="game-overlay">
                                 <div class="w-16 h-16 border border-white/30 rounded-full flex items-center justify-center mb-4 hover:scale-110 transition-transform">
                                     <svg class="w-8 h-8 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
@@ -384,7 +417,7 @@
                                 <div class="text-[0.6rem] mt-4 opacity-50 uppercase tracking-widest">Click to Execute</div>
                             </div>
 
-                            <!-- 遊戲暫停畫面 -->
+                            <!-- Game Pause Overlay -->
                             <div id="pause-overlay" class="game-overlay hidden" style="background: rgba(0,0,0,0.85);">
                                 <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-4 whitespace-nowrap">
                                     System Halted
@@ -399,7 +432,7 @@
                         </div>
                     </div>
 
-                    <!-- 計分板區塊 -->
+                    <!-- Score Dashboard -->
                     <div class="flex flex-row sm:flex-col justify-between items-center sm:justify-start gap-4 sm:gap-6 p-4 border border-white/10 rounded bg-[#121214]/75 w-full sm:w-[160px]">
                         <div class="text-center sm:w-full">
                             <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">Score</div>
@@ -421,7 +454,6 @@
                     </div>
                 </div>
                 
-                <!-- 控制按鈕區 -->
                 <div class="grid grid-cols-3 gap-4 w-full max-w-[300px]">
                     <button class="control-btn h-14" id="btn-left">
                         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -447,18 +479,111 @@
     </div>
 
     <script>
+        // 音效合成器 (Web Audio API)
+        let audioCtx = null;
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'move') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(220, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'rotate') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'drop') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(60, now + 0.12);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'clear') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch (e) { console.error(e); }
+        }
+
         const modal = document.getElementById('form-modal');
         function openModal() { modal.classList.add('active'); isPaused = true; }
         function closeModal() { modal.classList.remove('active'); }
 
-        // 強制確保所有 autoplay 影片在載入後嘗試自動播放
         window.addEventListener('load', () => {
             document.querySelectorAll('video').forEach(vid => {
                 vid.play().catch(() => {});
             });
+            initMidiPadsWaveRhythm();
         });
 
-        // 模擬氣象數據更新
+        // 波浪式 MIDI 打擊墊亮燈控制器 (4x3 陣列: 4欄 x 3排)
+        function initMidiPadsWaveRhythm() {
+            const tags = document.querySelectorAll('.service-tag');
+            if (!tags.length) return;
+
+            const wavePatterns = [
+                [[0], [1, 4], [2, 5, 8], [3, 6, 9], [7, 10], [11]],  // 左上到右下對角波浪
+                [[0, 4, 8], [1, 5, 9], [2, 6, 10], [3, 7, 11]],      // 左至右直欄掃描
+                [[3], [2, 7], [1, 6, 11], [0, 5, 10], [4, 9], [8]],  // 右上到左下對角波浪
+                [[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]],        // 上至下橫排掃描
+                [[5, 6], [1, 2, 4, 7, 9, 10], [0, 3, 8, 11]],        // 中心擴散波浪
+                [[11], [7, 10], [3, 6, 9], [2, 5, 8], [1, 4], [0]]   // 右下到左上反向波浪
+            ];
+
+            let patternIndex = 0;
+
+            function runWave() {
+                const pattern = wavePatterns[patternIndex];
+                patternIndex = (patternIndex + 1) % wavePatterns.length;
+
+                const stepDelay = 200; 
+                const holdTime = 480;  
+
+                pattern.forEach((group, stepIdx) => {
+                    setTimeout(() => {
+                        group.forEach(idx => {
+                            if (tags[idx]) {
+                                tags[idx].classList.add('active');
+                                setTimeout(() => {
+                                    if (!tags[idx].matches(':hover')) {
+                                        tags[idx].classList.remove('active');
+                                    }
+                                }, holdTime);
+                            }
+                        });
+                    }, stepIdx * stepDelay);
+                });
+
+                const totalWaveDuration = pattern.length * stepDelay + holdTime + 900;
+                setTimeout(runWave, totalWaveDuration);
+            }
+
+            runWave();
+        }
+
         setInterval(() => {
             const humidityEl = document.getElementById('humidity-val');
             if (humidityEl) humidityEl.innerText = (73 + Math.sin(Date.now() / 15000) * 4 + Math.random()).toFixed(0) + " %";
@@ -468,7 +593,6 @@
             if (pm25El) pm25El.innerText = Math.max(5, (16 + Math.cos(Date.now() / 20000) * 3 + Math.random() * 2).toFixed(0)) + " μg/m³";
         }, 1000);
 
-        // 工作經驗精確計時器
         function updateExperience() {
             const startDate = new Date('2011-03-01T00:00:00');
             const now = new Date();
@@ -489,9 +613,7 @@
                 display.innerHTML = `
                     <div class="flex items-center gap-x-2 sm:gap-x-3 text-xs sm:text-sm font-mono whitespace-nowrap">
                         <div><span>${years}</span> YEARS </div>
-                        
                         <div><span>${months}</span> MONTHS </div>
-                       
                         <div><span>${days}</span> DAYS</div>
                     </div>
                     <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision</div>
@@ -538,6 +660,18 @@
             updateScore();
         };
 
+        // 灰階俄羅斯方塊配色 (I, L, J, O, Z, S, T)
+        const blockColors = [
+            null,
+            '#ffffff', // 1: Bright White (I)
+            '#d4d4d4', // 2: Light Gray (L)
+            '#888888', // 3: Medium Gray (J)
+            '#e5e5e5', // 4: Off White (O)
+            '#555555', // 5: Dark Gray (Z)
+            '#aaaaaa', // 6: Silver Gray (S)
+            '#777777'  // 7: Slate Gray (T)
+        ];
+
         function createMatrix(w, h) { const matrix = []; while (h--) matrix.push(new Array(w).fill(0)); return matrix; }
         function createPiece(type) {
             if (type === 'I') return [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]];
@@ -552,7 +686,7 @@
             matrix.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
-                        context.fillStyle = '#f3f4f6';
+                        context.fillStyle = blockColors[value] || '#f3f4f6';
                         context.fillRect(x + offset.x, y + offset.y, 1, 1);
                         context.strokeStyle = '#111';
                         context.lineWidth = 0.05;
@@ -575,7 +709,7 @@
             nextPieceMatrix.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
-                        nextContext.fillStyle = '#f3f4f6';
+                        nextContext.fillStyle = blockColors[value] || '#f3f4f6';
                         nextContext.fillRect(x + xOffset, y + yOffset, 1, 1);
                         nextContext.strokeStyle = '#111';
                         nextContext.lineWidth = 0.05;
@@ -584,6 +718,7 @@
                 });
             });
         }
+
         function merge(arena, player) { player.matrix.forEach((row, y) => { row.forEach((value, x) => { if (value !== 0) arena[y + player.pos.y][x + player.pos.x] = value; }); }); }
         function rotate(matrix, dir) { for (let y = 0; y < matrix.length; ++y) { for (let x = 0; x < y; ++x) { [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]]; } } dir > 0 ? matrix.forEach(row => row.reverse()) : matrix.reverse(); }
         function playerDrop() {
@@ -592,7 +727,7 @@
             if (collide(arena, player)) { player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore(); }
             dropCounter = 0;
         }
-        function playerMove(offset) { if (isPaused) return; player.pos.x += offset; if (collide(arena, player)) player.pos.x -= offset; }
+        function playerMove(offset) { if (isPaused) return; player.pos.x += offset; if (!collide(arena, player)) playSound('move'); else player.pos.x -= offset; }
         let nextPieceMatrix = null;
         function playerReset() {
             const pieces = 'TJLOSZI';
@@ -602,15 +737,21 @@
             drawNext();
             if (collide(arena, player)) { arena.forEach(row => row.fill(0)); player.score = 0; updateScore(); gameStarted = false; isPaused = true; gameOverlay.classList.remove('hidden'); pauseOverlay.classList.add('hidden'); }
         }
-        function playerRotate(dir) { if (isPaused) return; const pos = player.pos.x; let offset = 1; rotate(player.matrix, dir); while (collide(arena, player)) { player.pos.x += offset; offset = -(offset + (offset > 0 ? 1 : -1)); if (offset > player.matrix[0].length) { rotate(player.matrix, -dir); player.pos.x = pos; return; } } }
+        function playerRotate(dir) { if (isPaused) return; playSound('rotate'); const pos = player.pos.x; let offset = 1; rotate(player.matrix, dir); while (collide(arena, player)) { player.pos.x += offset; offset = -(offset + (offset > 0 ? 1 : -1)); if (offset > player.matrix[0].length) { rotate(player.matrix, -dir); player.pos.x = pos; return; } } }
         function collide(arena, player) { const [m, o] = [player.matrix, player.pos]; for (let y = 0; y < m.length; ++y) { for (let x = 0; x < m[y].length; ++x) { if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true; } } return false; }
+
         function arenaSweep() {
             let rowCount = 1;
+            let clearedLines = 0;
             outer: for (let y = arena.length - 1; y > 0; --y) {
                 for (let x = 0; x < arena[y].length; ++x) { if (arena[y][x] === 0) continue outer; }
                 const row = arena.splice(y, 1)[0].fill(0); arena.unshift(row); ++y;
                 player.score += isBoostActive ? Math.floor(rowCount * 10 * 1.5) : rowCount * 10;
                 rowCount *= 2;
+                clearedLines++;
+            }
+            if (clearedLines > 0) {
+                playSound('clear');
             }
         }
         function updateScore() {
@@ -619,6 +760,7 @@
             levelElement.innerText = level.toString().padStart(2, '0');
             dropInterval = isBoostActive ? Math.max(50, 1000 - (level - 1) * 180) : Math.max(100, 1000 - (level - 1) * 100);
         }
+
         let dropCounter = 0, dropInterval = 1000, lastTimeFrame = null, isPaused = true, gameStarted = false;
         const DAS_DELAY = 180, ARR_INTERVAL = 40;
         const inputState = { left: { pressed: false, dasTime: 0, arrTime: 0 }, right: { pressed: false, dasTime: 0, arrTime: 0 }, down: { pressed: false, dasTime: 0, arrTime: 0 } };
@@ -648,9 +790,19 @@
             draw();
             requestAnimationFrame(update);
         }
+
         const arena = createMatrix(13, 21), player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
-        const performDrop = () => { if (isPaused) return; while(!collide(arena, player)) player.pos.y++; player.pos.y--; merge(arena, player); playerReset(); arenaSweep(); updateScore(); };
-        
+        const performDrop = () => { 
+            if (isPaused) return; 
+            playSound('drop');
+            while(!collide(arena, player)) player.pos.y++; 
+            player.pos.y--; 
+            merge(arena, player); 
+            playerReset(); 
+            arenaSweep(); 
+            updateScore(); 
+        };
+
         const togglePause = () => {
             if (!gameStarted) return;
             isPaused = !isPaused;
@@ -684,7 +836,6 @@
             if (!btn) return;
             const start = (e) => { 
                 e.preventDefault(); 
-                
                 if (btnId === 'btn-pause') {
                     if (!gameStarted) {
                         startGame();
@@ -712,7 +863,7 @@
         }
         configureControl('btn-left', 'left', true); configureControl('btn-right', 'right', true); configureControl('btn-down', 'down', true);
         configureControl('btn-rotate', () => playerRotate(1), false); configureControl('btn-drop', performDrop, false); configureControl('btn-pause', togglePause, false);
-        
+
         document.addEventListener('keydown', e => {
             const preventKeys = [32, 37, 38, 39, 40];
             if (preventKeys.includes(e.keyCode)) {
