@@ -366,19 +366,16 @@
                         <div class="grid grid-cols-4 gap-2.5 mb-6 max-w-[420px]">
                             <div class="service-tag"><span>Branding & Identity</span></div>
                             <div class="service-tag"><span>Visual Production</span></div>
-<div class="service-tag"><span>Asahi</span></div>
+                             <div class="service-tag"><span>KIRIN</span></div>
                             <div class="service-tag"><span>Packaging Design</span></div>
                             <div class="service-tag"><span>Web Design</span></div>
-  <div class="service-tag"><span>KIRIN</span></div>
                             <div class="service-tag"><span>Key Visual</span></div>
+                            <div class="service-tag"><span>Asahi</span></div>
                             <div class="service-tag"><span>Poster Design</span></div>
                             <div class="service-tag"><span>Editorial Design</span></div>
-<div class="service-tag"><span>Orion</span></div>
                             <div class="service-tag"><span>Motion Graphics</span></div>
                             <div class="service-tag"><span>Product Photography</span></div>
-                            
-                          
-                            
+                            <div class="service-tag"><span>Orion</span></div>
                         </div>
                         
                         <div class="pt-4 border-t border-white/5">
@@ -451,6 +448,12 @@
                                 <span id="boost-dot" class="inline-block h-4 w-4 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-1"></span>
                             </button>
                         </div>
+                        <div class="text-center flex flex-col items-center sm:w-full">
+                            <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest mb-2">Sound</div>
+                            <button id="btn-sound" class="relative inline-flex h-6 w-11 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none focus:ring-0">
+                                <span id="sound-dot" class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 translate-x-6"></span>
+                            </button>
+                        </div>
                         <div class="text-center flex flex-col items-center justify-center sm:w-full">
                             <canvas id="next-canvas" width="80" height="80" style="width: 40px; height: 40px; background: transparent;"></canvas>
                         </div>
@@ -484,7 +487,9 @@
     <script>
         // 音效合成器 (Web Audio API)
         let audioCtx = null;
+        let soundEnabled = true;
         function playSound(type) {
+            if (!soundEnabled) return;
             try {
                 if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -640,6 +645,8 @@
         const pauseBtn = document.getElementById('btn-pause');
         const boostBtn = document.getElementById('btn-boost');
         const boostDot = document.getElementById('boost-dot');
+        const soundBtn = document.getElementById('btn-sound');
+        const soundDot = document.getElementById('sound-dot');
         
         context.scale(20, 20);
         nextContext.scale(20, 20);
@@ -662,6 +669,24 @@
             }
             updateScore();
         };
+
+        if (soundBtn) {
+            soundBtn.onclick = (e) => {
+                e.preventDefault();
+                soundEnabled = !soundEnabled;
+                if (soundEnabled) {
+                    soundBtn.classList.remove('bg-neutral-800');
+                    soundBtn.classList.add('bg-red-600');
+                    soundDot.classList.remove('translate-x-1', 'bg-neutral-400');
+                    soundDot.classList.add('translate-x-6', 'bg-white');
+                } else {
+                    soundBtn.classList.remove('bg-red-600');
+                    soundBtn.classList.add('bg-neutral-800');
+                    soundDot.classList.remove('translate-x-6', 'bg-white');
+                    soundDot.classList.add('translate-x-1', 'bg-neutral-400');
+                }
+            };
+        }
 
         // 灰階俄羅斯方塊配色 (I, L, J, O, Z, S, T)
         const blockColors = [
