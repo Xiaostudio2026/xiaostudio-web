@@ -338,6 +338,10 @@
             .node-label { font-size: 12px; }
             .hero-text { bottom: 45px !important; left: 20px !important; right: 20px; }
             .hero-text h2 { font-size: 2.3rem !important; line-height: 1.25 !important; }
+.tracking-widest {
+    letter-spacing: 0.05em;
+    font-size: smaller;
+}
         }   
 
         /* AI Assistant Iframe & Mask Styling */
@@ -676,7 +680,7 @@
             const isMobile = window.innerWidth < 768;
             const positions = isMobile ? [
                 { id: 'node1', top: '10%', left: '5%' }, { id: 'node3', top: '18%', left: '45%' },
-                { id: 'node2', top: '34%', left: '2%' }, { id: 'node4', top: '36%', left: '55%' },
+                { id: 'node2', top: '34%', left: '2%' }, { id: 'node4', top: '36%', left: '46%' },
                 { id: 'node6', top: '60%', left: '58%' }, { id: 'node5', top: '56%', left: '6%' }	
             ] : [
                 { id: 'node1', top: '20%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
@@ -779,7 +783,7 @@
                 case 'about': targetUrl = `${baseUrl}/about/`; break;
                 case 'static': targetUrl = `${baseUrl}/static/`; break;
                 case 'motion': targetUrl = `${baseUrl}/motion/`; break;
-                case 'print': targetUrl = `${baseUrl}/print/`; break;
+                case 'print': targetUrl = `https://xiaostudio.xyz/print/TH2026_demo_0730.html`; break;
                 case 'web': targetUrl = `${baseUrl}/web/`; break;
                 case 'form': targetUrl = `${baseUrl}/form/`; break;
             }
