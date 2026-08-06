@@ -267,8 +267,7 @@
         }
 
         .wave-label {
-          
-           font-family: 'JetBrains Mono', monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 9px;
             letter-spacing: 0.4em;
             text-transform: uppercase;
@@ -332,16 +331,25 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* Hero Text 平滑向上推移效果 */
+        .hero-text {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.music-active .hero-text {
+            transform: translateY(-32px);
+        }
+
         @media (max-width: 768px) {
             #visualizer { width: 280px; height: 35px; }
             .node-box { min-width: 135px; padding: 10px; }
             .node-label { font-size: 12px; }
-            .hero-text { bottom: 45px !important; left: 20px !important; right: 20px; }
-            .hero-text h2 { font-size: 2.3rem !important; line-height: 1.25 !important; }
-.tracking-widest {
-    letter-spacing: 0.05em;
-    font-size: smaller;
-}
+            .hero-text { bottom: 16px !important; left: 20px !important; right: 20px; }
+            .hero-text h2 { font-size: 2.5rem !important; line-height: 1.25 !important; }
+            .tracking-widest {
+                letter-spacing: 0.05em;
+                font-size: smaller;
+            }
         }   
 
         /* AI Assistant Iframe & Mask Styling */
@@ -453,8 +461,8 @@
             </div>
         </div>
 
-        <div class="hero-text absolute bottom-24 left-10 md:left-28 z-10 pointer-events-none max-w-2xl">
-            <h2 id="hero-title" class="text-3xl md:text-6xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
+        <div class="hero-text absolute bottom-5 left-6 md:left-24 z-10 pointer-events-none max-w-2xl">
+            <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
             <div class="flex items-center gap-6 mt-4">
                 <p class="text-[11px] mono tracking-[0.1em] uppercase opacity-50">© 2026 XIAOSTUDIO</p>
                 <div class="wave-label">Signal: Granular_v5.2</div>
@@ -467,23 +475,13 @@
     <div id="music-marquee-bar">
         <div class="marquee-track">
             <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-        
             <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
- <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-        
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
             <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
-  
- <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-        
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
             <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
-  
- <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-        
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
             <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
-  
- 
-  
-           
         </div>
     </div>
 
@@ -627,6 +625,7 @@
                 bgAudio.play().then(() => {
                     isPlaying = true;
                     if (musicMarqueeBar) musicMarqueeBar.classList.add('active');
+                    document.body.classList.add('music-active');
                 }).catch(e => console.log("Play audio failed:", e));
                 if (audioIcon) {
                     audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
@@ -635,6 +634,7 @@
                 bgAudio.pause();
                 isPlaying = false;
                 if (musicMarqueeBar) musicMarqueeBar.classList.remove('active');
+                document.body.classList.remove('music-active');
                 if (audioIcon) {
                     audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
                 }
@@ -679,12 +679,12 @@
         function initNodePositions() {
             const isMobile = window.innerWidth < 768;
             const positions = isMobile ? [
-                { id: 'node1', top: '10%', left: '5%' }, { id: 'node3', top: '18%', left: '45%' },
-                { id: 'node2', top: '34%', left: '2%' }, { id: 'node4', top: '36%', left: '46%' },
+                { id: 'node1', top: '14%', left: '5%' }, { id: 'node3', top: '14%', left: '55%' },
+                { id: 'node2', top: '34%', left: '7%' }, { id: 'node4', top: '36%', left: '46%' },
                 { id: 'node6', top: '60%', left: '58%' }, { id: 'node5', top: '56%', left: '6%' }	
             ] : [
-                { id: 'node1', top: '20%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
-                { id: 'node2', top: '40%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
+                { id: 'node1', top: '25%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
+                { id: 'node2', top: '45%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
                 { id: 'node6', top: '30%', left: '76%' }, { id: 'node5', top: '52%', left: '66%' }
             ];
             positions.forEach(pos => {
