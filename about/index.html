@@ -95,7 +95,7 @@
             #game-canvas {
                 max-width: 100%;
                 width: auto;
-                max-height: 38vh; /* 限制手機版最高高度，確保按鈕畫面完整呈現 */
+                max-height: 68vh; /* 提高手機版畫面最大高度限制，顯著放大遊戲區域 */
                 margin: 0 auto;
             }
         }
@@ -450,10 +450,10 @@
             </div>
 
             <div class="w-full flex flex-col items-center justify-center gap-3 sm:gap-5 border-t border-white/10 pt-5 sm:pt-10 mx-auto">
-                <div class="flex flex-row items-center justify-center gap-2.5 sm:gap-6 w-full max-w-[500px]">
+                <div class="flex flex-row items-stretch justify-center gap-2.5 sm:gap-6 w-full max-w-[500px] px-1">
                     
                     <!-- Game Canvas Container -->
-                    <div class="flex flex-col items-center justify-center shrink-0">
+                    <div class="flex flex-col items-center justify-center flex-1 min-w-0 shrink-0">
                         <div class="p-0 relative overflow-hidden rounded flex justify-center items-center w-full" id="canvas-container">
                             <canvas id="game-canvas" width="260" height="420"></canvas>
                             
@@ -479,47 +479,47 @@
                     </div>
 
                     <!-- Right Score Dashboard Panel (手機與電腦版皆位於右側直列佈局) -->
-                    <div class="flex flex-col justify-between items-center p-2 sm:p-3.5 border border-white/10 rounded bg-[#121214]/75 w-[100px] sm:w-[160px] self-stretch max-h-[38vh] sm:max-h-none gap-1 sm:gap-2 box-border overflow-hidden shrink-0">
+                    <div class="flex flex-col justify-between items-center p-2.5 sm:p-3.5 border border-white/10 rounded bg-[#121214]/75 w-[110px] sm:w-[160px] max-h-[48vh] sm:max-h-none gap-1 sm:gap-2 box-border overflow-hidden shrink-0">
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Score</div>
-                            <div class="text-xs sm:text-2xl font-bold tracking-tighter text-white truncate my-auto" id="score">000000</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Score</div>
+                            <div class="text-sm sm:text-2xl font-bold tracking-tighter text-white truncate my-auto" id="score">000000</div>
                         </div>
 
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Next</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Next</div>
                             <div class="my-auto flex items-center justify-center">
-                                <canvas id="next-canvas" width="80" height="80" class="w-6 h-6 sm:w-10 sm:h-10 bg-transparent block"></canvas>
+                                <canvas id="next-canvas" width="80" height="80" class="w-8 h-8 sm:w-10 sm:h-10 bg-transparent block"></canvas>
                             </div>
                         </div>
 
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Level</div>
-                            <div class="text-xs sm:text-2xl font-bold text-gray-400 truncate my-auto" id="level">01</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Level</div>
+                            <div class="text-sm sm:text-2xl font-bold text-gray-400 truncate my-auto" id="level">01</div>
                         </div>
 
                         <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Boost</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Boost</div>
                             <div class="my-auto flex items-center justify-center mt-0.5">
-                                <button id="btn-boost" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none shrink-0">
-                                    <span id="boost-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
+                                <button id="btn-boost" class="relative inline-flex h-3.5 sm:h-4 w-7 sm:w-8 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none shrink-0">
+                                    <span id="boost-dot" class="inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
                                 </button>
                             </div>
                         </div>
 
                         <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Sound</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Sound</div>
                             <div class="my-auto flex items-center justify-center mt-0.5">
-                                <button id="btn-sound" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
-                                    <span id="sound-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
+                                <button id="btn-sound" class="relative inline-flex h-3.5 sm:h-4 w-7 sm:w-8 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
+                                    <span id="sound-dot" class="inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
                                 </button>
                             </div>
                         </div>
 
                         <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Color</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Color</div>
                             <div class="my-auto flex items-center justify-center mt-0.5">
-                                <button id="btn-color" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
-                                    <span id="color-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
+                                <button id="btn-color" class="relative inline-flex h-3.5 sm:h-4 w-7 sm:w-8 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
+                                    <span id="color-dot" class="inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
                                 </button>
                             </div>
                         </div>
