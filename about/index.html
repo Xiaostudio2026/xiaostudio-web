@@ -77,6 +77,7 @@
             z-index: 1;
         }
 
+        /* 遊戲畫布：取消橫條網格，增加螢光光暈與復古微模糊感 */
         #game-canvas {
             border: 1px solid rgba(255, 255, 255, 0.18);
             background-color: rgba(16, 16, 22, 0.95);
@@ -86,28 +87,30 @@
             height: auto;
             aspect-ratio: 260 / 420;
             display: block;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.08), inset 0 0 20px rgba(0, 0, 0, 0.85);
-            /* 增加柔和螢光與微妙復古模糊感 */
-            filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.25)) drop-shadow(0 0 15px rgba(255, 23, 68, 0.15)) blur(0.2px);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.85);
+            filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.3)) drop-shadow(0 0 20px rgba(255, 23, 68, 0.15)) blur(0.2px);
         }
 
         @media (max-width: 640px) {
             #game-canvas {
-                max-width: 210px;
+                max-width: 100%;
+                width: auto;
+                max-height: 38vh; /* 限制手機版最高高度，確保按鈕畫面完整呈現 */
+                margin: 0 auto;
             }
         }
 
         #game-canvas.overdrive-active {
             border-color: #ef4444;
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.8);
-            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.5)) blur(0.2px);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.6), inset 0 0 20px rgba(239, 68, 68, 0.3);
+            filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.5)) blur(0.2px);
         }
 
         #canvas-container {
             position: relative;
         }
 
-        /* 已移除橫條掃描線(Scanlines)，改為暗角與微妙柔光效果 */
+        /* 移除橫條條紋，改為柔和暗角與色彩邊暈 */
         #canvas-container::after {
             content: "";
             position: absolute;
@@ -115,18 +118,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.5) 100%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.015), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.015));
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.03) 0%, rgba(0, 0, 0, 0.45) 100%);
             pointer-events: none;
             border-radius: 4px;
             z-index: 5;
             opacity: 0.85;
-            backdrop-filter: blur(0.3px);
         }
 
         #next-canvas {
             background-color: transparent;
-            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+            image-rendering: pixelated;
         }
 
         .dashboard-panel {
@@ -175,7 +176,6 @@
             background: #252529;
             border-color: #ffffff;
             color: #ffffff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         .control-btn svg {
@@ -204,7 +204,6 @@
             padding: 0 16px;
             text-align: center;
             box-sizing: border-box;
-            backdrop-filter: blur(2px);
         }
 
         .game-overlay.hidden {
@@ -216,7 +215,6 @@
             font-weight: 400;
             text-transform: none;
             line-height: 1;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         #form-modal {
@@ -328,7 +326,7 @@
         }
     </style>
 </head>
-<body class="p-4 sm:p-6">
+<body class="p-3 sm:p-6">
 
     <div class="video-bg-container">
         <video id="bg-video" autoplay loop muted playsinline>
@@ -349,10 +347,10 @@
     </div>
 
     <div class="main-container">
-        <header class="mb-6 flex flex-col lg:flex-row justify-between items-end pb-6 border-b border-white/10 gap-6">
+        <header class="mb-4 sm:mb-6 flex flex-col lg:flex-row justify-between items-end pb-4 sm:pb-6 border-b border-white/10 gap-4 sm:gap-6">
             <div>
                 <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
-                <h1 class="text-4xl font-bold tracking-tighter text-white">XIAO_STUDIO v3.0</h1>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tighter text-white">XIAO_STUDIO v3.0</h1>
             </div>
             
             <div class="flex flex-wrap gap-x-6 gap-y-3 font-mono text-left w-full lg:w-auto">
@@ -384,10 +382,10 @@
             </div>
         </header>
 
-        <main class="flex flex-col gap-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div class="lg:col-span-6 flex flex-col gap-8">
-                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full flex flex-col justify-between">
+        <main class="flex flex-col gap-6 sm:gap-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+                <div class="lg:col-span-6 flex flex-col gap-6 sm:gap-8">
+                    <div class="dashboard-panel p-5 sm:p-6 rounded bg-[#121214]/20 h-full flex flex-col justify-between">
                         <div>
                             <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
                             
@@ -412,8 +410,8 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-6 flex flex-col gap-8">
-                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full">
+                <div class="lg:col-span-6 flex flex-col gap-6 sm:gap-8">
+                    <div class="dashboard-panel p-5 sm:p-6 rounded bg-[#121214]/20 h-full">
                         <h3 class="text-[0.65rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Service_Capabilities</h3>
                         <div class="grid grid-cols-4 gap-2.5 mb-6 max-w-[420px]">
                             <div class="service-tag"><span>Branding & Identity</span></div>
@@ -451,28 +449,28 @@
                 </div>
             </div>
 
-            <div class="w-full flex flex-col items-center justify-center gap-5 border-t border-white/10 pt-8 sm:pt-10 mx-auto">
-                <div class="flex flex-col sm:flex-row items-stretch justify-center gap-3 sm:gap-6 w-full max-w-[500px]">
+            <div class="w-full flex flex-col items-center justify-center gap-3 sm:gap-5 border-t border-white/10 pt-5 sm:pt-10 mx-auto">
+                <div class="flex flex-row items-center justify-center gap-2.5 sm:gap-6 w-full max-w-[500px]">
                     
                     <!-- Game Canvas Container -->
-                    <div class="flex flex-col items-center justify-center w-full sm:w-auto">
+                    <div class="flex flex-col items-center justify-center shrink-0">
                         <div class="p-0 relative overflow-hidden rounded flex justify-center items-center w-full" id="canvas-container">
                             <canvas id="game-canvas" width="260" height="420"></canvas>
                             
                             <!-- Game Start Overlay -->
                             <div id="game-overlay" class="game-overlay">
-                                <div class="w-14 h-14 border border-white/30 rounded-full flex items-center justify-center mb-3 hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                                    <svg class="w-7 h-7 fill-white translate-x-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 border border-white/30 rounded-full flex items-center justify-center mb-2 sm:mb-3 hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 </div>
-                                <div id="overlay-title" class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 whitespace-nowrap">
+                                <div id="overlay-title" class="text-2xl sm:text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 whitespace-nowrap">
                                     Initialize Kernel
                                 </div>
-                                <div id="overlay-sub" class="text-[0.6rem] mt-3 opacity-60 uppercase tracking-widest">Click to Execute</div>
+                                <div id="overlay-sub" class="text-[0.55rem] sm:text-[0.6rem] mt-2 sm:mt-3 opacity-60 uppercase tracking-widest">Click to Execute</div>
                             </div>
 
                             <!-- Game Pause Overlay -->
                             <div id="pause-overlay" class="game-overlay hidden">
-                                <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-3 whitespace-nowrap">
+                                <div class="text-2xl sm:text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-2 sm:mb-3 whitespace-nowrap">
                                     System Halted
                                 </div>
                                 <div class="text-xs opacity-70 uppercase tracking-widest">Click to Resume</div>
@@ -480,70 +478,80 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-6 sm:flex sm:flex-col justify-items-center items-center justify-between p-2 sm:p-3.5 border border-white/10 rounded bg-[#121214]/75 w-full sm:w-[160px] h-auto gap-1 sm:gap-2 box-border overflow-hidden">
-                        <div class="text-center w-full min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate">Score</div>
-                            <div class="text-xs sm:text-2xl font-bold tracking-tighter text-white truncate" id="score">000000</div>
+                    <!-- Right Score Dashboard Panel (手機與電腦版皆位於右側直列佈局) -->
+                    <div class="flex flex-col justify-between items-center p-2 sm:p-3.5 border border-white/10 rounded bg-[#121214]/75 w-[100px] sm:w-[160px] self-stretch max-h-[38vh] sm:max-h-none gap-1 sm:gap-2 box-border overflow-hidden shrink-0">
+                        <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Score</div>
+                            <div class="text-xs sm:text-2xl font-bold tracking-tighter text-white truncate my-auto" id="score">000000</div>
                         </div>
 
-                        <div class="text-center w-full min-w-0 flex flex-col items-center">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Next</div>
-                            <canvas id="next-canvas" width="80" height="80" class="w-6 h-6 sm:w-10 sm:h-10 bg-transparent block"></canvas>
+                        <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Next</div>
+                            <div class="my-auto flex items-center justify-center">
+                                <canvas id="next-canvas" width="80" height="80" class="w-6 h-6 sm:w-10 sm:h-10 bg-transparent block"></canvas>
+                            </div>
                         </div>
 
-                        <div class="text-center w-full min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate">Level</div>
-                            <div class="text-xs sm:text-2xl font-bold text-gray-400 truncate" id="level">01</div>
+                        <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Level</div>
+                            <div class="text-xs sm:text-2xl font-bold text-gray-400 truncate my-auto" id="level">01</div>
                         </div>
 
-                        <div class="text-center flex flex-col items-center w-full min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Boost</div>
-                            <button id="btn-boost" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none shrink-0">
-                                <span id="boost-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
-                            </button>
+                        <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Boost</div>
+                            <div class="my-auto flex items-center justify-center mt-0.5">
+                                <button id="btn-boost" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none shrink-0">
+                                    <span id="boost-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="text-center flex flex-col items-center w-full min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Sound</div>
-                            <button id="btn-sound" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
-                                <span id="sound-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
-                            </button>
+                        <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Sound</div>
+                            <div class="my-auto flex items-center justify-center mt-0.5">
+                                <button id="btn-sound" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
+                                    <span id="sound-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="text-center flex flex-col items-center w-full min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Color</div>
-                            <button id="btn-color" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
-                                <span id="color-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
-                            </button>
+                        <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate leading-none">Color</div>
+                            <div class="my-auto flex items-center justify-center mt-0.5">
+                                <button id="btn-color" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
+                                    <span id="color-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Control Hints -->
-                <div class="text-[0.55rem] sm:text-[0.62rem] text-gray-400 font-mono tracking-wider flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full max-w-[500px] px-2 text-center">
+                <div class="text-[0.52rem] sm:text-[0.62rem] text-gray-400 font-mono tracking-wider flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full max-w-[500px] px-2 text-center">
                     <span><span class="text-white">↑</span>: ROTATE</span>
                     <span><span class="text-white">P</span>: PAUSE</span>
                     <span><span class="text-white">SPACE</span>: DROP</span>
                 </div>
                 
+                <!-- Game On-Screen Controller -->
                 <div class="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-[500px]">
-                    <button class="control-btn h-12 w-full" id="btn-left" aria-label="Left">
+                    <button class="control-btn h-11 sm:h-12 w-full" id="btn-left" aria-label="Left">
                         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
-                    <button class="control-btn h-12 w-full border-white/30 bg-white/5 active:bg-white/20" id="btn-rotate" aria-label="Rotate">
+                    <button class="control-btn h-11 sm:h-12 w-full border-white/30 bg-white/5 active:bg-white/20" id="btn-rotate" aria-label="Rotate">
                         <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
                     </button>
-                    <button class="control-btn h-12 w-full" id="btn-right" aria-label="Right">
+                    <button class="control-btn h-11 sm:h-12 w-full" id="btn-right" aria-label="Right">
                         <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
 
-                    <button class="control-btn h-12 w-full border border-white/20 bg-neutral-900/80 active:bg-neutral-700" id="btn-pause" aria-label="Pause">
+                    <button class="control-btn h-11 sm:h-12 w-full border border-white/20 bg-neutral-900/80 active:bg-neutral-700" id="btn-pause" aria-label="Pause">
                         <svg viewBox="0 0 24 24" id="pause-icon" class="w-5 h-5"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
                     </button>
-                    <button class="control-btn h-12 w-full" id="btn-down" aria-label="Soft Drop">
+                    <button class="control-btn h-11 sm:h-12 w-full" id="btn-down" aria-label="Soft Drop">
                         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <button class="control-btn h-12 w-full bg-white/10 active:bg-white/30" id="btn-drop" aria-label="Hard Drop">
+                    <button class="control-btn h-11 sm:h-12 w-full bg-white/10 active:bg-white/30" id="btn-drop" aria-label="Hard Drop">
                         <span class="text-xs font-bold text-white tracking-widest">DROP</span>
                     </button>
                 </div>
@@ -725,7 +733,7 @@
         let highScore = parseInt(localStorage.getItem('xiao_tetris_highscore') || '0', 10);
         let colorModeEnabled = true;
 
-        /* Game Boy Monochrome Palette */
+        /* Game Boy LCD Monochrome Palette */
         const grayPalette = [
             null,
             '#dddddd',
@@ -737,16 +745,16 @@
             '#3f3b3a'
         ];
 
-        /* Nintendo Retro Glowing Palette */
+        /* Nintendo NES / Famicom 8-Bit Retro Electronic Palette */
         const midiPalette = [
             null,
-            '#00e5ff',
-            '#ff9100',
-            '#2962ff',
-            '#ffea00',
-            '#ff1744',
-            '#00e676',
-            '#d500f9'
+            '#00e5ff', // 1: Cyan
+            '#ff9100', // 2: Orange
+            '#2962ff', // 3: Cobalt Blue
+            '#ffea00', // 4: Yellow
+            '#ff1744', // 5: Red
+            '#00e676', // 6: Emerald Green
+            '#d500f9'  // 7: Violet
         ];
 
         function getActivePalette() {
@@ -816,41 +824,35 @@
             if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
         }
 
-        /* 渲染帶有發光光彩(Phoshor Glow)與立體質感的方塊元件 */
         function drawPixelTile(ctx, x, y, colorIndex) {
             const currentPalette = getActivePalette();
             const baseColor = currentPalette[colorIndex] || '#f3f4f6';
 
-            ctx.save();
-            
-            // 螢光擴散光暈 (Glow Effect)
-            ctx.shadowColor = baseColor;
-            ctx.shadowBlur = 0.8;
-
-            // 1. 底色填滿
             ctx.fillStyle = baseColor;
             ctx.fillRect(x, y, 1, 1);
 
-            // 2. 方塊暗色邊框
-            ctx.strokeStyle = 'rgba(8, 8, 12, 0.9)';
-            ctx.lineWidth = 0.06;
+            ctx.strokeStyle = '#08080a';
+            ctx.lineWidth = 0.08;
             ctx.strokeRect(x, y, 1, 1);
 
-            // 3. 上與左斜角亮邊 Highlight (製造立體晶亮感)
             ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
             ctx.fillRect(x + 0.08, y + 0.08, 0.84, 0.12);
             ctx.fillRect(x + 0.08, y + 0.08, 0.12, 0.84);
 
-            // 4. 下與右斜角陰影 Shadow
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
             ctx.fillRect(x + 0.08, y + 0.80, 0.84, 0.12);
             ctx.fillRect(x + 0.80, y + 0.08, 0.12, 0.84);
 
-            // 5. 方塊核心軟光澤
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
             ctx.fillRect(x + 0.25, y + 0.25, 0.50, 0.50);
 
-            ctx.restore();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+            ctx.fillRect(x + 0.32, y + 0.32, 0.12, 0.12);
+            ctx.fillRect(x + 0.56, y + 0.56, 0.12, 0.12);
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.fillRect(x + 0.56, y + 0.32, 0.12, 0.12);
+            ctx.fillRect(x + 0.32, y + 0.56, 0.12, 0.12);
         }
 
         function drawMatrix(matrix, offset) {
@@ -865,18 +867,21 @@
         }
 
         function draw() {
-            // 背景黑底帶深灰微光
-            context.fillStyle = '#0f0f14';
+            context.fillStyle = '#101014';
             context.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 已取消橫條網格背景 (無橫向 Grid Lines)
+            
+            // 無橫條暗色極簡底紋
+            context.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+            context.lineWidth = 0.01;
+            for (let x = 0; x <= 13; x++) {
+                context.beginPath(); context.moveTo(x, 0); context.lineTo(x, 21); context.stroke();
+            }
 
             drawMatrix(arena, {x: 0, y: 0});
             if (player.matrix) {
                 drawMatrix(player.matrix, player.pos);
             }
 
-            /* 繪製最高分文字 overlay */
             context.fillStyle = 'rgba(255, 255, 255, 0.75)';
             context.font = '0.52px "JetBrains Mono", monospace';
             context.fillText(`HIGH: ${highScore.toString().padStart(6, '0')}`, 0.4, 0.9);
