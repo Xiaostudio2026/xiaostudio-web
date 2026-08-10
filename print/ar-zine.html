@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | TREE HOUSE 2026 - Yearbook demo #01</title>
+    <title>XiaoStudio | TREE HOUSE 2026 - Yearbook demo #01 (Protected)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #ffffff;
-            color: #000000;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             scroll-behavior: smooth;
+        }
+
+        .mono-text {
+            font-family: 'JetBrains Mono', monospace;
         }
 
         /* 滾動動畫效果定義 */
@@ -43,10 +62,11 @@
 
         /* 圖片容器與懸停縮放效果 */
         .image-container {
+            position: relative;
             overflow: hidden;
             background-color: #f7f7f7;
             border-radius: 4px;
-            scroll-margin-top: 80px; /* 滾動定位時保留上方間距，避免貼頂 */
+            scroll-margin-top: 80px;
         }
 
         .project-image {
@@ -55,14 +75,31 @@
             display: block;
             object-fit: cover;
             transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* 鎖定媒體元素本體 */
         }
 
         .image-container:hover .project-image {
             transform: scale(1.02);
         }
 
+        /* 媒體保護遮罩 (防止使用者對圖點選右鍵或另存新檔) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+            cursor: default;
+        }
+
         /* 頁首主視覺動畫 */
         .hero-reveal {
+            position: relative;
+            width: 100%;
+            height: 100%;
             opacity: 0;
             transform: scale(1.05);
             transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
@@ -87,17 +124,48 @@
         .animate-marquee:hover {
             animation-play-state: paused;
         }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
-<body class="selection:bg-gray-200">
+<body class="selection:bg-gray-200" oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- 專案主視覺 (Hero Image) - 手機版改為 4:3 比例，桌機端保持 60vh 高度 -->
+    <!-- 專案主視覺 (Hero Image) -->
     <section class="w-full aspect-[4/3] md:aspect-auto md:h-[60vh] overflow-hidden bg-gray-100 relative">
+        <div class="asset-protection-layer"></div>
         <div class="hero-reveal w-full h-full">
             <img 
                 src="https://res.cloudinary.com/dssycfvxr/image/upload/v1776679615/AR_cover_te9ids.jpg" 
                 alt="[TH2026]" 
-                class="w-full h-full object-cover grayscale-[0.1]"
+                class="w-full h-full object-cover grayscale-[0.1] project-image"
+                oncontextmenu="return false;"
             >
         </div>
     </section>
@@ -105,9 +173,6 @@
     <!-- 跑馬燈告示列 (Marquee Notice) -->
     <div class="w-full bg-black text-white py-3 overflow-hidden whitespace-nowrap border-b border-gray-800 relative z-10 select-none">
         <div class="animate-marquee flex items-center gap-12">
-            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
-                本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
-            </span>
             <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
                 本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
             </span>
@@ -127,14 +192,13 @@
         <section class="max-w-5xl mx-auto">
             <div class="reveal-item fade-in-up mb-6">
                 <span class="text-[10px] text-gray-800 font-bold tracking-[0.3em] uppercase mb-2 block">Category: Print Design</span>
-                <!-- 精緻化的標題排版層次 -->
                 <h1 class="text-black text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
-                    AROMASE Brand Pictorial  <br class="hidden md:block">
+                    AROMASE Brand Pictorial <br class="hidden md:block">
                     <span class="text-xl md:text-4xl font-normal tracking-normal text-gray-500 block mt-3">EDITORIAL & BRAND VISUAL ARCHIVING</span>
                 </h1>
             </div>
 
-          <!-- 關鍵字標籤 -->
+            <!-- 關鍵字標籤 -->
             <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
                 <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># AROMASE 艾瑪絲</span>
                 <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># 自然共生</span>
@@ -155,49 +219,53 @@
             </div>
         </section>
 
-        <!-- 圖片展示網格 (每一張圖片都配有對應的 id="project-img-X") -->
+        <!-- 圖片展示網格 (帶透明保護層) -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
             
-            <!-- 以下均為滿版大圖 -->
             <div id="project-img-3" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1776344739/AR-zine-01_tcduwr.jpg" alt="[設計展示 3]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1776344739/AR-zine-01_tcduwr.jpg" alt="[設計展示 3]" class="project-image" oncontextmenu="return false;">
             </div>
 
-            <!-- 左右對稱小圖 -->
             <div id="project-img-1" class="image-container reveal-item slide-in-left">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1778489330/AR_Page_01_tux5sq.jpg" alt="[設計展示 1]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1778489330/AR_Page_01_tux5sq.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
             </div>
             
             <div id="project-img-2" class="image-container reveal-item slide-in-right">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785922015/Future_lab_oto8zy.jpg" alt="[設計展示 2]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785922015/Future_lab_oto8zy.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
             </div>
        
             <div id="project-img-4" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785922164/Forest_lab_uudx76.jpg" alt="[設計展示 4]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785922164/Forest_lab_uudx76.jpg" alt="[設計展示 4]" class="project-image" oncontextmenu="return false;">
             </div>
 
             <div id="project-img-5" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785923482/Image-75_ln7mgr.jpg" alt="[設計展示 5]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785923482/Image-75_ln7mgr.jpg" alt="[設計展示 5]" class="project-image" oncontextmenu="return false;">
             </div>
         
             <div id="project-img-6" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785937318/AR_Page_02_hijubz.jpg" alt="[設計展示 6]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785937318/AR_Page_02_hijubz.jpg" alt="[設計展示 6]" class="project-image" oncontextmenu="return false;">
             </div>
           
-          
             <div id="project-img-8" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1778489328/AR_Page_04_dx2zek.jpg" alt="[設計展示 8]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1778489328/AR_Page_04_dx2zek.jpg" alt="[設計展示 8]" class="project-image" oncontextmenu="return false;">
             </div>
           
             <div id="project-img-9" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785939195/%E7%95%AB%E5%A0%B1_2025_flip_%E9%A0%81%E9%9D%A2_7_guz5zz.jpg" alt="[設計展示 9]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1785939195/%E7%95%AB%E5%A0%B1_2025_flip_%E9%A0%81%E9%9D%A2_7_guz5zz.jpg" alt="[設計展示 9]" class="project-image" oncontextmenu="return false;">
             </div>
            
             <div id="project-img-10" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1778489329/AR_Page_03_lsim6h.jpg" alt="[設計展示 10]" class="project-image">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1778489329/AR_Page_03_lsim6h.jpg" alt="[設計展示 10]" class="project-image" oncontextmenu="return false;">
             </div>
-           
-           
            
         </div>
     </main>
@@ -207,7 +275,111 @@
         &copy; 2026 XiaoStudio. All Rights Reserved.
     </footer>
 
+    <!-- 安全防護動態提示框 -->
+    <div id="security-toast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
+    </div>
+
     <script>
+        /**
+         * XIAOSTUDIO Security Guard Module
+         */
+        const SecurityGuard = {
+            toastTimeout: null,
+
+            init() {
+                this.disableContextMenu();
+                this.disableDragAndDrop();
+                this.disableShortcuts();
+                this.preventPrintScreen();
+            },
+
+            showToast(message) {
+                const toast = document.getElementById('security-toast');
+                const msgEl = document.getElementById('toast-message');
+                if (!toast || !msgEl) return;
+
+                msgEl.innerText = message || 'PROTECTED // CONTENT DOWNLOAD DISABLED';
+                toast.classList.add('active');
+
+                if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                this.toastTimeout = setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 2500);
+            },
+
+            disableContextMenu() {
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showToast('RIGHT CLICK DISABLED // 內容受著作權保護');
+                    return false;
+                }, false);
+            },
+
+            disableDragAndDrop() {
+                document.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                    this.showToast('DRAG & DROP DISABLED // 禁止拖曳下載');
+                    return false;
+                }, false);
+            },
+
+            disableShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                    const keyCode = e.keyCode || e.which;
+
+                    // F12 (DevTools)
+                    if (keyCode === 123) {
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                        return false;
+                    }
+
+                    if (ctrlOrCmd) {
+                        // S: 另存新檔, U: 檢視原始碼, P: 列印
+                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                            e.preventDefault();
+                            this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
+                            return false;
+                        }
+
+                        // Shift + I / J / C (開啟檢查元素與 Console)
+                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
+                            e.preventDefault();
+                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                            return false;
+                        }
+
+                        // A: 全選, C: 複製
+                        if (keyCode === 65 || keyCode === 67) {
+                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                                e.preventDefault();
+                                this.showToast('COPYING DISABLED // 禁止複製');
+                                return false;
+                            }
+                        }
+                    }
+                }, false);
+            },
+
+            preventPrintScreen() {
+                window.addEventListener('keyup', (e) => {
+                    if (e.key === 'PrintScreen') {
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText('');
+                        }
+                        this.showToast('SCREENSHOT DETECTED // 圖片受到保護');
+                    }
+                });
+            }
+        };
+
         // 設定 Intersection Observer 參數
         const observerOptions = { 
             threshold: 0.05, 
@@ -218,19 +390,19 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); // 觸發後即停止監聽，避免重複動畫
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        window.onload = () => {
-            // 監聽主視覺與所有展示區塊
+        window.addEventListener('DOMContentLoaded', () => {
+            SecurityGuard.init();
+
             document.querySelectorAll('.hero-reveal, .reveal-item').forEach(el => {
                 observer.observe(el);
             });
-        };
+        });
 
-        // 平滑滾動至指定的圖片
         function scrollToImage(index) {
             const element = document.getElementById(`project-img-${index}`);
             if (element) {
