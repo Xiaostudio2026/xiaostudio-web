@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>XIAOSTUDIO 蕭氏設計工作室 | 視覺設計與數位體驗</title>
+    <title>XIAOSTUDIO | 視覺設計與數位體驗</title>
     <meta name="description" content="蕭氏設計工作室 XIAOSTUDIO 專注於提供品牌視覺設計、動態設計及網頁設計。在形態的生成與轉化之間，探索設計、動態與科技交織而成的數位美學。">
     <meta name="keywords" content="蕭氏設計工作室, 蕭氏設計, XIAOSTUDIO, 品牌設計, 網頁設計, 動態設計, 平面設計, 包裝設計, 商品視覺, Visual Design, Motion Graphics, Design Studio Taiwan">
     <meta name="author" content="XIAOSTUDIO 蕭氏設計工作室">
@@ -60,12 +60,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;800&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
+        /* 禁止圖片與影片的長按快顯功能、拖曳與選擇 */
+        img, video {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none; /* 禁用 iOS 行動裝置長按彈出儲存圖片選單 */
+            pointer-events: auto;
+        }
+
         html {
             background-color: #000;
             transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 負片效果：轉換為反轉高對比度灰階 (Inverted High Contrast Grayscale Mode) */
+        /* 負片效果：轉換為反轉高對比度灰階 Mode */
         body.negative-mode #main-view,
         body.negative-mode nav,
         body.negative-mode .action-btn,
@@ -110,7 +121,6 @@
             position: relative; 
             overflow: hidden; 
             transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
-            /* 多層後備液態漸變底色，防止黑屏 */
             background: radial-gradient(circle at 50% 50%, #151821 0%, #08090d 50%, #000000 100%);
         }
 
@@ -213,7 +223,6 @@
         .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
         
-        /* 右下角操作按鈕 */
         .action-btn { 
             position: fixed; 
             right: 20px; 
@@ -274,7 +283,6 @@
             opacity: 0.4;
         }
 
-        /* 底部音樂跑馬燈列 (Music Marquee Bar) */
         #music-marquee-bar {
             position: fixed;
             bottom: 0;
@@ -331,7 +339,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Hero Text 平滑向上推移效果 */
         .hero-text {
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -352,7 +359,6 @@
             }
         }   
 
-        /* AI Assistant Iframe & Mask Styling */
         .ai-iframe-wrapper {
             position: relative;
             width: 100%;
@@ -387,7 +393,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <h1 class="seo-hidden">蕭氏設計工作室 XIAOSTUDIO | 設計與數位體驗工作室</h1>
     <h2 class="seo-hidden">視覺設計、網頁設計、動態設計、印刷包裝</h2>
@@ -418,14 +424,14 @@
     </nav>
 
     <div class="section" id="main-view">
-        <!-- 後備 HTML5 Video 播放器 -->
+        <!-- 後備 HTML5 Video 播放器（添加 controlsList="nodownload" 與 disablePictureInPicture 保護標籤） -->
         <div class="video-background" id="fallback-bg">
-            <video id="bgVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto">
+            <video id="bgVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
             </video>
         </div>
 
-        <video id="textureVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" crossorigin="anonymous">
+        <video id="textureVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" crossorigin="anonymous" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
         </video>
         
@@ -512,6 +518,39 @@
     </button>
 
     <script>
+        
+        // -------------------------------------------------------------
+        // 防下載與防儲存保護機制 (Anti-Download Protection System)
+        // -------------------------------------------------------------
+        
+        // 1. 全局及針對圖片與影片禁止滑鼠右鍵快顯選單
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, false);
+
+        // 2. 禁止圖片與影片滑鼠拖曳下載
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO' || e.target.closest('img') || e.target.closest('video')) {
+                e.preventDefault();
+                return false;
+            }
+        }, false);
+
+        // 3. 攔截常用儲存/下載快捷鍵 (Ctrl+S / Cmd+S / Ctrl+U)
+        document.addEventListener('keydown', function(e) {
+            // 攔截 Ctrl + S / Cmd + S (網頁另存新檔)
+            if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+                return false;
+            }
+            // 攔截 Ctrl + U / Cmd + U (查看原始碼)
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+        }, false);
+
         let audioCtx, analyser, source, dataArray;
         let particleHistory = [];
         let isPlaying = false;
@@ -610,7 +649,6 @@
         }
         updateCarbonCounter();
 
-        /* 音樂開關及跑馬燈驅動 */
         audioBtn.addEventListener('click', () => {
             initAudio();
             
@@ -778,7 +816,6 @@
                 }
             }
 
-            /* 各 Node 開啟相對應連結 */
             switch(type) {
                 case 'about': targetUrl = `${baseUrl}/about/`; break;
                 case 'static': targetUrl = `${baseUrl}/static/`; break;
@@ -808,6 +845,44 @@
                     `;
                 } else if (targetUrl) {
                     content.innerHTML = `<iframe src="${targetUrl}" id="overlay-iframe-container"></iframe>`;
+                    
+                    // 動態將防下載機制同步注入至同網域的 iframe 中
+                    const iframe = document.getElementById('overlay-iframe-container');
+                    if (iframe) {
+                        iframe.onload = function() {
+                            try {
+                                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                                if (doc) {
+                                    // 1. 注入子頁面防右鍵
+                                    doc.addEventListener('contextmenu', e => e.preventDefault(), false);
+                                    // 2. 注入子頁面防拖曳
+                                    doc.addEventListener('dragstart', e => {
+                                        if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO' || e.target.closest('img') || e.target.closest('video')) {
+                                            e.preventDefault();
+                                        }
+                                    }, false);
+                                    // 3. 注入子頁面防快捷鍵 (Ctrl/Cmd + S / U)
+                                    doc.addEventListener('keydown', e => {
+                                        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+                                            e.preventDefault();
+                                        }
+                                    }, false);
+                                    // 4. 注入子頁面 CSS 禁止 iOS 長按與拖曳
+                                    const style = doc.createElement('style');
+                                    style.textContent = `
+                                        img, video {
+                                            -webkit-user-drag: none !important;
+                                            user-drag: none !important;
+                                            -webkit-touch-callout: none !important;
+                                        }
+                                    `;
+                                    doc.head.appendChild(style);
+                                }
+                            } catch (err) {
+                                console.log("跨網域 iframe 受限於瀏覽器同源政策，無法直接注入腳本", err);
+                            }
+                        };
+                    }
                 } else {
                     content.innerHTML = `<div class="flex flex-col items-center justify-center h-full opacity-40 mono uppercase text-center"><p>${translations[currentLang].updateSoon}</p></div>`;
                 }
@@ -831,7 +906,6 @@
             });
         }
 
-        /* WebGL 流體波紋與影片渲染 */
         const webglCanvas = document.getElementById('webgl-canvas');
         const textureVideo = document.getElementById('textureVideo');
         const gl = webglCanvas ? (webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl')) : null;
@@ -931,7 +1005,6 @@
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-                    /* 預設維持後備影片層開啟，確保安全載入 */
                     isWebGLActive = true;
                 } else {
                     throw new Error('Link failed');
