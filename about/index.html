@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,12 +15,12 @@
             --border-color: transparent;
             --text-main: #f3f4f6;
             --accent-color: #ffffff;
-            font-size: 20px;
+            font-size: 22px;
         }
 
-        @media (min-width: 640px) {
+        @media (max-width: 640px) {
             :root {
-                font-size: 22px;
+                font-size: 20px;
             }
         }
 
@@ -79,17 +79,45 @@
 
         #game-canvas {
             border: 1px solid #444;
-            background-color: rgba(26, 26, 26, 0.95);
+            background-color: rgba(26, 26, 26, 0.9);
             image-rendering: pixelated;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            max-height: 52vh;
-            width: auto;
-            object-fit: contain;
+            width: 100%;
+            max-width: 260px;
+            height: auto;
+            aspect-ratio: 260 / 420;
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            #game-canvas {
+                max-width: 210px;
+            }
         }
 
         #game-canvas.overdrive-active {
             border-color: #ef4444;
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        #canvas-container {
+            position: relative;
+        }
+
+        #canvas-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            border-radius: 4px;
+            z-index: 5;
+            opacity: 0.85;
         }
 
         #next-canvas {
@@ -107,7 +135,7 @@
         }
 
         .experience-timer {
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
             line-height: 1.8;
             color: #d1d5db;
         }
@@ -116,12 +144,12 @@
             font-weight: 700;
             color: var(--accent-color);
             display: inline-block;
-            min-width: 18px;
-            font-size: 1.25rem; 
+            min-width: 20px;
+            font-size: 1.35rem; 
         }
 
         .ms-ticker {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             color: #888;
             font-weight: 400;
         }
@@ -208,7 +236,7 @@
         }
 
         .request-btn { 
-            background: #ffffff; color: #000000; border: 1px solid #ffffff; padding: 12px 16px; font-size: 0.8rem; font-weight: bold; letter-spacing: 0.05em; text-align: center; border-radius: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; width: 100%; min-height: 44px; 
+            background: #ffffff; color: #000000; border: 1px solid #ffffff; padding: 12px 16px; font-size: 0.8rem; font-weight: bold; letter-spacing: 0.05em; text-align: center; border-radius: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; width: 100%; min-height: 48px; 
         }
         .request-btn:hover { 
             background: rgba(255, 255, 255, 0.12); color: #ffffff; backdrop-filter: blur(8px); 
@@ -220,7 +248,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 6px; 
+            padding: 8px; 
             border: 1px solid var(--pad-solid-bg); 
             border-radius: 6px; 
             background: var(--pad-solid-bg); 
@@ -235,11 +263,24 @@
         .service-tag span {
             font-size: 0.55rem; 
             font-weight: 700;
-            line-height: 1.1;
+            line-height: 1.15;
             letter-spacing: -0.01em;
             color: var(--pad-text);
             opacity: 0;
             transition: opacity 0.35s ease;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        @media (min-width: 640px) {
+            .service-tag span {
+                font-size: 0.6rem;
+            }
         }
 
         /* 12 組參考實體 ORCA PAD MIDI 控制器之矽膠背光色彩與文字顏色 */
@@ -259,7 +300,7 @@
         .service-tag.active, .service-tag:hover { 
             filter: brightness(1) !important; 
             box-shadow: 0 0 22px var(--pad-glow), inset 0 0 10px rgba(255, 255, 255, 0.4) !important; 
-            transform: scale(1.05) !important;
+            transform: scale(1.06) !important;
         }
 
         .service-tag.active span, .service-tag:hover span {
@@ -286,7 +327,7 @@
     <div class="video-bg-container">
         <video id="bg-video" autoplay loop muted playsinline>
             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1785913231/DiscoBall_720_1_p8xrsh.mp4" type="video/mp4">
-            您的瀏覽器不支援 HTML5 影片播放。
+            Your browser does not support video play.
         </video>
     </div>
     <div class="video-overlay"></div>
@@ -305,31 +346,31 @@
         <header class="mb-6 flex flex-col lg:flex-row justify-between items-end pb-6 border-b border-white/10 gap-6">
             <div>
                 <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
-                <h1 class="text-3xl sm:text-4xl font-bold tracking-tighter text-white">XIAO_STUDIO v3.0</h1>
+                <h1 class="text-4xl font-bold tracking-tighter text-white">XIAO_STUDIO v3.0</h1>
             </div>
             
             <div class="flex flex-wrap gap-x-6 gap-y-3 font-mono text-left w-full lg:w-auto">
-                <div class="border-r border-white/10 pr-6 min-w-[100px]">
+                <div class="border-r border-white/10 pr-6 min-w-[110px]">
                     <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">LATITUDE</div>
-                    <div class="text-lg font-bold text-white">25.0117° N</div>
+                    <div class="text-xl font-bold text-white">25.0117° N</div>
                 </div>
-                <div class="border-r border-white/10 pr-6 min-w-[100px]">
+                <div class="border-r border-white/10 pr-6 min-w-[110px]">
                     <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">LONGITUDE</div>
-                    <div class="text-lg font-bold text-white">121.4658° E</div>
+                    <div class="text-xl font-bold text-white">121.4658° E</div>
                 </div>
-                <div class="border-r border-white/10 pr-6 min-w-[140px]">
+                <div class="border-r border-white/10 pr-6 min-w-[155px]">
                     <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">HUMIDITY / TEMP</div>
-                    <div class="text-lg font-bold text-white">
+                    <div class="text-xl font-bold text-white">
                         <span id="humidity-val">-- %</span><span class="text-gray-600 text-sm mx-1">/</span><span id="temp-val" class="text-red-400">--°C</span>
                     </div>
                 </div>
-                <div class="border-r border-white/10 pr-6 min-w-[100px]">
+                <div class="border-r border-white/10 pr-6 min-w-[110px]">
                     <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">PM2.5</div>
-                    <div class="text-lg font-bold text-white" id="pm25-val">-- μg/m³</div>
+                    <div class="text-xl font-bold text-white" id="pm25-val">-- μg/m³</div>
                 </div>
-                <div class="min-w-[110px]">
+                <div class="min-w-[120px]">
                     <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">SYSTEM_LOC</div>
-                    <div class="text-xs font-bold text-white flex items-center gap-1.5 mt-1">
+                    <div class="text-xs font-bold text-white flex items-center gap-1.5 mt-1.5">
                         <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
                         BANQIAO, TAIWAN
                     </div>
@@ -337,23 +378,23 @@
             </div>
         </header>
 
-        <main class="flex flex-col gap-8 sm:gap-12">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
-                <div class="lg:col-span-6 flex flex-col gap-6">
-                    <div class="dashboard-panel p-5 rounded bg-[#121214]/20 h-full flex flex-col justify-between">
+        <main class="flex flex-col gap-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-6 flex flex-col gap-8">
+                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full flex flex-col justify-between">
                         <div>
-                            <h3 class="text-[0.75rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
+                            <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Memory Cache Visualizer</h3>
                             
                             <div class="flex justify-center mb-4 overflow-hidden rounded border border-white/10 bg-black/40">
                                 <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[460px] max-w-full h-auto object-cover rounded">
                                     <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1785757678/gboy_1_qmneqs.mp4" type="video/mp4">
-                                    您的瀏覽器不支援 HTML5 影片播放。
+                                    Your browser does not support video play.
                                 </video>
                             </div>
 
                             <div class="space-y-3">
                                 <div>
-                                    <div class="flex justify-between text-[0.75rem] font-bold mb-2 pb-1 border-b border-white/10">
+                                    <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
                                         <span class="text-gray-300">WORK EXPERIENCE</span>
                                     </div>
                                     <div id="experience-display" class="experience-timer font-mono text-gray-300">
@@ -365,10 +406,10 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-6 flex flex-col gap-6">
-                    <div class="dashboard-panel p-5 rounded bg-[#121214]/20 h-full">
+                <div class="lg:col-span-6 flex flex-col gap-8">
+                    <div class="dashboard-panel p-6 rounded bg-[#121214]/20 h-full">
                         <h3 class="text-[0.65rem] font-bold mb-4 text-gray-400 uppercase tracking-widest">Service_Capabilities</h3>
-                        <div class="grid grid-cols-4 gap-2 mb-6 max-w-[420px]">
+                        <div class="grid grid-cols-4 gap-2.5 mb-6 max-w-[420px]">
                             <div class="service-tag"><span>Branding & Identity</span></div>
                             <div class="service-tag"><span>Visual Production</span></div>
                             <div class="service-tag"><span>Packaging Design</span></div>
@@ -384,11 +425,11 @@
                         </div>
                         
                         <div class="pt-4 border-t border-white/5">
-                            <div class="text-[0.6rem] text-gray-500 mb-3 uppercase tracking-wider">Contact_Protocols</div>
-                            <div class="space-y-3">
+                            <div class="text-[0.6rem] text-gray-500 mb-4 uppercase tracking-wider">Contact_Protocols</div>
+                            <div class="space-y-4">
                                 <a href="mailto:jewuenxiao@gmail.com" class="block group">
                                     <div class="text-[0.5rem] text-gray-500 mb-1 uppercase">01. MAIL_GATEWAY</div>
-                                    <div class="text-[0.85rem] text-gray-300 font-mono group-hover:underline underline-offset-4 decoration-white/30">
+                                    <div class="text-[0.9rem] text-gray-300 font-mono group-hover:underline underline-offset-4 decoration-white/30">
                                         jewuenxiao@gmail.com
                                     </div>
                                 </a>
@@ -404,105 +445,104 @@
                 </div>
             </div>
 
-            <!-- 遊戲區塊：電腦版與行動版皆完全水平置中 -->
-            <div class="w-full flex flex-col items-center justify-center gap-6 sm:gap-8 border-t border-white/10 pt-8 sm:pt-12 mx-auto">
-                <div class="flex flex-col sm:flex-row items-center sm:items-stretch justify-center gap-4 sm:gap-6 w-full max-w-[520px]">
-                    <div class="flex flex-col items-center w-full sm:w-auto">
-                        <div class="text-[0.65rem] text-gray-500 mb-2 uppercase tracking-widest">Core Execution</div>
-                        <div class="p-0 relative overflow-hidden rounded flex justify-center items-center" id="canvas-container">
+            <div class="w-full flex flex-col items-center justify-center gap-5 border-t border-white/10 pt-8 sm:pt-10 mx-auto">
+                <div class="flex flex-col sm:flex-row items-stretch justify-center gap-3 sm:gap-6 w-full max-w-[500px]">
+                    
+                    <!-- Game Canvas Container -->
+                    <div class="flex flex-col items-center justify-center w-full sm:w-auto">
+                        <div class="p-0 relative overflow-hidden rounded flex justify-center items-center w-full" id="canvas-container">
                             <canvas id="game-canvas" width="260" height="420"></canvas>
                             
                             <!-- Game Start Overlay -->
                             <div id="game-overlay" class="game-overlay">
                                 <div class="w-14 h-14 border border-white/30 rounded-full flex items-center justify-center mb-3 hover:scale-110 transition-transform">
-                                    <svg class="w-7 h-7 fill-white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    <svg class="w-7 h-7 fill-white translate-x-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 </div>
-                                <div id="overlay-title" class="text-2xl sm:text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-2 whitespace-nowrap">
+                                <div id="overlay-title" class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 whitespace-nowrap">
                                     Initialize Kernel
                                 </div>
-                                <div id="overlay-subtitle" class="text-[0.55rem] sm:text-[0.6rem] mt-3 opacity-50 uppercase tracking-widest">Click or Press Key to Execute</div>
+                                <div id="overlay-sub" class="text-[0.6rem] mt-3 opacity-60 uppercase tracking-widest">Click to Execute</div>
                             </div>
 
                             <!-- Game Pause Overlay -->
                             <div id="pause-overlay" class="game-overlay hidden">
-                                <div class="text-2xl sm:text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-2 mb-3 whitespace-nowrap">
+                                <div class="text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-3 whitespace-nowrap">
                                     System Halted
                                 </div>
                                 <div class="text-xs opacity-70 uppercase tracking-widest">Click to Resume</div>
                             </div>
                         </div>
-
-                        <!-- 按鍵說明：微調字號，排成同一行 -->
-                        <div class="mt-3 text-[0.52rem] sm:text-[0.6rem] text-gray-400 font-mono tracking-wider flex items-center justify-center gap-2 sm:gap-4 whitespace-nowrap w-full">
-                            <span><span class="text-white font-bold">↑</span>: ROTATE</span>
-                            <span class="text-gray-600">|</span>
-                            <span><span class="text-white font-bold">P</span>: PAUSE</span>
-                            <span class="text-gray-600">|</span>
-                            <span><span class="text-white font-bold">SPACE</span>: DROP</span>
-                        </div>
                     </div>
 
-                    <!-- Score & Controls Dashboard (行動版緊湊一列，電腦版直立式) -->
-                    <div class="flex flex-row sm:flex-col justify-between items-center sm:justify-start gap-2 sm:gap-4 p-3 sm:p-4 border border-white/10 rounded bg-[#121214]/75 w-full sm:w-[150px] overflow-hidden">
-                        <div class="text-center min-w-0">
+                    <!-- Right Score Dashboard Panel -->
+                    <div class="grid grid-cols-6 sm:flex sm:flex-col justify-items-center items-center justify-between p-2 sm:p-3.5 border border-white/10 rounded bg-[#121214]/75 w-full sm:w-[160px] h-auto gap-1 sm:gap-2 box-border overflow-hidden">
+                        <div class="text-center w-full min-w-0">
                             <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate">Score</div>
-                            <div class="text-base sm:text-xl font-bold tracking-tighter text-white" id="score">000000</div>
+                            <div class="text-xs sm:text-2xl font-bold tracking-tighter text-white truncate" id="score">000000</div>
                         </div>
-                        <div class="text-center min-w-0">
+
+                        <div class="text-center w-full min-w-0 flex flex-col items-center">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Next</div>
+                            <canvas id="next-canvas" width="80" height="80" class="w-6 h-6 sm:w-10 sm:h-10 bg-transparent block"></canvas>
+                        </div>
+
+                        <div class="text-center w-full min-w-0">
                             <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest truncate">Level</div>
-                            <div class="text-base sm:text-xl font-bold text-gray-400" id="level">01</div>
+                            <div class="text-xs sm:text-2xl font-bold text-gray-400 truncate" id="level">01</div>
                         </div>
-                        
-                        <!-- Boost Switch -->
-                        <div class="text-center flex flex-col items-center min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-1 truncate">Boost</div>
-                            <button id="btn-boost" class="relative inline-flex h-4 w-8 sm:h-5 sm:w-9 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none">
-                                <span id="boost-dot" class="inline-block h-3 w-3 sm:h-3.5 sm:w-3.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
-                            </button>
-                        </div>
-                        
-                        <!-- Sound Switch -->
-                        <div class="text-center flex flex-col items-center min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-1 truncate">Sound</div>
-                            <button id="btn-sound" class="relative inline-flex h-4 w-8 sm:h-5 sm:w-9 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none">
-                                <span id="sound-dot" class="inline-block h-3 w-3 sm:h-3.5 sm:w-3.5 transform rounded-full bg-white transition-transform duration-300 translate-x-4 sm:translate-x-4.5"></span>
+
+                        <div class="text-center flex flex-col items-center w-full min-w-0">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Boost</div>
+                            <button id="btn-boost" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none shrink-0">
+                                <span id="boost-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
                             </button>
                         </div>
 
-                        <!-- Color Mode Switch -->
-                        <div class="text-center flex flex-col items-center min-w-0">
-                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-1 truncate">Color</div>
-                            <button id="btn-color" class="relative inline-flex h-4 w-8 sm:h-5 sm:w-9 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none">
-                                <span id="color-dot" class="inline-block h-3 w-3 sm:h-3.5 sm:w-3.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
+                        <div class="text-center flex flex-col items-center w-full min-w-0">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Sound</div>
+                            <button id="btn-sound" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
+                                <span id="sound-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
                             </button>
                         </div>
 
-                        <!-- Next Piece Preview -->
-                        <div class="text-center flex flex-col items-center justify-center min-w-0">
-                            <canvas id="next-canvas" width="80" height="80" class="w-7 h-7 sm:w-9 sm:h-9 bg-transparent"></canvas>
+                        <div class="text-center flex flex-col items-center w-full min-w-0">
+                            <div class="text-[0.45rem] sm:text-[0.5rem] text-gray-500 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Color</div>
+                            <button id="btn-color" class="relative inline-flex h-3 sm:h-3.5 w-6 sm:w-7 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
+                                <span id="color-dot" class="inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
+
+                <!-- Single-Row Control Hints -->
+                <div class="text-[0.55rem] sm:text-[0.62rem] text-gray-400 font-mono tracking-wider flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full max-w-[500px] px-2 text-center">
+                    <span><span class="text-white">↑</span>: ROTATE</span>
+                    <span><span class="text-white">P</span>: PAUSE</span>
+                    <span><span class="text-white">SPACE</span>: DROP</span>
+                </div>
                 
-                <!-- Game Physical Controls (Arrow Keys + Action Keys) -->
-                <div class="grid grid-cols-3 gap-3 w-full max-w-[280px]">
-                    <button class="control-btn h-12" id="btn-left">
+                <!-- Game On-Screen Controller (3x2 Grid Aligned Layout) -->
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-[500px]">
+                    <!-- Top Row: 左 - 旋轉 - 右 -->
+                    <button class="control-btn h-12 w-full" id="btn-left" aria-label="Left">
                         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
-                    <button class="control-btn h-12" id="btn-rotate">
+                    <button class="control-btn h-12 w-full border-white/30 bg-white/5 active:bg-white/20" id="btn-rotate" aria-label="Rotate">
                         <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
                     </button>
-                    <button class="control-btn h-12" id="btn-right">
+                    <button class="control-btn h-12 w-full" id="btn-right" aria-label="Right">
                         <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
-                    <button class="control-btn h-12" id="btn-pause">
-                        <svg viewBox="0 0 24 24" id="pause-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+
+                    <!-- Bottom Row: 暫停 - 下 - DROP -->
+                    <button class="control-btn h-12 w-full border border-white/20 bg-neutral-900/80 active:bg-neutral-700" id="btn-pause" aria-label="Pause">
+                        <svg viewBox="0 0 24 24" id="pause-icon" class="w-5 h-5"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
                     </button>
-                    <button class="control-btn h-12" id="btn-down">
+                    <button class="control-btn h-12 w-full" id="btn-down" aria-label="Soft Drop">
                         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
-                    <button class="control-btn h-12" id="btn-drop">
-                        <span class="text-xs font-bold text-white">DROP</span>
+                    <button class="control-btn h-12 w-full bg-white/10 active:bg-white/30" id="btn-drop" aria-label="Hard Drop">
+                        <span class="text-xs font-bold text-white tracking-widest">DROP</span>
                     </button>
                 </div>
             </div>
@@ -510,7 +550,7 @@
     </div>
 
     <script>
-        // 音效合成器 (Web Audio API)
+        /* Audio Synthesizer (Web Audio API) */
         let audioCtx = null;
         let soundEnabled = true;
         function playSound(type) {
@@ -528,7 +568,7 @@
                 if (type === 'move') {
                     osc.type = 'square';
                     osc.frequency.setValueAtTime(220, now);
-                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.setValueAtTime(0.05, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
                     osc.start(now);
                     osc.stop(now + 0.05);
@@ -536,7 +576,7 @@
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(440, now);
                     osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.setValueAtTime(0.08, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
                     osc.start(now);
                     osc.stop(now + 0.08);
@@ -544,7 +584,7 @@
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(300, now);
                     osc.frequency.exponentialRampToValueAtTime(60, now + 0.12);
-                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.setValueAtTime(0.12, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
                     osc.start(now);
                     osc.stop(now + 0.12);
@@ -553,7 +593,7 @@
                     osc.frequency.setValueAtTime(523.25, now);
                     osc.frequency.setValueAtTime(659.25, now + 0.08);
                     osc.frequency.setValueAtTime(783.99, now + 0.16);
-                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.setValueAtTime(0.15, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
                     osc.start(now);
                     osc.stop(now + 0.3);
@@ -570,9 +610,10 @@
                 vid.play().catch(() => {});
             });
             initMidiPadsWaveRhythm();
+            draw();
         });
 
-        // 波浪式 MIDI 打擊墊亮燈控制器 (4x3 陣列)
+        /* Wave MIDI Pad Backlight Controller */
         function initMidiPadsWaveRhythm() {
             const tags = document.querySelectorAll('.service-tag');
             if (!tags.length) return;
@@ -649,8 +690,8 @@
                         <div><span>${months}</span> MONTHS </div>
                         <div><span>${days}</span> DAYS</div>
                     </div>
-                    <div class="text-[0.6rem] mt-2 opacity-60 uppercase tracking-tighter">Clock Precision</div>
-                    <div class="text-2xl sm:text-3xl font-bold mt-0.5 text-white">
+                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision</div>
+                    <div class="text-3xl font-bold mt-1 text-white">
                         ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker text-xs">.${milliseconds.toString().padStart(3,'0')}</span>
                     </div>
                 `;
@@ -667,7 +708,7 @@
         const levelElement = document.getElementById('level');
         const gameOverlay = document.getElementById('game-overlay');
         const overlayTitle = document.getElementById('overlay-title');
-        const overlaySubtitle = document.getElementById('overlay-subtitle');
+        const overlaySub = document.getElementById('overlay-sub');
         const pauseOverlay = document.getElementById('pause-overlay');
         const pauseBtn = document.getElementById('btn-pause');
         const boostBtn = document.getElementById('btn-boost');
@@ -676,56 +717,54 @@
         const soundDot = document.getElementById('sound-dot');
         const colorBtn = document.getElementById('btn-color');
         const colorDot = document.getElementById('color-dot');
-        
+
         context.scale(20, 20);
         nextContext.scale(20, 20);
-        
-        let isBoostActive = false;
-        let isColorActive = false;
+
         let highScore = parseInt(localStorage.getItem('xiao_tetris_highscore') || '0', 10);
+        let colorModeEnabled = true;
 
-        // 配色表 (灰階 vs 彩色)
-        const grayscaleColors = [
+        /* Game Boy LCD Monochrome Green Palette */
+        const grayPalette = [
             null,
-            '#ffffff', // 1: I
-            '#d4d4d4', // 2: L
-            '#888888', // 3: J
-            '#e5e5e5', // 4: O
-            '#555555', // 5: Z
-            '#aaaaaa', // 6: S
-            '#777777'  // 7: T
+            '#dddddd', // 1: GB Light Green
+            '#727171', // 2: GB Mid Green
+            '#9fa0a0', // 3: GB Dark Green
+            '#89898a', // 4: GB Mid Green Light
+            '#2c2c29', // 5: GB Deepest Green
+            '#5a5858', // 6: GB Light Green 2
+            '#3f3b3a'  // 7: GB Dark Green 2
         ];
 
-        // 採用與 Service_Capabilities MIDI 控制器背光一致的鮮艷色彩
-        const vividColors = [
+        /* Nintendo NES / Famicom 8-Bit Retro Electronic Palette */
+        const midiPalette = [
             null,
-            '#48dbfb', // 1: I (MIDI Pad 6 - 天藍色)
-            '#ffbe5d', // 2: L (MIDI Pad 2 - 暖橘色)
-            '#70a1ff', // 3: J (MIDI Pad 8 - 柔藍色)
-            '#e2ff3d', // 4: O (MIDI Pad 3 - 螢光黃綠)
-            '#ff6b81', // 5: Z (MIDI Pad 1 - 珊瑚紅)
-            '#55efc4', // 6: S (MIDI Pad 5 - 薄荷綠)
-            '#f368e0'  // 7: T (MIDI Pad 4 - 桃紫紅)
+            '#00e5ff', // 1: Cyan (Electric Cyan)
+            '#ff9100', // 2: Orange (Arcade Orange)
+            '#2962ff', // 3: Cobalt Blue (NES Blue)
+            '#ffea00', // 4: Famicom Yellow
+            '#ff1744', // 5: Nintendo Red
+            '#00e676', // 6: Arcade Emerald Green
+            '#d500f9'  // 7: Retro Violet
         ];
 
-        function getBlockColors() {
-            return isColorActive ? vividColors : grayscaleColors;
+        function getActivePalette() {
+            return colorModeEnabled ? midiPalette : grayPalette;
         }
 
+        let isBoostActive = false;
         boostBtn.onclick = (e) => {
             e.preventDefault();
             isBoostActive = !isBoostActive;
             if (isBoostActive) {
                 boostBtn.classList.remove('bg-neutral-800');
                 boostBtn.classList.add('bg-red-600');
-                boostDot.classList.remove('translate-x-0.5', 'bg-neutral-400');
-                boostDot.classList.add('translate-x-4', 'sm:translate-x-4.5', 'bg-white');
+                boostDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 canvas.classList.add('overdrive-active');
             } else {
                 boostBtn.classList.remove('bg-red-600');
                 boostBtn.classList.add('bg-neutral-800');
-                boostDot.classList.remove('translate-x-4', 'sm:translate-x-4.5', 'bg-white');
-                boostDot.classList.add('translate-x-0.5', 'bg-neutral-400');
+                boostDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 canvas.classList.remove('overdrive-active');
             }
             updateScore();
@@ -738,13 +777,11 @@
                 if (soundEnabled) {
                     soundBtn.classList.remove('bg-neutral-800');
                     soundBtn.classList.add('bg-red-600');
-                    soundDot.classList.remove('translate-x-0.5', 'bg-neutral-400');
-                    soundDot.classList.add('translate-x-4', 'sm:translate-x-4.5', 'bg-white');
+                    soundDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 } else {
                     soundBtn.classList.remove('bg-red-600');
                     soundBtn.classList.add('bg-neutral-800');
-                    soundDot.classList.remove('translate-x-4', 'sm:translate-x-4.5', 'bg-white');
-                    soundDot.classList.add('translate-x-0.5', 'bg-neutral-400');
+                    soundDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 }
             };
         }
@@ -752,17 +789,15 @@
         if (colorBtn) {
             colorBtn.onclick = (e) => {
                 e.preventDefault();
-                isColorActive = !isColorActive;
-                if (isColorActive) {
+                colorModeEnabled = !colorModeEnabled;
+                if (colorModeEnabled) {
                     colorBtn.classList.remove('bg-neutral-800');
-                    colorBtn.classList.add('bg-cyan-500');
-                    colorDot.classList.remove('translate-x-0.5', 'bg-neutral-400');
-                    colorDot.classList.add('translate-x-4', 'sm:translate-x-4.5', 'bg-white');
+                    colorBtn.classList.add('bg-red-600');
+                    colorDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 } else {
-                    colorBtn.classList.remove('bg-cyan-500');
+                    colorBtn.classList.remove('bg-red-600');
                     colorBtn.classList.add('bg-neutral-800');
-                    colorDot.classList.remove('translate-x-4', 'sm:translate-x-4.5', 'bg-white');
-                    colorDot.classList.add('translate-x-0.5', 'bg-neutral-400');
+                    colorDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 }
                 draw();
                 drawNext();
@@ -779,52 +814,89 @@
             if (type === 'S') return [[0, 6, 6], [6, 6, 0], [0, 0, 0]];
             if (type === 'T') return [[0, 7, 0], [7, 7, 7], [0, 0, 0]];
         }
+
+        function drawPixelTile(ctx, x, y, colorIndex) {
+            const currentPalette = getActivePalette();
+            const baseColor = currentPalette[colorIndex] || '#f3f4f6';
+
+            // Base fill
+            ctx.fillStyle = baseColor;
+            ctx.fillRect(x, y, 1, 1);
+
+            // 1. Outer Dark Pixel Border
+            ctx.strokeStyle = '#08080a';
+            ctx.lineWidth = 0.08;
+            ctx.strokeRect(x, y, 1, 1);
+
+            // 2. Nintendo Style Bevel Highlights (Top & Left edges)
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+            ctx.fillRect(x + 0.08, y + 0.08, 0.84, 0.12); // Top Highlight
+            ctx.fillRect(x + 0.08, y + 0.08, 0.12, 0.84); // Left Highlight
+
+            // 3. Shadow Bevels (Bottom & Right edges)
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            ctx.fillRect(x + 0.08, y + 0.80, 0.84, 0.12); // Bottom Shadow
+            ctx.fillRect(x + 0.80, y + 0.08, 0.12, 0.84); // Right Shadow
+
+            // 4. Center Core Inset with Dithered Retro Pixel Dots
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillRect(x + 0.25, y + 0.25, 0.50, 0.50);
+
+            // Retro Dither Grain (Pixel dots)
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+            ctx.fillRect(x + 0.32, y + 0.32, 0.12, 0.12);
+            ctx.fillRect(x + 0.56, y + 0.56, 0.12, 0.12);
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.fillRect(x + 0.56, y + 0.32, 0.12, 0.12);
+            ctx.fillRect(x + 0.32, y + 0.56, 0.12, 0.12);
+        }
+
         function drawMatrix(matrix, offset) {
-            const colors = getBlockColors();
+            if (!matrix) return;
             matrix.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
-                        context.fillStyle = colors[value] || '#f3f4f6';
-                        context.fillRect(x + offset.x, y + offset.y, 1, 1);
-                        context.strokeStyle = '#111';
-                        context.lineWidth = 0.05;
-                        context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                        drawPixelTile(context, x + offset.x, y + offset.y, value);
                     }
                 });
             });
         }
 
-        function drawHighScoreText() {
-            context.save();
-            context.font = '1px "JetBrains Mono", monospace';
-            context.fillStyle = 'rgba(255, 255, 255, 0.85)';
-            context.textAlign = 'left';
-            context.fillText(`HIGH: ${highScore.toString().padStart(6, '0')}`, 0.4, 1.2);
-            context.restore();
-        }
-
         function draw() {
-            context.fillStyle = '#1a1a1a';
+            context.fillStyle = '#101014';
             context.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw retro subtle background grid
+            context.strokeStyle = '#1a1a22';
+            context.lineWidth = 0.02;
+            for (let x = 0; x <= 13; x++) {
+                context.beginPath(); context.moveTo(x, 0); context.lineTo(x, 21); context.stroke();
+            }
+            for (let y = 0; y <= 21; y++) {
+                context.beginPath(); context.moveTo(0, y); context.lineTo(13, y); context.stroke();
+            }
+
             drawMatrix(arena, {x: 0, y: 0});
-            drawMatrix(player.matrix, player.pos);
-            drawHighScoreText();
+            if (player.matrix) {
+                drawMatrix(player.matrix, player.pos);
+            }
+
+            /* Draw High Score Overlay on Top of Canvas */
+            context.fillStyle = 'rgba(255, 255, 255, 0.75)';
+            context.font = '0.52px "JetBrains Mono", monospace';
+            context.fillText(`HIGH: ${highScore.toString().padStart(6, '0')}`, 0.4, 0.9);
         }
 
         function drawNext() {
             nextContext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
             if (!nextPieceMatrix) return;
-            const colors = getBlockColors();
             const xOffset = (4 - nextPieceMatrix[0].length) / 2;
             const yOffset = (4 - nextPieceMatrix.length) / 2;
             nextPieceMatrix.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
-                        nextContext.fillStyle = colors[value] || '#f3f4f6';
-                        nextContext.fillRect(x + xOffset, y + yOffset, 1, 1);
-                        nextContext.strokeStyle = '#111';
-                        nextContext.lineWidth = 0.05;
-                        nextContext.strokeRect(x + xOffset, y + yOffset, 1, 1);
+                        drawPixelTile(nextContext, x + xOffset, y + yOffset, value);
                     }
                 });
             });
@@ -843,35 +915,25 @@
         function playerMove(offset) { if (isPaused) return; player.pos.x += offset; if (!collide(arena, player)) playSound('move'); else player.pos.x -= offset; }
         
         let nextPieceMatrix = null;
-        
         function playerReset() {
             const pieces = 'TJLOSZI';
-            if (!nextPieceMatrix) { 
-                player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]); 
-                nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]); 
-            } else { 
-                player.matrix = nextPieceMatrix; 
-                nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]); 
-            }
-            player.pos.y = 0; 
-            player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+            if (!nextPieceMatrix) { player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]); nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]); }
+            else { player.matrix = nextPieceMatrix; nextPieceMatrix = createPiece(pieces[pieces.length * Math.random() | 0]); }
+            player.pos.y = 0; player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
             drawNext();
 
-            if (collide(arena, player)) { 
-                // Game Over - 停留在畫面並可重新開始
-                isGameOver = true;
-                isPaused = true;
+            if (collide(arena, player)) {
+                /* Game Over Handling */
                 gameStarted = false;
-                
+                isPaused = true;
                 if (player.score > highScore) {
                     highScore = player.score;
                     localStorage.setItem('xiao_tetris_highscore', highScore.toString());
                 }
-
                 overlayTitle.innerText = "Game Over";
-                overlaySubtitle.innerText = "Click to Restart";
-                gameOverlay.classList.remove('hidden'); 
-                pauseOverlay.classList.add('hidden'); 
+                overlaySub.innerText = "Click to Restart";
+                gameOverlay.classList.remove('hidden');
+                pauseOverlay.classList.add('hidden');
             }
         }
 
@@ -894,17 +956,17 @@
         }
 
         function updateScore() {
+            const level = Math.floor(player.score / 100) + 1;
+            scoreElement.innerText = player.score.toString().padStart(6, '0');
+            levelElement.innerText = level.toString().padStart(2, '0');
             if (player.score > highScore) {
                 highScore = player.score;
                 localStorage.setItem('xiao_tetris_highscore', highScore.toString());
             }
-            const level = Math.floor(player.score / 100) + 1;
-            scoreElement.innerText = player.score.toString().padStart(6, '0');
-            levelElement.innerText = level.toString().padStart(2, '0');
             dropInterval = isBoostActive ? Math.max(50, 1000 - (level - 1) * 180) : Math.max(100, 1000 - (level - 1) * 100);
         }
 
-        let dropCounter = 0, dropInterval = 1000, lastTimeFrame = null, isPaused = true, gameStarted = false, isGameOver = false;
+        let dropCounter = 0, dropInterval = 1000, lastTimeFrame = null, isPaused = true, gameStarted = false;
         const DAS_DELAY = 180, ARR_INTERVAL = 40;
         const inputState = { left: { pressed: false, dasTime: 0, arrTime: 0 }, right: { pressed: false, dasTime: 0, arrTime: 0 }, down: { pressed: false, dasTime: 0, arrTime: 0 } };
         const keyMap = { 37: 'left', 65: 'left', 39: 'right', 68: 'right', 40: 'down', 83: 'down' };
@@ -955,7 +1017,8 @@
             if (isPaused) { 
                 pauseOverlay.classList.remove('hidden'); 
                 pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-            } else { 
+            }
+            else { 
                 pauseOverlay.classList.add('hidden'); 
                 pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
                 lastTimeFrame = null; 
@@ -964,24 +1027,21 @@
         };
 
         const startGame = () => { 
-            arena.forEach(row => row.fill(0)); 
+            arena.forEach(row => row.fill(0));
             player.score = 0;
-            isGameOver = false;
             gameStarted = true; 
             isPaused = false; 
             gameOverlay.classList.add('hidden'); 
             pauseOverlay.classList.add('hidden');
             pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+            nextPieceMatrix = null;
             playerReset(); 
             updateScore(); 
             lastTimeFrame = null; 
             requestAnimationFrame(update); 
         };
 
-        gameOverlay.onclick = () => {
-            startGame();
-        };
-
+        gameOverlay.onclick = startGame;
         pauseOverlay.onclick = togglePause;
 
         function configureControl(btnId, action, isContinuous) {
@@ -1040,7 +1100,7 @@
                 return;
             }
 
-            if (!gameStarted && (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 38)) {
+            if (!gameStarted && (e.keyCode === 13 || e.keyCode === 32)) {
                 startGame();
                 return;
             }
