@@ -95,7 +95,7 @@
             #game-canvas {
                 max-width: 100%;
                 width: auto;
-                max-height: 68vh; /* 提高手機版畫面最大高度限制，顯著放大遊戲區域 */
+                max-height: 68vh; /* 優化手機版畫面最高限制，確保畫面與按鈕皆能全覽 */
                 margin: 0 auto;
             }
         }
@@ -253,7 +253,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 8px; 
+            padding: 4px; 
             border: 1px solid var(--pad-solid-bg); 
             border-radius: 6px; 
             background: var(--pad-solid-bg); 
@@ -266,15 +266,17 @@
         }
 
         .service-tag span {
-            font-size: 0.55rem; 
+            font-size: clamp(0.46rem, 1.1vw, 0.58rem); 
             font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.01em;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
             color: var(--pad-text);
             opacity: 0;
             transition: opacity 0.35s ease;
-            word-break: break-word;
-            overflow-wrap: break-word;
+            word-break: normal;
+            overflow-wrap: normal;
+            white-space: normal;
+            hyphens: none;
             max-width: 100%;
             display: -webkit-box;
             -webkit-line-clamp: 3;
@@ -284,7 +286,7 @@
 
         @media (min-width: 640px) {
             .service-tag span {
-                font-size: 0.6rem;
+                font-size: 0.58rem;
             }
         }
 
@@ -470,16 +472,16 @@
 
                             <!-- Game Pause Overlay -->
                             <div id="pause-overlay" class="game-overlay hidden">
-                                <div class="text-2xl sm:text-3xl font-herr-von-muellerhoff text-white tracking-[0.05em] px-4 mb-2 sm:mb-3 whitespace-nowrap">
-                                    System Halted
+                                <div class="text-2xl sm:text-3xl font-bold text-white tracking-widest uppercase">
+                                    PAUSED
                                 </div>
-                                <div class="text-xs opacity-70 uppercase tracking-widest">Click to Resume</div>
+                                <div class="text-[0.55rem] sm:text-[0.6rem] mt-2 sm:mt-3 opacity-60 uppercase tracking-widest">Click or Press P to Resume</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Score Dashboard Panel (手機與電腦版皆位於右側直列佈局) -->
-                    <div class="flex flex-col justify-between items-center p-2.5 sm:p-3.5 border border-white/10 rounded bg-[#121214]/75 w-[110px] sm:w-[160px] max-h-[48vh] sm:max-h-none gap-1 sm:gap-2 box-border overflow-hidden shrink-0">
+                    <!-- Right Score Dashboard Panel -->
+                    <div class="flex flex-col justify-between items-center p-2 sm:p-3 border border-white/10 rounded bg-[#121214]/75 w-[110px] sm:w-[160px] gap-1 sm:gap-2 box-border overflow-hidden shrink-0">
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
                             <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none">Score</div>
                             <div class="text-sm sm:text-2xl font-bold tracking-tighter text-white truncate my-auto" id="score">000000</div>
@@ -930,8 +932,8 @@
                 }
                 overlayTitle.innerText = "Game Over";
                 overlaySub.innerText = "Click to Restart";
-                gameOverlay.classList.remove('hidden');
-                pauseOverlay.classList.add('hidden');
+                if (gameOverlay) gameOverlay.classList.remove('hidden');
+                if (pauseOverlay) pauseOverlay.classList.add('hidden');
             }
         }
 
@@ -1013,12 +1015,12 @@
             if (!gameStarted) return;
             isPaused = !isPaused;
             if (isPaused) { 
-                pauseOverlay.classList.remove('hidden'); 
-                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+                if (pauseOverlay) pauseOverlay.classList.remove('hidden'); 
+                if (pauseBtn) pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
             }
             else { 
-                pauseOverlay.classList.add('hidden'); 
-                pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+                if (pauseOverlay) pauseOverlay.classList.add('hidden'); 
+                if (pauseBtn) pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
                 lastTimeFrame = null; 
                 requestAnimationFrame(update); 
             }
@@ -1029,9 +1031,9 @@
             player.score = 0;
             gameStarted = true; 
             isPaused = false; 
-            gameOverlay.classList.add('hidden'); 
-            pauseOverlay.classList.add('hidden');
-            pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+            if (gameOverlay) gameOverlay.classList.add('hidden'); 
+            if (pauseOverlay) pauseOverlay.classList.add('hidden');
+            if (pauseBtn) pauseBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
             nextPieceMatrix = null;
             playerReset(); 
             updateScore(); 
@@ -1039,8 +1041,8 @@
             requestAnimationFrame(update); 
         };
 
-        gameOverlay.onclick = startGame;
-        pauseOverlay.onclick = togglePause;
+        if (gameOverlay) gameOverlay.onclick = startGame;
+        if (pauseOverlay) pauseOverlay.onclick = togglePause;
 
         function configureControl(btnId, action, isContinuous) {
             const btn = document.getElementById(btnId);
