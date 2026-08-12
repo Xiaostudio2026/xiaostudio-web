@@ -193,6 +193,56 @@
         .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
         .lang-btn { font-size: 14px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
+        
+        /* 連結與按鈕旁箭頭指示圖示專用樣式 */
+        .link-arrow {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 0.85em;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .node-btn-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            transition: opacity 0.3s ease;
+        }
+
+        .node-btn-text::after {
+            content: " ↗";
+            display: inline-block;
+            font-size: 0.9em;
+            margin-left: 3px;
+            opacity: 0.6;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+
+        /* 懸停動態效果：箭頭向右上微幅跳動 */
+        .workflow-node .node-box div:hover .node-btn-text::after,
+        .node-btn-text:hover::after {
+            transform: translate(3px, -3px);
+            opacity: 1;
+        }
+
+        /* 通用超連結（例如 Email 連結）箭頭效果 */
+        a {
+            transition: all 0.3s ease;
+        }
+        a:not(.no-arrow)::after {
+            content: " ↗";
+            display: inline-block;
+            font-size: 0.85em;
+            margin-left: 3px;
+            opacity: 0.7;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        a:not(.no-arrow):hover::after {
+            transform: translate(3px, -3px);
+            opacity: 1;
+        }
+
         .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
@@ -341,8 +391,8 @@
 
         .hero-text {
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-         margin-left: 30px;
-       }
+            margin-left: 30px;
+        }
 
         body.music-active .hero-text {
             transform: translateY(-32px);
@@ -425,7 +475,7 @@
     </nav>
 
     <div class="section" id="main-view">
-        <!-- 後備 HTML5 Video 播放器（添加 controlsList="nodownload" 與 disablePictureInPicture 保護標籤） -->
+        <!-- 後備 HTML5 Video 播放器 -->
         <div class="video-background" id="fallback-bg">
             <video id="bgVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
@@ -499,7 +549,7 @@
                     <span class="status-indicator"></span>
                     <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white">Pipeline System</span>
                 </div>
-                <div id="btn-close" class="px-5 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-all rounded-sm" onclick="hideOverlay()">Close</div>
+                <div id="btn-close" class="px-5 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-all rounded-sm flex items-center gap-1" onclick="hideOverlay()">Close <span class="text-[12px] font-normal">✕</span></div>
             </div>
             <div id="overlay-content" class="w-full flex-1 relative overflow-hidden"></div>
         </div>
@@ -610,7 +660,7 @@
         }
 
         const translations = {
-            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "作品存檔", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道", carbon: "全球累計二氧化碳排放量 (公噸)" },
+            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "平面視覺", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道", carbon: "全球累計二氧化碳排放量 (公噸)" },
             en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System", carbon: "Cumulative Global CO2 Emissions (Tons)" },
             jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム", carbon: "世界の累積二酸化碳素排出量 (トン)" },
             kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", webView: "디지털 경험", close: "닫기", updateSoon: "파이프ライン 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프라인 시스템", carbon: "전 세계 누적 이산화탄소 배출량 (톤)" },
@@ -694,7 +744,6 @@
             document.getElementById('btn-print').innerText = t.viewPrint;
             document.getElementById('txt-web').innerText = t.web;
             document.getElementById('btn-web').innerText = t.viewWeb;
-            document.getElementById('btn-close').innerText = t.close;
             document.getElementById('btn-form').innerText = t.request;
             document.getElementById('overlay-title').innerText = t.pipelineTitle;
             document.getElementById('txt-carbon-label').innerText = t.carbon;
