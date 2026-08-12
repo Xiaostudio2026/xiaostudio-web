@@ -95,7 +95,7 @@
             #game-canvas {
                 max-width: 100%;
                 width: auto;
-                max-height: 68vh; /* 優化手機版畫面最高限制，確保畫面與按鈕皆能全覽 */
+                max-height: 68vh;
                 margin: 0 auto;
             }
         }
@@ -110,7 +110,6 @@
             position: relative;
         }
 
-        /* 移除橫條條紋，改為柔和暗角與色彩邊暈 */
         #canvas-container::after {
             content: "";
             position: absolute;
@@ -326,6 +325,18 @@
                 background-color: #000000;
             }
         }
+
+        /* 電腦數據運算文字解碼流特效 */
+        .cyber-matrix-text {
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            font-size: 0.52em;
+            vertical-align: middle;
+            margin-left: 0.2rem;
+            min-width: 19.5ch;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body class="p-3 sm:p-6">
@@ -352,7 +363,9 @@
         <header class="mb-4 sm:mb-6 flex flex-col lg:flex-row justify-between items-end pb-4 sm:pb-6 border-b border-white/10 gap-4 sm:gap-6">
             <div>
                 <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]">NODE_01 / ARCH_X64</div>
-                <h1 class="text-3xl sm:text-4xl font-bold tracking-tighter text-white">XIAO_STUDIO v3.0</h1>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tighter text-white">
+                    XIAO_STUDIO <span id="cyber-matrix-display" class="cyber-matrix-text"></span><span class="animate-pulse text-white font-bold ml-0.5">_</span>
+                </h1>
             </div>
             
             <div class="flex flex-wrap gap-x-6 gap-y-3 font-mono text-left w-full lg:w-auto">
@@ -465,7 +478,7 @@
                                     <svg class="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 </div>
                                 <div id="overlay-title" class="text-3xl sm:text-4xl font-windsong text-white tracking-[0.05em] px-4 whitespace-nowrap">
-                                    Initialize </br>Kernel
+                                    Initialize <br/>Kernel
                                 </div>
                                 <div id="overlay-sub" class="text-[0.55rem] sm:text-[0.6rem] mt-2 sm:mt-3 opacity-60 uppercase tracking-widest">Click to Execute</div>
                             </div>
@@ -621,10 +634,60 @@
                 vid.play().catch(() => {});
             });
             initMidiPadsWaveRhythm();
+            initCyberMatrixScrambler();
             draw();
         });
 
-        /* Wave MIDI Pad Backlight Controller */
+        function initCyberMatrixScrambler() {
+            const phrases = [
+                "Flow as Liquid",
+                "Roll with the Form",
+                "Spin into the World"
+            ];
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/";
+            const displayEl = document.getElementById('cyber-matrix-display');
+            if (!displayEl) return;
+
+            let phraseIdx = 0;
+
+            function scrambleTo(targetText, onComplete) {
+                let iteration = 0;
+                const maxIterations = targetText.length * 3;
+                
+                const interval = setInterval(() => {
+                    displayEl.innerText = targetText
+                        .split('')
+                        .map((char, index) => {
+                            if (char === ' ') return ' ';
+                            if (index < iteration / 3) {
+                                return targetText[index];
+                            }
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join('');
+
+                    if (iteration >= maxIterations) {
+                        clearInterval(interval);
+                        displayEl.innerText = targetText;
+                        if (onComplete) onComplete();
+                    }
+                    iteration++;
+                }, 35);
+            }
+
+            function cycle() {
+                const target = phrases[phraseIdx];
+                scrambleTo(target, () => {
+                    setTimeout(() => {
+                        phraseIdx = (phraseIdx + 1) % phrases.length;
+                        cycle();
+                    }, 2800); // 停留展示2.8秒
+                });
+            }
+
+            cycle();
+        }
+
         function initMidiPadsWaveRhythm() {
             const tags = document.querySelectorAll('.service-tag');
             if (!tags.length) return;
@@ -735,7 +798,6 @@
         let highScore = parseInt(localStorage.getItem('xiao_tetris_highscore') || '0', 10);
         let colorModeEnabled = true;
 
-        /* Game Boy LCD Monochrome Palette */
         const grayPalette = [
             null,
             '#dddddd',
@@ -747,16 +809,15 @@
             '#3f3b3a'
         ];
 
-        /* Nintendo NES / Famicom 8-Bit Retro Electronic Palette */
         const midiPalette = [
             null,
-            '#00e5ff', // 1: Cyan
-            '#ff9100', // 2: Orange
-            '#2962ff', // 3: Cobalt Blue
-            '#ffea00', // 4: Yellow
-            '#ff1744', // 5: Red
-            '#00e676', // 6: Emerald Green
-            '#d500f9'  // 7: Violet
+            '#00e5ff',
+            '#ff9100',
+            '#2962ff',
+            '#ffea00',
+            '#ff1744',
+            '#00e676',
+            '#d500f9'
         ];
 
         function getActivePalette() {
@@ -872,7 +933,6 @@
             context.fillStyle = '#101014';
             context.fillRect(0, 0, canvas.width, canvas.height);
             
-            // 無橫條暗色極簡底紋
             context.strokeStyle = 'rgba(255, 255, 255, 0.02)';
             context.lineWidth = 0.01;
             for (let x = 0; x <= 13; x++) {
