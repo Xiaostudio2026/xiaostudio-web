@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -352,9 +352,10 @@
     </div>
     <div class="video-overlay"></div>
 
+    <!-- Modal Form -->
     <div id="form-modal">
         <div class="modal-content">
-            <div class="modal-title" id="i18n-modal-title">External_Form: Request_Consultation</div>
+            <div class="modal-title" data-i18n="externalFormTitle">External_Form: Request_Consultation</div>
             <div class="close-btn" onclick="closeModal()">✕</div>
             <div class="iframe-container">
                 <iframe src="https://xiaostudio.xyz/form/" class="w-full h-full border-none"></iframe>
@@ -363,11 +364,10 @@
     </div>
 
     <div class="main-container">
+        <!-- Header -->
         <header class="mb-4 sm:mb-6 flex flex-col lg:flex-row justify-between items-end pb-4 sm:pb-6 border-b border-white/10 gap-4 sm:gap-6">
-            <div class="w-full lg:w-auto">
-                <div class="flex items-center justify-between lg:justify-start gap-4 mb-1">
-                    <div class="text-[0.65rem] text-gray-500 tracking-[0.2em]" id="i18n-node-arch">NODE_01 / ARCH_X64</div>
-                </div>
+            <div>
+                <div class="text-[0.65rem] text-gray-500 mb-1 tracking-[0.2em]" data-i18n="nodeArch">NODE_01 / ARCH_X64</div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tighter text-white">
                     XIAO_STUDIO <span id="cyber-matrix-display" class="cyber-matrix-text"></span><span class="animate-pulse text-white font-bold ml-0.5">_</span>
                 </h1>
@@ -375,28 +375,28 @@
             
             <div class="flex flex-wrap gap-x-6 gap-y-3 text-left w-full lg:w-auto">
                 <div class="border-r border-white/10 pr-6 min-w-[110px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" id="i18n-lat-label">LATITUDE</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" data-i18n="latitude">LATITUDE</div>
                     <div class="text-xl font-bold text-white">25.0117° N</div>
                 </div>
                 <div class="border-r border-white/10 pr-6 min-w-[110px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" id="i18n-lng-label">LONGITUDE</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" data-i18n="longitude">LONGITUDE</div>
                     <div class="text-xl font-bold text-white">121.4658° E</div>
                 </div>
                 <div class="border-r border-white/10 pr-6 min-w-[155px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" id="i18n-env-label">HUMIDITY / TEMP</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" data-i18n="humidityTemp">HUMIDITY / TEMP</div>
                     <div class="text-xl font-bold text-white">
                         <span id="humidity-val">-- %</span><span class="text-gray-600 text-sm mx-1">/</span><span id="temp-val" class="text-red-400">--°C</span>
                     </div>
                 </div>
                 <div class="border-r border-white/10 pr-6 min-w-[110px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold">PM2.5</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" data-i18n="pm25">PM2.5</div>
                     <div class="text-xl font-bold text-white" id="pm25-val">-- μg/m³</div>
                 </div>
                 <div class="min-w-[120px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" id="i18n-sys-loc-label">SYSTEM_LOC</div>
-                    <div class="text-xs font-bold text-white flex items-center gap-1.5 mt-1.5" id="i18n-sys-loc-val">
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold" data-i18n="systemLoc">SYSTEM_LOC</div>
+                    <div class="text-xs font-bold text-white flex items-center gap-1.5 mt-1.5">
                         <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
-                        BANQIAO, TAIWAN
+                        <span data-i18n="banqiaoTaiwan">BANQIAO, TAIWAN</span>
                     </div>
                 </div>
             </div>
@@ -404,10 +404,11 @@
 
         <main class="flex flex-col gap-6 sm:gap-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+                <!-- Left Column -->
                 <div class="lg:col-span-6 flex flex-col gap-6 sm:gap-8">
                     <div class="dashboard-panel p-5 sm:p-6 rounded bg-[#121214]/20 h-full flex flex-col justify-between">
                         <div>
-                            <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest" id="i18n-mem-visualizer">Memory Cache Visualizer</h3>
+                            <h3 class="text-[0.78rem] font-bold mb-4 text-gray-400 uppercase tracking-widest" data-i18n="memoryCacheVisualizer">Memory Cache Visualizer</h3>
                             
                             <div class="flex justify-center mb-4 overflow-hidden rounded border border-white/10 bg-black/40">
                                 <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[460px] max-w-full h-auto object-cover rounded">
@@ -419,7 +420,7 @@
                             <div class="space-y-3">
                                 <div>
                                     <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
-                                        <span class="text-gray-300" id="i18n-work-exp-title">WORK EXPERIENCE</span>
+                                        <span class="text-gray-300" data-i18n="workExperience">WORK EXPERIENCE</span>
                                     </div>
                                     <div id="experience-display" class="experience-timer text-gray-300">
                                         LOADING_DATA...
@@ -430,10 +431,11 @@
                     </div>
                 </div>
 
+                <!-- Right Column -->
                 <div class="lg:col-span-6 flex flex-col gap-6 sm:gap-8">
                     <div class="dashboard-panel p-5 sm:p-6 rounded bg-[#121214]/20 h-full">
-                        <h3 class="text-[0.65rem] font-bold mb-4 text-gray-400 uppercase tracking-widest" id="i18n-svc-capabilities">Service_Capabilities</h3>
-                        <div class="grid grid-cols-4 gap-2.5 mb-6 max-w-[420px]" id="service-tags-container">
+                        <h3 class="text-[0.65rem] font-bold mb-4 text-gray-400 uppercase tracking-widest" data-i18n="serviceCapabilities">Service_Capabilities</h3>
+                        <div class="grid grid-cols-4 gap-2.5 mb-6 max-w-[420px]">
                             <div class="service-tag"><span>Branding & Identity</span></div>
                             <div class="service-tag"><span>Visual Production</span></div>
                             <div class="service-tag"><span>Packaging Design</span></div>
@@ -449,17 +451,17 @@
                         </div>
                         
                         <div class="pt-4 border-t border-white/5">
-                            <div class="text-[0.6rem] text-gray-500 mb-4 uppercase tracking-wider" id="i18n-contact-protocols">Contact_Protocols</div>
+                            <div class="text-[0.6rem] text-gray-500 mb-4 uppercase tracking-wider" data-i18n="contactProtocols">Contact_Protocols</div>
                             <div class="space-y-4">
                                 <a href="mailto:jewuenxiao@gmail.com" class="block group">
-                                    <div class="text-[0.5rem] text-gray-500 mb-1 uppercase" id="i18n-mail-gateway">01. MAIL_GATEWAY</div>
+                                    <div class="text-[0.5rem] text-gray-500 mb-1 uppercase" data-i18n="mailGateway">01. MAIL_GATEWAY</div>
                                     <div class="text-[0.9rem] text-gray-300 group-hover:underline underline-offset-4 decoration-white/30">
                                         jewuenxiao@gmail.com
                                     </div>
                                 </a>
                                 <div class="group">
-                                    <div class="text-[0.5rem] text-gray-500 mb-2 uppercase" id="i18n-consultation">02. CONSULTATION</div>
-                                    <button onclick="openModal()" class="request-btn" id="i18n-request-btn">
+                                    <div class="text-[0.5rem] text-gray-500 mb-2 uppercase" data-i18n="consultation">02. CONSULTATION</div>
+                                    <button onclick="openModal()" class="request-btn" data-i18n="submitRequestForm">
                                         SUBMIT_REQUEST_FORM
                                     </button>
                                 </div>
@@ -501,24 +503,24 @@
                     <!-- Right Score Dashboard Panel -->
                     <div class="flex flex-col justify-between items-center p-2 sm:p-3 border border-white/10 rounded bg-[#121214]/75 w-[110px] sm:w-[160px] gap-1 sm:gap-2 box-border overflow-hidden shrink-0">
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
-                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" id="i18n-score-label">Score</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" data-i18n="score">Score</div>
                             <div class="text-sm sm:text-2xl font-bold tracking-tighter text-white truncate my-auto" id="score">000000</div>
                         </div>
 
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
-                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" id="i18n-next-label">Next</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" data-i18n="next">Next</div>
                             <div class="my-auto flex items-center justify-center">
                                 <canvas id="next-canvas" width="80" height="80" class="w-8 h-8 sm:w-10 sm:h-10 bg-transparent block"></canvas>
                             </div>
                         </div>
 
                         <div class="text-center w-full min-w-0 flex flex-col justify-between items-center py-0.5">
-                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" id="i18n-level-label">Level</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" data-i18n="level">Level</div>
                             <div class="text-sm sm:text-2xl font-bold text-gray-400 truncate my-auto" id="level">01</div>
                         </div>
 
                         <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
-                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" id="i18n-boost-label">Boost</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" data-i18n="boost">Boost</div>
                             <div class="my-auto flex items-center justify-center mt-0.5">
                                 <button id="btn-boost" class="relative inline-flex h-3.5 sm:h-4 w-7 sm:w-8 items-center rounded-full bg-neutral-800 transition-colors duration-300 focus:outline-none shrink-0">
                                     <span id="boost-dot" class="inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5"></span>
@@ -527,7 +529,7 @@
                         </div>
 
                         <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
-                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" id="i18n-sound-label">Sound</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" data-i18n="sound">Sound</div>
                             <div class="my-auto flex items-center justify-center mt-0.5">
                                 <button id="btn-sound" class="relative inline-flex h-3.5 sm:h-4 w-7 sm:w-8 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
                                     <span id="sound-dot" class="inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
@@ -536,7 +538,7 @@
                         </div>
 
                         <div class="text-center flex flex-col justify-between items-center w-full min-w-0 py-0.5">
-                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" id="i18n-color-label">Color</div>
+                            <div class="text-[0.5rem] sm:text-[0.55rem] text-gray-500 uppercase tracking-widest truncate leading-none" data-i18n="color">Color</div>
                             <div class="my-auto flex items-center justify-center mt-0.5">
                                 <button id="btn-color" class="relative inline-flex h-3.5 sm:h-4 w-7 sm:w-8 items-center rounded-full bg-red-600 transition-colors duration-300 focus:outline-none shrink-0">
                                     <span id="color-dot" class="inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4"></span>
@@ -548,9 +550,9 @@
 
                 <!-- Control Hints -->
                 <div class="text-[0.52rem] sm:text-[0.62rem] text-gray-400 tracking-wider flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full max-w-[500px] px-2 text-center">
-                    <span id="i18n-hint-rotate"><span class="text-white">↑</span>: ROTATE</span>
-                    <span id="i18n-hint-pause"><span class="text-white">P</span>: PAUSE</span>
-                    <span id="i18n-hint-drop"><span class="text-white">SPACE</span>: DROP</span>
+                    <span><span class="text-white">↑</span>: <span data-i18n="rotate">ROTATE</span></span>
+                    <span><span class="text-white">P</span>: <span data-i18n="pause">PAUSE</span></span>
+                    <span><span class="text-white">SPACE</span>: <span data-i18n="drop">DROP</span></span>
                 </div>
                 
                 <!-- Game On-Screen Controller -->
@@ -572,7 +574,7 @@
                         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <button class="control-btn h-11 sm:h-12 w-full bg-white/10 active:bg-white/30" id="btn-drop" aria-label="Hard Drop">
-                        <span class="text-xs font-bold text-white tracking-widest" id="i18n-drop-btn">DROP</span>
+                        <span class="text-xs font-bold text-white tracking-widest" data-i18n="drop">DROP</span>
                     </button>
                 </div>
             </div>
@@ -580,312 +582,406 @@
     </div>
 
     <script>
+        // 5-Language Dictionary
         const i18nDictionary = {
             zh: {
-                nodeArch: "節點_01 / 架構_X64",
-                sysLocLabel: "系統位置",
-                sysLocVal: "台灣板橋",
-                memVisualizer: "記憶體快取視覺化",
-                workExpTitle: "工作經驗累積",
-                clockPrecision: "時鐘精準度",
+                hero: "流體律動<br>隨形起舞",
+                about: "關於 XIAO",
+                viewAbout: "查看個人檔案",
+                static: "靜態作品",
+                viewStatic: "平面視覺",
+                motion: "動態作品",
+                viewMotion: "動態專案",
+                print: "印刷包裝",
+                viewPrint: "實體專案",
+                web: "網頁設計",
+                viewWeb: "數位體驗",
+                close: "關閉",
+                updateSoon: "管道詳情即將更新。",
+                request: "需求申請",
+                pipelineTitle: "系統管道",
+                carbon: "全球累計二氧化碳排放量 (公噸)",
+                nowPlaying: "正在播放：《Liquid Lobby Loop》流動如液 隨形起舞 旋轉於世",
+                composedBy: "作曲：xiaostudio ｜ Suno AI 生成",
+
+                nodeArch: "NODE_01 / ARCH_X64",
+                latitude: "緯度",
+                longitude: "經度",
+                humidityTemp: "濕度 / 溫度",
+                pm25: "PM2.5",
+                systemLoc: "系統位置",
+                banqiaoTaiwan: "台灣板橋",
+                memoryCacheVisualizer: "記憶快取視覺化",
+                workExperience: "工作經驗",
+                loadingData: "資料載入中...",
+                clockPrecision: "時鐘精度",
                 years: "年",
                 months: "月",
-                days: "天",
-                svcCapabilities: "服務核心能力",
+                days: "日",
+                serviceCapabilities: "核心服務能力",
                 contactProtocols: "聯絡通訊協定",
-                mailGateway: "01. 電子郵件入口",
-                consultation: "02. 需求諮詢表單",
-                requestBtn: "需求申請",
-                modalTitle: "系統管道：需求申請",
-                scoreLabel: "得分",
-                nextLabel: "下個",
-                levelLabel: "關卡",
-                boostLabel: "加速",
-                soundLabel: "音效",
-                colorLabel: "色彩",
-                hintRotate: "<span class=\"text-white\">↑</span>: 旋轉",
-                hintPause: "<span class=\"text-white\">P</span>: 暫停",
-                hintDrop: "<span class=\"text-white\">空白鍵</span>: 快速落下",
-                dropBtn: "DROP",
-                overlayTitleInit: "核心程式<br/>初始化",
-                overlaySubInit: "點擊執行遊戲",
-                overlayTitleOver: "遊戲結束",
-                overlaySubOver: "點擊重新開始",
-                pauseTitle: "遊戲暫停",
-                pauseSub: "點擊或按 P 鍵繼續",
+                mailGateway: "01. 電子郵件閘道",
+                consultation: "02. 專案諮詢需求",
+                submitRequestForm: "提交需求表單",
+                externalFormTitle: "外部表單：專案諮詢申請",
+
+                initKernel: "核心程式初始化",
+                clickToExecute: "點擊執行",
+                paused: "暫停",
+                clickToResume: "點擊或按 P 鍵繼續",
+                gameOver: "遊戲結束",
+                clickToRestart: "點擊重新開始",
+                score: "得分",
+                next: "下一個",
+                level: "關卡",
+                boost: "催落去",
+                sound: "音效",
+                color: "色彩",
+                rotate: "旋轉",
+                pause: "暫停",
+                drop: "急下",
+
                 matrixPhrases: [
-                    "流體律動",
+                     "流體律動",
                     "隨形而舞",
                     "旋入世界"
-                ],
-                serviceTags: [
-                    "品牌識別與形象", "視覺美術製作", "包裝視覺設計", "網頁視覺設計",
-                    "主視覺構圖設計", "海報視覺設計", "裝幀排版設計", "動態視覺影像",
-                    "商業產品攝影", "Asahi", "KIRIN", "Orion"
                 ]
             },
             en: {
+                hero: "Liquid Flow<br>Roll with the Form",
+                about: "About Xiao",
+                viewAbout: "View Profile",
+                static: "Static Works",
+                viewStatic: "Archive",
+                motion: "Motion Works",
+                viewMotion: "Motion Projects",
+                print: "Print & Packaging",
+                viewPrint: "Physical Projects",
+                web: "Web Design",
+                viewWeb: "Digital Experience",
+                close: "Close",
+                updateSoon: "Pipeline details updated soon.",
+                request: "Request Project",
+                pipelineTitle: "Pipeline System",
+                carbon: "Cumulative Global CO2 Emissions (Tons)",
+                nowPlaying: "NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World",
+                composedBy: "Composed by xiaostudio · Generated via Suno AI",
+
                 nodeArch: "NODE_01 / ARCH_X64",
-                sysLocLabel: "SYSTEM_LOC",
-                sysLocVal: "BANQIAO, TAIWAN",
-                memVisualizer: "Memory Cache Visualizer",
-                workExpTitle: "WORK EXPERIENCE",
+                latitude: "LATITUDE",
+                longitude: "LONGITUDE",
+                humidityTemp: "HUMIDITY / TEMP",
+                pm25: "PM2.5",
+                systemLoc: "SYSTEM_LOC",
+                banqiaoTaiwan: "BANQIAO, TAIWAN",
+                memoryCacheVisualizer: "Memory Cache Visualizer",
+                workExperience: "WORK EXPERIENCE",
+                loadingData: "LOADING_DATA...",
                 clockPrecision: "Clock Precision",
                 years: "YEARS",
                 months: "MONTHS",
                 days: "DAYS",
-                svcCapabilities: "Service_Capabilities",
+                serviceCapabilities: "Service_Capabilities",
                 contactProtocols: "Contact_Protocols",
                 mailGateway: "01. MAIL_GATEWAY",
                 consultation: "02. CONSULTATION",
-                requestBtn: "Request Project",
-                modalTitle: "Pipeline System: Request Project",
-                scoreLabel: "Score",
-                nextLabel: "Next",
-                levelLabel: "Level",
-                boostLabel: "Boost",
-                soundLabel: "Sound",
-                colorLabel: "Color",
-                hintRotate: "<span class=\"text-white\">↑</span>: ROTATE",
-                hintPause: "<span class=\"text-white\">P</span>: PAUSE",
-                hintDrop: "<span class=\"text-white\">SPACE</span>: DROP",
-                dropBtn: "DROP",
-                overlayTitleInit: "Initialize <br/>Kernel",
-                overlaySubInit: "Click to Execute",
-                overlayTitleOver: "Game Over",
-                overlaySubOver: "Click to Restart",
-                pauseTitle: "PAUSED",
-                pauseSub: "Click or Press P to Resume",
+                submitRequestForm: "SUBMIT_REQUEST_FORM",
+                externalFormTitle: "External_Form: Request_Consultation",
+
+                initKernel: "Initialize Kernel",
+                clickToExecute: "Click to Execute",
+                paused: "PAUSED",
+                clickToResume: "Click or Press P to Resume",
+                gameOver: "Game Over",
+                clickToRestart: "Click to Restart",
+                score: "Score",
+                next: "Next",
+                level: "Level",
+                boost: "Boost",
+                sound: "Sound",
+                color: "Color",
+                rotate: "ROTATE",
+                pause: "PAUSE",
+                drop: "DROP",
+
                 matrixPhrases: [
                     "Flow as Liquid",
                     "Roll with the Form",
                     "Spin into the World"
-                ],
-                serviceTags: [
-                    "Branding & Identity", "Visual Production", "Packaging Design", "Web Design",
-                    "Key Visual", "Poster Design", "Editorial Design", "Motion Graphics",
-                    "Product Photography", "Asahi", "KIRIN", "Orion"
                 ]
             },
             ja: {
+                hero: "流れる律動<br>形に従う",
+                about: "XIAOについて",
+                viewAbout: "プロフィール",
+                static: "グラフィック作品",
+                viewStatic: "アーカイブ",
+                motion: "モーション作品",
+                viewMotion: "モーションプロジェクト",
+                print: "印刷・パッケージ",
+                viewPrint: "フィジカルプロジェクト",
+                web: "ウェブデザイン",
+                viewWeb: "デジタル体験",
+                close: "閉じる",
+                updateSoon: "詳細はまもなく更新されます。",
+                request: "プロジェクト依頼",
+                pipelineTitle: "パイプラインシステム",
+                carbon: "世界の累積二酸化炭素排出量 (トン)",
+                nowPlaying: "再生中：《Liquid Lobby Loop》液体のように流れ 形に従い 世界を巡る",
+                composedBy: "作曲：xiaostudio ｜ Suno AI 作成",
+
                 nodeArch: "ノード_01 / アーキテクチャ_X64",
-                sysLocLabel: "システム位置",
-                sysLocVal: "台湾 板橋",
-                memVisualizer: "メモリキャッシュビジュアライザ",
-                workExpTitle: "職務経験蓄積",
-                clockPrecision: "高精度クロック",
+                latitude: "緯度",
+                longitude: "経度",
+                humidityTemp: "湿度 / 温度",
+                pm25: "PM2.5",
+                systemLoc: "システム位置",
+                banqiaoTaiwan: "台湾 板橋",
+                memoryCacheVisualizer: "メモリキャッシュビジュアライザ",
+                workExperience: "実務経験",
+                loadingData: "データ読み込み中...",
+                clockPrecision: "クロック精度",
                 years: "年",
                 months: "ヶ月",
                 days: "日",
-                svcCapabilities: "提供サービス領域",
+                serviceCapabilities: "サービス対応能力",
                 contactProtocols: "コンタクトプロトコル",
                 mailGateway: "01. メールゲートウェイ",
-                consultation: "02. 相談・お問合せ",
-                requestBtn: "プロジェクト依頼",
-                modalTitle: "パイプラインシステム: プロジェクト依頼",
-                scoreLabel: "スコア",
-                nextLabel: "ネクスト",
-                levelLabel: "レベル",
-                boostLabel: "ブースト",
-                soundLabel: "サウンド",
-                colorLabel: "カラー",
-                hintRotate: "<span class=\"text-white\">↑</span>: 回転",
-                hintPause: "<span class=\"text-white\">P</span>: 一時停止",
-                hintDrop: "<span class=\"text-white\">SPACE</span>: 落下",
-                dropBtn: "DROP",
-                overlayTitleInit: "カーネル<br/>初期化",
-                overlaySubInit: "クリックして実行",
-                overlayTitleOver: "ゲームオーバー",
-                overlaySubOver: "クリックして再始動",
-                pauseTitle: "一時停止",
-                pauseSub: "クリックまたはPキーで再開",
+                consultation: "02. プロジェクトのご相談",
+                submitRequestForm: "リクエストフォーム送信",
+                externalFormTitle: "外部フォーム: プロジェクト依頼申請",
+
+                initKernel: "カーネル初期化",
+                clickToExecute: "クリックして実行",
+                paused: "一時停止",
+                clickToResume: "クリックまたは P キーで再開",
+                gameOver: "ゲームオーバー",
+                clickToRestart: "クリックして再始動",
+                score: "スコア",
+                next: "ネクスト",
+                level: "レベル",
+                boost: "ブースト",
+                sound: "サウンド",
+                color: "カラー",
+                rotate: "回転",
+                pause: "一時停止",
+                drop: "ドロップ",
+
                 matrixPhrases: [
                     "液体のように流れ",
                     "形に従い",
                     "世界を巡る"
-                ],
-                serviceTags: [
-                    "ブランディング & アイデンティティ", "ビジュアルプロダクション", "パッケージデザイン", "ウェブデザイン",
-                    "キービジュアル", "ポスターデザイン", "エディトリアルデザイン", "モーショングラフィックス",
-                    "商品撮影", "Asahi", "KIRIN", "Orion"
                 ]
             },
             ko: {
+                hero: "유체의 흐름<br>형태를 따르다",
+                about: "XIAO 소개",
+                viewAbout: "프로필 보기",
+                static: "정적 작품",
+                viewStatic: "아카이브",
+                motion: "동적 작품",
+                viewMotion: "모션 프로젝트",
+                print: "인쇄 및 패키징",
+                viewPrint: "실체 프로젝트",
+                web: "웹 디자인",
+                viewWeb: "디지털 경험",
+                close: "닫기",
+                updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다.",
+                request: "프로젝트 요청",
+                pipelineTitle: "파이프라인 시스템",
+                carbon: "전 세계 누적 이산화탄소 배출량 (톤)",
+                nowPlaying: "재생 중: 《Liquid Lobby Loop》 유체처럼 흘러 형태를 따르고 세상으로 회전하다",
+                composedBy: "작곡: xiaostudio ｜ Suno AI 생성",
+
                 nodeArch: "노드_01 / 아키텍처_X64",
-                sysLocLabel: "시스템 위치",
-                sysLocVal: "대만 반차오",
-                memVisualizer: "메모리 캐시 시각화",
-                workExpTitle: "경력 사항",
-                clockPrecision: "정밀 시계",
+                latitude: "위도",
+                longitude: "경도",
+                humidityTemp: "습도 / 온도",
+                pm25: "PM2.5",
+                systemLoc: "시스템 위치",
+                banqiaoTaiwan: "대만 반차오",
+                memoryCacheVisualizer: "메모리 캐시 비주얼라이저",
+                workExperience: "경력 사항",
+                loadingData: "데이터 로딩 중...",
+                clockPrecision: "시계 정밀도",
                 years: "년",
                 months: "개월",
                 days: "일",
-                svcCapabilities: "서비스 역량",
-                contactProtocols: "연락 프로토콜",
+                serviceCapabilities: "서비스 역량",
+                contactProtocols: "연락처 프로토콜",
                 mailGateway: "01. 메일 게이트웨이",
-                consultation: "02. 상담 및 문의",
-                requestBtn: "프로젝트 요청",
-                modalTitle: "파이프라인 시스템: 프로젝트 요청",
-                scoreLabel: "점수",
-                nextLabel: "다음",
-                levelLabel: "레벨",
-                boostLabel: "부스트",
-                soundLabel: "소리",
-                colorLabel: "컬러",
-                hintRotate: "<span class=\"text-white\">↑</span>: 회전",
-                hintPause: "<span class=\"text-white\">P</span>: 일시정지",
-                hintDrop: "<span class=\"text-white\">스페이스</span>: 하강",
-                dropBtn: "DROP",
-                overlayTitleInit: "커널<br/>초기화",
-                overlaySubInit: "클릭하여 실행",
-                overlayTitleOver: "게임 오버",
-                overlaySubOver: "클릭하여 다시 시작",
-                pauseTitle: "일시 정지",
-                pauseSub: "클릭 또는 P 키를 눌러 재개",
+                consultation: "02. 프로젝트 상담 요청",
+                submitRequestForm: "요청 양식 제출",
+                externalFormTitle: "외부 양식: 프로젝트 상담 요청",
+
+                initKernel: "커널 초기화",
+                clickToExecute: "클릭하여 실행",
+                paused: "일시 정지",
+                clickToResume: "클릭하거나 P를 눌러 재개",
+                gameOver: "게임 오버",
+                clickToRestart: "클릭하여 재시작",
+                score: "점수",
+                next: "다음",
+                level: "레벨",
+                boost: "부스트",
+                sound: "사운드",
+                color: "컬러",
+                rotate: "회전",
+                pause: "일시 정지",
+                drop: "드롭",
+
                 matrixPhrases: [
                     "유체처럼 흘러",
                     "형태를 따르고",
                     "세상으로 회전하다"
-                ],
-                serviceTags: [
-                    "브랜딩 & 아이덴티티", "비주얼 프로덕션", "패키지 디자인", "웹 디자인",
-                    "키 비주얼", "포스터 디자인", "편집 디자인", "모션 그래픽",
-                    "제품 사진 촬영", "Asahi", "KIRIN", "Orion"
                 ]
             },
             fr: {
-                nodeArch: "NOEUD_01 / ARCH_X64",
-                sysLocLabel: "LOC_SYSTÈME",
-                sysLocVal: "BANQIAO, TAÏWAN",
-                memVisualizer: "Visualiseur Cache Mémoire",
-                workExpTitle: "EXPÉRIENCE PROFESSIONNELLE",
-                clockPrecision: "Précision Horloge",
+                hero: "Flux Liquide<br>Suivre la Forme",
+                about: "À propos de Xiao",
+                viewAbout: "Voir le profil",
+                static: "Travaux Statiques",
+                viewStatic: "Archives",
+                motion: "Travaux Animés",
+                viewMotion: "Projets Motion",
+                print: "Impression & Emballage",
+                viewPrint: "Projets Physiques",
+                web: "Design Web",
+                viewWeb: "Expérience Digitale",
+                close: "Fermer",
+                updateSoon: "Détails mis à jour prochainement.",
+                request: "Demander un Projet",
+                pipelineTitle: "Système Pipeline",
+                carbon: "Émissions mondiales de CO2 cumulées (Tonnes)",
+                nowPlaying: "LECTURE EN COURS : 《Liquid Lobby Loop》 Couler comme du liquide · Suivre la forme · Tourner dans le monde",
+                composedBy: "Composé par xiaostudio · Généré via Suno AI",
+
+                nodeArch: "NŒUD_01 / ARCH_X64",
+                latitude: "LATITUDE",
+                longitude: "LONGITUDE",
+                humidityTemp: "HUMIDITÉ / TEMP",
+                pm25: "PM2.5",
+                systemLoc: "EMPLACEMENT_SYS",
+                banqiaoTaiwan: "BANQIAO, TAIWAN",
+                memoryCacheVisualizer: "Visualiseur de Cache Mémoire",
+                workExperience: "EXPÉRIENCE PROFESSIONNELLE",
+                loadingData: "CHARGEMENT_DONNÉES...",
+                clockPrecision: "Précision de l'Horloge",
                 years: "ANS",
                 months: "MOIS",
                 days: "JOURS",
-                svcCapabilities: "Capacités_Services",
-                contactProtocols: "Protocoles_Contact",
-                mailGateway: "01. PASSERELLE EMAIL",
+                serviceCapabilities: "Capacités_Services",
+                contactProtocols: "Protocole_Contact",
+                mailGateway: "01. PASSERELLE_MAIL",
                 consultation: "02. CONSULTATION",
-                requestBtn: "Demander un Projet",
-                modalTitle: "Système Pipeline: Demander un Projet",
-                scoreLabel: "Score",
-                nextLabel: "Suivant",
-                levelLabel: "Niveau",
-                boostLabel: "Boost",
-                soundLabel: "Son",
-                colorLabel: "Couleur",
-                hintRotate: "<span class=\"text-white\">↑</span>: ROTATION",
-                hintPause: "<span class=\"text-white\">P</span>: PAUSE",
-                hintDrop: "<span class=\"text-white\">ESPACE</span>: CHUTE",
-                dropBtn: "DROP",
-                overlayTitleInit: "Initialiser<br/>Le Noyau",
-                overlaySubInit: "Cliquer pour exécuter",
-                overlayTitleOver: "Fin de Partie",
-                overlaySubOver: "Cliquer pour recommencer",
-                pauseTitle: "EN PAUSE",
-                pauseSub: "Cliquer ou appuyer sur P pour reprendre",
+                submitRequestForm: "SOUMETTRE_FORMULAIRE",
+                externalFormTitle: "Formulaire_Externe: Demande_Consultation",
+
+                initKernel: "Initialisation Kernel",
+                clickToExecute: "Cliquer pour Exécuter",
+                paused: "EN PAUSE",
+                clickToResume: "Cliquer ou Appuyer sur P pour Reprendre",
+                gameOver: "Fin de Partie",
+                clickToRestart: "Cliquer pour Redémarrer",
+                score: "Score",
+                next: "Suivant",
+                level: "Niveau",
+                boost: "Boost",
+                sound: "Son",
+                color: "Couleur",
+                rotate: "PIVOT",
+                pause: "PAUSE",
+                drop: "CHUTE",
+
                 matrixPhrases: [
                     "Couler comme du liquide",
                     "Suivre la forme",
                     "Tourner dans le monde"
-                ],
-                serviceTags: [
-                    "Branding & Identité", "Production Visuelle", "Design d'Emballage", "Design Web",
-                    "Visuel Principal", "Design d'Affiche", "Design Éditorial", "Motion Design",
-                    "Photographie Produit", "Asahi", "KIRIN", "Orion"
                 ]
             }
         };
 
-        let currentLang = 'en';
+        // Aliases for compatibility
+        i18nDictionary.jp = i18nDictionary.ja;
+        i18nDictionary.kr = i18nDictionary.ko;
+
+        let currentLang = 'zh';
 
         function changeLanguage(lang) {
-            if (!lang) return;
-            const l = lang.toLowerCase();
-            if (l.includes('zh')) currentLang = 'zh';
-            else if (l.includes('ja') || l.includes('jp')) currentLang = 'ja';
-            else if (l.includes('ko') || l.includes('kr')) currentLang = 'ko';
-            else if (l.includes('fr')) currentLang = 'fr';
-            else currentLang = 'en';
+            let target = (lang || 'zh').toLowerCase();
+            if (target === 'jp') target = 'ja';
+            if (target === 'kr') target = 'ko';
+            if (!i18nDictionary[target]) target = 'zh';
 
+            currentLang = target;
             const dict = i18nDictionary[currentLang];
 
-            // 更新 DOM 文字內容
-            const setHtml = (id, text) => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = text;
-            };
-            const setText = (id, text) => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = text;
-            };
-
-            setText('i18n-node-arch', dict.nodeArch);
-            setText('i18n-sys-loc-label', dict.sysLocLabel);
-            
-            const sysLocValEl = document.getElementById('i18n-sys-loc-val');
-            if (sysLocValEl) {
-                sysLocValEl.innerHTML = `<span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span> ${dict.sysLocVal}`;
-            }
-
-            setText('i18n-mem-visualizer', dict.memVisualizer);
-            setText('i18n-work-exp-title', dict.workExpTitle);
-            setText('i18n-svc-capabilities', dict.svcCapabilities);
-            setText('i18n-contact-protocols', dict.contactProtocols);
-            setText('i18n-mail-gateway', dict.mailGateway);
-            setText('i18n-consultation', dict.consultation);
-            setText('i18n-request-btn', dict.requestBtn);
-            setText('i18n-modal-title', dict.modalTitle);
-
-            setText('i18n-score-label', dict.scoreLabel);
-            setText('i18n-next-label', dict.nextLabel);
-            setText('i18n-level-label', dict.levelLabel);
-            setText('i18n-boost-label', dict.boostLabel);
-            setText('i18n-sound-label', dict.soundLabel);
-            setText('i18n-color-label', dict.colorLabel);
-
-            setHtml('i18n-hint-rotate', dict.hintRotate);
-            setHtml('i18n-hint-pause', dict.hintPause);
-            setHtml('i18n-hint-drop', dict.hintDrop);
-            setText('i18n-drop-btn', dict.dropBtn);
-
-            setText('pause-title', dict.pauseTitle);
-            setText('pause-sub', dict.pauseSub);
-
-            // 更新遊戲 Over/Init 彈窗字樣 (若當前非遊戲中)
-            if (!gameStarted) {
-                setHtml('overlay-title', dict.overlayTitleInit);
-                setText('overlay-sub', dict.overlaySubInit);
-            }
-
-            const overlayTitleEl = document.getElementById('overlay-title');
-            if (overlayTitleEl) {
-                if (['zh', 'ja', 'ko'].includes(currentLang)) {
-                    overlayTitleEl.classList.remove('font-windsong');
-                    overlayTitleEl.classList.add('font-sans', 'font-bold');
-                } else {
-                    overlayTitleEl.classList.add('font-windsong');
-                    overlayTitleEl.classList.remove('font-sans');
-                }
-            }
-
-            // 更新 Service Capabilities Tags
-            const tagEls = document.querySelectorAll('.service-tag span');
-            tagEls.forEach((span, idx) => {
-                if (dict.serviceTags[idx]) {
-                    span.innerText = dict.serviceTags[idx];
+            // 1. DOM i18n Data attribute replacement
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerText = dict[key];
                 }
             });
 
-            // 重新重設賽博龐克字串矩陣
-            if (typeof resetCyberMatrixScrambler === 'function') {
-                resetCyberMatrixScrambler();
+            // 2. Dynamic style adjustments for overlays (CJK vs Western font)
+            const overlayTitle = document.getElementById('overlay-title');
+            const overlaySub = document.getElementById('overlay-sub');
+            const pauseTitle = document.getElementById('pause-title');
+            const pauseSub = document.getElementById('pause-sub');
+
+            if (overlayTitle) {
+                if (!gameStarted) {
+                    overlayTitle.innerText = dict.initKernel;
+                    overlaySub.innerText = dict.clickToExecute;
+                }
+                if (['zh', 'ja', 'ko'].includes(currentLang)) {
+                    overlayTitle.className = "text-xl sm:text-2xl font-bold font-sans text-white tracking-wider px-4 whitespace-nowrap";
+                } else {
+                    overlayTitle.className = "text-3xl sm:text-4xl font-windsong text-white tracking-[0.05em] px-4 whitespace-nowrap";
+                }
             }
+
+            if (pauseTitle) pauseTitle.innerText = dict.paused;
+            if (pauseSub) pauseSub.innerText = dict.clickToResume;
+
+            // 3. Reset Cyber Matrix Scrambler
+            resetCyberMatrixScrambler();
+
+            // 4. Sync language to second-level iframe (Form)
+            const formIframe = document.querySelector('#form-modal iframe');
+            if (formIframe) {
+                const baseUrl = "https://xiaostudio.xyz/form/";
+                const targetSrc = `${baseUrl}?lang=${currentLang}`;
+                if (!formIframe.src.includes(`lang=${currentLang}`)) {
+                    formIframe.src = targetSrc;
+                }
+                if (formIframe.contentWindow) {
+                    formIframe.contentWindow.postMessage({ type: 'LANGUAGE_CHANGE', lang: currentLang }, '*');
+                }
+            }
+        }
+
+        function detectInitialLanguage() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const paramLang = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('l');
+                if (paramLang) return paramLang;
+            } catch (e) {}
+
+            const navLang = (navigator.language || (navigator.languages && navigator.languages[0]) || '').toLowerCase();
+            if (navLang.startsWith('zh')) return 'zh';
+            if (navLang.startsWith('ja')) return 'ja';
+            if (navLang.startsWith('ko')) return 'ko';
+            if (navLang.startsWith('fr')) return 'fr';
+            if (navLang.startsWith('en')) return 'en';
+
+            return 'zh';
         }
 
         let audioCtx = null;
         let soundEnabled = true;
+
         function playSound(type) {
             if (!soundEnabled) return;
             try {
@@ -935,7 +1031,17 @@
         }
 
         const modal = document.getElementById('form-modal');
-        function openModal() { modal.classList.add('active'); isPaused = true; }
+        function openModal() { 
+            modal.classList.add('active'); 
+            isPaused = true; 
+            const formIframe = document.querySelector('#form-modal iframe');
+            if (formIframe) {
+                const targetSrc = `https://xiaostudio.xyz/form/?lang=${currentLang}`;
+                if (!formIframe.src.includes(`lang=${currentLang}`)) {
+                    formIframe.src = targetSrc;
+                }
+            }
+        }
         function closeModal() { modal.classList.remove('active'); }
 
         window.addEventListener('load', () => {
@@ -944,51 +1050,64 @@
             });
             initMidiPadsWaveRhythm();
             initCyberMatrixScrambler();
-            changeLanguage('en'); // 預設英文，也可依需求調整
+            
+            const initialLang = detectInitialLanguage();
+            changeLanguage(initialLang);
+
+            try {
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({ type: 'GET_LANGUAGE', request: 'lang' }, '*');
+                }
+            } catch (err) {}
+
             draw();
         });
 
         let scrambleTimeout = null;
+        let currentScrambleInterval = null;
         let phraseIdx = 0;
-
-        function resetCyberMatrixScrambler() {
-            phraseIdx = 0;
-            if (scrambleTimeout) clearTimeout(scrambleTimeout);
-            cycleScrambler();
-        }
 
         function initCyberMatrixScrambler() {
             resetCyberMatrixScrambler();
         }
 
-        function cycleScrambler() {
+        function resetCyberMatrixScrambler() {
+            if (currentScrambleInterval) clearInterval(currentScrambleInterval);
+            if (scrambleTimeout) clearTimeout(scrambleTimeout);
+            phraseIdx = 0;
+            cycleCyberMatrix();
+        }
+
+        function cycleCyberMatrix() {
             const displayEl = document.getElementById('cyber-matrix-display');
             if (!displayEl) return;
-            const phrases = i18nDictionary[currentLang].matrixPhrases;
-            const target = phrases[phraseIdx % phrases.length];
+
+            const dict = i18nDictionary[currentLang] || i18nDictionary.zh;
+            const phrases = dict.matrixPhrases || i18nDictionary.zh.matrixPhrases;
+            const targetText = phrases[phraseIdx % phrases.length];
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/";
 
             let iteration = 0;
-            const maxIterations = target.length * 3;
-            
-            const interval = setInterval(() => {
-                displayEl.innerText = target
+            const maxIterations = targetText.length * 3;
+
+            currentScrambleInterval = setInterval(() => {
+                displayEl.innerText = targetText
                     .split('')
                     .map((char, index) => {
                         if (char === ' ') return ' ';
                         if (index < iteration / 3) {
-                            return target[index];
+                            return targetText[index];
                         }
                         return chars[Math.floor(Math.random() * chars.length)];
                     })
                     .join('');
 
                 if (iteration >= maxIterations) {
-                    clearInterval(interval);
-                    displayEl.innerText = target;
+                    clearInterval(currentScrambleInterval);
+                    displayEl.innerText = targetText;
                     scrambleTimeout = setTimeout(() => {
                         phraseIdx = (phraseIdx + 1) % phrases.length;
-                        cycleScrambler();
+                        cycleCyberMatrix();
                     }, 2800);
                 }
                 iteration++;
@@ -1064,17 +1183,15 @@
             if (days < 0) { const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += prevMonth.getDate(); months--; }
             if (months < 0) { months += 12; years--; }
             const display = document.getElementById('experience-display');
-            
-            const dict = i18nDictionary[currentLang] || i18nDictionary.en;
-
             if (display) {
+                const dict = i18nDictionary[currentLang] || i18nDictionary.zh;
                 display.innerHTML = `
                     <div class="flex items-center gap-x-2 sm:gap-x-3 text-xs sm:text-sm whitespace-nowrap">
-                        <div><span>${years}</span> ${dict.years} </div>
-                        <div><span>${months}</span> ${dict.months} </div>
-                        <div><span>${days}</span> ${dict.days}</div>
+                        <div><span>${years}</span> ${dict.years || 'YEARS'} </div>
+                        <div><span>${months}</span> ${dict.months || 'MONTHS'} </div>
+                        <div><span>${days}</span> ${dict.days || 'DAYS'}</div>
                     </div>
-                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">${dict.clockPrecision}</div>
+                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">${dict.clockPrecision || 'Clock Precision'}</div>
                     <div class="text-3xl font-bold mt-1 text-white">
                         ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker text-xs">.${milliseconds.toString().padStart(3,'0')}</span>
                     </div>
@@ -1141,12 +1258,12 @@
             if (isBoostActive) {
                 boostBtn.classList.remove('bg-neutral-800');
                 boostBtn.classList.add('bg-red-600');
-                boostDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
+                boostDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 canvas.classList.add('overdrive-active');
             } else {
                 boostBtn.classList.remove('bg-red-600');
                 boostBtn.classList.add('bg-neutral-800');
-                boostDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
+                boostDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 canvas.classList.remove('overdrive-active');
             }
             updateScore();
@@ -1159,11 +1276,11 @@
                 if (soundEnabled) {
                     soundBtn.classList.remove('bg-neutral-800');
                     soundBtn.classList.add('bg-red-600');
-                    soundDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
+                    soundDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 } else {
                     soundBtn.classList.remove('bg-red-600');
                     soundBtn.classList.add('bg-neutral-800');
-                    soundDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
+                    soundDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 }
             };
         }
@@ -1175,11 +1292,11 @@
                 if (colorModeEnabled) {
                     colorBtn.classList.remove('bg-neutral-800');
                     colorBtn.classList.add('bg-red-600');
-                    colorDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
+                    colorDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 } else {
                     colorBtn.classList.remove('bg-red-600');
                     colorBtn.classList.add('bg-neutral-800');
-                    colorDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
+                    colorDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 }
                 draw();
                 drawNext();
@@ -1300,16 +1417,9 @@
                     highScore = player.score;
                     localStorage.setItem('xiao_tetris_highscore', highScore.toString());
                 }
-                const dict = i18nDictionary[currentLang] || i18nDictionary.en;
-                overlayTitle.innerText = dict.overlayTitleOver;
-                overlaySub.innerText = dict.overlaySubOver;
-                if (['zh', 'ja', 'ko'].includes(currentLang)) {
-                    overlayTitle.classList.remove('font-windsong');
-                    overlayTitle.classList.add('font-sans', 'font-bold');
-                } else {
-                    overlayTitle.classList.add('font-windsong');
-                    overlayTitle.classList.remove('font-sans');
-                }
+                const dict = i18nDictionary[currentLang] || i18nDictionary.zh;
+                if (overlayTitle) overlayTitle.innerText = dict.gameOver;
+                if (overlaySub) overlaySub.innerText = dict.clickToRestart;
                 if (gameOverlay) gameOverlay.classList.remove('hidden');
                 if (pauseOverlay) pauseOverlay.classList.add('hidden');
             }
@@ -1515,12 +1625,24 @@
             if (keyMap[e.keyCode]) inputState[keyMap[e.keyCode]].pressed = false; 
         });
 
-        // 子頁面監聽父頁面 postMessage 通訊
+        // 監聽來自最外層/父頁面的 postMessage 通訊 (支援多元格式)
         window.addEventListener('message', (e) => {
-            if (e.data && e.data.type === 'LANGUAGE_CHANGE') {
-                if (typeof changeLanguage === 'function') {
-                    changeLanguage(e.data.lang);
+            if (!e.data) return;
+
+            let lang = null;
+
+            if (typeof e.data === 'string') {
+                lang = e.data;
+            } else if (typeof e.data === 'object') {
+                if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE' || e.data.action === 'setLanguage') {
+                    lang = e.data.lang || e.data.language || e.data.locale;
+                } else if (e.data.lang || e.data.language || e.data.locale) {
+                    lang = e.data.lang || e.data.language || e.data.locale;
                 }
+            }
+
+            if (lang && typeof changeLanguage === 'function') {
+                changeLanguage(lang);
             }
         });
     </script>
