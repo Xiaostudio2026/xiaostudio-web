@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inquiry | Xiao Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+JP:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0a0a0a;
@@ -16,7 +16,7 @@
         body {
             background-color: #0a0a0a; /* 確保與主站底色一致 */
             color: var(--accent-white);
-            font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+            font-family: 'Montserrat', 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -346,12 +346,23 @@
 
     function normalizeLang(lang) {
         if (!lang) return 'zh';
-        const l = lang.toLowerCase();
-        if (l.startsWith('zh')) return 'zh';
-        if (l.startsWith('en')) return 'en';
-        if (l.startsWith('ja')) return 'ja';
-        if (l.startsWith('ko')) return 'ko';
-        if (l.startsWith('fr')) return 'fr';
+        const l = String(lang).toLowerCase().trim();
+
+        // 日文支援：ja, jp, jpn, japanese, ja-jp
+        if (l.startsWith('ja') || l.startsWith('jp') || l === 'japanese') return 'ja';
+
+        // 韓文支援：ko, kr, kor, korean, ko-kr
+        if (l.startsWith('ko') || l.startsWith('kr') || l === 'korean') return 'ko';
+
+        // 英文支援：en, english, en-us, en-gb
+        if (l.startsWith('en') || l === 'english') return 'en';
+
+        // 法文支援：fr, french, fr-fr
+        if (l.startsWith('fr') || l === 'french') return 'fr';
+
+        // 中文支援：zh, cn, tw, hk, chinese
+        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk') || l === 'chinese') return 'zh';
+
         return 'zh';
     }
 
@@ -408,12 +419,27 @@
         }
     };
 
-    // 聽取父頁面 postMessage 通訊切換語言
+    // 聽取父頁面 postMessage 通訊切換語言（支援多種訊息結構與格式）
     window.addEventListener('message', (e) => {
-        if (e.data && e.data.type === 'LANGUAGE_CHANGE') {
-            if (typeof changeLanguage === 'function') {
-                changeLanguage(e.data.lang);
+        if (!e.data) return;
+        let data = e.data;
+
+        // 若為 JSON 字串嘗試 parse，否則若為直接語言代碼字串則直接處理
+        if (typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            } catch (err) {
+                changeLanguage(data);
+                return;
             }
+        }
+
+        // 提取語言代碼（相容 lang, language, locale, langKey 等屬性名）
+        const targetLang = data.lang || data.language || data.locale || data.langKey;
+        if (targetLang) {
+            changeLanguage(targetLang);
+        } else if (data.type === 'LANGUAGE_CHANGE' && data.lang) {
+            changeLanguage(data.lang);
         }
     });
 </script>
