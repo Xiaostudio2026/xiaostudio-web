@@ -1199,6 +1199,14 @@
             keyStates[e.keyCode] = false; 
             if (keyMap[e.keyCode]) inputState[keyMap[e.keyCode]].pressed = false; 
         });
+        // 子頁面監聽父頁面 postMessage 通訊
+window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'LANGUAGE_CHANGE') {
+        if (typeof changeLanguage === 'function') {
+            changeLanguage(e.data.lang);
+        }
+    }
+});
     </script>
 </body>
 </html>
