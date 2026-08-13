@@ -733,9 +733,39 @@
             }
         });
 
+        // -------------------------------------------------------------
+        // 語言同步機制：同步更新主頁面及開啟中的 iframe
+        // -------------------------------------------------------------
+        function syncIframeLanguage(lang) {
+            const iframe = document.getElementById('overlay-iframe-container');
+            if (!iframe || !iframe.contentWindow) return;
+
+            try {
+                // 1. 跨網域/標準 postMessage 通訊
+                iframe.contentWindow.postMessage({
+                    type: 'LANGUAGE_CHANGE',
+                    lang: lang
+                }, '*');
+
+                // 2. 同源直接呼叫 iframe 暴露的 changeLanguage 函式或觸發事件
+                if (typeof iframe.contentWindow.changeLanguage === 'function') {
+                    iframe.contentWindow.changeLanguage(lang);
+                }
+
+                if (iframe.contentDocument) {
+                    iframe.contentDocument.documentElement.lang = lang;
+                    iframe.contentWindow.dispatchEvent(new CustomEvent('parentLangChange', { detail: { lang } }));
+                }
+            } catch (e) {
+                console.log("iframe 語言同步通訊提示:", e);
+            }
+        }
+
         function changeLanguage(lang) {
             currentLang = lang;
             const t = translations[lang];
+            if (!t) return;
+
             document.getElementById('hero-title').innerHTML = t.hero;
             document.getElementById('txt-about').innerText = t.about;
             document.getElementById('btn-about').innerText = t.viewAbout;
@@ -750,9 +780,13 @@
             document.getElementById('btn-form').innerText = t.request;
             document.getElementById('overlay-title').innerText = t.pipelineTitle;
             document.getElementById('txt-carbon-label').innerText = t.carbon;
+            
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
             });
+
+            // 連動更新已開啟的 iframe 語言
+            syncIframeLanguage(lang);
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -897,12 +931,17 @@
                         </div>
                     `;
                 } else if (targetUrl) {
-                    content.innerHTML = `<iframe src="${targetUrl}" id="overlay-iframe-container"></iframe>`;
+                    // 自動帶入當前語言參數 ?lang=xx
+                    const localizedUrl = targetUrl + (targetUrl.includes('?') ? '&' : '?') + 'lang=' + currentLang;
+                    content.innerHTML = `<iframe src="${localizedUrl}" id="overlay-iframe-container"></iframe>`;
                     
-                    // 動態將防下載機制同步注入至同網域的 iframe 中
                     const iframe = document.getElementById('overlay-iframe-container');
                     if (iframe) {
                         iframe.onload = function() {
+                            // 載入完成後發送語言同步指令
+                            syncIframeLanguage(currentLang);
+
+                            // 動態將防下載機制同步注入至同網域的 iframe 中
                             try {
                                 const doc = iframe.contentDocument || iframe.contentWindow.document;
                                 if (doc) {
