@@ -614,9 +614,9 @@
                 pauseTitle: "遊戲暫停",
                 pauseSub: "點擊或按 P 鍵繼續",
                 matrixPhrases: [
-                    "流動如液",
-                    "隨形起舞",
-                    "旋轉於世"
+                    "流體律動",
+                    "隨形而舞",
+                    "旋入世界"
                 ],
                 serviceTags: [
                     "品牌識別與形象", "視覺美術製作", "包裝視覺設計", "網頁視覺設計",
@@ -857,6 +857,17 @@
             if (!gameStarted) {
                 setHtml('overlay-title', dict.overlayTitleInit);
                 setText('overlay-sub', dict.overlaySubInit);
+            }
+
+            const overlayTitleEl = document.getElementById('overlay-title');
+            if (overlayTitleEl) {
+                if (['zh', 'ja', 'ko'].includes(currentLang)) {
+                    overlayTitleEl.classList.remove('font-windsong');
+                    overlayTitleEl.classList.add('font-sans', 'font-bold');
+                } else {
+                    overlayTitleEl.classList.add('font-windsong');
+                    overlayTitleEl.classList.remove('font-sans');
+                }
             }
 
             // 更新 Service Capabilities Tags
@@ -1292,6 +1303,13 @@
                 const dict = i18nDictionary[currentLang] || i18nDictionary.en;
                 overlayTitle.innerText = dict.overlayTitleOver;
                 overlaySub.innerText = dict.overlaySubOver;
+                if (['zh', 'ja', 'ko'].includes(currentLang)) {
+                    overlayTitle.classList.remove('font-windsong');
+                    overlayTitle.classList.add('font-sans', 'font-bold');
+                } else {
+                    overlayTitle.classList.add('font-windsong');
+                    overlayTitle.classList.remove('font-sans');
+                }
                 if (gameOverlay) gameOverlay.classList.remove('hidden');
                 if (pauseOverlay) pauseOverlay.classList.add('hidden');
             }
