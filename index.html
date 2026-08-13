@@ -533,7 +533,7 @@
 
     <!-- 音樂跑馬燈播放條 -->
     <div id="music-marquee-bar">
-        <div class="marquee-track">
+        <div class="marquee-track" id="marquee-track">
             <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
             <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
             <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
@@ -663,11 +663,106 @@
         }
 
         const translations = {
-            zh: { hero: "流體律動<br>隨形起舞", about: "關於 XIAO", viewAbout: "查看個人檔案", static: "靜態作品", viewStatic: "平面視覺", motion: "動態作品", viewMotion: "動態專案", print: "印刷包裝", viewPrint: "實體專案", web: "網頁設計", viewWeb: "數位體驗", close: "關閉", updateSoon: "管道詳情即將更新。", request: "需求申請", pipelineTitle: "系統管道", carbon: "全球累計二氧化碳排放量 (公噸)" },
-            en: { hero: "Liquid Flow<br>Roll with the Form", about: "About Xiao", viewAbout: "View Profile", static: "Static Works", viewStatic: "Archive", motion: "Motion Works", viewMotion: "Motion Projects", print: "Print & Packaging", viewPrint: "Physical Projects", web: "Web Design", viewWeb: "Digital Experience", close: "Close", updateSoon: "Pipeline details updated soon.", request: "Request Project", pipelineTitle: "Pipeline System", carbon: "Cumulative Global CO2 Emissions (Tons)" },
-            jp: { hero: "流れるリズム<br>形に従う", about: "XIAOについて", viewAbout: "プロフィール", static: "靜止畫作品", viewStatic: "アーカイブ", motion: "動畫作品", viewMotion: "モーショプロジェクト", print: "印刷・パッケージ", viewPrint: "實體プロジェクト", web: "ウェブデザイン", viewWeb: "デジタル體驗", close: "閉じる", updateSoon: "詳細はまもなく更新されます。", request: "プロジェクト依頼", pipelineTitle: "パイプラインシステム", carbon: "世界の累積二酸化碳素排出量 (トン)" },
-            kr: { hero: "유체의 흐름<br>형태를 따르다", about: "XIAO 소개", viewAbout: "프로필 보기", static: "정적 작품", viewStatic: "아카이브", motion: "동적 작품", viewMotion: "모션 프로젝트", print: "인쇄 및 패키징", viewPrint: "실체 프로젝트", web: "웹 디자인", webView: "디지털 경험", close: "닫기", updateSoon: "파이프ライン 세부 정보가 곧 업데이트됩니다。", request: "프로젝트 요청", pipelineTitle: "파이프라인 시스템", carbon: "전 세계 누적 이산화탄소 배출량 (톤)" },
-            fr: { hero: "Flux Liquide<br>Suivre la Forme", about: "À propos de Xiao", viewAbout: "Voir le profil", static: "Travaux Statiques", viewStatic: "Archives", motion: "Travaux Animés", viewMotion: "Projets Motion", print: "Impression & Emballage", viewPrint: "Projets Physiques", web: "Design Web", viewWeb: "Expérience Digitale", close: "Fermer", updateSoon: "Détails mis à jour prochainement.", request: "Demander un Projet", pipelineTitle: "Système Pipeline", carbon: "Émissions mondiales de CO2 cumulées (Tonnes)" }
+            zh: {
+                hero: "流體律動<br>隨形起舞",
+                about: "關於 XIAO",
+                viewAbout: "查看個人檔案",
+                static: "靜態作品",
+                viewStatic: "平面視覺",
+                motion: "動態作品",
+                viewMotion: "動態專案",
+                print: "印刷包裝",
+                viewPrint: "實體專案",
+                web: "網頁設計",
+                viewWeb: "數位體驗",
+                close: "關閉",
+                updateSoon: "管道詳情即將更新。",
+                request: "需求申請",
+                pipelineTitle: "系統管道",
+                carbon: "全球累計二氧化碳排放量 (公噸)",
+                nowPlaying: "正在播放：《Liquid Lobby Loop》流動如液 隨形起舞 旋轉於世",
+                composedBy: "作曲：xiaostudio ｜ Suno AI 生成"
+            },
+            en: {
+                hero: "Liquid Flow<br>Roll with the Form",
+                about: "About Xiao",
+                viewAbout: "View Profile",
+                static: "Static Works",
+                viewStatic: "Archive",
+                motion: "Motion Works",
+                viewMotion: "Motion Projects",
+                print: "Print & Packaging",
+                viewPrint: "Physical Projects",
+                web: "Web Design",
+                viewWeb: "Digital Experience",
+                close: "Close",
+                updateSoon: "Pipeline details updated soon.",
+                request: "Request Project",
+                pipelineTitle: "Pipeline System",
+                carbon: "Cumulative Global CO2 Emissions (Tons)",
+                nowPlaying: "NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World",
+                composedBy: "Composed by xiaostudio · Generated via Suno AI"
+            },
+            jp: {
+                hero: "流れる律動<br>形に従う",
+                about: "XIAOについて",
+                viewAbout: "プロフィール",
+                static: "グラフィック作品",
+                viewStatic: "アーカイブ",
+                motion: "モーション作品",
+                viewMotion: "モーションプロジェクト",
+                print: "印刷・パッケージ",
+                viewPrint: "フィジカルプロジェクト",
+                web: "ウェブデザイン",
+                viewWeb: "デジタル体験",
+                close: "閉じる",
+                updateSoon: "詳細はまもなく更新されます。",
+                request: "プロジェクト依頼",
+                pipelineTitle: "パイプラインシステム",
+                carbon: "世界の累積二酸化炭素排出量 (トン)",
+                nowPlaying: "再生中：《Liquid Lobby Loop》液体のように流れ 形に従い 世界を巡る",
+                composedBy: "作曲：xiaostudio ｜ Suno AI 作成"
+            },
+            kr: {
+                hero: "유체의 흐름<br>형태를 따르다",
+                about: "XIAO 소개",
+                viewAbout: "프로필 보기",
+                static: "정적 작품",
+                viewStatic: "아카이브",
+                motion: "동적 작품",
+                viewMotion: "모션 프로젝트",
+                print: "인쇄 및 패키징",
+                viewPrint: "실체 프로젝트",
+                web: "웹 디자인",
+                viewWeb: "디지털 경험",
+                close: "닫기",
+                updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다.",
+                request: "프로젝트 요청",
+                pipelineTitle: "파이프라인 시스템",
+                carbon: "전 세계 누적 이산화탄소 배출량 (톤)",
+                nowPlaying: "재생 중: 《Liquid Lobby Loop》 유체처럼 흘러 형태를 따르고 세상으로 회전하다",
+                composedBy: "작곡: xiaostudio ｜ Suno AI 생성"
+            },
+            fr: {
+                hero: "Flux Liquide<br>Suivre la Forme",
+                about: "À propos de Xiao",
+                viewAbout: "Voir le profil",
+                static: "Travaux Statiques",
+                viewStatic: "Archives",
+                motion: "Travaux Animés",
+                viewMotion: "Projets Motion",
+                print: "Impression & Emballage",
+                viewPrint: "Projets Physiques",
+                web: "Design Web",
+                viewWeb: "Expérience Digitale",
+                close: "Fermer",
+                updateSoon: "Détails mis à jour prochainement.",
+                request: "Demander un Projet",
+                pipelineTitle: "Système Pipeline",
+                carbon: "Émissions mondiales de CO2 cumulées (Tonnes)",
+                nowPlaying: "LECTURE EN COURS : 《Liquid Lobby Loop》 Couler comme du liquide · Suivre la forme · Tourner dans le monde",
+                composedBy: "Composé par xiaostudio · Généré via Suno AI"
+            }
         };
 
         let currentLang = 'en';
@@ -781,6 +876,21 @@
             document.getElementById('overlay-title').innerText = t.pipelineTitle;
             document.getElementById('txt-carbon-label').innerText = t.carbon;
             
+            // 同步更新跑馬燈文字
+            const marqueeTrack = document.getElementById('marquee-track');
+            if (marqueeTrack) {
+                marqueeTrack.innerHTML = `
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
+                `;
+            }
+
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
             });
