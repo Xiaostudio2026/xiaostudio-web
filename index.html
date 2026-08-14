@@ -193,8 +193,14 @@
             z-index: -10;
         }
 
-        .lang-switcher { display: flex; gap: 20px; pointer-events: auto; }
-        .lang-btn { font-size: 18px; letter-spacing: 0.12em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
+        .lang-switcher { display: flex; gap: 12px; pointer-events: auto; }
+        @media (min-width: 768px) {
+            .lang-switcher { gap: 20px; }
+        }
+        .lang-btn { font-size: 13px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
+        @media (min-width: 768px) {
+            .lang-btn { font-size: 18px; letter-spacing: 0.12em; }
+        }
         .lang-btn.active { opacity: 1; font-weight: 700; }
         
         /* 連結與按鈕旁箭頭指示圖示專用樣式 */
@@ -257,7 +263,7 @@
         .line-path { stroke: rgba(255, 255, 255, 0.6); stroke-width: 2; fill: none; }
         .line-pulse { stroke: rgba(255, 255, 255, 1); stroke-width: 2.5; fill: none; stroke-dasharray: 6, 120; animation: pulse-move 6s linear infinite; }
         @keyframes pulse-move { 0% { stroke-dashoffset: 240; } 100% { stroke-dashoffset: 0; } }
-        .carbon-counter { display: flex; flex-direction: column; align-items: flex-end; margin-top: 12px; pointer-events: none; }
+        .carbon-counter { display: flex; flex-direction: column; pointer-events: none; }
         .carbon-value { color: #fff; font-variant-numeric: tabular-nums; opacity: 0.85; }
         .carbon-dot { width: 3px; height: 3px; background: #fff; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; margin-right: 6px; }
         @keyframes blink { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.1; } }
@@ -273,11 +279,14 @@
         #overlay-iframe-container { width: 100%; height: 100%; border: none; display: block; background: #000; }
         
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
-        .logo-text { font-size: 2.25rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; line-height: 1.3; }
+        .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; line-height: 1.2; }
         @media (min-width: 768px) {
-            .logo-text { font-size: 2.75rem; }
+            .logo-text { font-size: 2.75rem; letter-spacing: 0.35em; line-height: 1.3; }
         }
-        .logo-underline { height: 4px; background-color: #fff; width: 36%; margin-top: 4px; }
+        .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 3px; }
+        @media (min-width: 768px) {
+            .logo-underline { height: 4px; margin-top: 4px; }
+        }
         
         .action-btn { 
             position: fixed; 
@@ -404,52 +413,6 @@
             transform: translateY(-44px);
         }
 
-        #music-marquee-bar.active {
-            transform: translateY(0);
-        }
-
-        .marquee-track {
-            display: flex;
-            white-space: nowrap;
-            will-change: transform;
-            animation: marquee-scroll 18s linear infinite;
-        }
-
-        .marquee-item {
-            display: flex;
-            align-items: center;
-            font-family: 'Barlow', sans-serif;
-            font-size: 10px;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.85);
-            padding-right: 50px;
-        }
-
-        .marquee-icon {
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            margin-right: 12px;
-            box-shadow: 0 0 6px rgba(255,255,255,0.8);
-            animation: blink 1.2s infinite;
-        }
-
-        @keyframes marquee-scroll {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
-
-        .hero-text {
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            margin-left: 30px;
-        }
-
-        body.music-active .hero-text {
-            transform: translateY(-32px);
-        }
-
         @media (max-width: 768px) {
             #visualizer { width: 280px; height: 35px; }
             .node-box { min-width: 135px; padding: 10px; }
@@ -501,13 +464,13 @@
     <h1 class="seo-hidden">蕭氏設計工作室 XIAOSTUDIO | 設計與數位體驗工作室</h1>
     <h2 class="seo-hidden">視覺設計、網頁設計、動態設計、印刷包裝</h2>
 
-    <nav class="fixed top-0 w-full z-[100] p-6 md:p-14 flex justify-between items-start pointer-events-none">
+    <nav class="fixed top-0 w-full z-[100] p-5 md:p-14 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-3 md:gap-0">
         <div class="logo-container pointer-events-auto cursor-pointer" onclick="window.location.reload()">
             <span class="logo-text">XIAOSTUDIO</span>
             <div class="logo-underline"></div>
         </div>
         
-        <div class="flex flex-col items-end gap-2">
+        <div class="flex flex-col items-start md:items-end gap-1.5 md:gap-2">
             <div class="lang-switcher mono">
                 <span class="lang-btn" data-lang="zh">ZH</span>
                 <span class="lang-btn active" data-lang="en">EN</span>
@@ -516,11 +479,11 @@
                 <span class="lang-btn" data-lang="fr">FR</span>
             </div>
             
-            <div class="carbon-counter">
-                <div id="carbon-value" class="carbon-value mono text-[16px] md:text-[20px] font-medium tracking-wider">2,541,334,776,321.664</div>
-                <div class="flex items-center mt-1">
+            <div class="carbon-counter items-start md:items-end">
+                <div id="carbon-value" class="carbon-value mono text-[12px] sm:text-[14px] md:text-[20px] font-medium tracking-wider">2,541,334,776,321.664</div>
+                <div class="flex items-center mt-0.5 md:mt-1">
                     <span class="carbon-dot"></span>
-                    <span id="txt-carbon-label" class="mono text-[11px] md:text-[12px] tracking-[0.15em] uppercase opacity-50">Cumulative Global CO2 Emissions (Tons)</span>
+                    <span id="txt-carbon-label" class="mono text-[9px] md:text-[12px] tracking-[0.1em] md:tracking-[0.15em] uppercase opacity-50">Cumulative Global CO2 Emissions (Tons)</span>
                 </div>
             </div>
         </div>
@@ -583,14 +546,14 @@
     <!-- 音樂跑馬燈播放條 -->
     <div id="music-marquee-bar">
         <div class="marquee-track" id="marquee-track">
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid  Roll with the Form Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio Generated via Suno AI</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
+            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
         </div>
     </div>
 
@@ -963,13 +926,13 @@
         function initNodePositions() {
             const isMobile = window.innerWidth < 768;
             const positions = isMobile ? [
-                { id: 'node1', top: '11%', left: '7%' }, { id: 'node3', top: '17%', left: '55%' },
-                { id: 'node2', top: '34%', left: '4%' }, { id: 'node4', top: '36%', left: '46%' },
-                { id: 'node6', top: '60%', left: '54%' }, { id: 'node5', top: '56%', left: '8%' }	
+                { id: 'node1', top: '18%', left: '17%' }, { id: 'node3', top: '10%', left: '55%' },
+                { id: 'node2', top: '35%', left: '4%' }, { id: 'node4', top: '36%', left: '46%' },
+                { id: 'node6', top: '63%', left: '54%' }, { id: 'node5', top: '56%', left: '8%' }	
             ] : [
                 { id: 'node1', top: '25%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
-                { id: 'node2', top: '45%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
-                { id: 'node6', top: '30%', left: '76%' }, { id: 'node5', top: '52%', left: '66%' }
+                { id: 'node2', top: '47%', left: '20%' }, { id: 'node4', top: '64%', left: '41%' },
+                { id: 'node6', top: '31%', left: '78%' }, { id: 'node5', top: '55%', left: '62%' }
             ];
             positions.forEach(pos => {
                 const el = document.getElementById(pos.id);
