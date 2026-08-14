@@ -193,8 +193,8 @@
             z-index: -10;
         }
 
-        .lang-switcher { display: flex; gap: 15px; pointer-events: auto; }
-        .lang-btn { font-size: 14px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
+        .lang-switcher { display: flex; gap: 20px; pointer-events: auto; }
+        .lang-btn { font-size: 18px; letter-spacing: 0.12em; opacity: 0.4; transition: opacity 0.3s ease; cursor: pointer; }
         .lang-btn.active { opacity: 1; font-weight: 700; }
         
         /* 連結與按鈕旁箭頭指示圖示專用樣式 */
@@ -273,8 +273,11 @@
         #overlay-iframe-container { width: 100%; height: 100%; border: none; display: block; background: #000; }
         
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
-        .logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; line-height: 1.9; }
-        .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 2px; }
+        .logo-text { font-size: 2.25rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; line-height: 1.3; }
+        @media (min-width: 768px) {
+            .logo-text { font-size: 2.75rem; }
+        }
+        .logo-underline { height: 4px; background-color: #fff; width: 36%; margin-top: 4px; }
         
         .action-btn { 
             position: fixed; 
@@ -341,7 +344,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 30px;
+            height: 40px;
             background: rgba(5, 5, 5, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -353,6 +356,52 @@
             pointer-events: none;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #music-marquee-bar.active {
+            transform: translateY(0);
+        }
+
+        .marquee-track {
+            display: flex;
+            white-space: nowrap;
+            will-change: transform;
+            animation: marquee-scroll 18s linear infinite;
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            font-family: 'Barlow', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.9);
+            padding-right: 60px;
+        }
+
+        .marquee-icon {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 6px rgba(255,255,255,0.8);
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .hero-text {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-left: 30px;
+        }
+
+        body.music-active .hero-text {
+            transform: translateY(-44px);
         }
 
         #music-marquee-bar.active {
@@ -458,7 +507,7 @@
             <div class="logo-underline"></div>
         </div>
         
-        <div class="flex flex-col items-end">
+        <div class="flex flex-col items-end gap-2">
             <div class="lang-switcher mono">
                 <span class="lang-btn" data-lang="zh">ZH</span>
                 <span class="lang-btn active" data-lang="en">EN</span>
@@ -468,10 +517,10 @@
             </div>
             
             <div class="carbon-counter">
-                <div id="carbon-value" class="carbon-value mono text-[11px] md:text-[12px] font-light tracking-wider">2,541,334,776,321.664</div>
+                <div id="carbon-value" class="carbon-value mono text-[16px] md:text-[20px] font-medium tracking-wider">2,541,334,776,321.664</div>
                 <div class="flex items-center mt-1">
                     <span class="carbon-dot"></span>
-                    <span id="txt-carbon-label" class="mono text-[8px] tracking-[0.15em] uppercase opacity-40">Cumulative Global CO2 Emissions (Tons)</span>
+                    <span id="txt-carbon-label" class="mono text-[11px] md:text-[12px] tracking-[0.15em] uppercase opacity-50">Cumulative Global CO2 Emissions (Tons)</span>
                 </div>
             </div>
         </div>
