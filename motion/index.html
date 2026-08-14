@@ -39,7 +39,7 @@
             overflow-x: hidden; 
             margin: 0; 
             padding: 2rem 2rem 8rem 2rem;
-        }
+        } 
         
         @media (min-width: 768px) { body { padding: 3rem 3rem 12rem 3rem; } }
         @media (min-width: 1024px) { body { padding: 4rem 4rem 16rem 4rem; } }
@@ -73,9 +73,9 @@
             gap: 6px;
             background: #000;
             color: #fff;
-            padding: 2px 8px;
-            font-size: 9px;
-            letter-spacing: 0.1em;
+            padding: 4px 10px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
         }
 
@@ -110,9 +110,16 @@
 
         .project-image-container {
             width: 100%;
+            aspect-ratio: 1 / 1; /* 手機端預設 1:1 比例 */
             overflow: hidden;
             position: relative;
             background-color: #eee;
+        }
+
+        @media (min-width: 768px) {
+            .project-image-container {
+                aspect-ratio: 4 / 3; /* 平板與電腦端維持 4:3 比例 */
+            }
         }
 
         .project-asset {
@@ -239,10 +246,10 @@
             transform: translateX(-50%) translateY(100px);
             background: #000;
             color: #fff;
-            padding: 12px 24px;
+            padding: 14px 28px;
             font-family: 'Barlow', sans-serif;
-            font-size: 11px;
-            letter-spacing: 0.05em;
+            font-size: 13px;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 1px solid #333;
@@ -252,7 +259,7 @@
             pointer-events: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         #security-toast.active {
@@ -287,7 +294,7 @@
     <div class="content-container">
         <!-- 頁首標題區 -->
         <header id="main-header" class="mb-6 md:mb-8">
-            <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase">
+            <div class="flex justify-between items-end mb-3 mono-text text-xs md:text-sm font-bold tracking-widest uppercase">
                 <div>NODE_03 // 2026 ISSUE</div>
                 <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
                 <div>MOTION PROJECTS</div>
@@ -301,12 +308,12 @@
                 </div>
             </div>
             
-            <div class="mt-4 flex justify-between items-center mono-text text-[9px] md:text-[10px] font-medium tracking-wider uppercase gap-4">
+            <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4">
                 <span class="security-badge">Protected Area</span>
                 
                 <!-- 黑字黑色外框線跑馬燈 -->
-                <div class="marquee-container py-1 px-2 max-w-[180px] sm:max-w-[260px] md:max-w-[340px]">
-                    <div class="marquee-content gap-6 text-black font-bold">
+                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
+                    <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
                         <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                         <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                     </div>
@@ -316,100 +323,123 @@
 
         <!-- 作品網格 -->
         <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-         
-            
-           <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4">
+            <a href="https://xiaostudio.xyz/motion/Horseyear.html" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb ">
+                    <img src="" class="project-asset auto-thumb">
                 </div>
-            </div>
+            </a>
 
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772784088/JA_Xmas_1920_30s_S_fxxm7k.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb ">
+                    <img src="" class="project-asset auto-thumb">
                 </div>
             </div>
             
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777977760/Rose_2026_1920_preview_zqv1ri.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb ">
+                    <img src="" class="project-asset auto-thumb">
                 </div>
             </div>
 
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777531778/Rainy_1920_2_tvx5aw.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                   <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
   
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772788390/Tea_Tree_Series_Video_2025_S_axtnpq.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb ">
+                    <img src="" class="project-asset auto-thumb">
                 </div>
             </div>
-         <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777532656/JA_Xmas_1920_30s_c9e0mx.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777532656/JA_Xmas_1920_30s_c9e0mx.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-          <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534483/JA_Mask_lhnujn.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534483/JA_Mask_lhnujn.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-          <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534674/JA_Mask_1_gym5f7.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534674/JA_Mask_1_gym5f7.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-          <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534685/JA_Mask_2_dk49ir.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534685/JA_Mask_2_dk49ir.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-          <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777536034/JA_Spray_ajgnsv.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777536034/JA_Spray_ajgnsv.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-         <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777538162/Nested_Sequence_23_puhktr.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777538162/Nested_Sequence_23_puhktr.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-         <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777539520/Product_Ai_motion_02_ognmdr.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777539520/Product_Ai_motion_02_ognmdr.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-         <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778154954/Tea_Tree_Series_V2_ucrxdx.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778154954/Tea_Tree_Series_V2_ucrxdx.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-         <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778155566/3in1_cover_qoemjl.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778155566/3in1_cover_qoemjl.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
-         <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778231388/Amber_Cover_q0g4uq.mp4">
+
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778231388/Amber_Cover_q0g4uq.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                     <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
+                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
                 </div>
             </div>
         </main>
@@ -425,7 +455,7 @@
 
     <!-- 安全防護動態提示框 -->
     <div id="security-toast">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
