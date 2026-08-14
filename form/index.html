@@ -4,49 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inquiry | Xiao Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+JP:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #0a0a0a;
+            --bg-color: #000000;
             --accent-white: #ffffff;
             --mono-gray: #333333;
             --text-gray: #888888;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #0a0a0a; /* 確保與主站底色一致 */
+            background-color: var(--bg-color);
             color: var(--accent-white);
             font-family: 'Montserrat', 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
-            padding: 40px 0;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 30px 16px;
+            overflow-x: hidden;
         }
 
         .contact-container {
             width: 100%;
             max-width: 550px;
-            padding: 20px;
-            box-sizing: border-box;
-            animation: fadeIn 1.2s cubic-bezier(0.2, 0, 0.2, 1);
+            padding: 10px 10px 30px 10px;
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0, 0.2, 1);
         }
 
         h2 {
             font-weight: 300;
-            letter-spacing: 0.5em;
+            letter-spacing: 0.4em;
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             text-transform: uppercase;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            color: #ffffff;
+            opacity: 0.9;
         }
 
         .form-group {
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             position: relative;
         }
 
         .sub-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         label {
@@ -55,7 +66,7 @@
             color: var(--text-gray);
             letter-spacing: 0.2em;
             display: block;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
@@ -65,18 +76,17 @@
             border: none;
             border-bottom: 1px solid var(--mono-gray);
             color: var(--accent-white);
-            padding: 12px 0;
-            font-size: 14px;
-            font-family: 'Montserrat', 'Noto Sans TC', sans-serif;
+            padding: 10px 0;
+            font-size: 13px;
+            font-family: 'Montserrat', 'Noto Sans TC', 'Noto Sans JP', sans-serif;
             border-radius: 0;
             outline: none;
-            transition: all 0.5s ease;
-            -webkit-appearance: none; /* 移除 iOS/Chrome 預設樣式 */
+            transition: border-color 0.4s ease, transform 0.4s ease;
+            -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
 
-        /* 針對 select 加入自定義下拉符號 (SVG) */
         select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -88,51 +98,64 @@
 
         input:focus, select:focus, textarea:focus {
             border-bottom: 1px solid var(--accent-white);
-            transform: translateY(-1px);
         }
 
-        /* 當 select 被聚焦時，箭頭顏色變亮 */
         select:focus {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
         }
 
         select option {
-            background-color: #111;
-            color: white;
+            background-color: #111111;
+            color: #ffffff;
+            padding: 8px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
         .submit-btn {
-            margin-top: 20px;
+            margin-top: 15px;
             width: 100%;
-            padding: 20px;
+            padding: 16px;
             background-color: var(--accent-white);
-            color: #000;
-            border: none;
+            color: #000000;
+            border: 1px solid #ffffff;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            letter-spacing: 0.4em;
+            letter-spacing: 0.3em;
             cursor: pointer;
-            transition: 0.4s;
+            transition: all 0.3s ease;
             text-transform: uppercase;
             font-size: 11px;
+            border-radius: 2px;
         }
 
         .submit-btn:hover { 
-            background-color: #999; 
-            letter-spacing: 0.5em; 
+            background-color: transparent; 
+            color: #ffffff;
+            letter-spacing: 0.4em; 
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         #status-msg {
             text-align: center;
-            margin: 100px 0;
+            margin: 60px 0;
             font-size: 12px;
-            letter-spacing: 0.3em;
-            line-height: 2;
+            letter-spacing: 0.25em;
+            line-height: 2.2;
             display: none;
+            color: var(--accent-white);
+            animation: fadeIn 0.6s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -196,7 +219,7 @@
 <script>
     const dictionary = {
         zh: {
-            header: "Inquiry / 需求表單",
+            header: "INQUIRY / 需求表單",
             labelName: "Name / 姓名",
             placeholderName: "您的姓名",
             labelEmail: "Email / 電子郵件",
@@ -218,11 +241,11 @@
             placeholderRef2: "Link 02 - https://...",
             placeholderRef3: "Link 03 - https://...",
             labelMessage: "Message / 詳情",
-            placeholderMessage: "Tell me about your project",
-            btnSubmit: "Send Inquiry",
+            placeholderMessage: "請描述您的專案需求與想法...",
+            btnSubmit: "SEND INQUIRY / 送出需求",
             btnSending: "SENDING...",
             btnError: "ERROR, TRY AGAIN",
-            statusSuccess: "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT."
+            statusSuccess: "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT.<br><br>感謝您的來信，我們將盡快與您聯繫。"
         },
         en: {
             header: "INQUIRY",
@@ -254,195 +277,193 @@
             statusSuccess: "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT."
         },
         ja: {
-            header: "INQUIRY / お問い合わせ",
-            labelName: "NAME / お名前",
-            placeholderName: "お名前をご入力ください",
-            labelEmail: "EMAIL / メールアドレス",
+            header: "お問い合わせ",
+            labelName: "お名前",
+            placeholderName: "山田 太郎",
+            labelEmail: "メールアドレス",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "SERVICE / サービス",
-            optBrandVisual: "ブランドビジュアルデザイン",
-            optBrandMotion: "ブランドモーション・映像制作",
+            labelService: "サービス内容",
+            optBrandVisual: "ブランディング・ビジュアルデザイン",
+            optBrandMotion: "ブランド映像制作",
             optPackaging: "パッケージデザイン",
             optWebDesign: "ウェブデザイン",
-            optOthers: "その他（書籍・ポスター・撮影など）",
-            labelBudget: "BUDGET / ご予算",
+            optOthers: "その他 (エディトリアル, ポスター, 撮影等)",
+            labelBudget: "予算感",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 以上",
-            optBudgetDiscuss: "未定 / 相談したい",
-            labelRef: "REFERENCE LINKS / 参考リンク (最大3件)",
-            placeholderRef1: "Link 01 - https://...",
-            placeholderRef2: "Link 02 - https://...",
-            placeholderRef3: "Link 03 - https://...",
-            labelMessage: "MESSAGE / 詳細内容",
-            placeholderMessage: "プロジェクトの概要をお聞かせください...",
+            optBudgetDiscuss: "未定 / 要相談",
+            labelRef: "参考リンク (最大3件)",
+            placeholderRef1: "リンク 01 - https://...",
+            placeholderRef2: "リンク 02 - https://...",
+            placeholderRef3: "リンク 03 - https://...",
+            labelMessage: "メッセージ詳細",
+            placeholderMessage: "プロジェクトの詳細をご記入ください...",
             btnSubmit: "送信する",
             btnSending: "送信中...",
-            btnError: "エラーが発生しました。再試行してください",
-            statusSuccess: "お問い合わせありがとうございます。<br>メッセージが送信されました。"
+            btnError: "エラー。再試行してください",
+            statusSuccess: "ありがとうございます。<br>メッセージが送信されました。"
         },
         ko: {
-            header: "INQUIRY / 문의하기",
-            labelName: "NAME / 성함",
-            placeholderName: "성함을 입력해 주세요",
-            labelEmail: "EMAIL / 이메일",
+            header: "문의하기",
+            labelName: "성함",
+            placeholderName: "홍길동",
+            labelEmail: "이메일 주소",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "SERVICE / 서비스",
+            labelService: "서비스 항목",
             optBrandVisual: "브랜드 비주얼 디자인",
-            optBrandMotion: "브랜드 모션/영상 제작",
+            optBrandMotion: "브랜드 영상 제작",
             optPackaging: "패키지 디자인",
             optWebDesign: "웹 디자인",
-            optOthers: "기타 (서적, 포스터, 사진 등)",
-            labelBudget: "BUDGET / 예산 범위",
+            optOthers: "기타 (포스터, 인쇄, 촬영 등)",
+            labelBudget: "예산 범위",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 이상",
             optBudgetDiscuss: "미정 / 논의 필요",
-            labelRef: "REFERENCE LINKS / 참고 링크 (최대 3개)",
-            placeholderRef1: "Link 01 - https://...",
-            placeholderRef2: "Link 02 - https://...",
-            placeholderRef3: "Link 03 - https://...",
-            labelMessage: "MESSAGE / 상세 내용",
-            placeholderMessage: "프로젝트에 대해 알려주세요...",
+            labelRef: "참고 링크 (최대 3개)",
+            placeholderRef1: "링크 01 - https://...",
+            placeholderRef2: "링크 02 - https://...",
+            placeholderRef3: "링크 03 - https://...",
+            labelMessage: "상세 내용",
+            placeholderMessage: "프로젝트에 대해 설명해주세요...",
             btnSubmit: "문의 보내기",
             btnSending: "전송 중...",
-            btnError: "오류가 발생했습니다. 다시 시도해 주세요",
+            btnError: "오류 발생, 다시 시도해주세요",
             statusSuccess: "감사합니다.<br>메시지가 성공적으로 전송되었습니다."
         },
         fr: {
-            header: "INQUIRY / DEMANDE",
-            labelName: "NAME / NOM",
-            placeholderName: "Votre nom",
-            labelEmail: "EMAIL / E-MAIL",
+            header: "DEMANDE DE PROJET",
+            labelName: "NOM",
+            placeholderName: "Votre Nom",
+            labelEmail: "E-MAIL",
             placeholderEmail: "jewuenxiao@gmail.com",
             labelService: "SERVICE",
             optBrandVisual: "Design Visuel de Marque",
-            optBrandMotion: "Production Vidéo & Motion",
+            optBrandMotion: "Production Vidéo de Marque",
             optPackaging: "Design d'Emballage",
             optWebDesign: "Design Web",
-            optOthers: "Autres (Livres, affiches, photo, etc.)",
-            labelBudget: "BUDGET",
-            optBudget1: "NT$ 30,000 - 50,000",
-            optBudget2: "NT$ 50,000 - 100,000",
-            optBudget3: "NT$ 100,000 - 200,000",
-            optBudget4: "Plus de NT$ 200,000",
-            optBudgetDiscuss: "À discuter / Non confirmé",
-            labelRef: "REFERENCE LINKS / LIENS DE RÉFÉRENCE (MAX 3)",
-            placeholderRef1: "Link 01 - https://...",
-            placeholderRef2: "Link 02 - https://...",
-            placeholderRef3: "Link 03 - https://...",
+            optOthers: "Autres (Livres, Affiches, Photo, etc.)",
+            labelBudget: "FOURCHETTE DE BUDGET",
+            optBudget1: "NT$ 30 000 - 50 000",
+            optBudget2: "NT$ 50 000 - 100 000",
+            optBudget3: "NT$ 100 000 - 200 000",
+            optBudget4: "NT$ 200 000+",
+            optBudgetDiscuss: "À Discuter",
+            labelRef: "LIENS DE RÉFÉRENCE (MAX 3)",
+            placeholderRef1: "Lien 01 - https://...",
+            placeholderRef2: "Lien 02 - https://...",
+            placeholderRef3: "Lien 03 - https://...",
             labelMessage: "MESSAGE",
             placeholderMessage: "Parlez-moi de votre projet...",
             btnSubmit: "ENVOYER LA DEMANDE",
             btnSending: "ENVOI EN COURS...",
-            btnError: "ERREUR, VEUILLEZ RÉESSAYER",
+            btnError: "ERREUR, RÉESSAYEZ",
             statusSuccess: "MERCI.<br>VOTRE MESSAGE A ÉTÉ ENVOYÉ."
         }
     };
 
     let currentLang = 'zh';
 
-    function normalizeLang(lang) {
-        if (!lang) return 'zh';
-        const l = String(lang).toLowerCase().trim();
+    function applyLanguage(lang) {
+        let target = (lang || 'zh').toLowerCase();
+        if (target === 'jp') target = 'ja';
+        if (target === 'kr') target = 'ko';
+        if (!dictionary[target]) target = 'zh';
 
-        // 日文支援：ja, jp, jpn, japanese, ja-jp
-        if (l.startsWith('ja') || l.startsWith('jp') || l === 'japanese') return 'ja';
+        currentLang = target;
+        const dict = dictionary[currentLang];
 
-        // 韓文支援：ko, kr, kor, korean, ko-kr
-        if (l.startsWith('ko') || l.startsWith('kr') || l === 'korean') return 'ko';
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) {
+                el.innerHTML = dict[key];
+            }
+        });
 
-        // 英文支援：en, english, en-us, en-gb
-        if (l.startsWith('en') || l === 'english') return 'en';
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (dict[key]) {
+                el.placeholder = dict[key];
+            }
+        });
+    }
 
-        // 法文支援：fr, french, fr-fr
-        if (l.startsWith('fr') || l === 'french') return 'fr';
+    function detectLanguage() {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramLang = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('l');
+            if (paramLang) return paramLang;
+        } catch (e) {}
 
-        // 中文支援：zh, cn, tw, hk, chinese
-        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk') || l === 'chinese') return 'zh';
+        const navLang = (navigator.language || '').toLowerCase();
+        if (navLang.startsWith('zh')) return 'zh';
+        if (navLang.startsWith('ja')) return 'ja';
+        if (navLang.startsWith('ko')) return 'ko';
+        if (navLang.startsWith('fr')) return 'fr';
+        if (navLang.startsWith('en')) return 'en';
 
         return 'zh';
     }
 
-    function changeLanguage(langKey) {
-        currentLang = normalizeLang(langKey);
-        const langData = dictionary[currentLang] || dictionary.zh;
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMsg = document.getElementById('status-msg');
 
-        // Update inner text content
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (langData[key]) {
-                el.innerText = langData[key];
-            }
-        });
-
-        // Update input placeholders
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (langData[key]) {
-                el.placeholder = langData[key];
-            }
-        });
-    }
-
-    const form = document.getElementById("contact-form");
-    const statusMsg = document.getElementById("status-msg");
-    const btn = document.getElementById("submit-btn");
-
-    form.onsubmit = async (e) => {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const activeDict = dictionary[currentLang] || dictionary.zh;
+        const dict = dictionary[currentLang] || dictionary.zh;
 
-        btn.disabled = true;
-        btn.innerText = activeDict.btnSending;
+        submitBtn.disabled = true;
+        submitBtn.innerText = dict.btnSending;
 
-        const data = new FormData(form);
         try {
             const response = await fetch(form.action, {
-                method: 'POST',
-                body: data,
-                headers: { 'Accept': 'application/json' }
+                method: form.method,
+                body: new FormData(form),
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
 
             if (response.ok) {
-                form.style.display = "none";
-                statusMsg.style.display = "block";
-                statusMsg.innerHTML = activeDict.statusSuccess;
-            } else { 
-                throw new Error(); 
+                form.style.display = 'none';
+                document.querySelector('h2').style.display = 'none';
+                statusMsg.innerHTML = dict.statusSuccess;
+                statusMsg.style.display = 'block';
+            } else {
+                throw new Error('Form submission failed');
             }
         } catch (err) {
-            btn.disabled = false;
-            btn.innerText = activeDict.btnError;
-        }
-    };
-
-    // 聽取父頁面 postMessage 通訊切換語言（支援多種訊息結構與格式）
-    window.addEventListener('message', (e) => {
-        if (!e.data) return;
-        let data = e.data;
-
-        // 若為 JSON 字串嘗試 parse，否則若為直接語言代碼字串則直接處理
-        if (typeof data === 'string') {
-            try {
-                data = JSON.parse(data);
-            } catch (err) {
-                changeLanguage(data);
-                return;
-            }
-        }
-
-        // 提取語言代碼（相容 lang, language, locale, langKey 等屬性名）
-        const targetLang = data.lang || data.language || data.locale || data.langKey;
-        if (targetLang) {
-            changeLanguage(targetLang);
-        } else if (data.type === 'LANGUAGE_CHANGE' && data.lang) {
-            changeLanguage(data.lang);
+            console.error('Submission Error:', err);
+            submitBtn.disabled = false;
+            submitBtn.innerText = dict.btnError;
+            setTimeout(() => {
+                submitBtn.innerText = dict.btnSubmit;
+            }, 3000);
         }
     });
-</script>
 
+    window.addEventListener('message', (e) => {
+        if (!e.data) return;
+        let lang = null;
+        if (typeof e.data === 'string') {
+            lang = e.data;
+        } else if (typeof e.data === 'object') {
+            if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE') {
+                lang = e.data.lang || e.data.language;
+            } else if (e.data.lang || e.data.language) {
+                lang = e.data.lang || e.data.language;
+            }
+        }
+        if (lang) applyLanguage(lang);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        applyLanguage(detectLanguage());
+    });
+</script>
 </body>
 </html>
