@@ -3,46 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | Print Works</title>
+    <title>XiaoStudio | Print Works (Protected)</title>
     
-    <!-- 1. 外部資源：Tailwind CSS (CDN) -->
+    <!-- 外部資源與字型 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- 2. 外部資源：Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
-    
-    <!-- 3. 修正路徑：指向上一層目錄的 CSS -->
-  <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        /* =========================================
+           1. 基礎變數與全局設定 (包含防護設定)
+           ========================================= */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-gray: #f3f3f3;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 2rem 2rem 8rem 2rem;
+        }
+        
+        @media (min-width: 768px) { body { padding: 3rem 3rem 12rem 3rem; } }
+        @media (min-width: 1024px) { body { padding: 4rem 4rem 16rem 4rem; } }
+
+        .mono-text { font-family: 'Barlow', sans-serif; }
+        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
+        .no-scroll { overflow: hidden; }
+
+        /* =========================================
+           2. 佈局元件 (Layout & Security Elements)
+           ========================================= */
+        .content-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .masthead-border { 
+            border-top: 1px solid var(--text-color); 
+            border-bottom: 1px solid var(--text-color); 
+            padding: 0.2rem 0;
+            margin: 0.5rem 0;
+        }
+
+        @media (min-width: 768px) { .masthead-border { padding: 1.25rem 0; } }
+
+        /* 防護標籤指示器 */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #000;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .security-badge::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #00ff66;
+        }
+
+        /* =========================================
+           3. 作品網格元件 (Project Card)
+           ========================================= */
+        .project-card {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            background-color: var(--accent-gray);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .project-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-image-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            background-color: #eee;
+        }
+
+        .project-asset {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* 鎖定媒體元素本體 */
+        }
+        
+        .project-asset.loaded { opacity: 1; }
+        .project-card:hover .project-asset { transform: scale(1.06); }
+
+        /* 媒體保護遮罩 (防止使用者直接對圖點選右鍵或另存新檔) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+            cursor: pointer;
+        }
+
+        .loading-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================
+           4. 專案詳情視窗與安全提示 UI
+           ========================================= */
+        #project-overlay {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-color);
+            z-index: 500;
+            transform: translateX(100%);
+            transition: var(--transition-smooth);
+            display: flex;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+        #project-overlay.active {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .project-modal-content {
+            width: 85vw;
+            max-width: 85vw; 
+            height: 100%;
+            position: relative;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            padding: 0; 
+        }
+
+        @media (max-width: 768px) { 
+            .project-modal-content { 
+                width: 95vw;
+                max-width: 95vw;
+            } 
+            .close-project-btn {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        .close-project-btn {
+            position: absolute;
+            top: 0; 
+            right: 0; 
+            width: 35px;
+            height: 35px;
+            background: #fff;
+            color: #000;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 601;
+            transition: var(--transition-smooth);
+        }
+
+        .close-project-btn:hover {
+            background: #000;
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        #project-iframe {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+            background: #fff;
+            border-top: 1px solid #000;
+        }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .marquee-container {
+            border: 1px solid #000000;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-scroll 14s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
 </head>
-<body class="p-8 md:p-12 lg:p-16">
+<body oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- 雜誌編排風格 Header -->
-    <header class="mb-8 md:mb-12">
-        <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-black">
-            <div>NODE_03 // 2026 ISSUE</div>
-            <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
-            <div>MOTION PROJECTS</div>
-        </div>
-        
-        <div class="masthead-border">
-            <div class="flex items-center justify-center md:justify-start">
-                <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none">
-                   MOTION<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>VIDEO
-                </h1>
+    <div class="content-container">
+        <!-- 頁首標題區 -->
+        <header id="main-header" class="mb-6 md:mb-8">
+            <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase">
+                <div>NODE_03 // 2026 ISSUE</div>
+                <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
+                <div>MOTION PROJECTS</div>
             </div>
-        </div>
-        
-        <div class="mt-4 flex justify-between mono-text text-[9px] md:text-[10px] font-medium tracking-wider text-black-400 uppercase">
-            <span>CRAFTING DYNAMIC VISUAL NARRATIVES</span>
-            <span>Vol. 001</span>
-        </div>
-    </header>
+            
+            <div class="masthead-border">
+                <div class="flex items-center justify-center text-center">
+                    <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase leading-none text-center">
+                         MOTION<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>VIDEO
+                    </h1>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex justify-between items-center mono-text text-[9px] md:text-[10px] font-medium tracking-wider uppercase gap-4">
+                <span class="security-badge">Protected Area</span>
+                
+                <!-- 黑字黑色外框線跑馬燈 -->
+                <div class="marquee-container py-1 px-2 max-w-[180px] sm:max-w-[260px] md:max-w-[340px]">
+                    <div class="marquee-content gap-6 text-black font-bold">
+                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-  
-    <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-      
-      
-        <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4">
+        <!-- 作品網格 -->
+        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+         
+            
+           <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4">
                 <div class="project-image-container aspect-square md:aspect-[4/3]">
                     <div class="loading-shimmer"></div>
                     <img src="" class="project-asset auto-thumb ">
@@ -136,20 +412,285 @@
                      <img src="" alt="Project Preview" class="project-asset auto-thumb w-full h-full object-cover">
                 </div>
             </div>
-   
         </main>
     </div>
-           
 
     <!-- 專案展示視窗 -->
-    <aside id="project-overlay" aria-hidden="true">
+    <aside id="project-overlay" aria-hidden="true" role="dialog">
         <div class="project-modal-content">
             <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
             <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
         </div>
     </aside>
 
-    <!-- 4. 修正路徑：指向上一層目錄的 JS -->
-    <script src="../assets/script.js"></script>
+    <!-- 安全防護動態提示框 -->
+    <div id="security-toast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
+    </div>
+
+    <!-- 腳本區 -->
+    <script>
+        /**
+         * XIAOSTUDIO 防護與核心邏輯系統
+         */
+
+        // =========================================
+        // 1. 禁止下載與複製安全防護引擎 (Security Module)
+        // =========================================
+        const SecurityGuard = {
+            toastTimeout: null,
+
+            init() {
+                this.disableContextMenu();
+                this.disableDragAndDrop();
+                this.disableShortcuts();
+                this.preventPrintScreen();
+            },
+
+            showToast(message) {
+                const toast = document.getElementById('security-toast');
+                const msgEl = document.getElementById('toast-message');
+                if (!toast || !msgEl) return;
+
+                msgEl.innerText = message || 'PROTECTED // CONTENT DOWNLOAD DISABLED';
+                toast.classList.add('active');
+
+                if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                this.toastTimeout = setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 2500);
+            },
+
+            disableContextMenu() {
+                // 阻擋右鍵選單
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showToast('RIGHT CLICK DISABLED // 內容受著作權保護');
+                    return false;
+                }, false);
+            },
+
+            disableDragAndDrop() {
+                // 阻擋圖片/媒體拖曳
+                document.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                    this.showToast('DRAG & DROP DISABLED // 禁止拖曳下載');
+                    return false;
+                }, false);
+            },
+
+            disableShortcuts() {
+                // 阻擋鍵盤組合鍵 (DevTools, 另存新檔, 檢視原始碼, 列印等)
+                document.addEventListener('keydown', (e) => {
+                    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                    const keyCode = e.keyCode || e.which;
+
+                    // F12 (DevTools)
+                    if (keyCode === 123) {
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                        return false;
+                    }
+
+                    if (ctrlOrCmd) {
+                        // S: 另存新檔, U: 檢視原始碼, P: 列印
+                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                            e.preventDefault();
+                            this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
+                            return false;
+                        }
+
+                        // Shift + I / J / C (開啟檢查元素與 Console)
+                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
+                            e.preventDefault();
+                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                            return false;
+                        }
+
+                        // A: 全選, C: 複製
+                        if (keyCode === 65 || keyCode === 67) {
+                            // 允許在輸入框內正常鍵入，其他區域禁止全選複製
+                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                                e.preventDefault();
+                                this.showToast('COPYING DISABLED // 禁止複製');
+                                return false;
+                            }
+                        }
+                    }
+                }, false);
+            },
+
+            preventPrintScreen() {
+                // 當按下 PrintScreen 鍵時清空剪貼簿 (對部分系統提供基本干擾)
+                window.addEventListener('keyup', (e) => {
+                    if (e.key === 'PrintScreen') {
+                        navigator.clipboard.writeText('');
+                        this.showToast('SCREENSHOT DETECTED // 圖片受到保護');
+                    }
+                });
+            }
+        };
+
+        // =========================================
+        // 2. Portfolio Core Logic (原本的核心邏輯)
+        // =========================================
+        const Portfolio = {
+            elements: {
+                header: document.getElementById('main-header'),
+                masthead: document.querySelector('.masthead-border'),
+                overlay: document.getElementById('project-overlay'),
+                iframe: document.getElementById('project-iframe'),
+                cards: document.querySelectorAll('.project-card')
+            },
+
+            init() {
+                this.bindEvents();
+                this.setupIntersectionObserver();
+            },
+
+            bindEvents() {
+                this.elements.cards.forEach(card => {
+                    // 支持 <a> 標籤與普通的 <div> 點擊觸發
+                    card.addEventListener('click', (e) => {
+                        const href = card.getAttribute('href');
+                        if (href) {
+                            e.preventDefault();
+                            this.open(href);
+                        }
+                    });
+                });
+
+                window.addEventListener('resize', () => {
+                    if (this.elements.overlay.classList.contains('active')) {
+                        this.updateOverlayPosition();
+                    }
+                });
+            },
+
+            setupIntersectionObserver() {
+                const options = {
+                    threshold: 0.01,
+                    rootMargin: '200px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const card = entry.target;
+                            card.classList.add('is-visible');
+                            
+                            const placeholder = card.querySelector('.auto-thumb');
+                            const assetUrl = card.getAttribute('data-thumb');
+                            
+                            if (placeholder && assetUrl && !placeholder.dataset.loaded) {
+                                this.loadAsset(placeholder, assetUrl, card);
+                            }
+                        }
+                    });
+                }, options);
+
+                this.elements.cards.forEach(card => observer.observe(card));
+            },
+
+            /**
+             * 資源加載處理：自動偵測圖片或影片 (帶下載保護屬性)
+             */
+            loadAsset(placeholder, url, card) {
+                const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
+                
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.className = placeholder.className;
+                    video.src = url;
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.setAttribute('muted', '');
+                    video.setAttribute('controlsList', 'nodownload noplaybackrate'); // 停用下載選單
+                    video.setAttribute('disablePictureInPicture', 'true'); // 停用畫中畫
+                    video.setAttribute('oncontextmenu', 'return false;');
+                    
+                    // 安全播放函式，隱藏瀏覽器省電模式或切頁引起的 AbortError
+                    const safePlay = () => {
+                        const playPromise = video.play();
+                        if (playPromise && typeof playPromise.catch === 'function') {
+                            playPromise.catch(() => {
+                                // 忽略省電模式或背景頁面暫停媒體導致的控制台錯誤
+                            });
+                        }
+                    };
+
+                    // --- 5秒循環邏輯 ---
+                    video.addEventListener('timeupdate', function() {
+                        if (this.currentTime >= 5) {
+                            this.currentTime = 0;
+                            safePlay();
+                        }
+                    });
+                    
+                    video.oncanplay = () => {
+                        safePlay();
+                        this.finalizeLoading(placeholder, video, card);
+                    };
+                    
+                    video.onerror = () => this.handleError(card);
+                    
+                    placeholder.parentNode.replaceChild(video, placeholder);
+                } else {
+                    placeholder.src = url;
+                    placeholder.setAttribute('oncontextmenu', 'return false;');
+                    placeholder.onload = () => {
+                        this.finalizeLoading(null, placeholder, card);
+                    };
+                    placeholder.onerror = () => this.handleError(card);
+                }
+            },
+
+            finalizeLoading(oldEl, newEl, card) {
+                newEl.classList.add('loaded');
+                newEl.dataset.loaded = "true";
+                const shimmer = card.querySelector('.loading-shimmer');
+                if (shimmer) shimmer.style.display = 'none';
+            },
+
+            handleError(card) {
+                const shimmer = card.querySelector('.loading-shimmer');
+                if (shimmer) shimmer.style.background = '#e0e0e0';
+            },
+
+            open(url) {
+                this.updateOverlayPosition();
+                this.elements.iframe.src = url;
+                this.elements.overlay.classList.add('active');
+                this.elements.overlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('no-scroll');
+            },
+
+            close() {
+                this.elements.overlay.classList.remove('active');
+                this.elements.overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('no-scroll');
+                setTimeout(() => { this.elements.iframe.src = ''; }, 600);
+            },
+
+            updateOverlayPosition() {
+                if (this.elements.masthead) {
+                    const rect = this.elements.masthead.getBoundingClientRect();
+                    this.elements.overlay.style.top = rect.top + 'px';
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            SecurityGuard.init();
+            Portfolio.init();
+        });
+    </script>
 </body>
 </html>
