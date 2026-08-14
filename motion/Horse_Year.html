@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XiaoStudio | TREE HOUSE 2026 - Yearbook demo #01 (Protected)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+
+        .mono-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 滾動動畫效果定義 */
+        .reveal-item {
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* 各種動畫進入方向 */
+        .fade-in-up {
+            transform: translateY(40px);
+        }
+
+        .slide-in-left {
+            transform: translateX(-40px);
+        }
+
+        .slide-in-right {
+            transform: translateX(40px);
+        }
+
+        /* 當元素進入視口時啟動動畫 */
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* 圖片與影片容器懸停縮放效果 */
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: #f7f7f7;
+            border-radius: 4px;
+            scroll-margin-top: 80px;
+        }
+
+        .project-image, .project-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* 鎖定媒體元素本體 */
+        }
+
+        .image-container:hover .project-image,
+        .image-container:hover .project-video {
+            transform: scale(1.02);
+        }
+
+        /* 媒體保護遮罩 (防止使用者對圖點選右鍵或另存新檔) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+            cursor: default;
+        }
+
+        /* 頁首主視覺動畫 */
+        .hero-reveal {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: scale(1.05);
+            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+        }
+
+        .hero-reveal.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 全螢幕自動收起控制列樣式 */
+        #project-video-1:fullscreen,
+        #project-video-1:-webkit-full-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+
+        #project-video-1:fullscreen .project-video,
+        #project-video-1:-webkit-full-screen .project-video {
+            max-height: 100vh;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        #project-video-1:fullscreen #video-controls-bar,
+        #project-video-1:-webkit-full-screen #video-controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 40;
+        }
+
+        #project-video-1:fullscreen.controls-hidden #video-controls-bar,
+        #project-video-1:-webkit-full-screen.controls-hidden #video-controls-bar {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+
+        #project-video-1:fullscreen.controls-hidden,
+        #project-video-1:-webkit-full-screen.controls-hidden {
+            cursor: none;
+        }
+    </style>
+</head>
+<body class="selection:bg-gray-200" oncontextmenu="return false;" ondragstart="return false;">
+
+    <!-- 專案主視覺 (Hero Image) -->
+    <section class="w-full aspect-[4/3] md:aspect-auto md:h-[60vh] overflow-hidden bg-gray-100 relative">
+        <div class="asset-protection-layer"></div>
+        <div class="hero-reveal w-full h-full">
+            <img 
+                src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786688531/Project_Horse_Header_sywrie.jpg" 
+                alt="[TH2026]" 
+                class="w-full h-full object-cover grayscale-[0.1] project-image"
+                oncontextmenu="return false;"
+            >
+        </div>
+    </section>
+
+    <!-- 跑馬燈告示列 (Marquee Notice - Pinned Sticky Positioning) -->
+    <div class="sticky top-0 z-50 w-full bg-black/95 backdrop-blur-md text-white py-3 overflow-hidden whitespace-nowrap border-b border-gray-800 select-none shadow-lg transition-all duration-300">
+        <div class="animate-marquee flex items-center gap-12">
+            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
+                本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
+            </span>
+            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
+                本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
+            </span>
+            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
+                本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
+            </span>
+        </div>
+    </div>
+
+    <!-- 內容區塊 -->
+    <main class="max-w-[1400px] mx-auto px-8 py-20 md:py-32 space-y-24">
+        
+        <!-- 專案標題與敘述 -->
+        <section class="max-w-5xl mx-auto">
+            <div class="reveal-item fade-in-up mb-6">
+                <span class="text-[10px] text-gray-800 font-bold tracking-[0.3em] uppercase mb-2 block">Category: Brand Video & Motion</span>
+                <h1 class="text-black text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
+                    CHINESE LUNAR YEAR OF THE HORSE <br class="hidden md:block">
+                    <span class="text-xl md:text-4xl font-normal tracking-normal text-gray-500 block mt-3">BRAND VIDEO PRODUCTION</span>
+                </h1>
+            </div>
+
+            <!-- 關鍵字標籤 -->
+            <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># juliArt 覺亞</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># YEAR OF THE HORSE</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># BRAND VIDEO</span>
+                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># VISUAL DIRECTION</span>
+            </div>
+
+            <!-- 專案簡介區塊 -->
+            <div class="flex flex-col md:flex-row gap-16 border-b border-gray-100 pb-16 reveal-item fade-in-up">
+                <div class="md:w-1/3 text-[10px] uppercase tracking-[0.3em] text-gray-800 font-bold border-t md:border-t-0 pt-6 md:pt-0">
+                    Role & Responsibilities
+                    <div class="mt-4 space-y-2 text-[13px] text-gray-600 font-medium normal-case tracking-normal">
+                        <p>Art & Visual Direction</p>
+                        <p>Scripting & Storyboarding</p>
+                        <p>Visual Production</p>
+                        <p>Video Editing & Post-Production</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 媒體展示網格 (帶透明保護層) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+
+            <div id="project-img-3" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689596/_Image_57_zxskdy.jpg" alt="[設計展示 3]" class="project-image" oncontextmenu="return false;">
+            </div>
+
+            <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689595/_Image-69_02_sbltp3.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
+            </div>
+            
+            <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689591/_Image_60_qvbbwv.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
+            </div>
+       
+            <div id="project-img-4" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689593/_Image_155_y6ymjs.jpg" alt="[設計展示 4]" class="project-image" oncontextmenu="return false;">
+            </div>
+
+            <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689595/CNY_shampoo_003-Current-View_czx6by.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
+            </div>
+            
+            <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689596/_Image-55_02_b4evbo.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
+            </div>
+
+             <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689593/_Image_76_h3dtko.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
+            </div>
+            
+            <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786690726/_Image_85_xy5g9i.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
+            </div>
+
+            <div id="project-img-5" class="image-container md:col-span-2 reveal-item fade-in-up">
+                <div class="asset-protection-layer"></div>
+                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689592/_Image_126_deiyax.jpg" alt="[設計展示 5]" class="project-image" oncontextmenu="return false;">
+            </div>
+
+            <!-- 影片展示區塊 (控制列置於影片下方獨立展示，不遮擋影片畫面) -->
+            <div id="project-video-1" class="image-container md:col-span-2 reveal-item fade-in-up bg-black border border-gray-100/10">
+                <div class="relative w-full">
+                    <div class="asset-protection-layer"></div>
+                    <video 
+                        id="main-video"
+                        src="https://res.cloudinary.com/dssycfvxr/video/upload/v1772698837/JA_CNY_2026_1920_S_clafj2.mp4" 
+                        class="project-video w-full h-auto block" 
+                        loop 
+                        muted 
+                        playsinline
+                        oncontextmenu="return false;"
+                    ></video>
+                </div>
+
+                <!-- 自訂控制介面 (獨立置於影片下方列，確保不遮擋影片畫面，並與頁面整體字型視覺一致) -->
+                <div id="video-controls-bar" class="w-full bg-black text-white px-5 py-3 flex flex-wrap items-center justify-between gap-4 border-t border-gray-900 z-30 relative select-none">
+                    <div class="flex items-center gap-5">
+                        <!-- 播放 / 暫停按鈕 -->
+                        <button id="video-bottom-play-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-2.5 group" aria-label="Play/Pause">
+                            <svg id="bottom-play-icon" class="w-4 h-4 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="bottom-pause-icon" class="w-4 h-4 hidden transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            <span id="play-btn-text" class="text-[10px] font-bold tracking-[0.2em] text-gray-300 group-hover:text-white uppercase transition-colors">PLAY</span>
+                        </button>
+
+                        <div class="h-3 w-[1px] bg-gray-800"></div>
+
+                        <!-- 音量開關與拉桿 -->
+                        <div class="flex items-center gap-2.5">
+                            <button id="video-volume-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center justify-center" aria-label="Toggle Mute">
+                                <svg id="volume-on-icon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                                <svg id="volume-mute-icon" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                            </button>
+                            <input id="video-volume-slider" type="range" min="0" max="1" step="0.05" value="0" class="w-16 md:w-24 h-1 bg-gray-800 appearance-none rounded-lg cursor-pointer accent-white hover:bg-gray-700 transition-all">
+                        </div>
+                    </div>
+
+                    <!-- 右側資訊與全螢幕按鈕 -->
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase hidden sm:inline-block">
+                            VIDEO // BRAND REEL 2026
+                        </span>
+
+                        <button id="video-fullscreen-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-1.5 px-3 py-1 border border-gray-800 rounded hover:border-gray-700 text-[10px] font-bold tracking-[0.2em] uppercase" aria-label="Toggle Fullscreen">
+                            <svg id="fullscreen-open-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                            <svg id="fullscreen-close-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
+                            <span>FULLSCREEN</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </main>
+
+    <!-- 頁尾版權 -->
+    <footer class="w-full py-12 border-t border-gray-100 text-center text-xs text-gray-400 tracking-[0.2em] uppercase">
+        &copy; 2026 XiaoStudio. All Rights Reserved.
+    </footer>
+
+    <!-- 安全防護動態提示框 -->
+    <div id="security-toast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
+    </div>
+
+    <script>
+        /**
+         * XIAOSTUDIO Security Guard Module
+         */
+        const SecurityGuard = {
+            toastTimeout: null,
+
+            init() {
+                this.disableContextMenu();
+                this.disableDragAndDrop();
+                this.disableShortcuts();
+                this.preventPrintScreen();
+            },
+
+            showToast(message) {
+                const toast = document.getElementById('security-toast');
+                const msgEl = document.getElementById('toast-message');
+                if (!toast || !msgEl) return;
+
+                msgEl.innerText = message || 'PROTECTED // CONTENT DOWNLOAD DISABLED';
+                toast.classList.add('active');
+
+                if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                this.toastTimeout = setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 2500);
+            },
+
+            disableContextMenu() {
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showToast('RIGHT CLICK DISABLED // 內容受著作權保護');
+                    return false;
+                }, false);
+            },
+
+            disableDragAndDrop() {
+                document.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                    this.showToast('DRAG & DROP DISABLED // 禁止拖曳下載');
+                    return false;
+                }, false);
+            },
+
+            disableShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                    const keyCode = e.keyCode || e.which;
+
+                    // F12 (DevTools)
+                    if (keyCode === 123) {
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                        return false;
+                    }
+
+                    if (ctrlOrCmd) {
+                        // S: 另存新檔, U: 檢視原始碼, P: 列印
+                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                            e.preventDefault();
+                            this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
+                            return false;
+                        }
+
+                        // Shift + I / J / C (開啟檢查元素與 Console)
+                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
+                            e.preventDefault();
+                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                            return false;
+                        }
+
+                        // A: 全選, C: 複製
+                        if (keyCode === 65 || keyCode === 67) {
+                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                                e.preventDefault();
+                                this.showToast('COPYING DISABLED // 禁止複製');
+                                return false;
+                            }
+                        }
+                    }
+                }, false);
+            },
+
+            preventPrintScreen() {
+                window.addEventListener('keyup', (e) => {
+                    if (e.key === 'PrintScreen') {
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText('');
+                        }
+                        this.showToast('SCREENSHOT DETECTED // 圖片受到保護');
+                    }
+                });
+            }
+        };
+
+        // 設定 Intersection Observer 參數
+        const observerOptions = { 
+            threshold: 0.05, 
+            rootMargin: "0px 0px -100px 0px" 
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 初始化影片播放器控制邏輯
+        function initVideoControls() {
+            const videoContainer = document.getElementById('project-video-1');
+            const video = document.getElementById('main-video');
+            const bottomPlayBtn = document.getElementById('video-bottom-play-btn');
+            const playBtnText = document.getElementById('play-btn-text');
+            const fullscreenBtn = document.getElementById('video-fullscreen-btn');
+            const volumeBtn = document.getElementById('video-volume-btn');
+            const volumeSlider = document.getElementById('video-volume-slider');
+
+            const bottomPlayIcon = document.getElementById('bottom-play-icon');
+            const bottomPauseIcon = document.getElementById('bottom-pause-icon');
+            const volumeOnIcon = document.getElementById('volume-on-icon');
+            const volumeMuteIcon = document.getElementById('volume-mute-icon');
+            const fsOpenIcon = document.getElementById('fullscreen-open-icon');
+            const fsCloseIcon = document.getElementById('fullscreen-close-icon');
+
+            if (!video) return;
+
+            let lastVolume = 0.8;
+            let fsHideTimer = null;
+
+            function showFSControls() {
+                videoContainer.classList.remove('controls-hidden');
+                clearTimeout(fsHideTimer);
+                const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+                if (isFS) {
+                    fsHideTimer = setTimeout(() => {
+                        videoContainer.classList.add('controls-hidden');
+                    }, 2500);
+                }
+            }
+
+            videoContainer.addEventListener('mousemove', () => {
+                const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+                if (isFS) showFSControls();
+            });
+
+            videoContainer.addEventListener('touchstart', () => {
+                const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+                if (isFS) showFSControls();
+            }, { passive: true });
+
+            function updatePlayUI() {
+                if (video.paused) {
+                    bottomPlayIcon.classList.remove('hidden');
+                    bottomPauseIcon.classList.add('hidden');
+                    if (playBtnText) playBtnText.innerText = 'PLAY';
+                } else {
+                    bottomPlayIcon.classList.add('hidden');
+                    bottomPauseIcon.classList.remove('hidden');
+                    if (playBtnText) playBtnText.innerText = 'PAUSE';
+                }
+            }
+
+            function updateVolumeUI() {
+                if (video.muted || video.volume === 0) {
+                    volumeOnIcon.classList.add('hidden');
+                    volumeMuteIcon.classList.remove('hidden');
+                    volumeSlider.value = 0;
+                } else {
+                    volumeOnIcon.classList.remove('hidden');
+                    volumeMuteIcon.classList.add('hidden');
+                    volumeSlider.value = video.volume;
+                }
+            }
+
+            function togglePlay() {
+                if (video.paused) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            }
+
+            function toggleMute() {
+                if (video.muted || video.volume === 0) {
+                    video.muted = false;
+                    video.volume = lastVolume > 0 ? lastVolume : 0.8;
+                } else {
+                    lastVolume = video.volume;
+                    video.muted = true;
+                }
+                updateVolumeUI();
+            }
+
+            function handleVolumeChange(e) {
+                const val = parseFloat(e.target.value);
+                video.volume = val;
+                if (val > 0) {
+                    video.muted = false;
+                    lastVolume = val;
+                } else {
+                    video.muted = true;
+                }
+                updateVolumeUI();
+            }
+
+            function toggleFullscreen() {
+                const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+                if (!isFS) {
+                    if (videoContainer.requestFullscreen) {
+                        videoContainer.requestFullscreen();
+                    } else if (videoContainer.webkitRequestFullscreen) {
+                        videoContainer.webkitRequestFullscreen();
+                    } else if (video.webkitEnterFullscreen) {
+                        video.webkitEnterFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    }
+                }
+            }
+
+            bottomPlayBtn.addEventListener('click', togglePlay);
+            volumeBtn.addEventListener('click', toggleMute);
+            volumeSlider.addEventListener('input', handleVolumeChange);
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+            video.addEventListener('play', updatePlayUI);
+            video.addEventListener('pause', updatePlayUI);
+            video.addEventListener('volumechange', updateVolumeUI);
+
+            const handleFSChange = () => {
+                const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+                if (isFS) {
+                    fsOpenIcon.classList.add('hidden');
+                    fsCloseIcon.classList.remove('hidden');
+                    showFSControls();
+                } else {
+                    fsOpenIcon.classList.remove('hidden');
+                    fsCloseIcon.classList.add('hidden');
+                    videoContainer.classList.remove('controls-hidden');
+                    clearTimeout(fsHideTimer);
+                }
+            };
+
+            document.addEventListener('fullscreenchange', handleFSChange);
+            document.addEventListener('webkitfullscreenchange', handleFSChange);
+
+            // 初始化音量與播放 UI
+            updatePlayUI();
+            updateVolumeUI();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            SecurityGuard.init();
+
+            document.querySelectorAll('.hero-reveal, .reveal-item').forEach(el => {
+                observer.observe(el);
+            });
+
+            initVideoControls();
+        });
+
+        function scrollToImage(index) {
+            const element = document.getElementById(`project-img-${index}`);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+        // 建議的全螢幕狀態監聽補強
+['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(eventName => {
+    document.addEventListener(eventName, () => {
+        const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+        if (!isFS) {
+            // 退出全螢幕時強制還原控制列與游標
+            if (controlsBar) controlsBar.style.opacity = '1';
+            if (videoWrapper) videoWrapper.style.cursor = 'default';
+        }
+    });
+});
+    </script>
+</body>
+</html>
