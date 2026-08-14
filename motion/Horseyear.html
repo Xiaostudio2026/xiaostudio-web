@@ -670,12 +670,6 @@
 });
 const bgm = document.getElementById('bgm');
 
-// 監聽頁面上所有 video 的 play 事件
-document.addEventListener('play', (event) => {
-  if (event.target.tagName.toLowerCase() === 'video') {
-    bgm.pause();
-  }
-}, true);
 
 // 當任何 video 暫停或結束時恢復背景音樂
 document.addEventListener('pause', (event) => {
@@ -715,6 +709,18 @@ function fadeInBGM(bgm, targetVolume = 1, duration = 500) {
       clearInterval(fade);
     }
   }, 50);
+}
+// 直接存取上兩層的 audio 標籤
+function controlGrandparentBGM(action) {
+    try {
+        const grandBgm = window.parent.parent.document.getElementById('bgm');
+        if (grandBgm) {
+            if (action === 'pause') grandBgm.pause();
+            if (action === 'play') grandBgm.play();
+        }
+    } catch (e) {
+        console.warn("無法直接存取上兩層 DOM，可能受到同源政策限制:", e);
+    }
 }
     </script>
 </body>
