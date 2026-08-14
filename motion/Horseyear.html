@@ -668,6 +668,54 @@
         }
     });
 });
+const bgm = document.getElementById('bgm');
+
+// 監聽頁面上所有 video 的 play 事件
+document.addEventListener('play', (event) => {
+  if (event.target.tagName.toLowerCase() === 'video') {
+    bgm.pause();
+  }
+}, true);
+
+// 當任何 video 暫停或結束時恢復背景音樂
+document.addEventListener('pause', (event) => {
+  if (event.target.tagName.toLowerCase() === 'video') {
+    // 檢查是否還有其他 video 在播放中，若沒有才恢復 BGM
+    const isAnyVideoPlaying = Array.from(document.querySelectorAll('video'))
+      .some(v => !v.paused && !v.ended);
+    
+    if (!isAnyVideoPlaying) {
+      bgm.play();
+    }
+  }
+}, true);
+// 平滑淡出並暫停 BGM
+function fadeOutBGM(bgm, duration = 500) {
+  let step = bgm.volume / (duration / 50);
+  let fade = setInterval(() => {
+    if (bgm.volume > step) {
+      bgm.volume -= step;
+    } else {
+      bgm.volume = 0;
+      bgm.pause();
+      clearInterval(fade);
+    }
+  }, 50);
+}
+
+// 恢復播放並平滑淡入 BGM
+function fadeInBGM(bgm, targetVolume = 1, duration = 500) {
+  bgm.play();
+  let step = targetVolume / (duration / 50);
+  let fade = setInterval(() => {
+    if (bgm.volume < targetVolume - step) {
+      bgm.volume += step;
+    } else {
+      bgm.volume = targetVolume;
+      clearInterval(fade);
+    }
+  }, 50);
+}
     </script>
 </body>
 </html>
