@@ -563,8 +563,8 @@
             </div>
         </div>
 
-        <div class="hero-text absolute bottom-5 left-6 md:left-24 z-10 pointer-events-none max-w-2xl">
-            <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br>Roll with the Form</h2>
+        <div class="hero-text absolute bottom-5 left-6 md:left-24 z-10 pointer-events-none max-w-5xl">
+            <h2 id="hero-title" class="text-4xl md:text-7xl font-bold tracking-tight leading-tight">Liquid Flow<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">Roll with the Form</span></h2>
             <div class="flex items-center gap-6 mt-4">
                 <p class="text-[12px] mono tracking-[0.1em] uppercase opacity-60">© 2026 XIAOSTUDIO</p>
                 <div class="wave-label text-[10px]">Signal: Granular_v5.2</div>
@@ -706,7 +706,7 @@
 
         const translations = {
             zh: {
-                hero: "流體律動<br>隨形起舞",
+                hero: '流體律動<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">隨形起舞</span>',
                 about: "關於 XIAO",
                 viewAbout: "查看個人檔案",
                 static: "靜態作品",
@@ -726,7 +726,7 @@
                 composedBy: "作曲：xiaostudio ｜ Suno AI 生成"
             },
             en: {
-                hero: "Liquid Flow<br>Roll with the Form",
+                hero: 'Liquid Flow<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">Roll with the Form</span>',
                 about: "About Xiao",
                 viewAbout: "View Profile",
                 static: "Static Works",
@@ -746,7 +746,7 @@
                 composedBy: "Composed by xiaostudio · Generated via Suno AI"
             },
             jp: {
-                hero: "流れる律動<br>形に従う",
+                hero: '流れる律動<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">形に従う</span>',
                 about: "XIAOについて",
                 viewAbout: "プロフィール",
                 static: "グラフィック作品",
@@ -766,7 +766,7 @@
                 composedBy: "作曲：xiaostudio ｜ Suno AI 作成"
             },
             kr: {
-                hero: "유체의 흐름<br>형태를 따르다",
+                hero: '유체의 흐름<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">형태를 따르다</span>',
                 about: "XIAO 소개",
                 viewAbout: "프로필 보기",
                 static: "정적 작품",
@@ -786,7 +786,7 @@
                 composedBy: "작곡: xiaostudio ｜ Suno AI 생성"
             },
             fr: {
-                hero: "Flux Liquide<br>Suivre la Forme",
+                hero: 'Flux Liquide<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">Suivre la Forme</span>',
                 about: "À propos de Xiao",
                 viewAbout: "Voir le profil",
                 static: "Travaux Statiques",
@@ -956,9 +956,9 @@
         function initNodePositions() {
             const isMobile = window.innerWidth < 768;
             const positions = isMobile ? [
-                { id: 'node1', top: '11%', left: '7%' }, { id: 'node3', top: '17%', left: '55%' },
-                { id: 'node2', top: '34%', left: '4%' }, { id: 'node4', top: '36%', left: '46%' },
-                { id: 'node6', top: '60%', left: '54%' }, { id: 'node5', top: '56%', left: '8%' }	
+                { id: 'node1', top: '17%', left: '10%' }, { id: 'node3', top: '10%', left: '55%' },
+                { id: 'node2', top: '34%', left: '4%' }, { id: 'node4', top: '33%', left: '46%' },
+                { id: 'node6', top: '65%', left: '51%' }, { id: 'node5', top: '53%', left: '8%' }	
             ] : [
                 { id: 'node1', top: '25%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
                 { id: 'node2', top: '45%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
