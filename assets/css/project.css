@@ -1,4 +1,4 @@
-  :root {
+   :root {
             --bg-color: #ffffff;
             --text-color: #000000;
         }
@@ -58,6 +58,28 @@
             background-color: #f7f7f7;
             border-radius: 0;
             scroll-margin-top: 80px;
+        }
+
+        .image-container.aspect-square-mobile {
+            aspect-ratio: 1 / 1;
+        }
+        @media (min-width: 768px) {
+            .image-container.aspect-square-mobile {
+                aspect-ratio: auto;
+            }
+        }
+
+        /* 手機版強制橫螢幕旋轉樣式 (針對不支援 Screen Orientation API 之裝置備用) */
+        .force-landscape {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vh !important;
+            height: 100vw !important;
+            transform: rotate(90deg) translateY(-100%);
+            transform-origin: top left;
+            z-index: 99999 !important;
+            background-color: #000 !important;
         }
 
         .project-image, .project-video {
