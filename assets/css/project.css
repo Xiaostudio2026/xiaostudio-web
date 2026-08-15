@@ -1,1 +1,197 @@
+  :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
 
+        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .mono-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 滾動動畫效果定義 */
+        .reveal-item {
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* 各種動畫進入方向 */
+        .fade-in-up {
+            transform: translateY(40px);
+        }
+
+        .slide-in-left {
+            transform: translateX(-40px);
+        }
+
+        .slide-in-right {
+            transform: translateX(40px);
+        }
+
+        /* 當元素進入視口時啟動動畫 */
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* 圖片與影片容器懸停縮放效果 */
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: #f7f7f7;
+            border-radius: 0;
+            scroll-margin-top: 80px;
+        }
+
+        .project-image, .project-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* 鎖定媒體元素本體 */
+        }
+
+        .image-container:hover .project-image,
+        .image-container:hover .project-video {
+            transform: scale(1.02);
+        }
+
+        /* 媒體保護遮罩 (防止使用者對圖點選右鍵或另存新檔) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+            cursor: default;
+        }
+
+        /* 頁首主視覺動畫 */
+        .hero-reveal {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: scale(1.05);
+            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+        }
+
+        .hero-reveal.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 全螢幕自動收起控制列樣式 */
+        #project-video-1:fullscreen,
+        #project-video-1:-webkit-full-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+
+        #project-video-1:fullscreen .project-video,
+        #project-video-1:-webkit-full-screen .project-video {
+            max-height: 100vh;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        #project-video-1:fullscreen #video-controls-bar,
+        #project-video-1:-webkit-full-screen #video-controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 40;
+        }
+
+        #project-video-1:fullscreen.controls-hidden #video-controls-bar,
+        #project-video-1:-webkit-full-screen.controls-hidden #video-controls-bar {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+
+        #project-video-1:fullscreen.controls-hidden,
+        #project-video-1:-webkit-full-screen.controls-hidden {
+            cursor: none;
+        }
+
+        /* 筆記本淡灰色方格紙背景 (Sketch Grid Paper Effect) */
+        .sketch-grid-bg {
+            background-color: transparent;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.055) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
