@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | TREE HOUSE 2026 - Yearbook demo #01 (Protected)</title>
+    <title>XiaoStudio | Motion Production</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
@@ -28,6 +28,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         .mono-text {
@@ -65,7 +66,7 @@
             position: relative;
             overflow: hidden;
             background-color: #f7f7f7;
-            border-radius: 4px;
+            border-radius: 0;
             scroll-margin-top: 80px;
         }
 
@@ -195,6 +196,15 @@
         #project-video-1:-webkit-full-screen.controls-hidden {
             cursor: none;
         }
+
+        /* 筆記本淡灰色方格紙背景 (Sketch Grid Paper Effect) */
+        .sketch-grid-bg {
+            background-color: transparent;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.055) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
     </style>
 </head>
 <body class="selection:bg-gray-200" oncontextmenu="return false;" ondragstart="return false;">
@@ -215,103 +225,142 @@
     <!-- 跑馬燈告示列 (Marquee Notice - Pinned Sticky Positioning) -->
     <div class="sticky top-0 z-50 w-full bg-black/95 backdrop-blur-md text-white py-3 overflow-hidden whitespace-nowrap border-b border-gray-800 select-none shadow-lg transition-all duration-300">
         <div class="animate-marquee flex items-center gap-12">
-            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
+            <span class="text-[11px] font-medium tracking-[0.18em] text-white">
                 本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
             </span>
-            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
+            <span class="text-[11px] font-medium tracking-[0.18em] text-white">
                 本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
             </span>
-            <span class="text-[11px] font-medium tracking-[0.18em] text-gray-300">
+            <span class="text-[11px] font-medium tracking-[0.18em] text-white">
                 本專案內容均為已上市發表之成品，版權歸美科實業股份有限公司所有，未經授權禁止任意轉載 &nbsp;&bull;&nbsp; ALL CONTENT IN THIS PROJECT CONSISTS OF OFFICIALLY RELEASED PRODUCTS. COPYRIGHT BELONGS TO MACROHI CO., LTD. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED.
             </span>
         </div>
     </div>
 
-    <!-- 內容區塊 -->
-    <main class="max-w-[1400px] mx-auto px-8 py-20 md:py-32 space-y-24">
+    <!-- 內容區塊 (改為滿版主容器，內部區塊再個別定寬) -->
+    <main class="w-full py-16 md:py-28 space-y-16 md:space-y-24 overflow-x-hidden">
         
         <!-- 專案標題與敘述 -->
-        <section class="max-w-5xl mx-auto">
-            <div class="reveal-item fade-in-up mb-6">
-                <span class="text-[10px] text-gray-800 font-bold tracking-[0.3em] uppercase mb-2 block">Category: Brand Video & Motion</span>
-                <h1 class="text-black text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
-                    CHINESE LUNAR YEAR OF THE HORSE <br class="hidden md:block">
-                    <span class="text-xl md:text-4xl font-normal tracking-normal text-gray-500 block mt-3">BRAND VIDEO PRODUCTION</span>
-                </h1>
-            </div>
+        <section class="max-w-[1400px] mx-auto px-8 space-y-12">
+            <div class="max-w-5xl mx-auto">
+                <div class="reveal-item fade-in-up mb-6">
+                    <span class="text-[10px] text-black font-bold tracking-[0.3em] uppercase mb-2 block">Category: Brand Video & Motion</span>
+                    <h1 class="text-black text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
+                        CHINESE LUNAR YEAR OF THE HORSE <br class="hidden md:block">
+                        <span class="text-xl md:text-4xl font-black tracking-normal text-black block mt-3">BRAND VIDEO PRODUCTION</span>
+                    </h1>
+                </div>
 
-            <!-- 關鍵字標籤 -->
-            <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
-                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># juliArt 覺亞</span>
-                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># YEAR OF THE HORSE</span>
-                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># BRAND VIDEO</span>
-                <span class="px-4 py-1.5 border border-gray-200 text-[10px] uppercase tracking-[0.2em] font-bold text-gray-800"># VISUAL DIRECTION</span>
-            </div>
+                <!-- 關鍵字標籤 -->
+                <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
+                    <span class="px-4 py-1.5 border border-black text-[10px] uppercase tracking-[0.2em] font-bold text-black"># juliArt 覺亞</span>
+                    <span class="px-4 py-1.5 border border-black text-[10px] uppercase tracking-[0.2em] font-bold text-black"># YEAR OF THE HORSE</span>
+                    <span class="px-4 py-1.5 border border-black text-[10px] uppercase tracking-[0.2em] font-bold text-black"># BRAND VIDEO</span>
+                    <span class="px-4 py-1.5 border border-black text-[10px] uppercase tracking-[0.2em] font-bold text-black"># VISUAL DIRECTION</span>
+                </div>
 
-            <!-- 專案簡介區塊 -->
-            <div class="flex flex-col md:flex-row gap-16 border-b border-gray-100 pb-16 reveal-item fade-in-up">
-                <div class="md:w-1/3 text-[10px] uppercase tracking-[0.3em] text-gray-800 font-bold border-t md:border-t-0 pt-6 md:pt-0">
-                    Role & Responsibilities
-                    <div class="mt-4 space-y-2 text-[13px] text-gray-600 font-medium normal-case tracking-normal">
-                        <p>Art & Visual Direction</p>
-                        <p>Scripting & Storyboarding</p>
-                        <p>Visual Production</p>
-                        <p>Video Editing & Post-Production</p>
+                <!-- 專案簡介區塊 -->
+                <div class="flex flex-col md:flex-row gap-16 reveal-item fade-in-up">
+                    <div class="md:w-1/3 text-[10px] uppercase tracking-[0.3em] text-black font-bold border-t md:border-t-0 pt-6 md:pt-0">
+                        Role & Responsibilities
+                        <div class="mt-4 space-y-2 text-[13px] text-black font-semibold normal-case tracking-normal">
+                            <p>Art & Visual Direction</p>
+                            <p>Scripting & Storyboarding</p>
+                            <p>Visual Production</p>
+                            <p>Video Editing & Post-Production</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 媒體展示網格 (帶透明保護層) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+        <!-- 全螢幕貫穿分隔線 1 -->
+        <div class="w-full border-t-2 border-black reveal-item fade-in-up"></div>
 
-            <div id="project-img-3" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689596/_Image_57_zxskdy.jpg" alt="[設計展示 3]" class="project-image" oncontextmenu="return false;">
-            </div>
+        <!-- 分鏡與視覺規劃展示區塊 (無外框線的開放式方格紙氛圍) -->
+        <section class="sketch-grid-bg w-full py-12 md:py-16 reveal-item fade-in-up">
+            <div class="max-w-[1400px] mx-auto px-8 space-y-8">
+                <!-- 圖片區標籤：分鏡畫面視覺規劃 -->
+                <div class="pb-2">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[11px] uppercase tracking-[0.2em] font-bold shadow-[3px_3px_0px_0px_#000]">
+                            STORYBOARD & VISUAL PLANNING
+                        </span>
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[11px] uppercase tracking-[0.2em] font-bold shadow-[3px_3px_0px_0px_#000]">
+                            CONCEPT DEVELOPMENT
+                        </span>
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[11px] uppercase tracking-[0.2em] font-bold shadow-[3px_3px_0px_0px_#000]">
+                            VISUAL DIRECTION
+                        </span>
+                    </div>
+                </div>
 
-            <div id="project-img-1" class="image-container reveal-item slide-in-left">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689595/_Image-69_02_sbltp3.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
-            </div>
-            
-            <div id="project-img-2" class="image-container reveal-item slide-in-right">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689591/_Image_60_qvbbwv.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
-            </div>
-       
-            <div id="project-img-4" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689593/_Image_155_y6ymjs.jpg" alt="[設計展示 4]" class="project-image" oncontextmenu="return false;">
-            </div>
+                <!-- 媒體展示網格 (帶透明保護層) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
 
-            <div id="project-img-1" class="image-container reveal-item slide-in-left">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689595/CNY_shampoo_003-Current-View_czx6by.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
-            </div>
-            
-            <div id="project-img-2" class="image-container reveal-item slide-in-right">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689596/_Image-55_02_b4evbo.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
-            </div>
+                    <div id="project-img-3" class="image-container md:col-span-2 reveal-item fade-in-up">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689596/_Image_57_zxskdy.jpg" alt="[設計展示 3]" class="project-image" oncontextmenu="return false;">
+                    </div>
 
-             <div id="project-img-1" class="image-container reveal-item slide-in-left">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689593/_Image_76_h3dtko.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
-            </div>
-            
-            <div id="project-img-2" class="image-container reveal-item slide-in-right">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786690726/_Image_85_xy5g9i.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
-            </div>
+                    <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689595/_Image-69_02_sbltp3.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
+                    </div>
+                    
+                    <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689591/_Image_60_qvbbwv.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
+                    </div>
+               
+                    <div id="project-img-4" class="image-container md:col-span-2 reveal-item fade-in-up">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689593/_Image_155_y6ymjs.jpg" alt="[設計展示 4]" class="project-image" oncontextmenu="return false;">
+                    </div>
 
-            <div id="project-img-5" class="image-container md:col-span-2 reveal-item fade-in-up">
-                <div class="asset-protection-layer"></div>
-                <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689592/_Image_126_deiyax.jpg" alt="[設計展示 5]" class="project-image" oncontextmenu="return false;">
+                    <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689595/CNY_shampoo_003-Current-View_czx6by.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
+                    </div>
+                    
+                    <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689596/_Image-55_02_b4evbo.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
+                    </div>
+
+                    <div id="project-img-1" class="image-container reveal-item slide-in-left">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689593/_Image_76_h3dtko.jpg" alt="[設計展示 1]" class="project-image" oncontextmenu="return false;">
+                    </div>
+                    
+                    <div id="project-img-2" class="image-container reveal-item slide-in-right">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786690726/_Image_85_xy5g9i.jpg" alt="[設計展示 2]" class="project-image" oncontextmenu="return false;">
+                    </div>
+
+                    <div id="project-img-5" class="image-container md:col-span-2 reveal-item fade-in-up">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/dssycfvxr/image/upload/v1786689592/_Image_126_deiyax.jpg" alt="[設計展示 5]" class="project-image" oncontextmenu="return false;">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 全螢幕貫穿分隔線 2 -->
+        <div class="w-full border-t-2 border-black reveal-item fade-in-up"></div>
+
+        <!-- 影片區塊 -->
+        <section class="max-w-[1400px] mx-auto px-8 space-y-6">
+            <!-- 影片標題區塊：整排向下箭頭指示 (黑色) -->
+            <div class="pb-2 reveal-item fade-in-up">
+                <div class="flex justify-between items-center w-full text-black font-mono text-xs md:text-sm font-bold select-none px-2">
+                    <span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span>
+                </div>
             </div>
 
             <!-- 影片展示區塊 (控制列置於影片下方獨立展示，不遮擋影片畫面) -->
-            <div id="project-video-1" class="image-container md:col-span-2 reveal-item fade-in-up bg-black border border-gray-100/10">
+            <div id="project-video-1" class="image-container reveal-item fade-in-up bg-black border border-gray-100/10">
                 <div class="relative w-full">
                     <div class="asset-protection-layer"></div>
                     <video 
@@ -325,14 +374,14 @@
                     ></video>
                 </div>
 
-                <!-- 自訂控制介面 (獨立置於影片下方列，確保不遮擋影片畫面，並與頁面整體字型視覺一致) -->
+                <!-- 自訂控制介面 -->
                 <div id="video-controls-bar" class="w-full bg-black text-white px-5 py-3 flex flex-wrap items-center justify-between gap-4 border-t border-gray-900 z-30 relative select-none">
                     <div class="flex items-center gap-5">
                         <!-- 播放 / 暫停按鈕 -->
                         <button id="video-bottom-play-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-2.5 group" aria-label="Play/Pause">
                             <svg id="bottom-play-icon" class="w-4 h-4 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <svg id="bottom-pause-icon" class="w-4 h-4 hidden transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                            <span id="play-btn-text" class="text-[10px] font-bold tracking-[0.2em] text-gray-300 group-hover:text-white uppercase transition-colors">PLAY</span>
+                            <span id="play-btn-text" class="text-[10px] font-bold tracking-[0.2em] text-white group-hover:text-gray-200 uppercase transition-colors">PLAY</span>
                         </button>
 
                         <div class="h-3 w-[1px] bg-gray-800"></div>
@@ -349,7 +398,7 @@
 
                     <!-- 右側資訊與全螢幕按鈕 -->
                     <div class="flex items-center gap-4">
-                        <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase hidden sm:inline-block">
+                        <span class="text-[10px] font-bold tracking-[0.2em] text-white uppercase hidden sm:inline-block">
                             VIDEO // BRAND REEL 2026
                         </span>
 
@@ -361,12 +410,13 @@
                     </div>
                 </div>
             </div>
-        
-        </div>
+        </section>
+
     </main>
 
-    <!-- 頁尾版權 -->
-    <footer class="w-full py-12 border-t border-gray-100 text-center text-xs text-gray-400 tracking-[0.2em] uppercase">
+    <!-- 頁尾前貫穿分隔線 -->
+    <div class="w-full border-t-2 border-black"></div>
+    <footer class="w-full py-12 text-center text-xs text-black font-bold tracking-[0.2em] uppercase">
         &copy; 2026 XiaoStudio. All Rights Reserved.
     </footer>
 
@@ -648,6 +698,7 @@
             initVideoControls();
         });
 
+        // 平滑滾動到指定圖片項
         function scrollToImage(index) {
             const element = document.getElementById(`project-img-${index}`);
             if (element) {
@@ -657,71 +708,30 @@
                 });
             }
         }
-        // 建議的全螢幕狀態監聽補強
-['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(eventName => {
-    document.addEventListener(eventName, () => {
-        const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
-        if (!isFS) {
-            // 退出全螢幕時強制還原控制列與游標
-            if (controlsBar) controlsBar.style.opacity = '1';
-            if (videoWrapper) videoWrapper.style.cursor = 'default';
-        }
-    });
-});
-const bgm = document.getElementById('bgm');
 
+        // 全螢幕狀態監聽補強
+        ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(eventName => {
+            document.addEventListener(eventName, () => {
+                const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+                const videoContainer = document.getElementById('project-video-1');
+                if (!isFS && videoContainer) {
+                    videoContainer.classList.remove('controls-hidden');
+                }
+            });
+        });
 
-// 當任何 video 暫停或結束時恢復背景音樂
-document.addEventListener('pause', (event) => {
-  if (event.target.tagName.toLowerCase() === 'video') {
-    // 檢查是否還有其他 video 在播放中，若沒有才恢復 BGM
-    const isAnyVideoPlaying = Array.from(document.querySelectorAll('video'))
-      .some(v => !v.paused && !v.ended);
-    
-    if (!isAnyVideoPlaying) {
-      bgm.play();
-    }
-  }
-}, true);
-// 平滑淡出並暫停 BGM
-function fadeOutBGM(bgm, duration = 500) {
-  let step = bgm.volume / (duration / 50);
-  let fade = setInterval(() => {
-    if (bgm.volume > step) {
-      bgm.volume -= step;
-    } else {
-      bgm.volume = 0;
-      bgm.pause();
-      clearInterval(fade);
-    }
-  }, 50);
-}
-
-// 恢復播放並平滑淡入 BGM
-function fadeInBGM(bgm, targetVolume = 1, duration = 500) {
-  bgm.play();
-  let step = targetVolume / (duration / 50);
-  let fade = setInterval(() => {
-    if (bgm.volume < targetVolume - step) {
-      bgm.volume += step;
-    } else {
-      bgm.volume = targetVolume;
-      clearInterval(fade);
-    }
-  }, 50);
-}
-// 直接存取上兩層的 audio 標籤
-function controlGrandparentBGM(action) {
-    try {
-        const grandBgm = window.parent.parent.document.getElementById('bgm');
-        if (grandBgm) {
-            if (action === 'pause') grandBgm.pause();
-            if (action === 'play') grandBgm.play();
-        }
-    } catch (e) {
-        console.warn("無法直接存取上兩層 DOM，可能受到同源政策限制:", e);
-    }
-}
+        // 音訊控制連動邏輯
+        document.addEventListener('pause', (event) => {
+            if (event.target.tagName && event.target.tagName.toLowerCase() === 'video') {
+                const isAnyVideoPlaying = Array.from(document.querySelectorAll('video'))
+                    .some(v => !v.paused && !v.ended);
+                
+                if (!isAnyVideoPlaying) {
+                    const bgm = document.getElementById('bgm');
+                    if (bgm) bgm.play().catch(() => {});
+                }
+            }
+        }, true);
     </script>
 </body>
 </html>
