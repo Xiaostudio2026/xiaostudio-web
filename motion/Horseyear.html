@@ -5,9 +5,273 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XiaoStudio | Motion Production</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="/assets/css/project.css"> 
-   
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .mono-text {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .font-barlow {
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .font-montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* 滾動動畫效果定義 */
+        .reveal-item {
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* 各種動畫進入方向 */
+        .fade-in-up {
+            transform: translateY(40px);
+        }
+
+        .slide-in-left {
+            transform: translateX(-40px);
+        }
+
+        .slide-in-right {
+            transform: translateX(40px);
+        }
+
+        /* 當元素進入視口時啟動動畫 */
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* 圖片與影片容器懸停縮放效果 */
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: #f7f7f7;
+            border-radius: 0;
+            scroll-margin-top: 80px;
+        }
+
+        .image-container.aspect-square-mobile {
+            aspect-ratio: 1 / 1;
+        }
+        @media (min-width: 768px) {
+            .image-container.aspect-square-mobile {
+                aspect-ratio: auto;
+            }
+        }
+
+        /* 手機版強制橫螢幕旋轉樣式 (針對不支援 Screen Orientation API 之裝置備用) */
+        .force-landscape {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vh !important;
+            height: 100vw !important;
+            transform: rotate(90deg) translateY(-100%);
+            transform-origin: top left;
+            z-index: 99999 !important;
+            background-color: #000 !important;
+        }
+
+        .project-image, .project-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* 鎖定媒體元素本體 */
+        }
+
+        .image-container:hover .project-image,
+        .image-container:hover .project-video {
+            transform: scale(1.02);
+        }
+
+        /* 媒體保護遮罩 (防止使用者對圖點選右鍵或另存新檔) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+            cursor: default;
+        }
+
+        /* 頁首主視覺動畫 */
+        .hero-reveal {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: scale(1.05);
+            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+        }
+
+        .hero-reveal.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            #security-toast {
+                font-size: 11px;
+            }
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 全螢幕自動收起控制列樣式 */
+        #project-video-1:fullscreen,
+        #project-video-1:-webkit-full-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+
+        #project-video-1:fullscreen .project-video,
+        #project-video-1:-webkit-full-screen .project-video {
+            max-height: 100vh;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        #project-video-1:fullscreen #video-controls-bar,
+        #project-video-1:-webkit-full-screen #video-controls-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 40;
+        }
+
+        #project-video-1:fullscreen.controls-hidden #video-controls-bar,
+        #project-video-1:-webkit-full-screen.controls-hidden #video-controls-bar {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+
+        #project-video-1:fullscreen.controls-hidden,
+        #project-video-1:-webkit-full-screen.controls-hidden {
+            cursor: none;
+        }
+
+        /* 筆記本淡灰色方格紙背景 (Sketch Grid Paper Effect) */
+        .sketch-grid-bg {
+            background-color: transparent;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.055) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* 筆記本橫線背景 (Notebook Horizontal Lines Background Effect) */
+        .notebook-lined-bg {
+            background-color: #ffffff;
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 1px, transparent 1px);
+            background-size: 100% 32px;
+        }
+
+        /* 標籤黑框白底實心錯位陰影 */
+        .tag-neo-shadow {
+            box-shadow: 3px 3px 0 0 #ffffff, 3px 3px 0 1px #000000;
+        }
+
+        /* 標籤黑底實心錯位陰影 */
+        .tag-black-shadow {
+            box-shadow: 4px 4px 0 0 #000000;
+        }
+
+        /* 收合動態動畫平滑轉換 */
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .accordion-content > div {
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            grid-template-rows: 1fr;
+        }
+    </style>
 </head>
 <body class="selection:bg-gray-200" oncontextmenu="return false;" ondragstart="return false;">
 
@@ -39,59 +303,158 @@
         </div>
     </div>
 
-    <!-- 內容區塊 (改為滿版主容器，內部區塊再個別定寬) -->
-    <main class="w-full py-16 md:py-28 space-y-16 md:space-y-24 overflow-x-hidden">
+    <!-- 內容區塊 (滿版主容器，內部區塊個別定寬) -->
+    <main class="w-full py-16 md:py-28 space-y-12 md:space-y-16 overflow-x-hidden">
         
         <!-- 專案標題與敘述 -->
-        <section class="max-w-[1400px] mx-auto px-8 space-y-12">
-            <div class="max-w-5xl mx-auto">
-                <div class="reveal-item fade-in-up mb-6">
-                    <span class="text-[12px] md:text-[10px] text-black font-bold tracking-[0.3em] uppercase mb-2 block">Category: Brand Video & Motion</span>
-                    <h1 class="text-black text-[35px] md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
-                        CHINESE LUNAR YEAR OF THE HORSE <br class="hidden md:block">
-                        <span class="text-[23px] md:text-4xl font-black tracking-normal text-black block mt-3">BRAND VIDEO PRODUCTION</span>
-                    </h1>
-                </div>
+        <section class="max-w-[1400px] mx-auto px-8 space-y-10">
+            <div class="reveal-item fade-in-up mb-6">
+                <span class="text-[12px] md:text-[10px] text-black font-bold tracking-[0.3em] uppercase mb-2 block">Category: Brand Video & Motion</span>
+                <h1 class="text-black text-[35px] md:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
+                    CHINESE LUNAR YEAR OF THE HORSE <br class="hidden md:block">
+                    <span class="text-[23px] md:text-4xl font-black tracking-normal text-black block mt-3">BRAND VIDEO PRODUCTION</span>
+                </h1>
+            </div>
 
-                <!-- 關鍵字標籤 -->
-                <div class="flex flex-wrap gap-2 mb-12 reveal-item fade-in-up">
-                    <span class="px-4 py-1.5 border border-black text-[12px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-black"># juliArt 覺亞</span>
-                    <span class="px-4 py-1.5 border border-black text-[12px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-black"># YEAR OF THE HORSE</span>
-                    <span class="px-4 py-1.5 border border-black text-[12px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-black"># BRAND VIDEO</span>
-                    <span class="px-4 py-1.5 border border-black text-[12px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-black"># VISUAL DIRECTION</span>
-                </div>
+            <!-- 關鍵字標籤 -->
+            <div class="flex flex-wrap gap-2.5 reveal-item fade-in-up">
+                <span class="px-5 py-2 border border-black text-[15px] md:text-[13px] uppercase tracking-[0.15em] font-bold text-black bg-white"># juliArt 覺亞</span>
+                <span class="px-5 py-2 border border-black text-[15px] md:text-[13px] uppercase tracking-[0.15em] font-bold text-black bg-white"># YEAR OF THE HORSE</span>
+                <span class="px-5 py-2 border border-black text-[15px] md:text-[13px] uppercase tracking-[0.15em] font-bold text-black bg-white"># BRAND VIDEO</span>
+                <span class="px-5 py-2 border border-black text-[15px] md:text-[13px] uppercase tracking-[0.15em] font-bold text-black bg-white"># VISUAL DIRECTION</span>
+            </div>
+        </section>
 
-                <!-- 專案簡介區塊 -->
-                <div class="flex flex-col md:flex-row gap-16 reveal-item fade-in-up">
-                    <div class="md:w-1/3 text-[12px] md:text-[10px] uppercase tracking-[0.3em] text-black font-bold border-t md:border-t-0 pt-6 md:pt-0">
-                        Role & Responsibilities
-                        <div class="mt-4 space-y-2 text-[15px] md:text-[13px] text-black font-semibold normal-case tracking-normal">
-                            <p>Art & Visual Direction</p>
-                            <p>Scripting & Storyboarding</p>
-                            <p>Visual Production</p>
-                            <p>Video Editing & Post-Production</p>
+        <!-- 相連無間隔收合選單區塊 (邊框調成與圖片區標籤一致的 border-black) -->
+        <section class="max-w-[1400px] mx-auto px-8 reveal-item fade-in-up">
+            <!-- 01. Motion Project Case 收合選單 -->
+            <div class="border border-black bg-white">
+                <!-- 收合表單標題列 -->
+                <button 
+                    id="case-toggle-btn"
+                    onclick="toggleAccordion('case-accordion', 'case-toggle-symbol')" 
+                    class="w-full py-3 md:py-3.5 px-6 md:px-8 flex items-center justify-between hover:bg-gray-50 transition-colors text-left focus:outline-none"
+                    aria-expanded="false"
+                >
+                    <h2 class="text-[20px] md:text-[22px] font-bold tracking-[0.15em] text-black uppercase font-montserrat flex items-center gap-3">
+                        MOTION PROJECT CASE
+                    </h2>
+                    <!-- 黑框黑字方塊 "+/-" 按鈕 -->
+                    <div class="w-8 h-8 md:w-9 md:h-9 border border-black flex items-center justify-center text-black font-extrabold text-lg md:text-xl font-mono leading-none shrink-0 ml-4 bg-white">
+                        <span id="case-toggle-symbol">+</span>
+                    </div>
+                </button>
+
+                <!-- 展開內容 -->
+                <div id="case-accordion" class="accordion-content">
+                    <div>
+                        <div class="p-6 md:p-8 border-t border-black notebook-lined-bg space-y-6">
+                            
+                            <!-- 01. 定義與探索 -->
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3">
+                                    <span class="font-montserrat font-black text-[22px] md:text-[20px] text-black">01.</span>
+                                    <h3 class="text-[18px] md:text-[16px] font-extrabold text-black uppercase tracking-wide font-montserrat">
+                                        定義與探索 <span class="text-[13px] md:text-[11px] font-bold text-black tracking-[0.15em] font-montserrat ml-1">(DISCOVER & DEFINE)</span>
+                                    </h3>
+                                </div>
+                                <div class="pl-7 md:pl-9 space-y-2 text-[15px] md:text-[14px] leading-relaxed text-black font-medium font-barlow">
+                                    <p><strong class="font-bold border-b border-black pb-0.5">專案背景 (Project Background)：</strong>馬年節慶檔期，整合 CISPER™ 護髮系列與馬年燙金紅包袋。</p>
+                                    <p><strong class="font-bold border-b border-black pb-0.5">核心視覺 (Visual Strategy)：</strong>「節慶」與「系列商品」在各自的空間量能轉化，以「紅 × 金」視覺基調。</p>
+                                </div>
+                            </div>
+
+                            <!-- 02. 發想與驗證 -->
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3">
+                                    <span class="font-montserrat font-black text-[22px] md:text-[20px] text-black">02.</span>
+                                    <h3 class="text-[18px] md:text-[16px] font-extrabold text-black uppercase tracking-wide font-montserrat">
+                                        發想與驗證 <span class="text-[13px] md:text-[11px] font-bold text-black tracking-[0.15em] font-montserrat ml-1">(DEVELOP & TEST)</span>
+                                    </h3>
+                                </div>
+                                <div class="pl-7 md:pl-9 space-y-2 text-[15px] md:text-[14px] leading-relaxed text-black font-medium font-barlow">
+                                    <p><strong class="font-bold border-b border-black pb-0.5">動態腳本 (Motion Storyboard)：</strong>規劃由「象徵馬年精神的品牌紅包袋」至「具象化圖騰沖出框架」，帶出「CISPER™ 能量爆發」的敘事節奏。</p>
+                                    <p><strong class="font-bold border-b border-black pb-0.5">動態設計 (VFX R&D)：</strong>針對商品與紅包袋及 Gold Dust（金塵）與 Gold Smoke（金煙）效果進行動態設計。</p>
+                                </div>
+                            </div>
+
+                            <!-- 03. 執行與交付 -->
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3">
+                                    <span class="font-montserrat font-black text-[22px] md:text-[20px] text-black">03.</span>
+                                    <h3 class="text-[18px] md:text-[16px] font-extrabold text-black uppercase tracking-wide font-montserrat">
+                                        執行與交付 <span class="text-[13px] md:text-[11px] font-bold text-black tracking-[0.15em] font-montserrat ml-1">(DELIVER & LAUNCH)</span>
+                                    </h3>
+                                </div>
+                                <div class="pl-7 md:pl-9 space-y-2 text-[15px] md:text-[14px] leading-relaxed text-black font-medium font-barlow">
+                                    <p><strong class="font-bold border-b border-black pb-0.5">渲染 (Rendering)：</strong>結合質感紙紋光影、金屬燙金質感與瓶身特寫。</p>
+                                    <p><strong class="font-bold border-b border-black pb-0.5">成品 (Final Deliverables)：</strong>交付 1920x1080 官方宣傳影片，應用於新年檔期行銷通路。</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02. Role & Responsibilities 收合選單 (緊接上方相連無間隔) -->
+            <div class="border border-black bg-white -mt-[1px]">
+                <!-- 收合按鈕標題列 -->
+                <button 
+                    id="role-toggle-btn"
+                    onclick="toggleAccordion('role-accordion', 'role-toggle-symbol')" 
+                    class="w-full py-3 md:py-3.5 px-6 md:px-8 flex items-center justify-between hover:bg-gray-50 transition-colors text-left focus:outline-none"
+                    aria-expanded="false"
+                >
+                    <h2 class="text-[20px] md:text-[22px] font-bold tracking-[0.15em] text-black uppercase font-montserrat flex items-center gap-3">
+                       ROLE & RESPONSIBILITIES
+                    </h2>
+                    <!-- 黑框黑字方塊 "+/-" 按鈕 -->
+                    <div class="w-8 h-8 md:w-9 md:h-9 border border-black flex items-center justify-center text-black font-extrabold text-lg md:text-xl font-mono leading-none shrink-0 ml-4 bg-white">
+                        <span id="role-toggle-symbol">+</span>
+                    </div>
+                </button>
+
+                <!-- 展開內容 -->
+                <div id="role-accordion" class="accordion-content">
+                    <div>
+                        <div class="p-6 md:p-8 border-t border-black notebook-lined-bg">
+                            <ul class="space-y-3 text-[16px] md:text-[14px] text-black font-bold uppercase tracking-wider font-montserrat">
+                                <li class="flex items-center gap-3">
+                                    <span class="w-2 h-2 bg-black inline-block"></span> Art & Visual Direction
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <span class="w-2 h-2 bg-black inline-block"></span> Scripting & Storyboarding
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <span class="w-2 h-2 bg-black inline-block"></span> Visual Production
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <span class="w-2 h-2 bg-black inline-block"></span> Video Editing & Post-Production
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 全螢幕貫穿分隔線 1 -->
+        <!-- 全螢幕貫穿實線分隔 1 -->
         <div class="w-full border-t-2 border-black reveal-item fade-in-up"></div>
 
         <!-- 分鏡與視覺規劃展示區塊 (無外框線的開放式方格紙氛圍) -->
-        <section class="sketch-grid-bg w-full py-12 md:py-16 reveal-item fade-in-up">
+        <section class="sketch-grid-bg w-full !mt-0 pt-8 pb-12 md:pt-10 md:pb-16 reveal-item fade-in-up">
             <div class="max-w-[1400px] mx-auto px-8 space-y-8">
                 <!-- 圖片區標籤：分鏡畫面視覺規劃 -->
                 <div class="pb-2">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold shadow-[3px_3px_0px_0px_#000]">
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold tag-neo-shadow">
                             STORYBOARD & VISUAL PLANNING
                         </span>
-                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold shadow-[3px_3px_0px_0px_#000]">
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold tag-neo-shadow">
                             CONCEPT DEVELOPMENT
                         </span>
-                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold shadow-[3px_3px_0px_0px_#000]">
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold tag-neo-shadow">
                             VISUAL DIRECTION
                         </span>
                     </div>
@@ -149,70 +512,80 @@
             </div>
         </section>
 
+        <!-- 影片上方貫穿虛線分隔線 -->
+        <div class="w-full h-[2px] !mt-0 reveal-item fade-in-up" style="background-image: linear-gradient(to right, #000 30%, transparent 30%); background-size: 32px 3px; background-repeat: repeat-x;"></div>
+
         <!-- 影片區塊 -->
-        <section class="max-w-[1400px] mx-auto px-8 space-y-6">
-            <!-- 影片標題區塊：整排向下箭頭指示 (黑色) -->
-            <div class="pb-2 reveal-item fade-in-up">
-                <div class="flex justify-between items-center w-full text-black font-mono text-sm md:text-xs font-bold select-none px-2">
-                    <span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span><span>↘</span>
-                </div>
-            </div>
-
-            <!-- 影片展示區塊 (控制列置於影片下方獨立展示，不遮擋影片畫面) -->
-            <div id="project-video-1" class="image-container reveal-item fade-in-up bg-black border border-gray-100/10">
-                <div class="relative w-full group">
-                    <div class="asset-protection-layer"></div>
-                    <video 
-                        id="main-video"
-                        src="https://res.cloudinary.com/dssycfvxr/video/upload/v1772698837/JA_CNY_2026_1920_S_clafj2.mp4" 
-                        class="project-video w-full h-auto block" 
-                        loop 
-                        muted 
-                        playsinline
-                        oncontextmenu="return false;"
-                    ></video>
-
-                    <!-- 影片正中央播放 / 暫停按鈕 -->
-                    <button id="center-play-btn" class="absolute inset-0 m-auto w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-300 z-30 focus:outline-none border border-white/20 shadow-2xl group-hover:scale-105" aria-label="Play/Pause Video">
-                        <svg id="center-play-icon" class="w-8 h-8 md:w-10 md:h-10 ml-1 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <svg id="center-pause-icon" class="w-8 h-8 md:w-10 md:h-10 text-white hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
+        <section class="w-full !mt-0 pt-8 pb-12 md:pt-10 md:pb-16 reveal-item fade-in-up">
+            <div class="max-w-[1400px] mx-auto px-8 space-y-6">
+                <!-- 影片區英文標題：成品輸出標籤 -->
+                <div class="pb-2">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold tag-black-shadow">
+                            FINAL OUTPUT // BRAND VIDEO
+                        </span>
+                        <span class="px-3.5 py-1.5 bg-white text-black border border-black text-[13px] md:text-[11px] uppercase tracking-[0.2em] font-bold tag-black-shadow">
+                            OFFICIAL RELEASE
+                        </span>
+                    </div>
                 </div>
 
-                <!-- 自訂控制介面 -->
-                <div id="video-controls-bar" class="w-full bg-black text-white px-4 md:px-5 py-3 flex items-center justify-between gap-3 border-t border-gray-900 z-30 relative select-none">
-                    <div class="flex items-center gap-3 md:gap-5">
-                        <!-- 播放 / 暫停按鈕 -->
-                        <button id="video-bottom-play-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-2 group p-1 md:p-0" aria-label="Play/Pause">
-                            <svg id="bottom-play-icon" class="w-4 h-4 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <svg id="bottom-pause-icon" class="w-4 h-4 hidden transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                            <span id="play-btn-text" class="text-[12px] md:text-[10px] font-bold tracking-[0.2em] text-white group-hover:text-gray-200 uppercase transition-colors hidden md:inline-block">PLAY</span>
+                <!-- 影片展示區塊 -->
+                <div id="project-video-1" class="image-container reveal-item fade-in-up bg-black border border-gray-100/10">
+                    <div class="relative w-full group">
+                        <div class="asset-protection-layer"></div>
+                        <video 
+                            id="main-video"
+                            src="https://res.cloudinary.com/dssycfvxr/video/upload/v1772698837/JA_CNY_2026_1920_S_clafj2.mp4" 
+                            class="project-video w-full h-auto block" 
+                            loop 
+                            muted 
+                            playsinline
+                            oncontextmenu="return false;"
+                        ></video>
+
+                        <!-- 影片正中央播放 / 暫停按鈕 -->
+                        <button id="center-play-btn" class="absolute inset-0 m-auto w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-300 z-30 focus:outline-none border border-white/20 shadow-2xl group-hover:scale-105" aria-label="Play/Pause Video">
+                            <svg id="center-play-icon" class="w-8 h-8 md:w-10 md:h-10 ml-1 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="center-pause-icon" class="w-8 h-8 md:w-10 md:h-10 text-white hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                         </button>
-
-                        <div class="h-3 w-[1px] bg-gray-800"></div>
-
-                        <!-- 音量開關與拉桿 -->
-                        <div class="flex items-center gap-2">
-                            <button id="video-volume-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center justify-center p-1 md:p-0" aria-label="Toggle Mute">
-                                <svg id="volume-on-icon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                                <svg id="volume-mute-icon" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-                            </button>
-                            <input id="video-volume-slider" type="range" min="0" max="1" step="0.05" value="0" class="w-12 md:w-24 h-1 bg-gray-800 appearance-none rounded-lg cursor-pointer accent-white hover:bg-gray-700 transition-all">
-                        </div>
                     </div>
 
-                    <!-- 右側旋轉與全螢幕按鈕 (手機版僅保留圖示) -->
-                    <div class="flex items-center gap-2 md:gap-4">
-                        <button id="video-rotate-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-1.5 p-2 md:px-3 md:py-1 border border-gray-800 rounded hover:border-gray-700 text-[12px] md:text-[10px] font-bold tracking-[0.2em] uppercase" aria-label="Rotate Screen">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                            <span class="hidden md:inline-block">ROTATE</span>
-                        </button>
+                    <!-- 自訂控制介面 -->
+                    <div id="video-controls-bar" class="w-full bg-black text-white px-4 md:px-5 py-3 flex items-center justify-between gap-3 border-t border-gray-900 z-30 relative select-none">
+                        <div class="flex items-center gap-3 md:gap-5">
+                            <!-- 播放 / 暫停按鈕 -->
+                            <button id="video-bottom-play-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-2 group p-1 md:p-0" aria-label="Play/Pause">
+                                <svg id="bottom-play-icon" class="w-4 h-4 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <svg id="bottom-pause-icon" class="w-4 h-4 hidden transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                <span id="play-btn-text" class="text-[12px] md:text-[10px] font-bold tracking-[0.2em] text-white group-hover:text-gray-200 uppercase transition-colors hidden md:inline-block">PLAY</span>
+                            </button>
 
-                        <button id="video-fullscreen-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-1.5 p-2 md:px-3 md:py-1 border border-gray-800 rounded hover:border-gray-700 text-[12px] md:text-[10px] font-bold tracking-[0.2em] uppercase" aria-label="Toggle Fullscreen">
-                            <svg id="fullscreen-open-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                            <svg id="fullscreen-close-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
-                            <span class="hidden md:inline-block">FULLSCREEN</span>
-                        </button>
+                            <div class="h-3 w-[1px] bg-gray-800"></div>
+
+                            <!-- 音量開關與拉桿 -->
+                            <div class="flex items-center gap-2">
+                                <button id="video-volume-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center justify-center p-1 md:p-0" aria-label="Toggle Mute">
+                                    <svg id="volume-on-icon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                                    <svg id="volume-mute-icon" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                                </button>
+                                <input id="video-volume-slider" type="range" min="0" max="1" step="0.05" value="0" class="w-12 md:w-24 h-1 bg-gray-800 appearance-none rounded-lg cursor-pointer accent-white hover:bg-gray-700 transition-all">
+                            </div>
+                        </div>
+
+                        <!-- 右側旋轉與全螢幕按鈕 -->
+                        <div class="flex items-center gap-2 md:gap-4">
+                            <button id="video-rotate-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-1.5 p-2 md:px-3 md:py-1 border border-gray-800 rounded hover:border-gray-700 text-[12px] md:text-[10px] font-bold tracking-[0.2em] uppercase" aria-label="Rotate Screen">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                <span class="hidden md:inline-block">ROTATE</span>
+                            </button>
+
+                            <button id="video-fullscreen-btn" class="text-white hover:text-gray-300 transition-colors focus:outline-none flex items-center gap-1.5 p-2 md:px-3 md:py-1 border border-gray-800 rounded hover:border-gray-700 text-[12px] md:text-[10px] font-bold tracking-[0.2em] uppercase" aria-label="Toggle Fullscreen">
+                                <svg id="fullscreen-open-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                                <svg id="fullscreen-close-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
+                                <span class="hidden md:inline-block">FULLSCREEN</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,8 +593,9 @@
 
     </main>
 
-    <!-- 頁尾前貫穿分隔線 -->
+    <!-- 頁尾前貫穿實線分隔 -->
     <div class="w-full border-t-2 border-black"></div>
+
     <footer class="w-full py-12 text-center text-sm md:text-xs text-black font-bold tracking-[0.2em] uppercase">
         &copy; 2026 XiaoStudio. All Rights Reserved.
     </footer>
@@ -236,6 +610,24 @@
     </div>
 
     <script>
+        /**
+         * 折疊收合功能控制 (Accordion Toggle)
+         */
+        function toggleAccordion(contentId, symbolId) {
+            const content = document.getElementById(contentId);
+            const symbol = document.getElementById(symbolId);
+            if (!content || !symbol) return;
+
+            const isOpen = content.classList.contains('open');
+            if (isOpen) {
+                content.classList.remove('open');
+                symbol.textContent = '+';
+            } else {
+                content.classList.add('open');
+                symbol.textContent = '-';
+            }
+        }
+
         /**
          * XIAOSTUDIO Security Guard Module
          */
@@ -374,7 +766,6 @@
             let isCustomLandscape = false;
 
             async function handleRotateScreen() {
-                // 原生 Screen Orientation API 嘗試
                 if (screen.orientation && screen.orientation.lock) {
                     try {
                         const currentType = screen.orientation.type;
@@ -392,7 +783,6 @@
                     }
                 }
 
-                // 備用方案 (針對 iOS Safari 或行動版瀏覽器不支援 Orientation API 時)：強制切換 CSS 橫向滿版
                 isCustomLandscape = !isCustomLandscape;
                 if (isCustomLandscape) {
                     videoContainer.classList.add('force-landscape');
@@ -420,7 +810,6 @@
                 rotateBtn.addEventListener('click', handleRotateScreen);
             }
 
-            // 監聽裝置物理旋轉事件
             window.addEventListener('orientationchange', () => {
                 if (window.orientation === 90 || window.orientation === -90) {
                     if (videoContainer.classList.contains('force-landscape')) {
@@ -541,6 +930,7 @@
             if (centerPlayBtn) centerPlayBtn.addEventListener('click', togglePlay);
             bottomPlayBtn.addEventListener('click', togglePlay);
             volumeBtn.addEventListener('click', toggleMute);
+            volumeSlider.value = 0;
             volumeSlider.addEventListener('input', handleVolumeChange);
             fullscreenBtn.addEventListener('click', toggleFullscreen);
 
@@ -570,7 +960,6 @@
             document.addEventListener('fullscreenchange', handleFSChange);
             document.addEventListener('webkitfullscreenchange', handleFSChange);
 
-            // 初始化音量與播放 UI
             updatePlayUI();
             updateVolumeUI();
         }
@@ -585,7 +974,6 @@
             initVideoControls();
         });
 
-        // 平滑滾動到指定圖片項
         function scrollToImage(index) {
             const element = document.getElementById(`project-img-${index}`);
             if (element) {
@@ -596,7 +984,6 @@
             }
         }
 
-        // 全螢幕狀態監聽補強
         ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(eventName => {
             document.addEventListener(eventName, () => {
                 const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
@@ -607,7 +994,6 @@
             });
         });
 
-        // 音訊控制連動邏輯
         document.addEventListener('pause', (event) => {
             if (event.target.tagName && event.target.tagName.toLowerCase() === 'video') {
                 const isAnyVideoPlaying = Array.from(document.querySelectorAll('video'))
