@@ -56,7 +56,6 @@
             max-width: 1440px;
             margin: 0 auto;
             position: relative;
-            
         }
 
         .masthead-border { 
@@ -137,6 +136,30 @@
         .web-card:hover {
             box-shadow: 0 20px 40px rgba(0,0,0,0.12);
             transform: translateY(-4px);
+        }
+
+        /* 專案英文類別標題列 (Project Tag Header) */
+        .project-category-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #000000;
+            padding: 0.55rem 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Barlow', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #000000;
+        }
+
+        .project-category-header .category-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #000000;
+            border-radius: 50%;
+            display: inline-block;
         }
 
         /* 瀏覽器標題列 Mockup Bar */
@@ -444,13 +467,20 @@
             </div>
         </header>
 
-      
-
         <!-- 網頁設計 3 個精選專案網格 (Web Design Grid) -->
         <main id="project-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
             
-            <!-- 專案 01: Horseyear Interactive Campaign -->
+            <!-- 專案 01 -->
             <article class="web-card reveal" data-disabled="true" data-url="">
+                <!-- 專案英文類別標題列 (Project Tag Header) -->
+                <div class="project-category-header">
+                    <div class="flex items-center gap-2">
+                        
+                        <span>PSCIENCE &amp; MEDICAL LAB</span>
+                    </div>
+                   
+                </div>
+
                 <!-- 擬真瀏覽器頂欄 -->
                 <div class="browser-bar">
                     <div class="browser-dots">
@@ -459,7 +489,6 @@
                         <span class="browser-dot bg-green-500"></span>
                     </div>
                     <div class="browser-address">https://www.aromasemedipro.com/</div>
-                   
                 </div>
 
                 <!-- 網頁畫面長條自動滾動預覽區域 -->
@@ -469,7 +498,7 @@
                     <div class="web-preview-scroll">
                         <img src="" 
                              data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787126579/cover_vaoult.jpg" 
-                             alt="Horseyear Interactive Campaign Web Design" 
+                             alt=" SCIENCE MEDICAL LAB Web Design" 
                              class="project-asset auto-thumb">
                     </div>
                     <!-- 專案觸發按鈕區 (半透明浮動底色，透出下方預覽圖) -->
@@ -482,8 +511,17 @@
                 </div>
             </article>
 
-            <!-- 專案 02: JA Luxury Xmas Web Portal -->
+            <!-- 專案 02 -->
             <article class="web-card reveal" data-disabled="true" data-url="">
+                <!-- 專案英文類別標題列 (Project Tag Header) -->
+                <div class="project-category-header">
+                    <div class="flex items-center gap-2">
+                        
+                        <span>PROFESSIONAL SALON &amp; SCALP CARE</span>
+                    </div>
+                    
+                </div>
+
                 <!-- 擬真瀏覽器頂欄 -->
                 <div class="browser-bar">
                     <div class="browser-dots">
@@ -492,7 +530,6 @@
                         <span class="browser-dot bg-green-500"></span>
                     </div>
                     <div class="browser-address">https://www.juliartofficial.com/</div>
-                    
                 </div>
 
                 <!-- 網頁畫面長條自動滾動預覽區域 -->
@@ -502,11 +539,11 @@
                     <div class="web-preview-scroll">
                         <img src="" 
                              data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787121967/JA_WEB_cover_wknigy.jpg" 
-                             alt="Rose Botanical Experience Web Design" 
+                             alt="PROFESSIONAL SALON Web Design" 
                              class="project-asset auto-thumb">
                     </div>
                     <!-- 專案觸發按鈕區 (半透明浮動底色，透出下方預覽圖) -->
-                    <div class="absolute bottom-0 inset-x-0 p-4 border-t border-black bg-white/70  z-20">
+                    <div class="absolute bottom-0 inset-x-0 p-4 border-t border-black bg-white/70 z-20">
                         <button class="w-full py-3.5 bg-black text-white mono-text text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 group">
                             <span>EXPLORE</span>
                             <span class="group-hover:translate-x-1 transition-transform">↗</span>
@@ -515,8 +552,17 @@
                 </div>
             </article>
 
-            <!-- 專案 03: Tea Tree Series Brand Showcase -->
-            <article class="web-card reveal"data-disabled="true"  data-url="">
+            <!-- 專案 03 -->
+            <article class="web-card reveal" data-disabled="true" data-url="">
+                <!-- 專案英文類別標題列 (Project Tag Header) -->
+                <div class="project-category-header">
+                    <div class="flex items-center gap-2">
+                       
+                        <span>RESEARCH &amp; DEVELOPMENT CENTER</span>
+                    </div>
+                   
+                </div>
+
                 <!-- 擬真瀏覽器頂欄 -->
                 <div class="browser-bar">
                     <div class="browser-dots">
@@ -525,7 +571,6 @@
                         <span class="browser-dot bg-green-500"></span>
                     </div>
                     <div class="browser-address">https://www.innoveglab.com/</div>
-                   
                 </div>
 
                 <!-- 網頁畫面長條自動滾動預覽區域 -->
@@ -535,7 +580,7 @@
                     <div class="web-preview-scroll">
                         <img src="" 
                              data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787121960/InnoVeg_Web_cover_r4hxxb.jpg" 
-                             alt="Tea Tree Series Brand Showcase" 
+                             alt="DEVELOPMENT CENTER Web design" 
                              class="project-asset auto-thumb">
                     </div>
                     <!-- 專案觸發按鈕區 (半透明浮動底色，透出下方預覽圖) -->
@@ -583,8 +628,6 @@
             </div>
         </div>
 
-        
-
         <!-- 網頁嵌入框架區域 -->
         <div class="project-modal-content">
             <div id="iframe-wrapper" class="iframe-wrapper">
@@ -600,8 +643,7 @@
             </svg>
             <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
         </div>
-
-        
+    </aside>
 
     <!-- 腳本區 -->
     <script>
