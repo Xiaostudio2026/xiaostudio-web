@@ -3,101 +3,870 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | Print Works</title>
+    <title>XiaoStudio | Selected Web Design Works (Protected)</title>
     
-    <!-- 1. 外部資源：Tailwind CSS (CDN) -->
+    <!-- 外部資源與字型 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- 2. 外部資源：Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
-    
-    <!-- 3. 修正路徑：指向上一層目錄的 CSS -->
-  <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        /* =========================================
+           1. 基礎變數與全局設定 (包含防護設定)
+           ========================================= */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-gray: #f4f4f5;
+            --border-color: #e4e4e7;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 2rem 1.5rem 3rem 1.5rem;
+        } 
+        
+        @media (min-width: 768px) { body { padding: 3rem 3rem 4rem 3rem; } }
+        @media (min-width: 1024px) { body { padding: 4rem 4rem 4rem 4rem; } }
+
+        .mono-text { font-family: 'Barlow', sans-serif; }
+        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
+        .no-scroll { overflow: hidden; }
+
+        /* =========================================
+           2. 佈局元件 (Layout & Security Elements)
+           ========================================= */
+        .content-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            position: relative;
+            
+        }
+
+        .masthead-border { 
+            border-top: 1px solid var(--text-color); 
+            border-bottom: 1px solid var(--text-color); 
+            padding: 0.4rem 0;
+            margin: 0.5rem 0;
+        }
+
+        @media (min-width: 768px) { .masthead-border { padding: 1rem 0; } }
+
+        /* 防護標籤指示器 */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #000;
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .security-badge::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #00ff66;
+        }
+
+        /* 跑馬燈元件 */
+        .marquee-container {
+            border: 1px solid #000000;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-scroll 16s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* =========================================
+           3. 網頁專案擬真瀏覽器外框 & 自動滑動預覽 (Auto Scroll Mockup Card)
+           ========================================= */
+        .web-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            border: 1px solid #000000;
+            transition: var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(30px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            cursor: pointer;
+        }
+
+        .web-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .web-card:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+        }
+
+        /* 瀏覽器標題列 Mockup Bar */
+        .browser-bar {
+            height: 38px;
+            background: #000000;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            border-bottom: 1px solid #000;
+        }
+
+        .browser-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .browser-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .browser-address {
+            background: rgba(255, 255, 255, 0.15);
+            color: #e4e4e7;
+            border-radius: 4px;
+            padding: 3px 12px;
+            font-size: 11px;
+            font-family: 'Barlow', sans-serif;
+            letter-spacing: 0.05em;
+            max-width: 240px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* 網頁預覽視窗容器 */
+        .web-preview-container {
+            position: relative;
+            width: 100%;
+            height: 480px; /* 固定的長條網格預覽高度 */
+            overflow: hidden;
+            background-color: #f8f8f8;
+        }
+
+        @media (min-width: 1024px) {
+            .web-preview-container {
+                height: 540px;
+            }
+        }
+
+        /* 自動滑動 Keyframes 動畫 (平滑來回上下滑動) */
+        @keyframes auto-scroll-preview {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(calc(-100% + 480px)); }
+            100% { transform: translateY(0); }
+        }
+
+        @media (min-width: 1024px) {
+            @keyframes auto-scroll-preview {
+                0% { transform: translateY(0); }
+                50% { transform: translateY(calc(-100% + 540px)); }
+                100% { transform: translateY(0); }
+            }
+        }
+
+        .web-preview-scroll {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: auto-scroll-preview 14s ease-in-out infinite;
+            will-change: transform;
+            pointer-events: none;
+        }
+
+        /* 滑鼠懸停時自動暫停滑動，方便使用者觀看特定區域 */
+        .web-card:hover .web-preview-scroll {
+            animation-play-state: paused;
+        }
+
+        .project-asset {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+
+        .project-asset.loaded { opacity: 1; }
+
+        /* 媒體保護遮罩 (防止複製/下載) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+        }
+
+        .loading-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================
+           4. 網頁全螢幕預覽視窗 (Responsive Device Modal)
+           ========================================= */
+        #project-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #project-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-toolbar {
+            width: 100%;
+            height: 54px;
+            background: #000000;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid #27272a;
+            z-index: 510;
+        }
+
+        .device-toggle-btn {
+            background: transparent;
+            border: 1px solid #3f3f46;
+            color: #a1a1aa;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-family: 'Barlow', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .device-toggle-btn.active, .device-toggle-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
+
+        .project-modal-content {
+            width: 100%;
+            height: calc(100vh - 54px);
+            position: relative;
+            background: #121212;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        /* 模擬不同裝置的尺寸切換 */
+        .iframe-wrapper {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            transition: width 0.4s ease, height 0.4s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .iframe-wrapper.device-tablet {
+            width: 768px;
+            height: 90%;
+        }
+
+        .iframe-wrapper.device-mobile {
+            width: 375px;
+            height: 85%;
+            border-radius: 20px;
+            border: 8px solid #27272a;
+        }
+
+        #project-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+        }
+
+        .close-project-btn {
+            width: 36px;
+            height: 36px;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .close-project-btn:hover {
+            background: #000000;
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 14px 28px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
 </head>
-<body class="p-8 md:p-12 lg:p-16">
+<body oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- 雜誌編排風格 Header -->
-    <header class="mb-8 md:mb-12">
-        <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-black">
-            <div>NODE_04 // 2026 ISSUE</div>
-            <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
-            <div>DIGITAL EXPERIENCE</div>
-        </div>
-        
-        <div class="masthead-border">
-            <div class="flex items-center justify-center md:justify-start">
-                <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none">
-                    WEB<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>INTERACTIVE
-                </h1>
+    <div class="content-container">
+        <!-- 頁首標題區 -->
+        <header id="main-header" class="mb-8 md:mb-12">
+            <div class="flex justify-between items-end mb-3 mono-text text-xs md:text-sm font-bold tracking-widest uppercase">
+                <div>NODE_04 // WEB DESIGN EDITION</div>
+                <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
+                <div>DIGITAL EXPERIENCE</div>
             </div>
-        </div>
-        
-        <div class="mt-4 flex justify-between mono-text text-[9px] md:text-[10px] font-medium tracking-wider text-black-400 uppercase">
-            <span>BUILDING INTERACTIVE DIGITAL EXPERIENCE</span>
-            <span>Vol. 001</span>
-        </div>
-    </header>
-
-      <!-- 作品網格 -->
-        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-               <!-- AR_poster
-            <a href="https://xiaostudio.xyz/print/ar-zine" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg">
             
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="AR VISUAL" class="project-asset auto-thumb">
+            <div class="masthead-border">
+                <div class="flex items-center justify-center text-center">
+                    <h1 class="text-[8.5vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase leading-none text-center">
+                         WEB<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>INTERACTIVE
+                    </h1>
                 </div>
-            </a> -->
+            </div>
             
-           
+            <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4">
+                <span class="security-badge">Protected Area</span>
+                
+                <!-- 黑字黑色外框線跑馬燈 -->
+                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[460px]">
+                    <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
+                        <span class="shrink-0">SELECTED WEB DESIGN PROJECTS // 3 ESSENTIAL WORKS</span>
+                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                        <span class="shrink-0">SELECTED WEB DESIGN PROJECTS // 3 ESSENTIAL WORKS</span>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div> <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div> <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div>
+      
 
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
+        <!-- 網頁設計 3 個精選專案網格 (Web Design Grid) -->
+        <main id="project-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
+            
+            <!-- 專案 01: Horseyear Interactive Campaign -->
+            <article class="web-card reveal" data-disabled="true" data-url="">
+                <!-- 擬真瀏覽器頂欄 -->
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <span class="browser-dot bg-red-500"></span>
+                        <span class="browser-dot bg-yellow-500"></span>
+                        <span class="browser-dot bg-green-500"></span>
+                    </div>
+                    <div class="browser-address">https://www.aromasemedipro.com/</div>
+                   
                 </div>
-            </div>
-             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
+
+                <!-- 網頁畫面長條自動滾動預覽區域 -->
+                <div class="web-preview-container">
+                    <div class="asset-protection-layer"></div>
                     <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
+                    <div class="web-preview-scroll">
+                        <img src="" 
+                             data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787126579/cover_vaoult.jpg" 
+                             alt="Horseyear Interactive Campaign Web Design" 
+                             class="project-asset auto-thumb">
+                    </div>
+                    <!-- 專案觸發按鈕區 (半透明浮動底色，透出下方預覽圖) -->
+                    <div class="absolute bottom-0 inset-x-0 p-4 border-t border-black bg-white/70 z-20">
+                        <button class="w-full py-3.5 bg-black text-white mono-text text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 group">
+                            <span>EXPLORE</span>
+                            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </article>
+
+            <!-- 專案 02: JA Luxury Xmas Web Portal -->
+            <article class="web-card reveal" data-disabled="true" data-url="">
+                <!-- 擬真瀏覽器頂欄 -->
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <span class="browser-dot bg-red-500"></span>
+                        <span class="browser-dot bg-yellow-500"></span>
+                        <span class="browser-dot bg-green-500"></span>
+                    </div>
+                    <div class="browser-address">https://www.juliartofficial.com/</div>
+                    
+                </div>
+
+                <!-- 網頁畫面長條自動滾動預覽區域 -->
+                <div class="web-preview-container">
+                    <div class="asset-protection-layer"></div>
+                    <div class="loading-shimmer"></div>
+                    <div class="web-preview-scroll">
+                        <img src="" 
+                             data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787121967/JA_WEB_cover_wknigy.jpg" 
+                             alt="Rose Botanical Experience Web Design" 
+                             class="project-asset auto-thumb">
+                    </div>
+                    <!-- 專案觸發按鈕區 (半透明浮動底色，透出下方預覽圖) -->
+                    <div class="absolute bottom-0 inset-x-0 p-4 border-t border-black bg-white/70  z-20">
+                        <button class="w-full py-3.5 bg-black text-white mono-text text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 group">
+                            <span>EXPLORE</span>
+                            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 專案 03: Tea Tree Series Brand Showcase -->
+            <article class="web-card reveal"data-disabled="true"  data-url="">
+                <!-- 擬真瀏覽器頂欄 -->
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <span class="browser-dot bg-red-500"></span>
+                        <span class="browser-dot bg-yellow-500"></span>
+                        <span class="browser-dot bg-green-500"></span>
+                    </div>
+                    <div class="browser-address">https://www.innoveglab.com/</div>
+                   
+                </div>
+
+                <!-- 網頁畫面長條自動滾動預覽區域 -->
+                <div class="web-preview-container">
+                    <div class="asset-protection-layer"></div>
+                    <div class="loading-shimmer"></div>
+                    <div class="web-preview-scroll">
+                        <img src="" 
+                             data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787121960/InnoVeg_Web_cover_r4hxxb.jpg" 
+                             alt="Tea Tree Series Brand Showcase" 
+                             class="project-asset auto-thumb">
+                    </div>
+                    <!-- 專案觸發按鈕區 (半透明浮動底色，透出下方預覽圖) -->
+                    <div class="absolute bottom-0 inset-x-0 p-4 border-t border-black bg-white/70 z-20">
+                        <button class="w-full py-3.5 bg-black text-white mono-text text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 group">
+                            <span>EXPLORE</span>
+                            <span class="group-hover:translate-x-1 transition-transform">↗</span>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
         </main>
+
+        <!-- 頁尾 Footer 區域 -->
+        <div class="w-full border-t-2 border-black mt-12 md:mt-16"></div>
+
+        <footer class="w-full py-6 text-center text-sm md:text-xs text-black font-bold tracking-[0.2em] uppercase">
+            &copy; 2026 XiaoStudio. All Rights Reserved.
+        </footer>
     </div>
 
-    <!-- 全螢幕作品彈窗 -->
-    <div id="project-overlay">
-        <div class="close-overlay" onclick="closeProject()">
-            <span>CLOSE</span>
+    <!-- 專案網頁全螢幕擬真預覽視窗 (Modal Overlay) -->
+    <aside id="project-overlay" aria-hidden="true" role="dialog">
+        <!-- 頂部控制欄 -->
+        <div class="modal-toolbar">
+            <div class="flex items-center gap-3">
+                <span id="modal-project-title" class="mono-text text-xs font-bold uppercase tracking-wider text-white">
+                    PROJECT PREVIEW
+                </span>
+                <span class="text-zinc-600">|</span>
+                <!-- 裝置維度切換按鈕 -->
+                <div class="flex items-center gap-1">
+                    <button class="device-toggle-btn active" onclick="Portfolio.setDeviceMode('desktop')">DESKTOP</button>
+                    <button class="device-toggle-btn" onclick="Portfolio.setDeviceMode('tablet')">TABLET</button>
+                    <button class="device-toggle-btn" onclick="Portfolio.setDeviceMode('mobile')">MOBILE</button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a id="external-link-btn" href="#" target="_blank" rel="noopener noreferrer" class="mono-text text-xs text-zinc-300 hover:text-white underline tracking-wider uppercase hidden sm:inline-block">
+                    OPEN IN NEW TAB ↗
+                </a>
+                <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
+            </div>
         </div>
-        <iframe id="project-iframe" src="" frameborder="0"></iframe>
-    </div>
 
-    <!-- 4. 修正路徑：指向上一層目錄的 JS -->
-    <script src="../assets/script.js"></script>
+        
+
+        <!-- 網頁嵌入框架區域 -->
+        <div class="project-modal-content">
+            <div id="iframe-wrapper" class="iframe-wrapper">
+                <iframe id="project-iframe" src="" frameborder="0" title="專案網頁即時預覽"></iframe>
+            </div>
+        </div>
+      
+        <!-- 安全防護動態提示框 -->
+        <div id="security-toast">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
+        </div>
+
+        
+
+    <!-- 腳本區 -->
+    <script>
+        /**
+         * XIAOSTUDIO WEB DESIGN PORTFOLIO ENGINE
+         */
+
+        // =========================================
+        // 1. 禁止下載與複製安全防護引擎 (Security Module)
+        // =========================================
+        const SecurityGuard = {
+            toastTimeout: null,
+
+            init() {
+                this.disableContextMenu();
+                this.disableDragAndDrop();
+                this.disableShortcuts();
+                this.preventPrintScreen();
+            },
+
+            showToast(message) {
+                const toast = document.getElementById('security-toast');
+                const msgEl = document.getElementById('toast-message');
+                if (!toast || !msgEl) return;
+
+                msgEl.innerText = message || 'PROTECTED // CONTENT DOWNLOAD DISABLED';
+                toast.classList.add('active');
+
+                if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                this.toastTimeout = setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 2500);
+            },
+
+            disableContextMenu() {
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showToast('RIGHT CLICK DISABLED // 網頁設計內容受著作權保護');
+                    return false;
+                }, false);
+            },
+
+            disableDragAndDrop() {
+                document.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                    this.showToast('DRAG & DROP DISABLED // 禁止拖曳媒體與圖檔');
+                    return false;
+                }, false);
+            },
+
+            disableShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                    const keyCode = e.keyCode || e.which;
+
+                    // F12 (DevTools)
+                    if (keyCode === 123) {
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已受限');
+                        return false;
+                    }
+
+                    if (ctrlOrCmd) {
+                        // S: 另存新檔, U: 檢視原始碼, P: 列印
+                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                            e.preventDefault();
+                            this.showToast('SAVING/PRINTING DISABLED // 禁止儲存網頁與列印');
+                            return false;
+                        }
+
+                        // Shift + I / J / C (開啟 Console / Inspector)
+                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
+                            e.preventDefault();
+                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已受限');
+                            return false;
+                        }
+
+                        // A: 全選, C: 複製
+                        if (keyCode === 65 || keyCode === 67) {
+                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                                e.preventDefault();
+                                this.showToast('COPYING DISABLED // 禁止複製網頁內容');
+                                return false;
+                            }
+                        }
+                    }
+                }, false);
+            },
+
+            preventPrintScreen() {
+                window.addEventListener('keyup', (e) => {
+                    if (e.key === 'PrintScreen') {
+                        navigator.clipboard.writeText('');
+                        this.showToast('SCREENSHOT DETECTED // 專案畫面受到保護');
+                    }
+                });
+            }
+        };
+
+        // =========================================
+        // 2. Portfolio Core Logic (網頁專案展示邏輯)
+        // =========================================
+        const Portfolio = {
+            elements: {
+                header: document.getElementById('main-header'),
+                overlay: document.getElementById('project-overlay'),
+                iframe: document.getElementById('project-iframe'),
+                iframeWrapper: document.getElementById('iframe-wrapper'),
+                cards: document.querySelectorAll('.web-card'),
+                modalTitle: document.getElementById('modal-project-title'),
+                externalBtn: document.getElementById('external-link-btn')
+            },
+
+            init() {
+                this.bindEvents();
+                this.setupIntersectionObserver();
+            },
+
+            bindEvents() {
+                this.elements.cards.forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const url = card.getAttribute('data-url');
+                        const addressBar = card.querySelector('.browser-address');
+                        const title = addressBar ? addressBar.innerText : 'PROJECT PREVIEW';
+                        if (url) {
+                            e.preventDefault();
+                            this.open(url, title);
+                        }
+                    });
+                });
+
+                // 按下 ESC 鍵時關閉 modal
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.elements.overlay.classList.contains('active')) {
+                        this.close();
+                    }
+                });
+            },
+
+            setupIntersectionObserver() {
+                const options = {
+                    threshold: 0.1,
+                    rootMargin: '100px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const card = entry.target;
+                            card.classList.add('is-visible');
+                            
+                            const placeholder = card.querySelector('.auto-thumb');
+                            const assetUrl = placeholder ? placeholder.getAttribute('data-thumb') : null;
+                            
+                            if (placeholder && assetUrl && !placeholder.dataset.loaded) {
+                                this.loadAsset(placeholder, assetUrl, card);
+                            }
+                        }
+                    });
+                }, options);
+
+                this.elements.cards.forEach(card => observer.observe(card));
+            },
+
+            /**
+             * 資源加載處理：自動識別圖片或影片作為封面預覽
+             */
+            loadAsset(placeholder, url, card) {
+                const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
+                
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.className = placeholder.className;
+                    video.src = url;
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.setAttribute('muted', '');
+                    video.setAttribute('controlsList', 'nodownload noplaybackrate');
+                    video.setAttribute('disablePictureInPicture', 'true');
+                    video.setAttribute('oncontextmenu', 'return false;');
+                    
+                    const safePlay = () => {
+                        const playPromise = video.play();
+                        if (playPromise && typeof playPromise.catch === 'function') {
+                            playPromise.catch(() => {});
+                        }
+                    };
+
+                    video.oncanplay = () => {
+                        safePlay();
+                        this.finalizeLoading(placeholder, video, card);
+                    };
+                    
+                    video.onerror = () => this.handleError(card);
+                    
+                    placeholder.parentNode.replaceChild(video, placeholder);
+                } else {
+                    placeholder.src = url;
+                    placeholder.setAttribute('oncontextmenu', 'return false;');
+                    placeholder.onload = () => {
+                        this.finalizeLoading(null, placeholder, card);
+                    };
+                    placeholder.onerror = () => this.handleError(card);
+                }
+            },
+
+            finalizeLoading(oldEl, newEl, card) {
+                newEl.classList.add('loaded');
+                newEl.dataset.loaded = "true";
+                const shimmer = card.querySelector('.loading-shimmer');
+                if (shimmer) shimmer.style.display = 'none';
+            },
+
+            handleError(card) {
+                const shimmer = card.querySelector('.loading-shimmer');
+                if (shimmer) shimmer.style.background = '#e0e0e0';
+            },
+
+            open(url, title) {
+                this.elements.iframe.src = url;
+                if (this.elements.modalTitle) this.elements.modalTitle.innerText = title;
+                if (this.elements.externalBtn) this.elements.externalBtn.href = url;
+                
+                // 預設為 Desktop 尺寸
+                this.setDeviceMode('desktop');
+
+                this.elements.overlay.classList.add('active');
+                this.elements.overlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('no-scroll');
+            },
+
+            close() {
+                this.elements.overlay.classList.remove('active');
+                this.elements.overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('no-scroll');
+                setTimeout(() => { this.elements.iframe.src = ''; }, 400);
+            },
+
+            setDeviceMode(mode) {
+                const wrapper = this.elements.iframeWrapper;
+                const buttons = document.querySelectorAll('.device-toggle-btn');
+                
+                buttons.forEach(btn => btn.classList.remove('active'));
+                
+                wrapper.className = 'iframe-wrapper'; // reset
+
+                if (mode === 'tablet') {
+                    wrapper.classList.add('device-tablet');
+                } else if (mode === 'mobile') {
+                    wrapper.classList.add('device-mobile');
+                }
+
+                const targetBtn = Array.from(buttons).find(btn => btn.innerText.toLowerCase() === mode);
+                if (targetBtn) targetBtn.classList.add('active');
+            }
+        };
+
+        // 頁面初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            SecurityGuard.init();
+            Portfolio.init();
+        });
+    </script>
 </body>
 </html>
