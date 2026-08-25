@@ -58,31 +58,31 @@
   <!-- Main Container -->
   <main class="max-w-5xl mx-auto px-4 mt-8">
 
-    <!-- Day Selector Tabs (Hover with Orange Theme Background) -->
+    <!-- Day Selector Tabs (Hover with Unified Orange Theme Background and White Text) -->
     <div class="flex overflow-x-auto gap-2 pb-2 mb-8 hide-scrollbar border-b-2 border-zinc-300">
       <button onclick="switchTab('day0')" id="tab-day0" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
-        <div class="font-black uppercase group-hover:text-white">Day 0</div>
-        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/25 (二) 啟程</div>
+        <div class="font-black uppercase text-zinc-900 group-hover:text-white transition-colors">Day 0</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-white transition-colors">8/25 (二) 啟程</div>
       </button>
       <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
-        <div class="font-black uppercase group-hover:text-white">Day 1：秋葉原</div>
-        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/26 (三)</div>
+        <div class="font-black uppercase text-zinc-900 group-hover:text-white transition-colors">Day 1：秋葉原</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-white transition-colors">8/26 (三)</div>
       </button>
       <button onclick="switchTab('day2')" id="tab-day2" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
-        <div class="font-black uppercase group-hover:text-white">Day 2：鎌倉 + 江之島</div>
-        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/27 (四)</div>
+        <div class="font-black uppercase text-zinc-900 group-hover:text-white transition-colors">Day 2：鎌倉 + 江之島</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-white transition-colors">8/27 (四)</div>
       </button>
       <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
-        <div class="font-black uppercase group-hover:text-white">Day 3：池袋 + 高圓寺</div>
-        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/28 (五)</div>
+        <div class="font-black uppercase text-zinc-900 group-hover:text-white transition-colors">Day 3：池袋 + 高圓寺</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-white transition-colors">8/28 (五)</div>
       </button>
       <button onclick="switchTab('day4')" id="tab-day4" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
-        <div class="font-black uppercase group-hover:text-white">Day 4：新宿 + 原宿</div>
-        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/29 (六) 返程</div>
+        <div class="font-black uppercase text-zinc-900 group-hover:text-white transition-colors">Day 4：新宿 + 原宿</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-white transition-colors">8/29 (六) 返程</div>
       </button>
     </div>
 
-    <!-- Weather Bar Card (White Background, Large Header, Deleted LIVE FORECAST) -->
+    <!-- Weather Bar Card (White Background, Large Header) -->
     <div id="weather-bar" class="mb-8">
       <!-- Dynamic Content by JS -->
     </div>
@@ -266,12 +266,35 @@
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('bg-orange-600', 'text-white', 'border-orange-600');
         btn.classList.add('bg-white', 'text-zinc-700', 'border-zinc-300');
+        
+        // Reset child text colors to ensure hover consistency
+        const titleEl = btn.querySelector('.font-black');
+        const descEl = btn.querySelector('.text-\\[11px\\]');
+        if (titleEl) {
+          titleEl.classList.remove('text-white');
+          titleEl.classList.add('text-zinc-900');
+        }
+        if (descEl) {
+          descEl.classList.remove('text-white');
+          descEl.classList.add('text-zinc-500');
+        }
       });
 
       const activeBtn = document.getElementById(`tab-${dayKey}`);
       if (activeBtn) {
         activeBtn.classList.remove('bg-white', 'text-zinc-700', 'border-zinc-300');
         activeBtn.classList.add('bg-orange-600', 'text-white', 'border-orange-600');
+
+        const titleEl = activeBtn.querySelector('.font-black');
+        const descEl = activeBtn.querySelector('.text-\\[11px\\]');
+        if (titleEl) {
+          titleEl.classList.remove('text-zinc-900');
+          titleEl.classList.add('text-white');
+        }
+        if (descEl) {
+          descEl.classList.remove('text-zinc-500');
+          descEl.classList.add('text-white');
+        }
       }
 
       renderDay(dayKey, autoScroll);
