@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東京自由行行程表 (2026/8/25 - 8/29)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div>
+        <h1 class="text-2xl font-bold flex items-center gap-2">
+          <i class="fa-solid fa-plane-departure"></i> 東京自由行 5 天 4 夜行程
+        </h1>
+        <p class="text-xs sm:text-sm text-blue-100 mt-0.5">2026/08/25 (二) ~ 2026/08/29 (六)</p>
+      </div>
+      <div class="flex items-center gap-2 text-xs bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/30">
+        <i class="fa-solid fa-hotel text-amber-300"></i>
+        <span>住宿：<strong class="font-semibold text-white">淺草橋</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-4 mt-6">
+
+    <!-- Day Selector Tabs -->
+    <div class="flex overflow-x-auto gap-2 pb-2 mb-6 hide-scrollbar border-b border-slate-200">
+      <button onclick="switchTab('day0')" id="tab-day0" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex-shrink-0 transition-all duration-200 border bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+        <div class="font-bold">Day 0</div>
+        <div class="text-xs text-slate-400">8/25 (二) 啟程</div>
+      </button>
+      <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn active px-4 py-2.5 rounded-xl font-medium text-sm flex-shrink-0 transition-all duration-200 border bg-indigo-600 text-white border-indigo-600 shadow-sm">
+        <div class="font-bold">Day 1：秋葉原</div>
+        <div class="text-xs opacity-80">8/26 (三)</div>
+      </button>
+      <button onclick="switchTab('day2')" id="tab-day2" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex-shrink-0 transition-all duration-200 border bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+        <div class="font-bold">Day 2：鎌倉 + 江之島</div>
+        <div class="text-xs text-slate-400">8/27 (四)</div>
+      </button>
+      <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex-shrink-0 transition-all duration-200 border bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+        <div class="font-bold">Day 3：池袋 + 高圓寺</div>
+        <div class="text-xs text-slate-400">8/28 (五)</div>
+      </button>
+      <button onclick="switchTab('day4')" id="tab-day4" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex-shrink-0 transition-all duration-200 border bg-white text-slate-600 border-slate-200 hover:bg-slate-100">
+        <div class="font-bold">Day 4：新宿 + 原宿</div>
+        <div class="text-xs text-slate-400">8/29 (六) 返程</div>
+      </button>
+    </div>
+
+    <!-- Weather Bar (Live API Data) -->
+    <div id="weather-bar" class="mb-6">
+      <!-- Dynamic Content by JS -->
+    </div>
+
+    <!-- Timeline Sections -->
+    <div id="timeline-container" class="space-y-4">
+      <!-- Content injected by JavaScript -->
+    </div>
+
+  </main>
+
+  <script>
+    // Schedule Data with Coordinates & Images
+    const scheduleData = {
+      day0: {
+        title: "8/25 (二) - 出發前夜",
+        dateStr: "2026-08-25",
+        lat: 25.0797, lon: 121.2342,
+        locationName: "桃園國際機場",
+        items: [
+          { time: "22:45", title: "從家裡出發", desc: "準備出門前往機場所在地或轉乘點", category: "transport", mapQuery: "", image: "https://images.unsplash.com/photo-1542296332-2e4473faf563?w=500&auto=format&fit=crop&q=80" },
+          { time: "23:20 ~ 23:56", title: "搭車至新北產業園區站", desc: "轉乘桃園機場捷運", category: "transport", mapQuery: "新北產業園區站", image: "https://images.unsplash.com/photo-1515165562839-50b353703414?w=500&auto=format&fit=crop&q=80" },
+          { time: "24:00+", title: "夜宿/夜間移動", desc: "夜間準備登機前往日本", category: "hotel", mapQuery: "桃園國際機場", image: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=500&auto=format&fit=crop&q=80" }
+        ]
+      },
+      day1: {
+        title: "8/26 (三) - Day 1：秋葉原動漫巡禮",
+        dateStr: "2026-08-26",
+        lat: 35.6983, lon: 139.7731,
+        locationName: "東京秋葉原",
+        items: [
+          { time: "02:40 ~ 07:00", title: "捷星航班：桃機一航 → 成田三航", desc: "搭乘日本捷星航空 GK12（02:40出發、07:00抵達）", category: "flight", mapQuery: "成田國際機場 第3航廈", image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&auto=format&fit=crop&q=80" },
+          { time: "07:50", title: "出海關", desc: "完成入境手續與提領行李", category: "transport", mapQuery: "成田國際機場 第2航廈", image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&auto=format&fit=crop&q=80" },
+          { time: "08:10", title: "空港第2ビル買票", desc: "購買京成電鐵 / Access 特急車票", category: "ticket", mapQuery: "空港第2ビル駅", image: "https://images.unsplash.com/photo-1532105956626-9569c03602f6?w=500&auto=format&fit=crop&q=80" },
+          { time: "08:31 ~ 09:32", title: "空港第2ビル → 淺草橋", desc: "搭乘 Access 特急羽田空港行 → 淺草下一站 → 淺草橋", category: "transport", mapQuery: "淺草橋車站", image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80" },
+          { time: "09:30+", title: "STone Hotel 寄放行李", desc: "前往飯店寄放行李，輕裝出發", category: "hotel", mapQuery: "STone Hotel 淺草橋", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=80" },
+          { time: "10:00 ~ 11:00", title: "Gashapon Bandai Official Shop 扭蛋", desc: "途經 UNIQLO，前往萬代官方扭蛋店巨蛋店", category: "spot", mapQuery: "ガシャポンバンダイオフィシャルショップ秋葉原店", image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop&q=80" },
+          { time: "11:00 ~ 12:00", title: "駿河屋 秋葉原", desc: "逛周邊模型與動漫二手商品", category: "spot", mapQuery: "駿河屋 秋葉原駅前店", image: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80" },
+          { time: "12:00 ~ 13:00", title: "Radio Kaikan (ラジオ会館)", desc: "秋葉原地標性動漫商場逛逛", category: "spot", mapQuery: "秋葉原ラジオ会館", image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=80" },
+          { time: "13:00 ~ 14:00", title: "Gamers 秋葉原店", desc: "聲優、動漫周邊巡禮", category: "spot", mapQuery: "AKIHABARAゲーマーズ本店", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80" },
+          { time: "14:00 ~ 15:00", title: "CURE MAID CAFÉ 女僕咖啡廳", desc: "午餐（蛋包飯、鬆餅），體驗始祖女僕咖啡廳", category: "food", mapQuery: "CURE MAID CAFÉ", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&auto=format&fit=crop&q=80" },
+          { time: "16:00 ~ 17:00", title: "Animate 秋葉原店", desc: "大人可去唐吉訶德逛逛", category: "spot", mapQuery: "アニメイト秋葉原1号館", image: "https://images.unsplash.com/photo-1580237072617-771c3ecc4a24?w=500&auto=format&fit=crop&q=80" },
+          { time: "17:00 ~ 18:00", title: "Mandarake Complex", desc: "二手動漫周邊尋寶", category: "spot", mapQuery: "まんだらけ コンプレックス", image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop&q=80" },
+          { time: "18:30", title: "四十八漁場 昭和通り口店 (已訂位)", desc: "海鮮大餐聚會", category: "food", mapQuery: "四十八漁場 秋葉原昭和通り口店", image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=500&auto=format&fit=crop&q=80" },
+          { time: "20:00 ~ 22:00", title: "BIC CAMERA / MUJI / GU / UNIQLO", desc: "採買服飾與電器（看情形可省略）", category: "shop", mapQuery: "Bic Camera Akihabara", image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop&q=80" },
+          { time: "22:00+", title: "返回飯店休息", desc: "返回淺草橋住宿地點休息", category: "hotel", mapQuery: "淺草橋車站", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=500&auto=format&fit=crop&q=80" }
+        ]
+      },
+      day2: {
+        title: "8/27 (四) - Day 2：鎌倉與江之島海岸線",
+        dateStr: "2026-08-27",
+        lat: 35.3190, lon: 139.5506,
+        locationName: "神奈川鎌倉",
+        items: [
+          { time: "08:00", title: "起床", desc: "梳洗準備出門", category: "life", mapQuery: "", image: "https://images.unsplash.com/photo-1511295742362-92c96b124e52?w=500&auto=format&fit=crop&q=80" },
+          { time: "08:30 ~ 10:00", title: "出發前往鎌倉", desc: "東京/品川方向 → 鎌倉（約 10:00 抵達）", category: "transport", mapQuery: "鎌倉駅", image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=500&auto=format&fit=crop&q=80" },
+          { time: "10:00 ~ 12:00", title: "小町通散步 + 午餐", desc: "天氣好可以租和服；若天氣不佳取消後面江之島行程", category: "spot", mapQuery: "小町通り", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=500&auto=format&fit=crop&q=80" },
+          { time: "13:00 ~ 14:00", title: "搭乘江之電：鎌倉站 → 七里ヶ浜", desc: "體驗經典海濱復古路面電車", category: "transport", mapQuery: "七里ヶ浜駅", image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=500&auto=format&fit=crop&q=80" },
+          { time: "14:00 ~ 16:00", title: "七里ヶ浜海灘 chill", desc: "賞海景、看衝浪者與富士山景緻", category: "spot", mapQuery: "七里ヶ浜海岸", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80" },
+          { time: "16:00 ~ 17:00", title: "七里ヶ浜站 → 江之島", desc: "搭乘江之電前往江之島", category: "transport", mapQuery: "江ノ島駅", image: "https://images.unsplash.com/photo-1528164344705-47542687990d?w=500&auto=format&fit=crop&q=80" },
+          { time: "17:00 ~ 20:00", title: "江之島散步 + 晚餐", desc: "島上老街巡禮，吃海鮮晚餐（看情形可省略）", category: "spot", mapQuery: "江の島", image: "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=500&auto=format&fit=crop&q=80" },
+          { time: "20:00 ~ 21:30", title: "返回淺草橋", desc: "江之島/片瀨江之島 → 藤澤 → 東京 → 淺草橋", category: "transport", mapQuery: "淺草橋駅", image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80" },
+          { time: "22:00+", title: "休息", desc: "淺草橋飯店休息", category: "hotel", mapQuery: "淺草橋", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=80" }
+        ]
+      },
+      day3: {
+        title: "8/28 (五) - Day 3：池袋與高圓寺古著",
+        dateStr: "2026-08-28",
+        lat: 35.7295, lon: 139.7109,
+        locationName: "東京池袋",
+        items: [
+          { time: "09:00", title: "起床", desc: "準備出門", category: "life", mapQuery: "", image: "https://images.unsplash.com/photo-1511295742362-92c96b124e52?w=500&auto=format&fit=crop&q=80" },
+          { time: "09:30", title: "出發前往池袋", desc: "從淺草橋搭車前往池袋", category: "transport", mapQuery: "池袋駅", image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=80" },
+          { time: "10:00 ~ 12:00", title: "Animate 池袋本店", desc: "旗艦級動漫大樓巡禮", category: "spot", mapQuery: "アニメイト池袋本店", image: "https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80" },
+          { time: "12:00 ~ 15:00", title: "K-BOOKS × 3 + Lashinbang + WEGO", desc: "途中有 ringo 烤蘋果派、章魚燒、可麗餅等小吃", category: "spot", mapQuery: "K-BOOKS 乙女ロード館", image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&auto=format&fit=crop&q=80" },
+          { time: "15:00 ~ 16:30", title: "麵創房 無敵家 (午晚餐)", desc: "品嚐濃厚豚骨叉燒拉麵", category: "food", mapQuery: "麺創房 無敵家", image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500&auto=format&fit=crop&q=80" },
+          { time: "17:00 ~ 20:00", title: "池袋 → 高圓寺古著店巡禮", desc: "逛古著店：① Trip Vintage ② BIG TIME ③ SLAT 2ND ④ GREEN LIGHT ⑤ Small Change（有時間再去 Whistler / Frescade）", category: "spot", mapQuery: "高円寺パル商店街", image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=500&auto=format&fit=crop&q=80" },
+          { time: "20:00 ~ 22:00", title: "淺草買 からあげ緣 宵夜", desc: "返回飯店前購買唐揚雞宵夜", category: "food", mapQuery: "からあげ縁 浅草総本店", image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=500&auto=format&fit=crop&q=80" },
+          { time: "22:00+", title: "休息", desc: "淺草橋飯店休息", category: "hotel", mapQuery: "淺草橋", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=80" }
+        ]
+      },
+      day4: {
+        title: "8/29 (六) - Day 4：新宿原宿 + 準備返程",
+        dateStr: "2026-08-29",
+        lat: 35.6909, lon: 139.7003,
+        locationName: "東京新宿",
+        items: [
+          { time: "09:30", title: "起床", desc: "整理行李", category: "life", mapQuery: "", image: "https://images.unsplash.com/photo-1511295742362-92c96b124e52?w=500&auto=format&fit=crop&q=80" },
+          { time: "10:00", title: "Check-out 寄存行李", desc: "向飯店 Check-out 並辦理行李寄存", category: "hotel", mapQuery: "淺草橋", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=80" },
+          { time: "10:20", title: "淺草橋 → 新宿", desc: "搭乘電車前往新宿/原宿區", category: "transport", mapQuery: "新宿駅", image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80" },
+          { time: "11:00 ~ 13:00", title: "六歌仙本店「楓之宴」120分鐘 (已訂位)", desc: "頂級燒肉 + 帝王蟹吃到飽享用", category: "food", mapQuery: "六歌仙 本店", image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop&q=80" },
+          { time: "13:00 ~ 14:00", title: "新宿 → 原宿", desc: "搭乘 JR 山手線至原宿站竹下口", category: "transport", mapQuery: "原宿駅 竹下口", image: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=500&auto=format&fit=crop&q=80" },
+          { time: "14:00 ~ 17:00", title: "竹下通 或 下北澤", desc: "【特別提醒：若下雨務必提早去機場】逛街逛潮牌古著", category: "spot", mapQuery: "竹下通り", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&auto=format&fit=crop&q=80" },
+          { time: "17:00", title: "返回淺草橋", desc: "搭車回淺草橋準備取行李", category: "transport", mapQuery: "淺草橋駅", image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80" },
+          { time: "17:30", title: "取行李出發前往機場", desc: "18:10 淺草橋 → 快特 成田空港行 → 19:21 空港第2ビル → 成田T3", category: "transport", mapQuery: "成田國際機場 第3航廈", image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&auto=format&fit=crop&q=80" },
+          { time: "20:30", title: "Jetstar Check-in", desc: "辦理登機與行李託運手續", category: "flight", mapQuery: "成田國際機場 第3航廈", image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&auto=format&fit=crop&q=80" },
+          { time: "22:40 ~ 01:30", title: "返台航班：成田T3 → 桃園T1", desc: "搭乘日本捷星 GK13 返抵台灣桃園機場", category: "flight", mapQuery: "桃園國際機場", image: "https://images.unsplash.com/photo-1508873696983-2df515122519?w=500&auto=format&fit=crop&q=80" }
+        ]
+      }
+    };
+
+    // WMO Weather Interpretation Code
+    function getWeatherMeta(code) {
+      if (code === 0) return { status: "晴朗無雲", icon: "fa-sun", color: "text-amber-500" };
+      if (code === 1 || code === 2) return { status: "晴時多雲", icon: "fa-cloud-sun", color: "text-amber-400" };
+      if (code === 3) return { status: "陰天", icon: "fa-cloud", color: "text-slate-400" };
+      if (code >= 45 && code <= 48) return { status: "有霧", icon: "fa-smog", color: "text-slate-400" };
+      if (code >= 51 && code <= 67) return { status: "有雨/飄雨", icon: "fa-cloud-rain", color: "text-blue-400" };
+      if (code >= 71 && code <= 77) return { status: "降雪", icon: "fa-snowflake", color: "text-sky-300" };
+      if (code >= 80 && code <= 82) return { status: "陣雨", icon: "fa-cloud-showers-heavy", color: "text-blue-500" };
+      if (code >= 95) return { status: "雷雨", icon: "fa-cloud-bolt", color: "text-purple-500" };
+      return { status: "多雲", icon: "fa-cloud", color: "text-slate-400" };
+    }
+
+    // Fetch Live Weather from Open-Meteo API
+    async function fetchLiveWeather(lat, lon, targetDateStr) {
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("API Network error");
+        const data = await res.json();
+
+        let dateIndex = data.daily.time.indexOf(targetDateStr);
+        if (dateIndex === -1) dateIndex = 0; // Fallback to current forecast
+
+        const weatherCode = data.daily.weathercode[dateIndex];
+        const maxTemp = Math.round(data.daily.temperature_2m_max[dateIndex]);
+        const minTemp = Math.round(data.daily.temperature_2m_min[dateIndex]);
+        const meta = getWeatherMeta(weatherCode);
+
+        return {
+          status: meta.status,
+          temp: `${maxTemp}°C / ${minTemp}°C`,
+          icon: meta.icon,
+          color: meta.color,
+          desc: `（即時資料來源：Open-Meteo 氣象預報）`
+        };
+      } catch (err) {
+        console.warn("即時天氣載入失敗:", err);
+        return {
+          status: "多雲/氣象載入中",
+          temp: "32°C / 25°C",
+          icon: "fa-cloud-sun",
+          color: "text-blue-500",
+          desc: "即時氣象資料更新中"
+        };
+      }
+    }
+
+    // Category Badge Function
+    function getCategoryBadge(category) {
+      switch (category) {
+        case 'flight':
+          return `<span class="bg-blue-100 text-blue-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-plane"></i> 航班/機場</span>`;
+        case 'food':
+          return `<span class="bg-orange-100 text-orange-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-utensils"></i> 美食饗宴</span>`;
+        case 'spot':
+          return `<span class="bg-purple-100 text-purple-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-camera"></i> 景點逛街</span>`;
+        case 'transport':
+          return `<span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-train"></i> 交通移動</span>`;
+        case 'hotel':
+          return `<span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-hotel"></i> 飯店/行李</span>`;
+        case 'shop':
+          return `<span class="bg-pink-100 text-pink-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-bag-shopping"></i> 購物採買</span>`;
+        case 'ticket':
+          return `<span class="bg-teal-100 text-teal-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-solid fa-ticket"></i> 票券/購票</span>`;
+        default:
+          return `<span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-0.5 rounded-full font-medium inline-flex items-center gap-1"><i class="fa-regular fa-clock"></i> 行程日程</span>`;
+      }
+    }
+
+    // Open Google Maps
+    function openMap(query) {
+      if (!query) return;
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // Switch Tab
+    function switchTab(dayKey) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-sm');
+        btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+      });
+
+      const activeBtn = document.getElementById(`tab-${dayKey}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-sm');
+      }
+
+      renderDay(dayKey);
+    }
+
+    // Render Timeline Content
+    async function renderDay(dayKey) {
+      const data = scheduleData[dayKey];
+      const weatherBar = document.getElementById('weather-bar');
+      const timelineContainer = document.getElementById('timeline-container');
+
+      // Weather loading skeleton
+      weatherBar.innerHTML = `
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex justify-between items-center animate-pulse">
+          <div class="h-6 bg-slate-200 rounded w-48"></div>
+          <div class="h-8 bg-slate-200 rounded w-32"></div>
+        </div>
+      `;
+
+      // Render Timeline Items
+      let html = '';
+      data.items.forEach((item) => {
+        const hasMap = Boolean(item.mapQuery);
+        const imgUrl = item.image || 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80';
+
+        html += `
+          <div class="relative flex flex-col md:flex-row gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all">
+            <div class="w-full md:w-36 h-32 md:h-auto flex-shrink-0 rounded-xl overflow-hidden bg-slate-100 relative group">
+              <img 
+                src="${imgUrl}" 
+                alt=""
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80';"
+              />
+            </div>
+            <div class="flex-grow flex flex-col justify-between">
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs sm:text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100">
+                    ${item.time}
+                  </span>
+                  ${getCategoryBadge(item.category)}
+                </div>
+                <h3 class="text-base sm:text-lg font-bold text-slate-800">
+                  ${item.title}
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                  ${item.desc}
+                </p>
+              </div>
+              ${hasMap ? `
+                <div class="mt-3">
+                  <button type="button" onclick="openMap('${item.mapQuery.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-location-dot text-red-500"></i>
+                    <span>地圖導航：${item.mapQuery}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5 opacity-70"></i>
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      timelineContainer.innerHTML = html;
+
+      // Fetch Real-time Weather
+      const weatherInfo = await fetchLiveWeather(data.lat, data.lon, data.dateStr);
+
+      weatherBar.innerHTML = `
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">${data.title}</h2>
+            <p class="text-xs text-slate-500 mt-1">地點：${data.locationName} ${weatherInfo.desc}</p>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100 self-stretch sm:self-auto justify-between">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid ${weatherInfo.icon} text-2xl ${weatherInfo.color}"></i>
+              <span class="text-sm font-semibold text-slate-700">${weatherInfo.status}</span>
+            </div>
+            <span class="text-sm font-bold text-slate-900 bg-white px-2.5 py-1 rounded-md shadow-xs border border-slate-200">${weatherInfo.temp}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initialize View
+    window.onload = function() {
+      renderDay('day1');
+    };
+  </script>
+</body>
+</html>
+
