@@ -23,6 +23,10 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
   </style>
 </head>
 <body class="text-zinc-900 min-h-screen pb-16 selection:bg-orange-600 selection:text-white">
@@ -54,31 +58,31 @@
   <!-- Main Container -->
   <main class="max-w-5xl mx-auto px-4 mt-8">
 
-    <!-- Day Selector Tabs (Sharp Edge Style) -->
+    <!-- Day Selector Tabs (Hover with Orange Theme Background) -->
     <div class="flex overflow-x-auto gap-2 pb-2 mb-8 hide-scrollbar border-b-2 border-zinc-300">
-      <button onclick="switchTab('day0')" id="tab-day0" class="tab-btn px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:border-zinc-900">
-        <div class="font-black uppercase">Day 0</div>
-        <div class="text-[11px] text-zinc-500 font-normal">8/25 (二) 啟程</div>
+      <button onclick="switchTab('day0')" id="tab-day0" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
+        <div class="font-black uppercase group-hover:text-white">Day 0</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/25 (二) 啟程</div>
       </button>
-      <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn active px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-orange-600 text-white border-orange-600">
-        <div class="font-black uppercase">Day 1：秋葉原</div>
-        <div class="text-[11px] text-orange-100 font-normal">8/26 (三)</div>
+      <button onclick="switchTab('day1')" id="tab-day1" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
+        <div class="font-black uppercase group-hover:text-white">Day 1：秋葉原</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/26 (三)</div>
       </button>
-      <button onclick="switchTab('day2')" id="tab-day2" class="tab-btn px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:border-zinc-900">
-        <div class="font-black uppercase">Day 2：鎌倉 + 江之島</div>
-        <div class="text-[11px] text-zinc-500 font-normal">8/27 (四)</div>
+      <button onclick="switchTab('day2')" id="tab-day2" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
+        <div class="font-black uppercase group-hover:text-white">Day 2：鎌倉 + 江之島</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/27 (四)</div>
       </button>
-      <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:border-zinc-900">
-        <div class="font-black uppercase">Day 3：池袋 + 高圓寺</div>
-        <div class="text-[11px] text-zinc-500 font-normal">8/28 (五)</div>
+      <button onclick="switchTab('day3')" id="tab-day3" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
+        <div class="font-black uppercase group-hover:text-white">Day 3：池袋 + 高圓寺</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/28 (五)</div>
       </button>
-      <button onclick="switchTab('day4')" id="tab-day4" class="tab-btn px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:border-zinc-900">
-        <div class="font-black uppercase">Day 4：新宿 + 原宿</div>
-        <div class="text-[11px] text-zinc-500 font-normal">8/29 (六) 返程</div>
+      <button onclick="switchTab('day4')" id="tab-day4" class="tab-btn group px-5 py-3 font-bold text-xs sm:text-sm flex-shrink-0 transition-all duration-200 border-2 bg-white text-zinc-700 border-zinc-300 hover:bg-orange-600 hover:text-white hover:border-orange-600">
+        <div class="font-black uppercase group-hover:text-white">Day 4：新宿 + 原宿</div>
+        <div class="text-[11px] text-zinc-500 font-normal group-hover:text-orange-100">8/29 (六) 返程</div>
       </button>
     </div>
 
-    <!-- Weather Bar Card -->
+    <!-- Weather Bar Card (White Background, Large Header, Deleted LIVE FORECAST) -->
     <div id="weather-bar" class="mb-8">
       <!-- Dynamic Content by JS -->
     </div>
@@ -91,7 +95,7 @@
   </main>
 
   <script>
-    // Schedule Data with Coordinates
+    // Schedule Data with Start/End Minutes for Auto-scroll Calculation
     const scheduleData = {
       day0: {
         title: "8/25 (二) - 出發前夜",
@@ -99,9 +103,9 @@
         lat: 25.0797, lon: 121.2342,
         locationName: "桃園國際機場",
         items: [
-          { time: "22:45", title: "從家裡出發", desc: "準備出門前往機場所在地或轉乘點", category: "transport", mapQuery: "" },
-          { time: "23:20 ~ 23:56", title: "搭車至新北產業園區站", desc: "轉乘桃園機場捷運", category: "transport", mapQuery: "新北產業園區站" },
-          { time: "24:00+", title: "夜宿/夜間移動", desc: "夜間準備登機前往日本", category: "hotel", mapQuery: "桃園國際機場" }
+          { id: "item-0-0", startMin: 22*60+45, endMin: 23*60+20, time: "22:45", title: "從家裡出發", desc: "準備出門前往機場所在地或轉乘點", category: "transport", mapQuery: "" },
+          { id: "item-0-1", startMin: 23*60+20, endMin: 23*60+56, time: "23:20 ~ 23:56", title: "搭車至新北產業園區站", desc: "轉乘桃園機場捷運", category: "transport", mapQuery: "新北產業園區站" },
+          { id: "item-0-2", startMin: 24*60, endMin: 24*60+180, time: "24:00+", title: "夜宿/夜間移動", desc: "夜間準備登機前往日本", category: "hotel", mapQuery: "桃園國際機場" }
         ]
       },
       day1: {
@@ -110,21 +114,21 @@
         lat: 35.6983, lon: 139.7731,
         locationName: "東京秋葉原",
         items: [
-          { time: "02:40 ~ 07:00", title: "捷星航班：桃機一航 → 成田三航", desc: "搭乘日本捷星航空 GK12（02:40出發、07:00抵達）", category: "flight", mapQuery: "成田國際機場 第3航廈" },
-          { time: "07:50", title: "出海關", desc: "完成入境手續與提領行李", category: "transport", mapQuery: "成田國際機場 第2航廈" },
-          { time: "08:10", title: "空港第2ビル買票", desc: "購買京成電鐵 / Access 特急車票", category: "ticket", mapQuery: "空港第2ビル駅" },
-          { time: "08:31 ~ 09:32", title: "空港第2ビル → 淺草橋", desc: "搭乘 Access 特急羽田空港行 → 淺草下一站 → 淺草橋", category: "transport", mapQuery: "淺草橋車站" },
-          { time: "09:30+", title: "STone Hotel 寄放行李", desc: "前往飯店寄放行李，輕裝出發", category: "hotel", mapQuery: "STone Hotel 淺草橋" },
-          { time: "10:00 ~ 11:00", title: "Gashapon Bandai Official Shop 扭蛋", desc: "途經 UNIQLO，前往萬代官方扭蛋店巨蛋店", category: "spot", mapQuery: "ガシャポンバンダイオフィシャルショップ秋葉原店" },
-          { time: "11:00 ~ 12:00", title: "駿河屋 秋葉原", desc: "逛周邊模型與動漫二手商品", category: "spot", mapQuery: "駿河屋 秋葉原駅前店" },
-          { time: "12:00 ~ 13:00", title: "Radio Kaikan (ラジオ会館)", desc: "秋葉原地標性動漫商場逛逛", category: "spot", mapQuery: "秋葉原ラジオ会館" },
-          { time: "13:00 ~ 14:00", title: "Gamers 秋葉原店", desc: "聲優、動漫周邊巡禮", category: "spot", mapQuery: "AKIHABARAゲーマーズ本店" },
-          { time: "14:00 ~ 15:00", title: "CURE MAID CAFÉ 女僕咖啡廳", desc: "午餐（蛋包飯、鬆餅），體驗始祖女僕咖啡廳", category: "food", mapQuery: "CURE MAID CAFÉ" },
-          { time: "16:00 ~ 17:00", title: "Animate 秋葉原店", desc: "大人可去唐吉訶德逛逛", category: "spot", mapQuery: "アニメイト秋葉原1号館" },
-          { time: "17:00 ~ 18:00", title: "Mandarake Complex", desc: "二手動漫周邊尋寶", category: "spot", mapQuery: "まんだらけ コンプレックス" },
-          { time: "18:30", title: "四十八漁場 昭和通り口店 (已訂位)", desc: "海鮮大餐聚會", category: "food", mapQuery: "四十八漁場 秋葉原昭和通り口店" },
-          { time: "20:00 ~ 22:00", title: "BIC CAMERA / MUJI / GU / UNIQLO", desc: "採買服飾與電器（看情形可省略）", category: "shop", mapQuery: "Bic Camera Akihabara" },
-          { time: "22:00+", title: "返回飯店休息", desc: "返回淺草橋住宿地點休息", category: "hotel", mapQuery: "淺草橋車站" }
+          { id: "item-1-0", startMin: 2*60+40, endMin: 7*60, time: "02:40 ~ 07:00", title: "捷星航班：桃機一航 → 成田三航", desc: "搭乘日本捷星航空 GK12（02:40出發、07:00抵達）", category: "flight", mapQuery: "成田國際機場 第3航廈" },
+          { id: "item-1-1", startMin: 7*60+50, endMin: 8*60+10, time: "07:50", title: "出海關", desc: "完成入境手續與提領行李", category: "transport", mapQuery: "成田國際機場 第2航廈" },
+          { id: "item-1-2", startMin: 8*60+10, endMin: 8*60+31, time: "08:10", title: "空港第2ビル買票", desc: "購買京成電鐵 / Access 特急車票", category: "ticket", mapQuery: "空港第2ビル駅" },
+          { id: "item-1-3", startMin: 8*60+31, endMin: 9*60+32, time: "08:31 ~ 09:32", title: "空港第2ビル → 淺草橋", desc: "搭乘 Access 特急羽田空港行 → 淺草下一站 → 淺草橋", category: "transport", mapQuery: "淺草橋車站" },
+          { id: "item-1-4", startMin: 9*60+30, endMin: 10*60, time: "09:30+", title: "STone Hotel 寄放行李", desc: "前往飯店寄放行李，輕裝出發", category: "hotel", mapQuery: "STone Hotel 淺草橋" },
+          { id: "item-1-5", startMin: 10*60, endMin: 11*60, time: "10:00 ~ 11:00", title: "Gashapon Bandai Official Shop 扭蛋", desc: "途經 UNIQLO，前往萬代官方扭蛋店巨蛋店", category: "spot", mapQuery: "ガシャポンバンダイオフィシャルショップ秋葉原店" },
+          { id: "item-1-6", startMin: 11*60, endMin: 12*60, time: "11:00 ~ 12:00", title: "駿河屋 秋葉原", desc: "逛周邊模型與動漫二手商品", category: "spot", mapQuery: "駿河屋 秋葉原駅前店" },
+          { id: "item-1-7", startMin: 12*60, endMin: 13*60, time: "12:00 ~ 13:00", title: "Radio Kaikan (ラジオ会館)", desc: "秋葉原地標性動漫商場逛逛", category: "spot", mapQuery: "秋葉原ラジオ会館" },
+          { id: "item-1-8", startMin: 13*60, endMin: 14*60, time: "13:00 ~ 14:00", title: "Gamers 秋葉原店", desc: "聲優、動漫周邊巡禮", category: "spot", mapQuery: "AKIHABARAゲーマーズ本店" },
+          { id: "item-1-9", startMin: 14*60, endMin: 15*60, time: "14:00 ~ 15:00", title: "CURE MAID CAFÉ 女僕咖啡廳", desc: "午餐（蛋包飯、鬆餅），體驗始祖女僕咖啡廳", category: "food", mapQuery: "CURE MAID CAFÉ" },
+          { id: "item-1-10", startMin: 16*60, endMin: 17*60, time: "16:00 ~ 17:00", title: "Animate 秋葉原店", desc: "大人可去唐吉訶德逛逛", category: "spot", mapQuery: "アニメイト秋葉原1号館" },
+          { id: "item-1-11", startMin: 17*60, endMin: 18*60, time: "17:00 ~ 18:00", title: "Mandarake Complex", desc: "二手動漫周邊尋寶", category: "spot", mapQuery: "まんだらけ コンプレックス" },
+          { id: "item-1-12", startMin: 18*60+30, endMin: 20*60, time: "18:30", title: "四十八漁場 昭和通り口店 (已訂位)", desc: "海鮮大餐聚會", category: "food", mapQuery: "四十八漁場 秋葉原昭和通り口店" },
+          { id: "item-1-13", startMin: 20*60, endMin: 22*60, time: "20:00 ~ 22:00", title: "BIC CAMERA / MUJI / GU / UNIQLO", desc: "採買服飾與電器（看情形可省略）", category: "shop", mapQuery: "Bic Camera Akihabara" },
+          { id: "item-1-14", startMin: 22*60, endMin: 24*60, time: "22:00+", title: "返回飯店休息", desc: "返回淺草橋住宿地點休息", category: "hotel", mapQuery: "淺草橋車站" }
         ]
       },
       day2: {
@@ -133,15 +137,15 @@
         lat: 35.3190, lon: 139.5506,
         locationName: "神奈川鎌倉",
         items: [
-          { time: "08:00", title: "起床", desc: "梳洗準備出門", category: "life", mapQuery: "" },
-          { time: "08:30 ~ 10:00", title: "出發前往鎌倉", desc: "東京/品川方向 → 鎌倉（約 10:00 抵達）", category: "transport", mapQuery: "鎌倉駅" },
-          { time: "10:00 ~ 12:00", title: "小町通散步 + 午餐", desc: "天氣好可以租和服；若天氣不佳取消後面江之島行程", category: "spot", mapQuery: "小町通り" },
-          { time: "13:00 ~ 14:00", title: "搭乘江之電：鎌倉站 → 七里ヶ浜", desc: "體驗經典海濱復古路面電車", category: "transport", mapQuery: "七里ヶ浜駅" },
-          { time: "14:00 ~ 16:00", title: "七里ヶ浜海灘 chill", desc: "賞海景、看衝浪者與富士山景緻", category: "spot", mapQuery: "七里ヶ浜海岸" },
-          { time: "16:00 ~ 17:00", title: "七里ヶ浜站 → 江之島", desc: "搭乘江之電前往江之島", category: "transport", mapQuery: "江ノ島駅" },
-          { time: "17:00 ~ 20:00", title: "江之島散步 + 晚餐", desc: "島上老街巡禮，吃海鮮晚餐（看情形可省略）", category: "spot", mapQuery: "江の島" },
-          { time: "20:00 ~ 21:30", title: "返回淺草橋", desc: "江之島/片瀨江之島 → 藤澤 → 東京 → 淺草橋", category: "transport", mapQuery: "淺草橋駅" },
-          { time: "22:00+", title: "休息", desc: "淺草橋飯店休息", category: "hotel", mapQuery: "淺草橋" }
+          { id: "item-2-0", startMin: 8*60, endMin: 8*60+30, time: "08:00", title: "起床", desc: "梳洗準備出門", category: "life", mapQuery: "" },
+          { id: "item-2-1", startMin: 8*60+30, endMin: 10*60, time: "08:30 ~ 10:00", title: "出發前往鎌倉", desc: "東京/品川方向 → 鎌倉（約 10:00 抵達）", category: "transport", mapQuery: "鎌倉駅" },
+          { id: "item-2-2", startMin: 10*60, endMin: 12*60, time: "10:00 ~ 12:00", title: "小町通散步 + 午餐", desc: "天氣好可以租和服；若天氣不佳取消後面江之島行程", category: "spot", mapQuery: "小町通り" },
+          { id: "item-2-3", startMin: 13*60, endMin: 14*60, time: "13:00 ~ 14:00", title: "搭乘江之電：鎌倉站 → 七里ヶ浜", desc: "體驗經典海濱復古路面電車", category: "transport", mapQuery: "七里ヶ浜駅" },
+          { id: "item-2-4", startMin: 14*60, endMin: 16*60, time: "14:00 ~ 16:00", title: "七里ヶ浜海灘 chill", desc: "賞海景、看衝浪者與富士山景緻", category: "spot", mapQuery: "七里ヶ浜海岸" },
+          { id: "item-2-5", startMin: 16*60, endMin: 17*60, time: "16:00 ~ 17:00", title: "七里ヶ浜站 → 江之島", desc: "搭乘江之電前往江之島", category: "transport", mapQuery: "江ノ島駅" },
+          { id: "item-2-6", startMin: 17*60, endMin: 20*60, time: "17:00 ~ 20:00", title: "江之島散步 + 晚餐", desc: "島上老街巡禮，吃海鮮晚餐（看情形可省略）", category: "spot", mapQuery: "江の島" },
+          { id: "item-2-7", startMin: 20*60, endMin: 21*60+30, time: "20:00 ~ 21:30", title: "返回淺草橋", desc: "江之島/片瀨江之島 → 藤澤 → 東京 → 淺草橋", category: "transport", mapQuery: "淺草橋駅" },
+          { id: "item-2-8", startMin: 22*60, endMin: 24*60, time: "22:00+", title: "休息", desc: "淺草橋飯店休息", category: "hotel", mapQuery: "淺草橋" }
         ]
       },
       day3: {
@@ -150,14 +154,14 @@
         lat: 35.7295, lon: 139.7109,
         locationName: "東京池袋",
         items: [
-          { time: "09:00", title: "起床", desc: "準備出門", category: "life", mapQuery: "" },
-          { time: "09:30", title: "出發前往池袋", desc: "從淺草橋搭車前往池袋", category: "transport", mapQuery: "池袋駅" },
-          { time: "10:00 ~ 12:00", title: "Animate 池袋本店", desc: "旗艦級動漫大樓巡禮", category: "spot", mapQuery: "アニメイト池袋本店" },
-          { time: "12:00 ~ 15:00", title: "K-BOOKS × 3 + Lashinbang + WEGO", desc: "途中有 ringo 烤蘋果派、章魚燒、可麗餅等小吃", category: "spot", mapQuery: "K-BOOKS 乙女ロード館" },
-          { time: "15:00 ~ 16:30", title: "麵創房 無敵家 (午晚餐)", desc: "品嚐濃厚豚骨叉燒拉麵", category: "food", mapQuery: "麺創房 無敵家" },
-          { time: "17:00 ~ 20:00", title: "池袋 → 高圓寺古著店巡禮", desc: "逛古著店：① Trip Vintage ② BIG TIME ③ SLAT 2ND ④ GREEN LIGHT ⑤ Small Change（有時間再去 Whistler / Frescade）", category: "spot", mapQuery: "高円寺パル商店街" },
-          { time: "20:00 ~ 22:00", title: "淺草買 からあげ緣 宵夜", desc: "返回飯店前購買唐揚雞宵夜", category: "food", mapQuery: "からあげ縁 浅草総本店" },
-          { time: "22:00+", title: "休息", desc: "淺草橋飯店休息", category: "hotel", mapQuery: "淺草橋" }
+          { id: "item-3-0", startMin: 9*60, endMin: 9*60+30, time: "09:00", title: "起床", desc: "準備出門", category: "life", mapQuery: "" },
+          { id: "item-3-1", startMin: 9*60+30, endMin: 10*60, time: "09:30", title: "出發前往池袋", desc: "從淺草橋搭車前往池袋", category: "transport", mapQuery: "池袋駅" },
+          { id: "item-3-2", startMin: 10*60, endMin: 12*60, time: "10:00 ~ 12:00", title: "Animate 池袋本店", desc: "旗艦級動漫大樓巡禮", category: "spot", mapQuery: "アニメイト池袋本店" },
+          { id: "item-3-3", startMin: 12*60, endMin: 15*60, time: "12:00 ~ 15:00", title: "K-BOOKS × 3 + Lashinbang + WEGO", desc: "途中有 ringo 烤蘋果派、章魚燒、可麗餅等小吃", category: "spot", mapQuery: "K-BOOKS 乙女ロード館" },
+          { id: "item-3-4", startMin: 15*60, endMin: 16*60+30, time: "15:00 ~ 16:30", title: "麵創房 無敵家 (午晚餐)", desc: "品嚐濃厚豚骨叉燒拉麵", category: "food", mapQuery: "麺創房 無敵家" },
+          { id: "item-3-5", startMin: 17*60, endMin: 20*60, time: "17:00 ~ 20:00", title: "池袋 → 高圓寺古著店巡禮", desc: "逛古著店：① Trip Vintage ② BIG TIME ③ SLAT 2ND ④ GREEN LIGHT ⑤ Small Change（有時間再去 Whistler / Frescade）", category: "spot", mapQuery: "高円寺パル商店街" },
+          { id: "item-3-6", startMin: 20*60, endMin: 22*60, time: "20:00 ~ 22:00", title: "淺草買 からあげ緣 宵夜", desc: "返回飯店前購買唐揚雞宵夜", category: "food", mapQuery: "からあげ縁 浅草総本店" },
+          { id: "item-3-7", startMin: 22*60, endMin: 24*60, time: "22:00+", title: "休息", desc: "淺草橋飯店休息", category: "hotel", mapQuery: "淺草橋" }
         ]
       },
       day4: {
@@ -166,31 +170,31 @@
         lat: 35.6909, lon: 139.7003,
         locationName: "東京新宿",
         items: [
-          { time: "09:30", title: "起床", desc: "整理行李", category: "life", mapQuery: "" },
-          { time: "10:00", title: "Check-out 寄存行李", desc: "向飯店 Check-out 並辦理行李寄存", category: "hotel", mapQuery: "淺草橋" },
-          { time: "10:20", title: "淺草橋 → 新宿", desc: "搭乘電車前往新宿/原宿區", category: "transport", mapQuery: "新宿駅" },
-          { time: "11:00 ~ 13:00", title: "六歌仙本店「楓之宴」120分鐘 (已訂位)", desc: "頂級燒肉 + 帝王蟹吃到飽享用", category: "food", mapQuery: "六歌仙 本店" },
-          { time: "13:00 ~ 14:00", title: "新宿 → 原宿", desc: "搭乘 JR 山手線至原宿站竹下口", category: "transport", mapQuery: "原宿駅 竹下口" },
-          { time: "14:00 ~ 17:00", title: "竹下通 或 下北澤", desc: "【特別提醒：若下雨務必提早去機場】逛街逛潮牌古著", category: "spot", mapQuery: "竹下通り" },
-          { time: "17:00", title: "返回淺草橋", desc: "搭車回淺草橋準備取行李", category: "transport", mapQuery: "淺草橋駅" },
-          { time: "17:30", title: "取行李出發前往機場", desc: "18:10 淺草橋 → 快特 成田空港行 → 19:21 空港第2ビル → 成田T3", category: "transport", mapQuery: "成田國際機場 第3航廈" },
-          { time: "20:30", title: "Jetstar Check-in", desc: "辦理登機與行李託運手續", category: "flight", mapQuery: "成田國際機場 第3航廈" },
-          { time: "22:40 ~ 01:30", title: "返台航班：成田T3 → 桃園T1", desc: "搭乘日本捷星 GK13 返抵台灣桃園機場", category: "flight", mapQuery: "桃園國際機場" }
+          { id: "item-4-0", startMin: 9*60+30, endMin: 10*60, time: "09:30", title: "起床", desc: "整理行李", category: "life", mapQuery: "" },
+          { id: "item-4-1", startMin: 10*60, endMin: 10*60+20, time: "10:00", title: "Check-out 寄存行李", desc: "向飯店 Check-out 並辦理行李寄存", category: "hotel", mapQuery: "淺草橋" },
+          { id: "item-4-2", startMin: 10*60+20, endMin: 11*60, time: "10:20", title: "淺草橋 → 新宿", desc: "搭乘電車前往新宿/原宿區", category: "transport", mapQuery: "新宿駅" },
+          { id: "item-4-3", startMin: 11*60, endMin: 13*60, time: "11:00 ~ 13:00", title: "六歌仙本店「楓之宴」120分鐘 (已訂位)", desc: "頂級燒肉 + 帝王蟹吃到飽享用", category: "food", mapQuery: "六歌仙 本店" },
+          { id: "item-4-4", startMin: 13*60, endMin: 14*60, time: "13:00 ~ 14:00", title: "新宿 → 原宿", desc: "搭乘 JR 山手線至原宿站竹下口", category: "transport", mapQuery: "原宿駅 竹下口" },
+          { id: "item-4-5", startMin: 14*60, endMin: 17*60, time: "14:00 ~ 17:00", title: "竹下通 或 下北澤", desc: "【特別提醒：若下雨務必提早去機場】逛街逛潮牌古著", category: "spot", mapQuery: "竹下通り" },
+          { id: "item-4-6", startMin: 17*60, endMin: 17*60+30, time: "17:00", title: "返回淺草橋", desc: "搭車回淺草橋準備取行李", category: "transport", mapQuery: "淺草橋駅" },
+          { id: "item-4-7", startMin: 17*60+30, endMin: 20*60+30, time: "17:30", title: "取行李出發前往機場", desc: "18:10 淺草橋 → 快特 成田空港行 → 19:21 空港第2ビル → 成田T3", category: "transport", mapQuery: "成田國際機場 第3航廈" },
+          { id: "item-4-8", startMin: 20*60+30, endMin: 22*60+40, time: "20:30", title: "Jetstar Check-in", desc: "辦理登機與行李託運手續", category: "flight", mapQuery: "成田國際機場 第3航廈" },
+          { id: "item-4-9", startMin: 22*60+40, endMin: 24*60+90, time: "22:40 ~ 01:30", title: "返台航班：成田T3 → 桃園T1", desc: "搭乘日本捷星 GK13 返抵台灣桃園機場", category: "flight", mapQuery: "桃園國際機場" }
         ]
       }
     };
 
     // WMO Weather Interpretation Code
     function getWeatherMeta(code) {
-      if (code === 0) return { status: "晴朗無雲", icon: "fa-sun", color: "text-orange-500" };
-      if (code === 1 || code === 2) return { status: "晴時多雲", icon: "fa-cloud-sun", color: "text-orange-400" };
-      if (code === 3) return { status: "陰天", icon: "fa-cloud", color: "text-zinc-400" };
-      if (code >= 45 && code <= 48) return { status: "有霧", icon: "fa-smog", color: "text-zinc-400" };
-      if (code >= 51 && code <= 67) return { status: "有雨/飄雨", icon: "fa-cloud-rain", color: "text-zinc-600" };
-      if (code >= 71 && code <= 77) return { status: "降雪", icon: "fa-snowflake", color: "text-zinc-400" };
+      if (code === 0) return { status: "晴朗無雲", icon: "fa-sun", color: "text-orange-600" };
+      if (code === 1 || code === 2) return { status: "晴時多雲", icon: "fa-cloud-sun", color: "text-orange-500" };
+      if (code === 3) return { status: "陰天", icon: "fa-cloud", color: "text-zinc-600" };
+      if (code >= 45 && code <= 48) return { status: "有霧", icon: "fa-smog", color: "text-zinc-500" };
+      if (code >= 51 && code <= 67) return { status: "有雨/飄雨", icon: "fa-cloud-rain", color: "text-zinc-700" };
+      if (code >= 71 && code <= 77) return { status: "降雪", icon: "fa-snowflake", color: "text-zinc-500" };
       if (code >= 80 && code <= 82) return { status: "陣雨", icon: "fa-cloud-showers-heavy", color: "text-orange-600" };
       if (code >= 95) return { status: "雷雨", icon: "fa-cloud-bolt", color: "text-orange-600" };
-      return { status: "多雲", icon: "fa-cloud", color: "text-zinc-400" };
+      return { status: "多雲", icon: "fa-cloud", color: "text-zinc-600" };
     }
 
     // Fetch Live Weather from Open-Meteo API
@@ -219,7 +223,7 @@
       } catch (err) {
         console.warn("即時天氣載入失敗:", err);
         return {
-          status: "多雲/氣象載入中",
+          status: "多雲/載入中",
           temp: "32°C / 25°C",
           icon: "fa-cloud-sun",
           color: "text-orange-500",
@@ -258,7 +262,7 @@
     }
 
     // Switch Tab Logic
-    function switchTab(dayKey) {
+    function switchTab(dayKey, autoScroll = false) {
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('bg-orange-600', 'text-white', 'border-orange-600');
         btn.classList.add('bg-white', 'text-zinc-700', 'border-zinc-300');
@@ -270,36 +274,53 @@
         activeBtn.classList.add('bg-orange-600', 'text-white', 'border-orange-600');
       }
 
-      renderDay(dayKey);
+      renderDay(dayKey, autoScroll);
     }
 
     // Render Timeline Content
-    async function renderDay(dayKey) {
+    async function renderDay(dayKey, autoScroll = false) {
       const data = scheduleData[dayKey];
       const weatherBar = document.getElementById('weather-bar');
       const timelineContainer = document.getElementById('timeline-container');
 
+      // Calculate current time in minutes
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+
       // Weather loading skeleton
       weatherBar.innerHTML = `
-        <div class="bg-white p-5 border-2 border-zinc-300 flex justify-between items-center animate-pulse">
-          <div class="h-6 bg-zinc-200 w-48"></div>
+        <div class="bg-white p-6 border-2 border-zinc-300 flex justify-between items-center animate-pulse">
+          <div class="h-8 bg-zinc-200 w-64"></div>
           <div class="h-8 bg-zinc-200 w-32"></div>
         </div>
       `;
+
+      let targetScrollId = null;
 
       // Render Timeline Items
       let html = '';
       data.items.forEach((item) => {
         const hasMap = Boolean(item.mapQuery);
+        
+        // Check if item is active based on current time
+        const isCurrent = currentMin >= item.startMin && currentMin < item.endMin;
+        if (isCurrent || (!targetScrollId && currentMin < item.startMin)) {
+          if (!targetScrollId) targetScrollId = item.id;
+        }
+
+        const activeStyles = isCurrent 
+          ? 'border-orange-600 shadow-lg shadow-orange-600/10 border-l-8' 
+          : 'border-zinc-200 hover:border-zinc-900';
 
         html += `
-          <div class="bg-white p-6 border-2 border-zinc-200 hover:border-zinc-900 transition-colors duration-200 flex flex-col md:flex-row justify-between gap-4">
+          <div id="${item.id}" class="bg-white p-6 border-2 ${activeStyles} transition-all duration-200 flex flex-col md:flex-row justify-between gap-4">
             
             <!-- Main Content Area -->
             <div class="flex-grow">
               <!-- Category Badge & Extra Info -->
               <div class="flex flex-wrap items-center gap-2 mb-3">
                 ${getCategoryBadge(item.category)}
+                ${isCurrent ? `<span class="bg-orange-600 text-white text-[10px] font-black uppercase px-2 py-0.5 tracking-widest animate-pulse">● CURRENT</span>` : ''}
               </div>
 
               <!-- TIME AS MAIN HEADER (Large & Bold) -->
@@ -338,27 +359,55 @@
       // Fetch Real-time Weather
       const weatherInfo = await fetchLiveWeather(data.lat, data.lon, data.dateStr);
 
+      // WHITE BACKGROUND WEATHER BAR WITH ENLARGED MAIN HEADER
       weatherBar.innerHTML = `
-        <div class="bg-zinc-950 text-white p-5 sm:p-6 border-l-4 border-orange-600 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="bg-white text-zinc-900 p-6 border-2 border-zinc-900 border-l-8 border-l-orange-600 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm">
           <div>
-            <div class="text-[10px] font-black tracking-widest text-orange-500 uppercase mb-0.5">LIVE FORECAST</div>
-            <h2 class="text-xl font-black text-white tracking-tight uppercase">${data.title}</h2>
-            <p class="text-xs text-zinc-400 mt-1">地點：${data.locationName} ${weatherInfo.desc}</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight uppercase">${data.title}</h2>
+            <p class="text-xs sm:text-sm text-zinc-500 mt-1 font-bold">地點：${data.locationName} ${weatherInfo.desc}</p>
           </div>
-          <div class="flex items-center gap-4 bg-zinc-900 px-4 py-3 border border-zinc-800 self-stretch sm:self-auto justify-between">
+          <div class="flex items-center gap-3 bg-zinc-100 px-4 py-3 border border-zinc-300 self-stretch sm:self-auto justify-between sm:justify-start">
             <div class="flex items-center gap-2.5">
               <i class="fa-solid ${weatherInfo.icon} text-2xl ${weatherInfo.color}"></i>
-              <span class="text-sm font-bold text-zinc-200">${weatherInfo.status}</span>
+              <span class="text-sm font-black text-zinc-900">${weatherInfo.status}</span>
             </div>
-            <span class="text-sm font-black text-white bg-orange-600 px-3 py-1 uppercase font-mono">${weatherInfo.temp}</span>
+            <span class="text-zinc-300 font-light">|</span>
+            <span class="text-sm font-black text-orange-600 font-mono tracking-tight">${weatherInfo.temp}</span>
           </div>
         </div>
       `;
+
+      // Auto Scroll to Current/Next Time Slot
+      if (autoScroll && targetScrollId) {
+        setTimeout(() => {
+          const el = document.getElementById(targetScrollId);
+          if (el) {
+            const yOffset = -100; // Header offset
+            const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        }, 150);
+      }
     }
 
-    // Initialize View
+    // Auto-detect Today's Schedule on First Load
     window.onload = function() {
-      renderDay('day1');
+      const now = new Date();
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      
+      let initialDayKey = 'day1'; // Default
+
+      // Match 8/25~8/29
+      if (month === 8) {
+        if (date === 25) initialDayKey = 'day0';
+        else if (date === 26) initialDayKey = 'day1';
+        else if (date === 27) initialDayKey = 'day2';
+        else if (date === 28) initialDayKey = 'day3';
+        else if (date === 29) initialDayKey = 'day4';
+      }
+
+      switchTab(initialDayKey, true);
     };
   </script>
 </body>
