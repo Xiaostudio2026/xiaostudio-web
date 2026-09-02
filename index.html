@@ -87,7 +87,7 @@
             filter: invert(1) grayscale(100%) contrast(140%) hue-rotate(180deg);
         }
 
-        /* 開啟彈窗時保持專案真實色彩與品質 */
+        /* 開開啟彈窗時保持專案真實色彩與品質 */
         #overlay-screen #overlay-container {
             filter: none !important;
         }
@@ -323,10 +323,6 @@
             cursor: pointer; 
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             color: #fff;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
             user-select: none;
         }
         .action-btn:hover {
@@ -343,7 +339,7 @@
         }
 
         .audio-toggle { bottom: 20px; }
-        .ai-toggle { bottom: 74px; font-size: 12px; }
+        .ai-toggle { bottom: 74px; }
         .negative-toggle { bottom: 128px; }
  
         #visualizer { 
@@ -600,16 +596,21 @@
         </div>
     </div>
 
-    <!-- 右下角操作按鈕區：負片切換、AI助理、音樂控制 -->
+    <!-- 右下角操作按鈕區：負片切換（黑白半圓圖示）、AI助理（對話框圖示）、音樂控制 -->
     <button id="negativeToggle" class="action-btn negative-toggle" aria-label="Toggle Negative Effect" title="Negative Mode">
-        INV
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+        </svg>
     </button>
 
-    <button id="aiToggle" class="action-btn ai-toggle" aria-label="Open AI Assistant" onclick="showOverlay('ai')">
-        AI
+    <button id="aiToggle" class="action-btn ai-toggle" aria-label="Open AI Assistant" title="AI Assistant" onclick="showOverlay('ai')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
     </button>
 
-    <button id="audioToggle" class="action-btn audio-toggle" aria-label="Toggle Music">
+    <button id="audioToggle" class="action-btn audio-toggle" aria-label="Toggle Music" title="Toggle Music">
         <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
     </button>
 
@@ -958,7 +959,7 @@
             const positions = isMobile ? [
                 { id: 'node1', top: '17%', left: '10%' }, { id: 'node3', top: '10%', left: '55%' },
                 { id: 'node2', top: '34%', left: '4%' }, { id: 'node4', top: '33%', left: '46%' },
-                { id: 'node6', top: '65%', left: '51%' }, { id: 'node5', top: '53%', left: '8%' }	
+                { id: 'node6', top: '66%', left: '45%' }, { id: 'node5', top: '50%', left: '8%' }	
             ] : [
                 { id: 'node1', top: '25%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
                 { id: 'node2', top: '45%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
