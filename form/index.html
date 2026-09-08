@@ -4,507 +4,900 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inquiry | Xiao Studio</title>
+    <!-- Google Fonts: Barlow, Montserrat, Noto Sans TC/JP/KR -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+JP:wght@300;400&family=Noto+Sans+KR:wght@300;400&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;400;700;800&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #000000;
-            --accent-white: #ffffff;
-            --mono-gray: #333333;
-            --text-gray: #888888;
+            --bg-color: #ffffff;
+            --border-color: #000000;
+            --text-main: #000000;
+            --text-muted: #666666;
+            --accent-gray: #888888;
+            --font-mono: 'Barlow', monospace;
+            --font-sans: 'Barlow', 'Montserrat', 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
         }
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--accent-white);
-            font-family: 'Montserrat', 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            background-color: #ffffff;
+            color: var(--text-main);
+            font-family: var(--font-sans);
             min-height: 100vh;
-            padding: 30px 16px;
-            overflow-x: hidden;
-        }
-
-        .contact-container {
             width: 100%;
-            max-width: 550px;
-            padding: 10px 10px 30px 10px;
-            animation: fadeIn 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 24px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        h2 {
-            font-weight: 300;
-            letter-spacing: 0.4em;
-            text-align: center;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            font-size: 1rem;
-            color: #ffffff;
-            opacity: 0.9;
+        .industrial-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            border: 3px solid var(--border-color); /* 最外層顯著黑色外框線 */
+            background-color: #ffffff; /* 最外層純白底色 */
+            opacity: 0;
+            transform: scaleY(0.99);
+            transform-origin: top center;
+            animation: gridDraw 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
         }
 
-        .form-group {
-            margin-bottom: 32px;
+        .grid-row {
+            display: grid;
+            width: 100%;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .grid-row:last-child {
+            border-bottom: none;
+        }
+
+        .nav-grid {
+            grid-template-columns: 1fr auto;
+        }
+
+        .form-grid-2col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-grid-3col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .form-grid-1col {
+            grid-template-columns: 1fr;
+        }
+
+        .cell {
+            padding: 24px 28px;
+            border-right: 1px solid var(--border-color);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #ffffff;
+            transition: background-color 0.2s ease;
         }
 
-        .sub-group {
-            margin-bottom: 12px;
+        .cell:last-child {
+            border-right: none;
         }
 
-        label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-gray);
-            letter-spacing: 0.2em;
+        /* Hover 暗示可填表 */
+        .cell:has(input),
+        .cell:has(textarea),
+        .cell:has(.custom-select-wrapper) {
+            cursor: pointer;
+        }
+
+        .cell:has(input):hover,
+        .cell:has(textarea):hover,
+        .cell:has(.custom-select-wrapper):hover {
+            background-color: #f7f7f7;
+        }
+
+        .cell:has(input):hover .cell-corner,
+        .cell:has(textarea):hover .cell-corner,
+        .cell:has(.custom-select-wrapper):hover .cell-corner {
+            color: var(--accent-gray);
+            font-weight: bold;
+        }
+
+        .cell-corner {
+            position: absolute;
+            bottom: 6px;
+            right: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #aaaaaa;
+            pointer-events: none;
+            z-index: 5;
+            transition: color 0.2s ease;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .brand-logo-img {
+            height: 52px;
+            width: auto;
+            max-width: 360px;
             display: block;
-            margin-bottom: 8px;
-            text-transform: uppercase;
+            object-fit: contain;
+            opacity: 0;
+            animation: logoFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.1s;
         }
 
-        input, select, textarea {
+        .lang-switchers {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0;
+            animation: contentFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.8s;
+        }
+
+        .lang-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background-color: var(--border-color);
+            color: #ffffff;
+        }
+
+        .tag-label {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            animation: contentFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.8s;
+        }
+
+        .tag-label .num {
+            color: var(--accent-gray);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        textarea {
             width: 100%;
             background: transparent;
             border: none;
-            border-bottom: 1px solid var(--mono-gray);
-            color: var(--accent-white);
-            padding: 10px 0;
-            font-size: 13px;
-            font-family: 'Montserrat', 'Noto Sans TC', 'Noto Sans JP', sans-serif;
-            border-radius: 0;
             outline: none;
-            transition: border-color 0.4s ease, transform 0.4s ease;
+            font-family: var(--font-sans);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            padding: 10px 0 6px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            border-radius: 0;
             -webkit-appearance: none;
-            -moz-appearance: none;
             appearance: none;
+            opacity: 0;
+            animation: contentFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.9s;
         }
 
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0 center;
-            background-size: 12px;
+        input::placeholder, textarea::placeholder {
+            color: #a0a0a0;
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+
+        input:focus, textarea:focus {
+            border-bottom-color: var(--text-main);
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-family: var(--font-sans);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            padding: 10px 32px 8px 0;
             cursor: pointer;
-            padding-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            transition: all 0.2s ease;
+            opacity: 0;
+            animation: contentFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.9s;
         }
 
-        input:focus, select:focus, textarea:focus {
-            border-bottom: 1px solid var(--accent-white);
+        .custom-select-wrapper.open .custom-select-trigger,
+        .custom-select-trigger:focus {
+            border-bottom-color: var(--text-main);
+            background-color: rgba(0, 0, 0, 0.02);
+            outline: none;
         }
 
-        select:focus {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        .custom-select-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-main);
         }
 
-        select option {
-            background-color: #111111;
+        .custom-select-wrapper.open .custom-select-arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border: 2px solid var(--border-color);
+            box-shadow: 6px 6px 0px 0px var(--border-color);
+            z-index: 100;
+            display: none;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .custom-select-wrapper.open .custom-select-menu {
+            display: block;
+            animation: menuSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .custom-option {
+            padding: 14px 18px;
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.15s ease, color 0.15s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
+        }
+
+        .custom-option:hover {
+            background-color: var(--border-color);
             color: #ffffff;
-            padding: 8px;
+        }
+
+        .custom-option.selected {
+            background-color: #f0f0f0;
+            font-weight: 800;
+        }
+
+        .custom-option.selected::after {
+            content: "✓";
+            font-size: 1rem;
+        }
+
+        .custom-option.selected:hover {
+            background-color: var(--border-color);
+            color: #ffffff;
         }
 
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 110px;
+        }
+
+        .submit-cell {
+            padding: 48px 28px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .submit-btn {
-            margin-top: 15px;
             width: 100%;
-            padding: 16px;
-            background-color: var(--accent-white);
-            color: #000000;
-            border: 1px solid #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.3em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-size: 11px;
-            border-radius: 2px;
-        }
-
-        .submit-btn:hover { 
-            background-color: transparent; 
+            max-width: 440px;
+            min-height: 60px;
+            background-color: var(--border-color);
             color: #ffffff;
-            letter-spacing: 0.4em; 
+            border: 2px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 16px 32px;
+            box-shadow: 6px 6px 0px 0px #ffffff, 6px 6px 0px 2px var(--border-color);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            animation: contentFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 1s;
         }
 
-        .submit-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .submit-btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+            border-color: var(--border-color);
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px 0px #ffffff, 8px 8px 0px 2px var(--border-color);
+        }
+
+        .submit-btn .arrow {
+            font-size: 1.3rem;
+            transition: transform 0.3s;
+        }
+
+        .submit-btn:hover .arrow {
+            transform: translateX(6px);
         }
 
         #status-msg {
-            text-align: center;
-            margin: 60px 0;
-            font-size: 12px;
-            letter-spacing: 0.25em;
-            line-height: 2.2;
             display: none;
-            color: var(--accent-white);
-            animation: fadeIn 0.6s ease;
+            padding: 40px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            background-color: var(--text-main);
+            color: #ffffff;
+            border-top: 1px solid var(--border-color);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+        #status-msg span {
+            color: var(--accent-gray);
+            font-weight: 700;
+        }
+
+        /* Keyframes for Sequential Animations */
+        @keyframes logoFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gridDraw {
+            from {
+                opacity: 0;
+                transform: scaleY(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        @keyframes contentFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes menuSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .form-grid-2col,
+            .form-grid-3col,
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cell {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 18px 20px;
+            }
+
+            .cell:last-child {
+                border-bottom: none;
+            }
+
+            .brand-logo-img {
+                height: 40px;
+            }
+
+            .submit-btn {
+                max-width: 100%;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="contact-container">
-    <h2 data-i18n="header">Inquiry / 需求表單</h2>
-    
+<div class="industrial-wrapper">
+    <!-- Top Navigation Grid -->
+    <div class="grid-row nav-grid">
+        <div class="cell">
+            <div class="brand-logo">
+                <img src="https://xiaostudio.xyz/assets/images/Xiaostudio_logotype.svg" alt="Xiao Studio Logo" class="brand-logo-img" onerror="this.onerror=null; this.outerHTML='<span style=\'font-weight:900;letter-spacing:0.05em;\'>XIAO STUDIO</span>';">
+            </div>
+            <span class="cell-corner">⌟</span>
+        </div>
+        <div class="cell">
+            <div class="lang-switchers">
+                <button class="lang-btn active" onclick="changeLanguage('zh')">CH</button>
+                <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+                <button class="lang-btn" onclick="changeLanguage('ja')">JP</button>
+                <button class="lang-btn" onclick="changeLanguage('ko')">KR</button>
+                <button class="lang-btn" onclick="changeLanguage('fr')">FR</button>
+            </div>
+            <span class="cell-corner">⌟</span>
+        </div>
+    </div>
+
     <form id="contact-form" action="https://formspree.io/f/mreyrpjl" method="POST">
-        <div class="form-group">
-            <label data-i18n="labelName">Name / 姓名</label>
-            <input type="text" name="name" required placeholder="Your Name" data-i18n-placeholder="placeholderName">
+        
+        <!-- Row 1: Name & Email -->
+        <div class="grid-row form-grid-2col">
+            <div class="cell">
+                <div class="tag-label">
+                    <span data-i18n="labelName">01 // NAME 姓名</span>
+                    <span class="num">[REQUIRED]</span>
+                </div>
+                <input type="text" name="name" required placeholder="您的姓名 / 公司名稱" data-i18n-placeholder="placeholderName">
+                <span class="cell-corner">+</span>
+            </div>
+            <div class="cell">
+                <div class="tag-label">
+                    <span data-i18n="labelEmail">02 // EMAIL 電子郵件</span>
+                    <span class="num">[REQUIRED]</span>
+                </div>
+                <input type="email" name="email" required placeholder="jewuenxiao@gmail.com" data-i18n-placeholder="placeholderEmail">
+                <span class="cell-corner">+</span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label data-i18n="labelEmail">Email / 電子郵件</label>
-            <input type="email" name="email" required placeholder="jewuenxiao@gmail.com" data-i18n-placeholder="placeholderEmail">
+        <!-- Row 2: Service & Budget -->
+        <div class="grid-row form-grid-2col">
+            <div class="cell">
+                <div class="tag-label">
+                    <span data-i18n="labelService">03 // SERVICE 服務項目</span>
+                </div>
+                <div class="custom-select-wrapper" id="service-select-wrapper">
+                    <input type="hidden" name="service" id="input-service" value="Brand Visual Design">
+                    <button type="button" class="custom-select-trigger" id="service-trigger">
+                        <span class="selected-text" data-i18n="optBrandVisual">品牌視覺設計 Brand Visual Design</span>
+                        <span class="custom-select-arrow">▼</span>
+                    </button>
+                    <div class="custom-select-menu">
+                        <div class="custom-option selected" data-value="Brand Visual Design" data-i18n="optBrandVisual">品牌視覺設計 Brand Visual Design</div>
+                        <div class="custom-option" data-value="Brand Motion Production" data-i18n="optBrandMotion">品牌影音製作 Brand Motion Production</div>
+                        <div class="custom-option" data-value="Packaging Design" data-i18n="optPackaging">包裝設計 Packaging Design</div>
+                        <div class="custom-option" data-value="Web Design" data-i18n="optWebDesign">網頁設計 Web Design</div>
+                        <div class="custom-option" data-value="Others" data-i18n="optOthers">其他（書籍,海報,攝影等） Others</div>
+                    </div>
+                </div>
+                <span class="cell-corner">+</span>
+            </div>
+            <div class="cell">
+                <div class="tag-label">
+                    <span data-i18n="labelBudget">04 // BUDGET RANGE 預算區間</span>
+                </div>
+                <div class="custom-select-wrapper" id="budget-select-wrapper">
+                    <input type="hidden" name="budget" id="input-budget" value="30k-50k">
+                    <button type="button" class="custom-select-trigger" id="budget-trigger">
+                        <span class="selected-text" data-i18n="optBudget1">NT$ 30,000 - 50,000</span>
+                        <span class="custom-select-arrow">▼</span>
+                    </button>
+                    <div class="custom-select-menu">
+                        <div class="custom-option selected" data-value="30k-50k" data-i18n="optBudget1">NT$ 30,000 - 50,000</div>
+                        <div class="custom-option" data-value="50k-100k" data-i18n="optBudget2">NT$ 50,000 - 100,000</div>
+                        <div class="custom-option" data-value="100k-200k" data-i18n="optBudget3">NT$ 100,000 - 200,000</div>
+                        <div class="custom-option" data-value="200k+" data-i18n="optBudget4">NT$ 200,000 以上</div>
+                        <div class="custom-option" data-value="discuss" data-i18n="optBudgetDiscuss">尚未確認 / 需討論</div>
+                    </div>
+                </div>
+                <span class="cell-corner">+</span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label data-i18n="labelService">Service / 項目</label>
-            <select name="service">
-                <option value="Brand Visual Design" data-i18n="optBrandVisual">品牌視覺設計</option>
-                <option value="Brand Motion Production" data-i18n="optBrandMotion">品牌影音製作</option>
-                <option value="Packaging Design" data-i18n="optPackaging">包裝設計</option>
-                <option value="Web Design" data-i18n="optWebDesign">網頁設計</option>
-                <option value="Others" data-i18n="optOthers">其他（書籍,海報,攝影等）</option>
-            </select>
+        <!-- Row 3: Reference Links -->
+        <div class="grid-row form-grid-3col">
+            <div class="cell">
+                <div class="tag-label">
+                    <span data-i18n="labelRef">05 // REF LINK 01 參考範例</span>
+                </div>
+                <input type="url" name="ref_1" placeholder="https://..." data-i18n-placeholder="placeholderRef1">
+                <span class="cell-corner">+</span>
+            </div>
+            <div class="cell">
+                <div class="tag-label">
+                    <span>REF LINK 02</span>
+                </div>
+                <input type="url" name="ref_2" placeholder="https://..." data-i18n-placeholder="placeholderRef2">
+                <span class="cell-corner">+</span>
+            </div>
+            <div class="cell">
+                <div class="tag-label">
+                    <span>REF LINK 03</span>
+                </div>
+                <input type="url" name="ref_3" placeholder="https://..." data-i18n-placeholder="placeholderRef3">
+                <span class="cell-corner">+</span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label data-i18n="labelBudget">Budget / 預算區間</label>
-            <select name="budget">
-                <option value="30k-50k" data-i18n="optBudget1">NT$ 30,000 - 50,000</option>
-                <option value="50k-100k" data-i18n="optBudget2">NT$ 50,000 - 100,000</option>
-                <option value="100k-200k" data-i18n="optBudget3">NT$ 100,000 - 200,000</option>
-                <option value="200k+" data-i18n="optBudget4">NT$ 200,000 以上</option>
-                <option value="discuss" data-i18n="optBudgetDiscuss">尚未確認 / 需討論</option>
-            </select>
+        <!-- Row 4: Message Details -->
+        <div class="grid-row form-grid-1col">
+            <div class="cell">
+                <div class="tag-label">
+                    <span data-i18n="labelMessage">06 // PROJECT DETAILS 詳情描述</span>
+                </div>
+                <textarea name="message" rows="4" placeholder="請分享您的專案需求、預計時程與期待目標..." data-i18n-placeholder="placeholderMessage"></textarea>
+                <span class="cell-corner">+</span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label data-i18n="labelTimeline">Target Timeline / 預計完成時間</label>
-            <select name="timeline">
-                <option value="Within 1 month" data-i18n="optTimeline1">1 個月內 (急件)</option>
-                <option value="1-2 months" data-i18n="optTimeline2">1 - 2 個月</option>
-                <option value="2-3 months" data-i18n="optTimeline3">2 - 3 個月</option>
-                <option value="3+ months" data-i18n="optTimeline4">3 個月以上</option>
-                <option value="Flexible" data-i18n="optTimelineDiscuss">彈性 / 尚未確定</option>
-            </select>
+        <!-- Row 5: Submit Action -->
+        <div class="grid-row form-grid-1col">
+            <div class="cell submit-cell">
+                <button type="submit" id="submit-btn" class="submit-btn">
+                    <span id="btn-text" data-i18n="btnSubmit">SEND INQUIRY 送出需求</span>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label data-i18n="labelRef">Reference Links / 參考範例 (Max 3)</label>
-            <div class="sub-group"><input type="url" name="ref_1" placeholder="Link 01 - https://..." data-i18n-placeholder="placeholderRef1"></div>
-            <div class="sub-group"><input type="url" name="ref_2" placeholder="Link 02 - https://..." data-i18n-placeholder="placeholderRef2"></div>
-            <div class="sub-group"><input type="url" name="ref_3" placeholder="Link 03 - https://..." data-i18n-placeholder="placeholderRef3"></div>
-        </div>
-
-        <div class="form-group">
-            <label data-i18n="labelMessage">Message / 詳情</label>
-            <textarea name="message" rows="4" placeholder="Tell me about your project" data-i18n-placeholder="placeholderMessage"></textarea>
-        </div>
-
-        <button type="submit" id="submit-btn" class="submit-btn" data-i18n="btnSubmit">Send Inquiry</button>
     </form>
-    
+
+    <!-- Success / Error Status Display -->
     <div id="status-msg"></div>
 </div>
 
 <script>
     const dictionary = {
         zh: {
-            header: "INQUIRY / 需求表單",
-            labelName: "Name / 姓名",
-            placeholderName: "您的姓名",
-            labelEmail: "Email / 電子郵件",
+            header: "GET IN TOUCH",
+            tagLang: "LANG / 語言",
+            labelName: "01 // NAME 姓名",
+            placeholderName: "您的姓名 / 公司名稱",
+            labelEmail: "02 // EMAIL 電子郵件",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "Service / 項目",
-            optBrandVisual: "品牌視覺設計",
-            optBrandMotion: "品牌影音製作",
-            optPackaging: "包裝設計",
-            optWebDesign: "網頁設計",
-            optOthers: "其他（書籍,海報,攝影等）",
-            labelBudget: "Budget / 預算區間",
+            labelService: "03 // SERVICE 服務項目",
+            optBrandVisual: "品牌視覺設計 Brand Visual Design",
+            optBrandMotion: "品牌影音製作 Brand Motion Production",
+            optPackaging: "包裝設計 Packaging Design",
+            optWebDesign: "網頁設計 Web Design",
+            optOthers: "其他（書籍,海報,攝影等） Others",
+            labelBudget: "04 // BUDGET RANGE 預算區間",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 以上",
             optBudgetDiscuss: "尚未確認 / 需討論",
-            labelTimeline: "Target Timeline / 預計完成時間",
-            optTimeline1: "1 個月內 (急件)",
-            optTimeline2: "1 - 2 個月",
-            optTimeline3: "2 - 3 個月",
-            optTimeline4: "3 個月以上",
-            optTimelineDiscuss: "彈性 / 尚未確定",
-            labelRef: "Reference Links / 參考範例 (Max 3)",
-            placeholderRef1: "Link 01 - https://...",
-            placeholderRef2: "Link 02 - https://...",
-            placeholderRef3: "Link 03 - https://...",
-            labelMessage: "Message / 詳情",
-            placeholderMessage: "請描述您的專案需求與想法...",
-            btnSubmit: "SEND INQUIRY / 送出需求",
-            btnSending: "SENDING...",
+            labelRef: "05 // REF LINK 01 參考範例",
+            placeholderRef1: "https://...",
+            placeholderRef2: "https://...",
+            placeholderRef3: "https://...",
+            labelMessage: "06 // PROJECT DETAILS 詳情描述",
+            placeholderMessage: "請分享您的專案需求、預計時程與期待目標...",
+            btnSubmit: "SEND INQUIRY 送出需求",
+            btnSending: "SENDING IN PROGRESS...",
             btnError: "ERROR, TRY AGAIN",
-            statusSuccess: "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT.<br><br>感謝您的來信，我們將盡快與您聯繫。"
+            statusSuccess: "<span>THANK YOU.</span><br>YOUR INQUIRY HAS BEEN TRANSMITTED SUCCESSFULLY."
         },
         en: {
-            header: "INQUIRY",
-            labelName: "NAME",
-            placeholderName: "Your Name",
-            labelEmail: "EMAIL",
+            header: "GET IN TOUCH",
+            tagLang: "LANGUAGE",
+            labelName: "01 // NAME",
+            placeholderName: "Your Name / Organization",
+            labelEmail: "02 // EMAIL",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "SERVICE",
+            labelService: "03 // SERVICE",
             optBrandVisual: "Brand Visual Design",
             optBrandMotion: "Brand Motion Production",
             optPackaging: "Packaging Design",
             optWebDesign: "Web Design",
             optOthers: "Others (Books, Posters, Photo, etc.)",
-            labelBudget: "BUDGET RANGE",
+            labelBudget: "04 // BUDGET RANGE",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000+",
             optBudgetDiscuss: "To Be Discussed",
-            labelTimeline: "TARGET TIMELINE",
-            optTimeline1: "Within 1 Month (Urgent)",
-            optTimeline2: "1 - 2 Months",
-            optTimeline3: "2 - 3 Months",
-            optTimeline4: "3+ Months",
-            optTimelineDiscuss: "Flexible / To Be Discussed",
-            labelRef: "REFERENCE LINKS (MAX 3)",
-            placeholderRef1: "Link 01 - https://...",
-            placeholderRef2: "Link 02 - https://...",
-            placeholderRef3: "Link 03 - https://...",
-            labelMessage: "MESSAGE",
-            placeholderMessage: "Tell me about your project...",
+            labelRef: "05 // REF LINK 01",
+            placeholderRef1: "https://...",
+            placeholderRef2: "https://...",
+            placeholderRef3: "https://...",
+            labelMessage: "06 // PROJECT DETAILS",
+            placeholderMessage: "Tell me about your project scope, timeline, and goals...",
             btnSubmit: "SEND INQUIRY",
             btnSending: "SENDING...",
             btnError: "ERROR, TRY AGAIN",
-            statusSuccess: "THANK YOU.<br>YOUR MESSAGE HAS BEEN SENT."
+            statusSuccess: "<span>THANK YOU.</span><br>YOUR INQUIRY HAS BEEN TRANSMITTED SUCCESSFULLY."
         },
         ja: {
-            header: "お問い合わせ",
-            labelName: "お名前",
-            placeholderName: "山田 太郎",
-            labelEmail: "メールアドレス",
+            header: "GET IN TOUCH",
+            tagLang: "LANGUAGE / 言語",
+            labelName: "01 // NAME お名前",
+            placeholderName: "お名前をご入力ください",
+            labelEmail: "02 // EMAIL メール",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "サービス内容",
-            optBrandVisual: "ブランディング・ビジュアルデザイン",
-            optBrandMotion: "ブランド映像制作",
+            labelService: "03 // SERVICE サービス",
+            optBrandVisual: "ブランドビジュアルデザイン",
+            optBrandMotion: "ブランドモーション・映像制作",
             optPackaging: "パッケージデザイン",
             optWebDesign: "ウェブデザイン",
-            optOthers: "その他 (エディトリアル, ポスター, 撮影等)",
-            labelBudget: "予算感",
+            optOthers: "その他（書籍・ポスター・撮影など）",
+            labelBudget: "04 // BUDGET ご予算",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 以上",
-            optBudgetDiscuss: "未定 / 要相談",
-            labelTimeline: "納期希望",
-            optTimeline1: "1ヶ月以内（急募）",
-            optTimeline2: "1〜2ヶ月",
-            optTimeline3: "2〜3ヶ月",
-            optTimeline4: "3ヶ月以上",
-            optTimelineDiscuss: "柔軟に対応 / 未定",
-            labelRef: "参考リンク (最大3件)",
-            placeholderRef1: "リンク 01 - https://...",
-            placeholderRef2: "リンク 02 - https://...",
-            placeholderRef3: "リンク 03 - https://...",
-            labelMessage: "メッセージ詳細",
-            placeholderMessage: "プロジェクトの詳細をご記入ください...",
-            btnSubmit: "送信する",
-            btnSending: "送信中...",
-            btnError: "エラー。再試行してください",
-            statusSuccess: "ありがとうございます。<br>メッセージが送信されました。"
+            optBudgetDiscuss: "未定 / 相談したい",
+            labelRef: "05 // REF LINK 01 参考リンク",
+            placeholderRef1: "https://...",
+            placeholderRef2: "https://...",
+            placeholderRef3: "https://...",
+            labelMessage: "06 // DETAILS 詳細内容",
+            placeholderMessage: "プロジェクトの概要やご希望の納期をお知らせください...",
+            btnSubmit: "SEND INQUIRY 送信する",
+            btnSending: "SENDING...",
+            btnError: "ERROR, TRY AGAIN",
+            statusSuccess: "<span>THANK YOU.</span><br>メッセージが正常に送信されました。"
         },
         ko: {
-            header: "문의하기",
-            labelName: "성함",
-            placeholderName: "홍길동",
-            labelEmail: "이메일 주소",
+            header: "GET IN TOUCH",
+            tagLang: "LANGUAGE / 언어",
+            labelName: "01 // NAME 성함",
+            placeholderName: "성함을 입력해 주세요",
+            labelEmail: "02 // EMAIL 이메일",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "서비스 항목",
+            labelService: "03 // SERVICE 서비스",
             optBrandVisual: "브랜드 비주얼 디자인",
-            optBrandMotion: "브랜드 영상 제작",
+            optBrandMotion: "브랜드 모션/영상 제작",
             optPackaging: "패키지 디자인",
             optWebDesign: "웹 디자인",
-            optOthers: "기타 (포스터, 인쇄, 촬영 등)",
-            labelBudget: "예산 범위",
+            optOthers: "기타 (서적, 포스터, 사진 등)",
+            labelBudget: "04 // BUDGET 예산 범위",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 이상",
             optBudgetDiscuss: "미정 / 논의 필요",
-            labelTimeline: "희망 일정",
-            optTimeline1: "1개월 이내 (긴급)",
-            optTimeline2: "1 - 2개월",
-            optTimeline3: "2 - 3개월",
-            optTimeline4: "3개월 이상",
-            optTimelineDiscuss: "유동적 / 미정",
-            labelRef: "참고 링크 (최대 3개)",
-            placeholderRef1: "링크 01 - https://...",
-            placeholderRef2: "링크 02 - https://...",
-            placeholderRef3: "링크 03 - https://...",
-            labelMessage: "상세 내용",
-            placeholderMessage: "프로젝트에 대해 설명해주세요...",
-            btnSubmit: "문의 보내기",
-            btnSending: "전송 중...",
-            btnError: "오류 발생, 다시 시도해주세요",
-            statusSuccess: "감사합니다.<br>메시지가 성공적으로 전송되었습니다."
+            labelRef: "05 // REF LINK 01 참고 링크",
+            placeholderRef1: "https://...",
+            placeholderRef2: "https://...",
+            placeholderRef3: "https://...",
+            labelMessage: "06 // DETAILS 상세 내용",
+            placeholderMessage: "프로젝트 범위, 일정, 목표 등에 대해 알려주세요...",
+            btnSubmit: "SEND INQUIRY 문의 보내기",
+            btnSending: "SENDING...",
+            btnError: "ERROR, TRY AGAIN",
+            statusSuccess: "<span>THANK YOU.</span><br>문의가 성공적으로 전송되었습니다."
         },
         fr: {
-            header: "DEMANDE DE PROJET",
-            labelName: "NOM",
-            placeholderName: "Votre Nom",
-            labelEmail: "E-MAIL",
+            header: "GET IN TOUCH",
+            tagLang: "LANGUAGE",
+            labelName: "01 // NAME NOM",
+            placeholderName: "Votre nom / Organisation",
+            labelEmail: "02 // EMAIL E-MAIL",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "SERVICE",
+            labelService: "03 // SERVICE",
             optBrandVisual: "Design Visuel de Marque",
-            optBrandMotion: "Production Vidéo de Marque",
+            optBrandMotion: "Production Vidéo & Motion",
             optPackaging: "Design d'Emballage",
             optWebDesign: "Design Web",
-            optOthers: "Autres (Livres, Affiches, Photo, etc.)",
-            labelBudget: "FOURCHETTE DE BUDGET",
-            optBudget1: "NT$ 30 000 - 50 000",
-            optBudget2: "NT$ 50 000 - 100 000",
-            optBudget3: "NT$ 100 000 - 200 000",
-            optBudget4: "NT$ 200 000+",
-            optBudgetDiscuss: "À Discuter",
-            labelTimeline: "DÉLAI SOUHAITÉ",
-            optTimeline1: "Moins d'un mois (Urgent)",
-            optTimeline2: "1 à 2 mois",
-            optTimeline3: "2 à 3 mois",
-            optTimeline4: "Plus de 3 mois",
-            optTimelineDiscuss: "Flexible / À discuter",
-            labelRef: "LIENS DE RÉFÉRENCE (MAX 3)",
-            placeholderRef1: "Lien 01 - https://...",
-            placeholderRef2: "Lien 02 - https://...",
-            placeholderRef3: "Lien 03 - https://...",
-            labelMessage: "MESSAGE",
+            optOthers: "Autres (Livres, affiches, photo, etc.)",
+            labelBudget: "04 // BUDGET RANGE",
+            optBudget1: "NT$ 30,000 - 50,000",
+            optBudget2: "NT$ 50,000 - 100,000",
+            optBudget3: "NT$ 100,000 - 200,000",
+            optBudget4: "Plus de NT$ 200,000",
+            optBudgetDiscuss: "À discuter",
+            labelRef: "05 // REF LINK 01",
+            placeholderRef1: "https://...",
+            placeholderRef2: "https://...",
+            placeholderRef3: "https://...",
+            labelMessage: "06 // PROJECT DETAILS",
             placeholderMessage: "Parlez-moi de votre projet...",
-            btnSubmit: "ENVOYER LA DEMANDE",
-            btnSending: "ENVOI EN COURS...",
-            btnError: "ERREUR, RÉESSAYEZ",
-            statusSuccess: "MERCI.<br>VOTRE MESSAGE A ÉTÉ ENVOYÉ."
+            btnSubmit: "SEND INQUIRY ENVOYER",
+            btnSending: "SENDING...",
+            btnError: "ERROR, TRY AGAIN",
+            statusSuccess: "<span>MERCI.</span><br>VOTRE DEMANDE A ÉTÉ ENVOYÉE AVEC SUCCÈS."
         }
     };
 
     let currentLang = 'zh';
 
-    function applyLanguage(lang) {
-        let target = (lang || 'zh').toLowerCase();
-        if (target === 'jp') target = 'ja';
-        if (target === 'kr') target = 'ko';
-        if (!dictionary[target]) target = 'zh';
-
-        currentLang = target;
-        const dict = dictionary[currentLang];
-
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (dict[key]) {
-                el.innerHTML = dict[key];
-            }
-        });
-
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (dict[key]) {
-                el.placeholder = dict[key];
-            }
-        });
-    }
-
-    function detectLanguage() {
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const paramLang = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('l');
-            if (paramLang) return paramLang;
-        } catch (e) {}
-
-        const navLang = (navigator.language || '').toLowerCase();
-        if (navLang.startsWith('zh')) return 'zh';
-        if (navLang.startsWith('ja')) return 'ja';
-        if (navLang.startsWith('ko')) return 'ko';
-        if (navLang.startsWith('fr')) return 'fr';
-        if (navLang.startsWith('en')) return 'en';
-
+    function normalizeLang(lang) {
+        if (!lang) return 'zh';
+        const l = String(lang).toLowerCase().trim();
+        if (l.startsWith('ja') || l.startsWith('jp') || l === 'japanese') return 'ja';
+        if (l.startsWith('ko') || l.startsWith('kr') || l === 'korean') return 'ko';
+        if (l.startsWith('en') || l === 'english') return 'en';
+        if (l.startsWith('fr') || l === 'french') return 'fr';
+        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk') || l === 'chinese') return 'zh';
         return 'zh';
     }
 
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const statusMsg = document.getElementById('status-msg');
+    function changeLanguage(langKey) {
+        currentLang = normalizeLang(langKey);
+        const langData = dictionary[currentLang] || dictionary.zh;
 
-    form.addEventListener('submit', async function(e) {
+        // Update active class on top buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            if (btn.innerText.toLowerCase() === currentLang || (currentLang === 'ja' && btn.innerText.toLowerCase() === 'jp')) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Update inner text content
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (langData[key]) {
+                el.innerHTML = langData[key];
+            }
+        });
+
+        // Update input placeholders
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (langData[key]) {
+                el.placeholder = langData[key];
+            }
+        });
+    }
+
+    const form = document.getElementById("contact-form");
+    const statusMsg = document.getElementById("status-msg");
+    const btnText = document.getElementById("btn-text");
+    const submitBtn = document.getElementById("submit-btn");
+
+    form.onsubmit = async (e) => {
         e.preventDefault();
-        const dict = dictionary[currentLang] || dictionary.zh;
+        const activeDict = dictionary[currentLang] || dictionary.zh;
 
         submitBtn.disabled = true;
-        submitBtn.innerText = dict.btnSending;
+        btnText.innerText = activeDict.btnSending;
 
+        const data = new FormData(form);
         try {
             const response = await fetch(form.action, {
-                method: form.method,
-                body: new FormData(form),
-                headers: {
-                    'Accept': 'application/json'
-                }
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
-                form.style.display = 'none';
-                document.querySelector('h2').style.display = 'none';
-                statusMsg.innerHTML = dict.statusSuccess;
-                statusMsg.style.display = 'block';
-            } else {
-                throw new Error('Form submission failed');
+                form.style.display = "none";
+                statusMsg.style.display = "block";
+                statusMsg.innerHTML = activeDict.statusSuccess;
+            } else { 
+                throw new Error(); 
             }
         } catch (err) {
-            console.error('Submission Error:', err);
             submitBtn.disabled = false;
-            submitBtn.innerText = dict.btnError;
-            setTimeout(() => {
-                submitBtn.innerText = dict.btnSubmit;
-            }, 3000);
+            btnText.innerText = activeDict.btnError;
         }
-    });
+    };
 
+    // Listen for postMessage window communication
     window.addEventListener('message', (e) => {
         if (!e.data) return;
-        let lang = null;
-        if (typeof e.data === 'string') {
-            lang = e.data;
-        } else if (typeof e.data === 'object') {
-            if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE') {
-                lang = e.data.lang || e.data.language;
-            } else if (e.data.lang || e.data.language) {
-                lang = e.data.lang || e.data.language;
+        let data = e.data;
+
+        if (typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            } catch (err) {
+                changeLanguage(data);
+                return;
             }
         }
-        if (lang) applyLanguage(lang);
+
+        const targetLang = data.lang || data.language || data.locale || data.langKey;
+        if (targetLang) {
+            changeLanguage(targetLang);
+        } else if (data.type === 'LANGUAGE_CHANGE' && data.lang) {
+            changeLanguage(data.lang);
+        }
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-        applyLanguage(detectLanguage());
+    // Custom Select Dropdown behavior
+    document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+        const trigger = wrapper.querySelector('.custom-select-trigger');
+        const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+        const selectedText = wrapper.querySelector('.selected-text');
+        const options = wrapper.querySelectorAll('.custom-option');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                if (w !== wrapper) w.classList.remove('open');
+            });
+            wrapper.classList.toggle('open');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                options.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+
+                const val = opt.getAttribute('data-value');
+                hiddenInput.value = val;
+                
+                const i18nKey = opt.getAttribute('data-i18n');
+                if (i18nKey) {
+                    selectedText.setAttribute('data-i18n', i18nKey);
+                }
+                selectedText.innerHTML = opt.innerHTML;
+
+                wrapper.classList.remove('open');
+            });
+        });
+    });
+
+    // Close options on click outside
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
     });
 </script>
+
 </body>
 </html>
