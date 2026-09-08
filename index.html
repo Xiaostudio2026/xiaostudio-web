@@ -43,7 +43,7 @@
       }
     }
     </script>
-  
+
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -61,7 +61,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;400;700;800&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
         /* 禁止圖片與影片的長按快顯功能、拖曳與選擇 */
         img, video {
@@ -70,24 +70,31 @@
             -moz-user-drag: none;
             -o-user-drag: none;
             user-drag: none;
-            -webkit-touch-callout: none; /* 禁用 iOS 行動裝置長按彈出儲存圖片選單 */
+            -webkit-touch-callout: none;
             pointer-events: auto;
         }
 
         html {
             background-color: #000;
-            transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.3s ease;
+            font-size: 16px;
         }
+
+        /* 全站文字大小縮放類別 */
+        html.text-scale-125 { font-size: 20px !important; }
+        html.text-scale-150 { font-size: 24px !important; }
+        html.text-scale-200 { font-size: 32px !important; }
 
         /* 負片效果：轉換為反轉高對比度灰階 Mode */
         body.negative-mode #main-view,
         body.negative-mode nav,
         body.negative-mode .action-btn,
-        body.negative-mode #music-marquee-bar {
+        body.negative-mode #music-marquee-bar,
+        body.negative-mode #a11y-panel {
             filter: invert(1) grayscale(100%) contrast(140%) hue-rotate(180deg);
         }
 
-        /* 開開啟彈窗時保持專案真實色彩與品質 */
+        /* 開啟彈窗時保持專案真實色彩與品質 */
         #overlay-screen #overlay-container {
             filter: none !important;
         }
@@ -105,7 +112,6 @@
             user-select: none;
         }
         
-        /* 隱藏 SEO 標題 */
         .seo-hidden { 
             position: absolute; 
             width: 1px; 
@@ -139,7 +145,7 @@
             height: 100%; 
             background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); 
             background-size: 40px 40px; 
-            z-index: 1; 
+            z-index: 2; 
             pointer-events: none; 
         }
         
@@ -152,6 +158,7 @@
             z-index: 0; 
             filter: brightness(0.95) contrast(1.1); 
             background: #000;
+            transition: opacity 0.5s ease;
         }
 
         .video-background video { 
@@ -167,7 +174,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0; 
+            z-index: 1; 
             pointer-events: none;
         }
 
@@ -178,7 +185,7 @@
             width: 100%; 
             height: 100%; 
             background: radial-gradient(circle at center, transparent 25%, rgba(0,0,0,0.85) 100%); 
-            z-index: 1; 
+            z-index: 2; 
             pointer-events: none;
         }
         
@@ -206,15 +213,6 @@
         }
         .lang-btn.active { opacity: 1; font-weight: 700; }
         
-        /* 連結與按鈕旁箭頭指示圖示專用樣式 */
-        .link-arrow {
-            display: inline-block;
-            margin-left: 4px;
-            font-size: 0.85em;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            opacity: 0.7;
-        }
-
         .node-btn-text {
             display: inline-flex;
             align-items: center;
@@ -222,6 +220,7 @@
             font-size: 12px;
             line-height: 1.3;
             transition: opacity 0.3s ease;
+            white-space: nowrap;
         }
 
         .node-btn-text::after {
@@ -233,17 +232,13 @@
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
 
-        /* 懸停動態效果：箭頭向右上微幅跳動 */
         .workflow-node .node-box div:hover .node-btn-text::after,
         .node-btn-text:hover::after {
             transform: translate(3px, -3px);
             opacity: 1;
         }
 
-        /* 通用超連結（例如 Email 連結）箭頭效果 */
-        a {
-            transition: all 0.3s ease;
-        }
+        a { transition: all 0.3s ease; }
         a:not(.no-arrow)::after {
             content: " ↗";
             display: inline-block;
@@ -258,7 +253,7 @@
         }
 
         .dashboard-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
-        .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; }
+        .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; white-space: nowrap; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
         .node-box { 
             background: rgba(10, 10, 10, 0.8); 
@@ -269,10 +264,11 @@
             border-radius: 2px; 
             min-width: 175px; 
             line-height: 1.3; 
+            white-space: nowrap;
         }
         .node-box.special { border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.08); }
         .node-id { font-size: 11px; letter-spacing: 0.1em; line-height: 1; }
-        .node-label { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 8px; line-height: 1.3; }
+        .node-label { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 8px; line-height: 1.3; white-space: nowrap; }
         .status-indicator { width: 6px; height: 6px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
         @keyframes status-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
         .line-path { stroke: rgba(255, 255, 255, 0.6); stroke-width: 2; fill: none; }
@@ -283,7 +279,6 @@
         .carbon-dot { width: 4px; height: 4px; background: #fff; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; margin-right: 6px; }
         @keyframes blink { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.1; } }
         
-        /* Overlay Modals */
         #overlay-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0); z-index: 200; backdrop-filter: blur(0px); align-items: center; justify-content: center; transition: background 0.5s ease, backdrop-filter 0.5s ease; }
         #overlay-screen.active { display: flex; background: rgba(0,0,0,0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         #overlay-container { width: 100vw; height: 100vh; background: #000; position: relative; display: flex; flex-direction: column; overflow: hidden; will-change: transform, opacity; }
@@ -295,17 +290,12 @@
         
         .logo-container { position: relative; display: inline-flex; flex-direction: column; align-items: flex-start; }
         .logo-text { font-size: 1.725rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; line-height: 1.2; }
-        @media (min-width: 640px) {
-            .logo-text { font-size: 2.05rem; letter-spacing: 0.28em; }
-        }
-        @media (min-width: 768px) {
-            .logo-text { font-size: 2.75rem; letter-spacing: 0.35em; line-height: 1.3; }
-        }
+        @media (min-width: 640px) { .logo-text { font-size: 2.05rem; letter-spacing: 0.28em; } }
+        @media (min-width: 768px) { .logo-text { font-size: 2.75rem; letter-spacing: 0.35em; line-height: 1.3; } }
         .logo-underline { height: 3px; background-color: #fff; width: 36%; margin-top: 3px; }
-        @media (min-width: 768px) {
-            .logo-underline { height: 4px; margin-top: 4px; }
-        }
+        @media (min-width: 768px) { .logo-underline { height: 4px; margin-top: 4px; } }
         
+        /* 側邊功能按鈕維持圓形 */
         .action-btn { 
             position: fixed; 
             right: 20px; 
@@ -323,6 +313,10 @@
             cursor: pointer; 
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
             color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
             user-select: none;
         }
         .action-btn:hover {
@@ -341,12 +335,13 @@
         .audio-toggle { bottom: 20px; }
         .ai-toggle { bottom: 74px; }
         .negative-toggle { bottom: 128px; }
- 
+        .magnifier-toggle { bottom: 182px; }
+
         #visualizer { 
             width: 90vw; 
-            max-width: 1400px; 
-            height: 90px; 
-            margin-top: 15px; 
+            max-width: 1500px; 
+            height: 120px; 
+            margin-top: -15px; 
             display: block; 
             filter: brightness(1.4) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5)); 
             mix-blend-mode: screen; 
@@ -362,53 +357,128 @@
             opacity: 0.5;
         }
 
+        /* 底部整合播放器與跑馬燈列：控制區無外框 */
         #music-marquee-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 40px;
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            height: 52px;
+            background: rgba(5, 5, 5, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1px solid rgba(255, 255, 255, 0.22);
             z-index: 120;
             display: flex;
             align-items: center;
             overflow: hidden;
-            pointer-events: none;
+            pointer-events: auto;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        #music-marquee-bar.active {
-            transform: translateY(0);
+        #music-marquee-bar.active { transform: translateY(0); }
+
+        .integrated-bar-inner {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 0 16px;
+            gap: 12px;
+        }
+
+        /* 音樂控制區：取消外框 (border: none)，黑底加大圖示，hover 時反白（白底黑字） */
+        .bar-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            z-index: 10;
+            background: rgba(5, 5, 5, 0.95);
+            padding-right: 10px;
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .bar-btn {
+            background: #000;
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bar-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        .bar-btn:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        }
+
+        .bar-btn-play {
+            width: 44px;
+            height: 36px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 0px;
+        }
+        .bar-btn-play svg {
+            width: 20px;
+            height: 20px;
+        }
+        .bar-btn-play:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.03);
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 跑馬燈內容區塊 */
+        .marquee-container {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            position: relative;
+            max-width: calc(100% - 300px);
+        }
+        @media (max-width: 768px) {
+            .marquee-container { max-width: calc(100% - 160px); }
         }
 
         .marquee-track {
             display: flex;
             white-space: nowrap;
             will-change: transform;
-            animation: marquee-scroll 18s linear infinite;
+            animation: marquee-scroll 24s linear infinite;
         }
 
         .marquee-item {
             display: flex;
             align-items: center;
             font-family: 'Barlow', sans-serif;
-            font-size: 13px;
-            letter-spacing: 0.2em;
+            font-size: 11px;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.85);
             padding-right: 60px;
         }
 
         .marquee-icon {
-            width: 8px;
-            height: 8px;
+            width: 5px;
+            height: 5px;
             background: #fff;
             border-radius: 50%;
-            margin-right: 12px;
+            margin-right: 8px;
             box-shadow: 0 0 6px rgba(255,255,255,0.8);
             animation: blink 1.2s infinite;
         }
@@ -418,24 +488,89 @@
             100% { transform: translateX(-50%); }
         }
 
+        /* Overlay 頂部導覽列跑馬燈 */
+        .nav-marquee-container {
+            width: 140px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        @media (min-width: 640px) {
+            .nav-marquee-container { width: 220px; }
+        }
+        @media (min-width: 1024px) {
+            .nav-marquee-container { width: 320px; }
+        }
+
+        .nav-marquee-track {
+            display: flex;
+            white-space: nowrap;
+            will-change: transform;
+            animation: marquee-scroll 12s linear infinite;
+        }
+
+        /* 右側音量與控制區（包含加長的方格音量條） */
+        .bar-extras {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            z-index: 10;
+            background: rgba(5, 5, 5, 0.95);
+            padding-left: 10px;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .bar-time {
+            font-family: 'Barlow', sans-serif;
+            font-size: 10px;
+            opacity: 0.6;
+            font-variant-numeric: tabular-nums;
+            display: none;
+        }
+        @media (min-width: 1024px) {
+            .bar-time { display: inline-block; }
+        }
+
+        /* 加長方格音量條 */
+        .grid-volume-bar {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .volume-cell {
+            width: 4px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0px;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .volume-cell.active {
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+        }
+
         .hero-text {
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             margin-left: 30px;
         }
 
-        body.music-active .hero-text {
-            transform: translateY(-44px);
-        }
+        body.music-active .hero-text { transform: translateY(-40px); }
 
         @media (max-width: 768px) {
-            #visualizer { width: 80vw; width-max: 400px;height: 45px; }
+            #visualizer { width: 400px; height: 45px; }
             .node-box { min-width: 160px; padding: 12px 14px; }
             .node-id { font-size: 12px; }
             .node-label { font-size: 15px; gap: 7px; }
             .node-btn-text { font-size: 13px; }
-            .hero-text { bottom: 16px !important; left: 20px !important; right: 20px; }
+            .hero-text { bottom: 24px !important; left: 20px !important; right: 20px; }
             .hero-text h2 { font-size: 2.5rem !important; line-height: 1.25 !important; }
-            .marquee-item { font-size: 12px; letter-spacing: 0.15em; }
+            .marquee-item { font-size: 10px; letter-spacing: 0.1em; }
         }   
 
         .ai-iframe-wrapper {
@@ -470,6 +605,105 @@
             .ai-iframe { margin-top: -50px !important; height: calc(100% + 100px) !important; }
             .action-btn { z-index: 150 !important; }
         }
+
+        #reading-guide-line {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            width: 100vw;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            z-index: 9990;
+            display: none;
+            transform: translateY(-50%);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        #a11y-panel {
+            position: fixed;
+            bottom: 235px;
+            right: 20px;
+            width: 280px;
+            background: rgba(12, 12, 15, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 16px;
+            z-index: 160;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.15);
+            display: none;
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #fff;
+        }
+
+        #a11y-panel.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .a11y-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .a11y-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .a11y-row label { opacity: 0.85; font-size: 11px; letter-spacing: 0.05em; }
+        .a11y-btn-group { display: flex; gap: 4px; }
+
+        .a11y-option-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .a11y-option-btn:hover, .a11y-option-btn.active {
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+            border-color: #fff;
+            box-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.2); transition: .3s; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px;
+            background-color: white; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #fff; }
+        input:checked + .slider:before { transform: translateX(18px); background-color: #000; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -478,16 +712,14 @@
     <h2 class="seo-hidden">視覺設計、網頁設計、動態設計、印刷包裝</h2>
 
     <nav class="fixed top-0 w-full z-[100] p-4 md:p-14 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-2 md:gap-0">
-        <!-- 手機版：標題與語言切換同列，碳排放量位於下方 -->
         <div class="w-full md:w-auto flex flex-row items-center justify-between md:justify-start gap-4">
             <div class="logo-container pointer-events-auto cursor-pointer" onclick="window.location.reload()">
                 <span class="logo-text">XIAOSTUDIO</span>
                 <div class="logo-underline"></div>
             </div>
 
-            <!-- 手機版右側語言切換列 (< md 顯示) -->
             <div class="lang-switcher mono md:hidden">
-                <span class="lang-btn" data-lang="zh">ZH</span>
+                <span class="lang-btn" data-lang="zh">CH</span>
                 <span class="lang-btn active" data-lang="en">EN</span>
                 <span class="lang-btn" data-lang="jp">JP</span>
                 <span class="lang-btn" data-lang="kr">KR</span>
@@ -496,9 +728,8 @@
         </div>
         
         <div class="flex flex-col items-start md:items-end gap-1 md:gap-2 w-full md:w-auto">
-            <!-- 桌面版語言切換列 (≥ md 顯示) -->
             <div class="lang-switcher mono hidden md:flex">
-                <span class="lang-btn" data-lang="zh">ZH</span>
+                <span class="lang-btn" data-lang="zh">CH</span>
                 <span class="lang-btn active" data-lang="en">EN</span>
                 <span class="lang-btn" data-lang="jp">JP</span>
                 <span class="lang-btn" data-lang="kr">KR</span>
@@ -516,15 +747,14 @@
     </nav>
 
     <div class="section" id="main-view">
-        <!-- 後備 HTML5 Video 播放器 -->
         <div class="video-background" id="fallback-bg">
-            <video id="bgVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
+            <video id="bgVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" crossorigin="anonymous" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
                 <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
             </video>
         </div>
 
         <video id="textureVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" crossorigin="anonymous" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
-            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4" type="video/mp4">
+            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4?gl=1" type="video/mp4">
         </video>
         
         <canvas id="webgl-canvas"></canvas>
@@ -565,30 +795,82 @@
                 <p class="text-[12px] mono tracking-[0.1em] uppercase opacity-60">© 2026 XIAOSTUDIO</p>
                 <div class="wave-label text-[10px]">Signal: Granular_v5.2</div>
             </div>
-            <canvas id="visualizer"</canvas>
+            <canvas id="visualizer"></canvas>
         </div>
     </div>
 
-    <!-- 音樂跑馬燈播放條 -->
+    <!-- 底部整合播放器與跑馬燈列 (取消按鈕外框、無圓角矩形) -->
     <div id="music-marquee-bar">
-        <div class="marquee-track" id="marquee-track">
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
-            <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
+        <div class="integrated-bar-inner">
+            <!-- 左側播放控制按鈕（取消外框、黑底加大圖示、hover反白） -->
+            <div class="bar-controls">
+                <button class="bar-btn" id="btn-prev-track" title="Previous Track">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                <button class="bar-btn bar-btn-play" id="btn-play-pause" title="Play/Pause">
+                    <svg id="svg-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button class="bar-btn" id="btn-next-track" title="Next Track">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                </button>
+            </div>
+
+            <!-- 中間滾動跑馬燈 -->
+            <div class="marquee-container">
+                <div class="marquee-track" id="marquee-track">
+                    <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>Composed by xiaostudio · Generated via Suno AI</div>
+                </div>
+            </div>
+
+            <!-- 右側加長方格音量調節條與時間 -->
+            <div class="bar-extras">
+                <span id="player-time-curr" class="bar-time">0:00</span>
+                <span class="bar-time">/</span>
+                <span id="player-time-dur" class="bar-time">0:00</span>
+                <div class="flex items-center gap-1.5 bg-black/40 px-2 py-1 border border-white/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="opacity-70"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    <!-- 20格加長方格音量調節條 -->
+                    <div class="grid-volume-bar" id="grid-volume-bar" title="音量控制">
+                        <!-- 動態產生 20 格 -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="overlay-screen" onclick="hideOverlay()">
         <div id="overlay-container" onclick="event.stopPropagation()">
             <div id="overlay-nav" class="relative w-full flex-shrink-0 flex justify-between items-center p-4 md:p-6 border-b border-white/10 bg-black/90 backdrop-blur-md z-50">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 sm:gap-4">
                     <span class="status-indicator"></span>
-                    <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white">Pipeline System</span>
+                    <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white hidden sm:inline">Pipeline System</span>
+                    
+                    <!-- 頂部 Pipeline System 音訊播放模組：音樂控制區右側包含動態跑馬燈 -->
+                    <div id="nav-mini-player" class="flex items-center gap-2 border-l border-white/20 pl-3 mono text-[13px] text-white/80">
+                        <!-- 音樂控制區按鈕 -->
+                        <div class="flex items-center gap-1 flex-shrink-0">
+                            <button id="nav-btn-prev" class="p-1 hover:text-white opacity-70 hover:opacity-100 transition-opacity" title="Previous Track">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                            </button>
+                            <button id="nav-btn-play-pause" class="p-1 hover:text-white opacity-70 hover:opacity-100 transition-opacity" title="Play/Pause">
+                                <svg id="nav-svg-play-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            </button>
+                            <button id="nav-btn-next" class="p-1 hover:text-white opacity-70 hover:opacity-100 transition-opacity" title="Next Track">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- 音樂控制區右邊：歌曲名稱跑馬燈 -->
+                        <div class="nav-marquee-container">
+                            <div class="nav-marquee-track" id="nav-marquee-track">
+                                <span class="pr-6 uppercase tracking-wider text-[11px] sm:text-[12px] opacity-90">NOW PLAYING: Liquid Lobby Loop · xiaostudio</span>
+                                <span class="pr-6 uppercase tracking-wider text-[11px] sm:text-[12px] opacity-90">NOW PLAYING: Liquid Lobby Loop · xiaostudio</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="btn-close" class="px-5 py-2 text-[10px] font-bold tracking-[0.3em] uppercase cursor-pointer mono bg-white text-black hover:bg-gray-200 transition-all rounded-sm flex items-center gap-1" onclick="hideOverlay()">Close <span class="text-[12px] font-normal">✕</span></div>
             </div>
@@ -596,37 +878,67 @@
         </div>
     </div>
 
-    <!-- 右下角操作按鈕區：負片切換（黑白半圓圖示）、AI助理（對話框圖示）、音樂控制 -->
+    <div id="reading-guide-line"></div>
+
+    <div id="a11y-panel" class="mono">
+        <div class="a11y-title">
+            <span id="lbl-a11y-title">A11Y ACCESSIBILITY</span>
+        </div>
+
+        <div class="a11y-row">
+            <label id="lbl-text-size">TEXT SCALE</label>
+            <div class="a11y-btn-group">
+                <button class="a11y-option-btn text-scale-btn active" data-scale="100">100%</button>
+                <button class="a11y-option-btn text-scale-btn" data-scale="125">125%</button>
+                <button class="a11y-option-btn text-scale-btn" data-scale="150">150%</button>
+                <button class="a11y-option-btn text-scale-btn" data-scale="200">200%</button>
+            </div>
+        </div>
+
+        <div class="a11y-row">
+            <label id="lbl-reading-guide">READING GUIDE</label>
+            <label class="switch">
+                <input type="checkbox" id="guide-toggle-input">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- 側邊功能按鈕維持圓形 -->
+    <button id="magnifierToggle" class="action-btn magnifier-toggle" aria-label="Toggle Accessibility Settings" title="Text Scale & Accessibility">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="12" r="4"></circle>
+            <circle cx="18" cy="12" r="4"></circle>
+            <path d="M10 12h4"></path>
+            <path d="M2 12h0.5"></path>
+            <path d="M21.5 12h0.5"></path>
+        </svg>
+    </button>
+
     <button id="negativeToggle" class="action-btn negative-toggle" aria-label="Toggle Negative Effect" title="Negative Mode">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 3v18"></path>
             <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
         </svg>
     </button>
 
     <button id="aiToggle" class="action-btn ai-toggle" aria-label="Open AI Assistant" title="AI Assistant" onclick="showOverlay('ai')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
     </button>
 
-    <button id="audioToggle" class="action-btn audio-toggle" aria-label="Toggle Music" title="Toggle Music">
+    <button id="audioToggle" class="action-btn audio-toggle" aria-label="Toggle Music">
         <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
     </button>
 
     <script>
-        
-        // -------------------------------------------------------------
-        // 防下載與防儲存保護機制 (Anti-Download Protection System)
-        // -------------------------------------------------------------
-        
-        // 1. 全局及針對圖片與影片禁止滑鼠右鍵快顯選單
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
         }, false);
 
-        // 2. 禁止圖片與影片滑鼠拖曳下載
         document.addEventListener('dragstart', function(e) {
             if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO' || e.target.closest('img') || e.target.closest('video')) {
                 e.preventDefault();
@@ -634,15 +946,8 @@
             }
         }, false);
 
-        // 3. 攔截常用儲存/下載快捷鍵 (Ctrl+S / Cmd+S / Ctrl+U)
         document.addEventListener('keydown', function(e) {
-            // 攔截 Ctrl + S / Cmd + S (網頁另存新檔)
-            if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
-                e.preventDefault();
-                return false;
-            }
-            // 攔截 Ctrl + U / Cmd + U (查看原始碼)
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U')) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
                 e.preventDefault();
                 return false;
             }
@@ -651,6 +956,46 @@
         let audioCtx, analyser, source, dataArray;
         let particleHistory = [];
         let isPlaying = false;
+
+         const playlist = [
+            {
+                title: "Liquid Lobby Loop",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1777020592/Liquid_Lobby_Loop_Edit_hqoh72.mp3"
+            },
+            {
+                title: "Flow As Liquid",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518848/Xiaostudio_mixdown_V2_lopypg.mp3"
+            },
+
+            {
+                title: "Intro",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Intro_spxbdt.mp3"
+            },
+            {
+                title: "Liquid Lobby Loop",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518836/Xiaostudio_Lift_x_Mashup_cofnvw.mp3"
+            },
+            {
+                title: "Liquid Lobby Loop",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518854/Xiaostudio_Lift_V3_gfc4jf.mp3"
+            },
+               {
+                title: "Liquid Lobby Loop",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Drift_V2_ktldo4.mp3"
+            },
+            {
+                title: "Liquid Lobby Loop",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518859/Xiaostudio_mixdown_5_omzsdt.mp3"
+            },
+        ];
+        let currentTrackIndex = 0;
 
         function initAudio() {
             if (audioCtx) return;
@@ -669,6 +1014,52 @@
                 console.log("Audio API not supported or blocked", e);
             }
             renderVisualizer();
+        }
+
+        function loadTrack(index) {
+            currentTrackIndex = (index + playlist.length) % playlist.length;
+            const track = playlist[currentTrackIndex];
+            const bgAudio = document.getElementById('bgAudio');
+            
+            if (bgAudio) {
+                const wasPlaying = !bgAudio.paused;
+                bgAudio.src = track.src;
+                bgAudio.load();
+                
+                updateMarqueeText(track.title, track.artist);
+
+                if (wasPlaying || isPlaying) {
+                    playAudio();
+                }
+            }
+        }
+
+        function updateMarqueeText(trackTitle, trackArtist) {
+            const marqueeTrack = document.getElementById('marquee-track');
+            const navMarqueeTrack = document.getElementById('nav-marquee-track');
+            const t = translations[currentLang] || translations.en;
+            
+            const titleStr = trackTitle || playlist[currentTrackIndex].title;
+            const artistStr = trackArtist || playlist[currentTrackIndex].artist;
+            
+            if (marqueeTrack) {
+                const playingMsg = `NOW PLAYING:《${titleStr}》Flow as Liquid · Roll with the Form`;
+                const compMsg = t.composedBy || "Composed by xiaostudio";
+                marqueeTrack.innerHTML = `
+                    <div class="marquee-item"><span class="marquee-icon"></span>${playingMsg}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${compMsg}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${playingMsg}</div>
+                    <div class="marquee-item"><span class="marquee-icon"></span>${compMsg}</div>
+                `;
+            }
+
+            if (navMarqueeTrack) {
+                const navMsg = `NOW PLAYING: ${titleStr} · ${artistStr}`;
+                navMarqueeTrack.innerHTML = `
+                    <span class="pr-6 uppercase tracking-wider text-[11px] sm:text-[12px] opacity-90">${navMsg}</span>
+                    <span class="pr-6 uppercase tracking-wider text-[11px] sm:text-[12px] opacity-90">${navMsg}</span>
+                `;
+            }
         }
 
         function renderVisualizer() {
@@ -724,7 +1115,10 @@
                 pipelineTitle: "系統管道",
                 carbon: "全球累計二氧化碳排放量 (公噸)",
                 nowPlaying: "正在播放：《Liquid Lobby Loop》流動如液 隨形而舞 旋轉於世",
-                composedBy: "作曲：xiaostudio ｜ Suno AI 生成"
+                composedBy: "作曲：xiaostudio ｜ Suno AI 生成",
+                a11yTitle: "無障礙網頁空間",
+                textSize: "文字縮放",
+                readingGuide: "閱讀聚焦線"
             },
             en: {
                 hero: 'Flow as Fluid<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">Roll with the Form</span>',
@@ -744,7 +1138,10 @@
                 pipelineTitle: "Pipeline System",
                 carbon: "Cumulative Global CO2 Emissions (Tons)",
                 nowPlaying: "NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World",
-                composedBy: "Composed by xiaostudio · Generated via Suno AI"
+                composedBy: "Composed by xiaostudio · Generated via Suno AI",
+                a11yTitle: "A11Y ACCESSIBILITY",
+                textSize: "TEXT SCALE",
+                readingGuide: "READING GUIDE"
             },
             jp: {
                 hero: '流れる律動<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">形に従う</span>',
@@ -764,7 +1161,10 @@
                 pipelineTitle: "パイプラインシステム",
                 carbon: "世界の累積二酸化炭素排出量 (トン)",
                 nowPlaying: "再生中：《Liquid Lobby Loop》液体のように流れ 形に従い 世界を巡る",
-                composedBy: "作曲：xiaostudio ｜ Suno AI 作成"
+                composedBy: "作曲：xiaostudio ｜ Suno AI 作成",
+                a11yTitle: "アクセシビリティ",
+                textSize: "文字サイズ",
+                readingGuide: "ガイドライン"
             },
             kr: {
                 hero: '유체의 흐름<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">형태를 따르다</span>',
@@ -784,7 +1184,10 @@
                 pipelineTitle: "파이프라인 시스템",
                 carbon: "전 세계 누적 이산화탄소 배출량 (톤)",
                 nowPlaying: "재생 중: 《Liquid Lobby Loop》 유체처럼 흘러 형태를 따르고 세상으로 회전하다",
-                composedBy: "작곡: xiaostudio ｜ Suno AI 생성"
+                composedBy: "작곡: xiaostudio ｜ Suno AI 생성",
+                a11yTitle: "접근성 도구",
+                textSize: "텍스트 크기",
+                readingGuide: "가이드 라인"
             },
             fr: {
                 hero: 'Flux Liquide<br><span class="inline-block pl-8 md:pl-16 whitespace-nowrap">Suivre la Forme</span>',
@@ -804,7 +1207,10 @@
                 pipelineTitle: "Système Pipeline",
                 carbon: "Émissions mondiales de CO2 cumulées (Tonnes)",
                 nowPlaying: "LECTURE EN COURS : 《Liquid Lobby Loop》 Couler comme du liquide · Suivre la forme · Tourner dans le monde",
-                composedBy: "Composé par xiaostudio · Généré via Suno AI"
+                composedBy: "Composé par xiaostudio · Généré via Suno AI",
+                a11yTitle: "ACCESSIBILITÉ A11Y",
+                textSize: "TAILLE TEXTE",
+                readingGuide: "GUIDE DE LECTURE"
             }
         };
 
@@ -812,18 +1218,218 @@
         const audioBtn = document.getElementById('audioToggle');
         const audioIcon = document.getElementById('audioIcon');
         const negativeBtn = document.getElementById('negativeToggle');
+        const magnifierBtn = document.getElementById('magnifierToggle');
+        const a11yPanel = document.getElementById('a11y-panel');
         const musicMarqueeBar = document.getElementById('music-marquee-bar');
         const bgAudio = document.getElementById('bgAudio');
-        const bgVideo = document.getElementById('bgVideo');
         let isMuted = true;
         let isNegative = false;
 
-        /* 負片效果切換 */
         negativeBtn.addEventListener('click', () => {
             isNegative = !isNegative;
             document.body.classList.toggle('negative-mode', isNegative);
             negativeBtn.classList.toggle('active', isNegative);
         });
+
+        magnifierBtn.addEventListener('click', () => {
+            const isActive = a11yPanel.classList.contains('active');
+            a11yPanel.classList.toggle('active', !isActive);
+            magnifierBtn.classList.toggle('active', !isActive);
+        });
+
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const prevTrackBtn = document.getElementById('btn-prev-track');
+        const nextTrackBtn = document.getElementById('btn-next-track');
+        const timeCurr = document.getElementById('player-time-curr');
+        const timeDur = document.getElementById('player-time-dur');
+        const svgPlayIcon = document.getElementById('svg-play-icon');
+
+        // 初始化 20 格加長方格音量條
+        const totalVolumeCells = 20;
+        const gridVolumeBar = document.getElementById('grid-volume-bar');
+        const volumeCells = [];
+
+        if (gridVolumeBar) {
+            for (let i = 0; i < totalVolumeCells; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'volume-cell';
+                if (i < Math.floor(totalVolumeCells * 0.8)) {
+                    cell.classList.add('active');
+                }
+                cell.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const newVolume = (i + 1) / totalVolumeCells;
+                    setVolume(newVolume);
+                });
+                gridVolumeBar.appendChild(cell);
+                volumeCells.push(cell);
+            }
+        }
+
+        function setVolume(val) {
+            if (bgAudio) bgAudio.volume = Math.max(0, Math.min(1, val));
+            const activeCount = Math.round(val * totalVolumeCells);
+            volumeCells.forEach((cell, idx) => {
+                if (idx < activeCount) {
+                    cell.classList.add('active');
+                } else {
+                    cell.classList.remove('active');
+                }
+            });
+        }
+
+        if (gridVolumeBar) {
+            let isDraggingVol = false;
+            const updateVolFromCoord = (clientX) => {
+                const rect = gridVolumeBar.getBoundingClientRect();
+                const x = clientX - rect.left;
+                const pct = Math.max(0, Math.min(1, x / rect.width));
+                setVolume(pct);
+            };
+
+            gridVolumeBar.addEventListener('mousedown', (e) => {
+                isDraggingVol = true;
+                updateVolFromCoord(e.clientX);
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (isDraggingVol) updateVolFromCoord(e.clientX);
+            });
+            window.addEventListener('mouseup', () => { isDraggingVol = false; });
+
+            gridVolumeBar.addEventListener('touchstart', (e) => {
+                isDraggingVol = true;
+                updateVolFromCoord(e.touches[0].clientX);
+            });
+            window.addEventListener('touchmove', (e) => {
+                if (isDraggingVol && e.touches[0]) updateVolFromCoord(e.touches[0].clientX);
+            });
+            window.addEventListener('touchend', () => { isDraggingVol = false; });
+        }
+
+        function formatTime(sec) {
+            if (isNaN(sec)) return "0:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function playAudio() {
+            initAudio();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            bgAudio.muted = false;
+            isMuted = false;
+            bgAudio.play().then(() => {
+                isPlaying = true;
+                if (musicMarqueeBar) musicMarqueeBar.classList.add('active');
+                document.body.classList.add('music-active');
+                audioBtn.classList.add('active');
+                updatePlayStateUI(true);
+            }).catch(e => console.log("Play audio failed:", e));
+        }
+
+        function pauseAudio() {
+            bgAudio.pause();
+            isPlaying = false;
+            updatePlayStateUI(false);
+        }
+
+        function toggleAudioState() {
+            if (isPlaying) {
+                pauseAudio();
+            } else {
+                playAudio();
+            }
+        }
+
+        function updatePlayStateUI(playing) {
+            if (svgPlayIcon) {
+                if (playing) {
+                    svgPlayIcon.innerHTML = `<rect x="6" y="4" width="3.5" height="16"/><rect x="14.5" y="4" width="3.5" height="16"/>`;
+                } else {
+                    svgPlayIcon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`;
+                }
+            }
+            const navSvgPlayIcon = document.getElementById('nav-svg-play-icon');
+            if (navSvgPlayIcon) {
+                if (playing) {
+                    navSvgPlayIcon.innerHTML = `<rect x="6" y="4" width="3.5" height="16"/><rect x="14.5" y="4" width="3.5" height="16"/>`;
+                } else {
+                    navSvgPlayIcon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`;
+                }
+            }
+            if (audioIcon) {
+                if (playing) {
+                    audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
+                } else {
+                    audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
+                }
+            }
+        }
+
+        if (bgAudio) {
+            bgAudio.addEventListener('timeupdate', () => {
+                if (bgAudio.duration) {
+                    if (timeCurr) timeCurr.innerText = formatTime(bgAudio.currentTime);
+                    if (timeDur) timeDur.innerText = formatTime(bgAudio.duration);
+                }
+            });
+
+            bgAudio.addEventListener('ended', () => {
+                loadTrack(currentTrackIndex + 1);
+            });
+        }
+
+        if (playPauseBtn) playPauseBtn.addEventListener('click', toggleAudioState);
+        if (prevTrackBtn) prevTrackBtn.addEventListener('click', () => loadTrack(currentTrackIndex - 1));
+        if (nextTrackBtn) nextTrackBtn.addEventListener('click', () => loadTrack(currentTrackIndex + 1));
+
+        const navPlayPauseBtn = document.getElementById('nav-btn-play-pause');
+        const navPrevTrackBtn = document.getElementById('nav-btn-prev');
+        const navNextTrackBtn = document.getElementById('nav-btn-next');
+
+        if (navPlayPauseBtn) navPlayPauseBtn.addEventListener('click', toggleAudioState);
+        if (navPrevTrackBtn) navPrevTrackBtn.addEventListener('click', () => loadTrack(currentTrackIndex - 1));
+        if (navNextTrackBtn) navNextTrackBtn.addEventListener('click', () => loadTrack(currentTrackIndex + 1));
+
+        audioBtn.addEventListener('click', () => {
+            initAudio();
+            const isBarActive = musicMarqueeBar.classList.contains('active');
+            if (!isBarActive) {
+                musicMarqueeBar.classList.add('active');
+                playAudio();
+            } else {
+                toggleAudioState();
+            }
+        });
+
+        const guideInput = document.getElementById('guide-toggle-input');
+        const readingGuideLine = document.getElementById('reading-guide-line');
+
+        if (guideInput) {
+            guideInput.addEventListener('change', (e) => {
+                readingGuideLine.style.display = e.target.checked ? 'block' : 'none';
+            });
+        }
+
+        document.querySelectorAll('.text-scale-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.text-scale-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const scale = btn.getAttribute('data-scale');
+                document.documentElement.classList.remove('text-scale-110', 'text-scale-125', 'text-scale-150', 'text-scale-200');
+                if (scale !== '100') {
+                    document.documentElement.classList.add(`text-scale-${scale}`);
+                }
+            });
+        });
+
+        function handlePointerMove(clientX, clientY) {
+            if (readingGuideLine && guideInput && guideInput.checked) {
+                readingGuideLine.style.top = clientY + 'px';
+            }
+        }
 
         const carbonValueEl = document.getElementById('carbon-value');
         const annualEmissions = 40000000000; 
@@ -841,51 +1447,16 @@
         }
         updateCarbonCounter();
 
-        audioBtn.addEventListener('click', () => {
-            initAudio();
-            
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            isMuted = !isMuted;
-            bgAudio.muted = isMuted;
-
-            if (!isMuted) {
-                bgAudio.play().then(() => {
-                    isPlaying = true;
-                    if (musicMarqueeBar) musicMarqueeBar.classList.add('active');
-                    document.body.classList.add('music-active');
-                }).catch(e => console.log("Play audio failed:", e));
-                if (audioIcon) {
-                    audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>`;
-                }
-            } else {
-                bgAudio.pause();
-                isPlaying = false;
-                if (musicMarqueeBar) musicMarqueeBar.classList.remove('active');
-                document.body.classList.remove('music-active');
-                if (audioIcon) {
-                    audioIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>`;
-                }
-            }
-        });
-
-        // -------------------------------------------------------------
-        // 語言同步機制：同步更新主頁面及開啟中的 iframe
-        // -------------------------------------------------------------
         function syncIframeLanguage(lang) {
             const iframe = document.getElementById('overlay-iframe-container');
             if (!iframe || !iframe.contentWindow) return;
 
             try {
-                // 1. 跨網域/標準 postMessage 通訊
                 iframe.contentWindow.postMessage({
                     type: 'LANGUAGE_CHANGE',
                     lang: lang
                 }, '*');
 
-                // 2. 同源直接呼叫 iframe 暴露的 changeLanguage 函式或觸發事件
                 if (typeof iframe.contentWindow.changeLanguage === 'function') {
                     iframe.contentWindow.changeLanguage(lang);
                 }
@@ -918,27 +1489,17 @@
             document.getElementById('btn-form').innerText = t.request;
             document.getElementById('overlay-title').innerText = t.pipelineTitle;
             document.getElementById('txt-carbon-label').innerText = t.carbon;
+
+            document.getElementById('lbl-a11y-title').innerText = t.a11yTitle;
+            document.getElementById('lbl-text-size').innerText = t.textSize;
+            document.getElementById('lbl-reading-guide').innerText = t.readingGuide;
             
-            // 同步更新跑馬燈文字
-            const marqueeTrack = document.getElementById('marquee-track');
-            if (marqueeTrack) {
-                marqueeTrack.innerHTML = `
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.nowPlaying}</div>
-                    <div class="marquee-item"><span class="marquee-icon"></span>${t.composedBy}</div>
-                `;
-            }
+            updateMarqueeText();
 
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
             });
 
-            // 連動更新已開啟的 iframe 語言
             syncIframeLanguage(lang);
         }
 
@@ -959,7 +1520,7 @@
             const positions = isMobile ? [
                 { id: 'node1', top: '17%', left: '10%' }, { id: 'node3', top: '10%', left: '55%' },
                 { id: 'node2', top: '34%', left: '4%' }, { id: 'node4', top: '33%', left: '46%' },
-                { id: 'node6', top: '66%', left: '45%' }, { id: 'node5', top: '50%', left: '8%' }	
+                { id: 'node6', top: '65%', left: '51%' }, { id: 'node5', top: '53%', left: '8%' }	
             ] : [
                 { id: 'node1', top: '25%', left: '12%' }, { id: 'node3', top: '15%', left: '42%' },
                 { id: 'node2', top: '45%', left: '25%' }, { id: 'node4', top: '64%', left: '45%' },
@@ -1015,6 +1576,7 @@
         });
 
         window.addEventListener('mousemove', (e) => { 
+            handlePointerMove(e.clientX, e.clientY);
             if (typeof pushDistortionRipple === 'function') {
                 pushDistortionRipple(e.clientX, e.clientY);
             }
@@ -1025,12 +1587,14 @@
         });
         
         window.addEventListener('touchmove', (e) => { 
+            const touch = e.touches[0];
+            handlePointerMove(touch.clientX, touch.clientY);
             if (typeof pushDistortionRipple === 'function') {
-                pushDistortionRipple(e.touches[0].clientX, e.touches[0].clientY);
+                pushDistortionRipple(touch.clientX, touch.clientY);
             }
             if (!activeNode) return; 
-            activeNode.style.left = `${e.touches[0].clientX - offset.x}px`; 
-            activeNode.style.top = `${e.touches[0].clientY - offset.y}px`; 
+            activeNode.style.left = `${touch.clientX - offset.x}px`; 
+            activeNode.style.top = `${touch.clientY - offset.y}px`; 
             updateLines(); 
         });
 
@@ -1084,35 +1648,27 @@
                         </div>
                     `;
                 } else if (targetUrl) {
-                    // 自動帶入當前語言參數 ?lang=xx
                     const localizedUrl = targetUrl + (targetUrl.includes('?') ? '&' : '?') + 'lang=' + currentLang;
                     content.innerHTML = `<iframe src="${localizedUrl}" id="overlay-iframe-container"></iframe>`;
                     
                     const iframe = document.getElementById('overlay-iframe-container');
                     if (iframe) {
                         iframe.onload = function() {
-                            // 載入完成後發送語言同步指令
                             syncIframeLanguage(currentLang);
-
-                            // 動態將防下載機制同步注入至同網域的 iframe 中
                             try {
                                 const doc = iframe.contentDocument || iframe.contentWindow.document;
                                 if (doc) {
-                                    // 1. 注入子頁面防右鍵
                                     doc.addEventListener('contextmenu', e => e.preventDefault(), false);
-                                    // 2. 注入子頁面防拖曳
                                     doc.addEventListener('dragstart', e => {
                                         if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO' || e.target.closest('img') || e.target.closest('video')) {
                                             e.preventDefault();
                                         }
                                     }, false);
-                                    // 3. 注入子頁面防快捷鍵 (Ctrl/Cmd + S / U)
                                     doc.addEventListener('keydown', e => {
                                         if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
                                             e.preventDefault();
                                         }
                                     }, false);
-                                    // 4. 注入子頁面 CSS 禁止 iOS 長按與拖曳
                                     const style = doc.createElement('style');
                                     style.textContent = `
                                         img, video {
@@ -1124,7 +1680,7 @@
                                     doc.head.appendChild(style);
                                 }
                             } catch (err) {
-                                console.log("跨網域 iframe 受限於瀏覽器同源政策，無法直接注入腳本", err);
+                                console.log("Iframe load note:", err);
                             }
                         };
                     }
@@ -1141,14 +1697,6 @@
                 screen.classList.remove('active');
                 setTimeout(() => { if (!screen.classList.contains('active')) { screen.style.display = 'none'; document.getElementById('overlay-content').innerHTML = ''; } }, 600);
             }
-        }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Registered!', reg))
-                    .catch(err => console.log('SW Register Failed!', err));
-            });
         }
 
         const webglCanvas = document.getElementById('webgl-canvas');
@@ -1175,7 +1723,6 @@
             uniform vec2 uTextureScale; 
             
             uniform vec3 uRipples[16];
-            uniform int uRippleCount;
 
             void main() {
                 vec2 uvScreen = vTexCoord;
@@ -1183,35 +1730,35 @@
                 vec2 totalOffset = vec2(0.0);
 
                 for (int i = 0; i < 16; i++) {
-                    if (i >= uRippleCount) break;
-
                     vec2 center = uRipples[i].xy;
                     float age = uRipples[i].z; 
 
-                    vec2 toPixel = (uvScreen - center) * aspect;
-                    float dist = length(toPixel);
+                    if (age > 0.0 && age < 1.0) {
+                        vec2 toPixel = (uvScreen - center) * aspect;
+                        float dist = length(toPixel);
 
-                    float currentRadius = age * 0.15; 
-                    float waveWidth = 0.03;          
-                    
-                    if (dist < currentRadius + waveWidth && dist > currentRadius - waveWidth) {
-                        float progress = (dist - (currentRadius - waveWidth)) / (waveWidth * 2.0);
-                        float wave = sin(progress * 3.14159265);
-                        float strength = (1.0 - age) * 0.045 * wave; 
+                        float currentRadius = age * 0.25; 
+                        float waveWidth = 0.05;          
                         
-                        totalOffset += normalize(toPixel) * strength;
+                        if (dist < currentRadius + waveWidth && dist > currentRadius - waveWidth) {
+                            float progress = (dist - (currentRadius - waveWidth)) / (waveWidth * 2.0);
+                            float wave = sin(progress * 3.14159265);
+                            float strength = (1.0 - age) * 0.06 * wave; 
+                            
+                            totalOffset += normalize(toPixel) * strength;
+                        }
                     }
                 }
 
                 vec2 distortedUvScreen = clamp(uvScreen - totalOffset, 0.0, 1.0);
                 vec2 finalUv = (distortedUvScreen - 0.5) * uTextureScale + 0.5;
                 vec4 videoColor = texture2D(uVideoTexture, finalUv);
-                float highlights = length(totalOffset) * 1.8;
+                float highlights = length(totalOffset) * 2.5;
                 gl_FragColor = videoColor + vec4(vec3(highlights), 0.0);
             }
         `;
 
-        let program, positionLocation, uVideoTextureLoc, uResolutionLoc, uTextureScaleLoc, uRipplesLoc, uRippleCountLoc, buffer, videoTexture;
+        let program, positionLocation, uVideoTextureLoc, uResolutionLoc, uTextureScaleLoc, uRipplesLoc, buffer, videoTexture;
 
         if (gl) {
             try {
@@ -1234,7 +1781,6 @@
                     uResolutionLoc = gl.getUniformLocation(program, 'uResolution');
                     uTextureScaleLoc = gl.getUniformLocation(program, 'uTextureScale');
                     uRipplesLoc = gl.getUniformLocation(program, 'uRipples');
-                    uRippleCountLoc = gl.getUniformLocation(program, 'uRippleCount');
 
                     buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -1251,11 +1797,13 @@
                     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
                     isWebGLActive = true;
+                    const fallbackBg = document.getElementById('fallback-bg');
+                    if (fallbackBg) fallbackBg.style.opacity = '0';
                 } else {
                     throw new Error('Link failed');
                 }
             } catch (e) {
-                console.warn('WebGL setup failed, using HTML5 video fallback: ', e);
+                console.warn('WebGL setup fallback to standard video:', e);
                 isWebGLActive = false;
                 if (webglCanvas) webglCanvas.style.display = 'none';
             }
@@ -1276,8 +1824,8 @@
             const y = clientY / window.innerHeight;
 
             const speed = Math.hypot(clientX - lastMousePos.x, clientY - lastMousePos.y);
-            if (speed > 5) {
-                ripples.push({ x, y, age: 0.0 });
+            if (speed > 4) {
+                ripples.push({ x, y, age: 0.01 });
                 if (ripples.length > maxRipples) {
                     ripples.shift();
                 }
@@ -1285,106 +1833,94 @@
             lastMousePos = { x: clientX, y: clientY };
         }
 
-        function resizeWebGLCanvas() {
+        function resizeCanvas() {
             if (!webglCanvas) return;
-            webglCanvas.width = window.innerWidth;
-            webglCanvas.height = window.innerHeight;
-            if (gl) gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            webglCanvas.width = window.innerWidth * dpr;
+            webglCanvas.height = window.innerHeight * dpr;
+            if (gl) gl.viewport(0, 0, webglCanvas.width, webglCanvas.height);
         }
 
-        function renderLoop() {
-            if (!isWebGLActive || !gl) return;
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initNodePositions();
+            updateLines();
+        });
 
-            if (textureVideo && textureVideo.readyState >= textureVideo.HAVE_CURRENT_DATA) {
-                try {
+        function renderWebGL() {
+            if (!isWebGLActive || !gl || !textureVideo) return;
+
+            try {
+                if (textureVideo.readyState >= textureVideo.HAVE_CURRENT_DATA) {
                     gl.bindTexture(gl.TEXTURE_2D, videoTexture);
                     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureVideo);
-                } catch (err) {
-                    console.warn('CORS / Video texture stream blocked. Falling back to HTML5 Video.', err);
-                    isWebGLActive = false;
-                    if (webglCanvas) webglCanvas.style.display = 'none';
-                    return;
                 }
-            }
 
-            gl.clearColor(0.0, 0.0, 0.0, 1.0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.useProgram(program);
 
-            gl.useProgram(program);
+                gl.uniform2f(uResolutionLoc, webglCanvas.width, webglCanvas.height);
 
-            gl.enableVertexAttribArray(positionLocation);
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-            gl.uniform2f(uResolutionLoc, webglCanvas.width, webglCanvas.height);
-
-            let scaleX = 1.0;
-            let scaleY = 1.0;
-            if (textureVideo && textureVideo.videoWidth > 0 && textureVideo.videoHeight > 0) {
-                const screenRatio = webglCanvas.width / webglCanvas.height;
-                const videoRatio = textureVideo.videoWidth / textureVideo.videoHeight;
-                if (screenRatio > videoRatio) {
-                    scaleY = videoRatio / screenRatio;
+                const screenAspect = webglCanvas.width / webglCanvas.height;
+                const videoAspect = (textureVideo.videoWidth && textureVideo.videoHeight) ? (textureVideo.videoWidth / textureVideo.videoHeight) : (16/9);
+                let scaleX = 1.0, scaleY = 1.0;
+                if (screenAspect > videoAspect) {
+                    scaleY = videoAspect / screenAspect;
                 } else {
-                    scaleX = screenRatio / videoRatio;
+                    scaleX = screenAspect / videoAspect;
                 }
+                gl.uniform2f(uTextureScaleLoc, scaleX, scaleY);
+
+                const activeRipples = [];
+                const rippleData = new Float32Array(16 * 3);
+
+                for (let i = 0; i < ripples.length; i++) {
+                    ripples[i].age += 0.018;
+                    if (ripples[i].age < 1.0) {
+                        activeRipples.push(ripples[i]);
+                    }
+                }
+                ripples = activeRipples;
+
+                for (let i = 0; i < 16; i++) {
+                    if (i < ripples.length) {
+                        rippleData[i * 3 + 0] = ripples[i].x;
+                        rippleData[i * 3 + 1] = ripples[i].y;
+                        rippleData[i * 3 + 2] = ripples[i].age;
+                    } else {
+                        rippleData[i * 3 + 0] = 0;
+                        rippleData[i * 3 + 1] = 0;
+                        rippleData[i * 3 + 2] = 0.0;
+                    }
+                }
+
+                gl.uniform3fv(uRipplesLoc, rippleData);
+
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+                gl.enableVertexAttribArray(positionLocation);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            } catch(e) {
+                console.warn("Render WebGL error fallback:", e);
+                isWebGLActive = false;
+                const fallbackBg = document.getElementById('fallback-bg');
+                if (fallbackBg) fallbackBg.style.opacity = '1';
             }
-            gl.uniform2f(uTextureScaleLoc, scaleX, scaleY);
 
-            const rippleData = [];
-            for (let i = 0; i < ripples.length; i++) {
-                ripples[i].age += 0.018; 
-                rippleData.push(ripples[i].x, ripples[i].y, ripples[i].age);
-            }
-            ripples = ripples.filter(r => r.age < 1.0);
-
-            while (rippleData.length < 16 * 3) {
-                rippleData.push(0.0, 0.0, 999.0); 
-            }
-
-            gl.uniform3fv(uRipplesLoc, new Float32Array(rippleData));
-            gl.uniform1i(uRippleCountLoc, ripples.length);
-
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-            requestAnimationFrame(renderLoop);
-        }
-
-        function forcePlayVideos() {
-            const bgV = document.getElementById('bgVideo');
-            const texV = document.getElementById('textureVideo');
-            if (bgV) {
-                bgV.muted = true;
-                bgV.play().catch(e => console.log("bgVideo auto-play handled."));
-            }
-            if (texV) {
-                texV.muted = true;
-                texV.play().catch(e => console.log("textureVideo auto-play handled."));
-            }
+            requestAnimationFrame(renderWebGL);
         }
 
         window.addEventListener('load', () => {
+            resizeCanvas();
             initNodePositions();
-            resizeWebGLCanvas();
-            forcePlayVideos();
             if (isWebGLActive) {
-                renderLoop(); 
+                renderWebGL();
             }
-            renderVisualizer(); 
-            changeLanguage('en'); 
+            const bgVideoEl = document.getElementById('bgVideo');
+            if (bgVideoEl) bgVideoEl.play().catch(() => {});
+            const textureVidEl = document.getElementById('textureVideo');
+            if (textureVidEl) textureVidEl.play().catch(() => {});
         });
-
-        window.addEventListener('click', forcePlayVideos, { once: true });
-        window.addEventListener('touchstart', forcePlayVideos, { once: true });
-
-        window.addEventListener('resize', () => { 
-            initNodePositions(); 
-            resizeWebGLCanvas();
-            updateLines(); 
-        });
-
-        const initialBgV = document.getElementById('bgVideo');
-        if (initialBgV) initialBgV.muted = true;
     </script>
 </body>
 </html>
