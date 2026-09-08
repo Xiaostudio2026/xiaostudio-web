@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Core Processor Unit - Technical Edition</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap');
 
         :root {
@@ -29,7 +27,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Barlow', sans-serif;
+            font-family: 'JetBrains Mono', monospace;
             overflow-x: hidden;
             display: flex;
             justify-content: center;
@@ -267,10 +265,10 @@
         }
 
         .service-tag span {
-            font-size: clamp(0.62rem, 2.4vw, 0.78rem); 
+            font-size: clamp(0.46rem, 1.1vw, 0.58rem); 
             font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.01em;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
             color: var(--pad-text);
             opacity: 0;
             transition: opacity 0.35s ease;
@@ -287,7 +285,7 @@
 
         @media (min-width: 640px) {
             .service-tag span {
-                font-size: 0.68rem;
+                font-size: 0.58rem;
             }
         }
 
@@ -331,14 +329,13 @@
         /* 電腦數據運算文字解碼流特效 */
         .cyber-matrix-text {
             color: #ffffff;
-            font-family: 'Barlow', sans-serif;
+            font-family: 'JetBrains Mono', monospace;
             display: inline-block;
             font-size: 0.52em;
             vertical-align: middle;
             margin-left: 0.2rem;
             min-width: 19.5ch;
             white-space: nowrap;
-            letter-spacing: normal;
         }
     </style>
 </head>
@@ -371,27 +368,27 @@
                 </h1>
             </div>
             
-            <div class="flex flex-wrap gap-x-6 gap-y-3 text-left w-full lg:w-auto">
+            <div class="flex flex-wrap gap-x-6 gap-y-3 font-mono text-left w-full lg:w-auto">
                 <div class="border-r border-white/10 pr-6 min-w-[110px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold">LATITUDE</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">LATITUDE</div>
                     <div class="text-xl font-bold text-white">25.0117° N</div>
                 </div>
                 <div class="border-r border-white/10 pr-6 min-w-[110px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold">LONGITUDE</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">LONGITUDE</div>
                     <div class="text-xl font-bold text-white">121.4658° E</div>
                 </div>
                 <div class="border-r border-white/10 pr-6 min-w-[155px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold">HUMIDITY / TEMP</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">HUMIDITY / TEMP</div>
                     <div class="text-xl font-bold text-white">
                         <span id="humidity-val">-- %</span><span class="text-gray-600 text-sm mx-1">/</span><span id="temp-val" class="text-red-400">--°C</span>
                     </div>
                 </div>
                 <div class="border-r border-white/10 pr-6 min-w-[110px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold">PM2.5</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">PM2.5</div>
                     <div class="text-xl font-bold text-white" id="pm25-val">-- μg/m³</div>
                 </div>
                 <div class="min-w-[120px]">
-                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest font-semibold">SYSTEM_LOC</div>
+                    <div class="text-[0.5rem] text-gray-500 uppercase tracking-widest">SYSTEM_LOC</div>
                     <div class="text-xs font-bold text-white flex items-center gap-1.5 mt-1.5">
                         <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
                         BANQIAO, TAIWAN
@@ -409,7 +406,7 @@
                             
                             <div class="flex justify-center mb-4 overflow-hidden rounded border border-white/10 bg-black/40">
                                 <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-[460px] max-w-full h-auto object-cover rounded">
-                                    <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1787295633/Spinintotheworld_1_qzzl6h.mp4" type="video/mp4">
+                                    <source src="https://res.cloudinary.com/dssycfvxr/video/upload/v1785757678/gboy_1_qmneqs.mp4" type="video/mp4">
                                     Your browser does not support video play.
                                 </video>
                             </div>
@@ -419,7 +416,7 @@
                                     <div class="flex justify-between text-[0.78rem] font-bold mb-2 pb-1 border-b border-white/10">
                                         <span class="text-gray-300">WORK EXPERIENCE</span>
                                     </div>
-                                    <div id="experience-display" class="experience-timer text-gray-300">
+                                    <div id="experience-display" class="experience-timer font-mono text-gray-300">
                                         LOADING_DATA...
                                     </div>
                                 </div>
@@ -451,7 +448,7 @@
                             <div class="space-y-4">
                                 <a href="mailto:jewuenxiao@gmail.com" class="block group">
                                     <div class="text-[0.5rem] text-gray-500 mb-1 uppercase">01. MAIL_GATEWAY</div>
-                                    <div class="text-[0.9rem] text-gray-300 group-hover:underline underline-offset-4 decoration-white/30">
+                                    <div class="text-[0.9rem] text-gray-300 font-mono group-hover:underline underline-offset-4 decoration-white/30">
                                         jewuenxiao@gmail.com
                                     </div>
                                 </a>
@@ -545,7 +542,7 @@
                 </div>
 
                 <!-- Control Hints -->
-                <div class="text-[0.52rem] sm:text-[0.62rem] text-gray-400 tracking-wider flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full max-w-[500px] px-2 text-center">
+                <div class="text-[0.52rem] sm:text-[0.62rem] text-gray-400 font-mono tracking-wider flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full max-w-[500px] px-2 text-center">
                     <span><span class="text-white">↑</span>: ROTATE</span>
                     <span><span class="text-white">P</span>: PAUSE</span>
                     <span><span class="text-white">SPACE</span>: DROP</span>
@@ -578,406 +575,8 @@
     </div>
 
     <script>
-        // 5-Language Dictionary
-        const i18nDictionary = {
-            zh: {
-                hero: "流體律動<br>隨形起舞",
-                about: "關於 XIAO",
-                viewAbout: "查看個人檔案",
-                static: "靜態作品",
-                viewStatic: "平面視覺",
-                motion: "動態作品",
-                viewMotion: "動態專案",
-                print: "印刷包裝",
-                viewPrint: "實體專案",
-                web: "網頁設計",
-                viewWeb: "數位體驗",
-                close: "關閉",
-                updateSoon: "管道詳情即將更新。",
-                request: "需求申請",
-                pipelineTitle: "系統管道",
-                carbon: "全球累計二氧化碳排放量 (公噸)",
-                nowPlaying: "正在播放：《Liquid Lobby Loop》流動如液 隨形起舞 旋轉於世",
-                composedBy: "作曲：xiaostudio ｜ Suno AI 生成",
-
-                nodeArch: "NODE_01 / ARCH_X64",
-                latitude: "緯度",
-                longitude: "經度",
-                humidityTemp: "濕度 / 溫度",
-                pm25: "PM2.5",
-                systemLoc: "系統位置",
-                banqiaoTaiwan: "台灣板橋",
-                memoryCacheVisualizer: "記憶快取視覺化",
-                workExperience: "工作經驗",
-                loadingData: "資料載入中...",
-                clockPrecision: "時鐘精度",
-                years: "年",
-                months: "月",
-                days: "日",
-                serviceCapabilities: "核心服務能力",
-                contactProtocols: "聯絡通訊協定",
-                mailGateway: "01. 電子郵件閘道",
-                consultation: "02. 專案諮詢需求",
-                submitRequestForm: "提交需求表單",
-                externalFormTitle: "外部表單：專案諮詢申請",
-
-                initKernel: "核心程式初始化",
-                clickToExecute: "點擊執行",
-                paused: "暫停",
-                clickToResume: "點擊或按 P 鍵繼續",
-                gameOver: "遊戲結束",
-                clickToRestart: "點擊重新開始",
-                score: "得分",
-                next: "下一個",
-                level: "關卡",
-                boost: "催落去",
-                sound: "音效",
-                color: "色彩",
-                rotate: "旋轉",
-                pause: "暫停",
-                drop: "急下",
-
-                matrixPhrases: [
-                     "流體律動",
-                    "隨形而舞",
-                    "旋入世界"
-                ]
-            },
-            en: {
-                hero: "Liquid Flow<br>Roll with the Form",
-                about: "About Xiao",
-                viewAbout: "View Profile",
-                static: "Static Works",
-                viewStatic: "Archive",
-                motion: "Motion Works",
-                viewMotion: "Motion Projects",
-                print: "Print & Packaging",
-                viewPrint: "Physical Projects",
-                web: "Web Design",
-                viewWeb: "Digital Experience",
-                close: "Close",
-                updateSoon: "Pipeline details updated soon.",
-                request: "Request Project",
-                pipelineTitle: "Pipeline System",
-                carbon: "Cumulative Global CO2 Emissions (Tons)",
-                nowPlaying: "NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World",
-                composedBy: "Composed by xiaostudio · Generated via Suno AI",
-
-                nodeArch: "NODE_01 / ARCH_X64",
-                latitude: "LATITUDE",
-                longitude: "LONGITUDE",
-                humidityTemp: "HUMIDITY / TEMP",
-                pm25: "PM2.5",
-                systemLoc: "SYSTEM_LOC",
-                banqiaoTaiwan: "BANQIAO, TAIWAN",
-                memoryCacheVisualizer: "Memory Cache Visualizer",
-                workExperience: "WORK EXPERIENCE",
-                loadingData: "LOADING_DATA...",
-                clockPrecision: "Clock Precision",
-                years: "YEARS",
-                months: "MONTHS",
-                days: "DAYS",
-                serviceCapabilities: "Service_Capabilities",
-                contactProtocols: "Contact_Protocols",
-                mailGateway: "01. MAIL_GATEWAY",
-                consultation: "02. CONSULTATION",
-                submitRequestForm: "SUBMIT_REQUEST_FORM",
-                externalFormTitle: "External_Form: Request_Consultation",
-
-                initKernel: "Initialize Kernel",
-                clickToExecute: "Click to Execute",
-                paused: "PAUSED",
-                clickToResume: "Click or Press P to Resume",
-                gameOver: "Game Over",
-                clickToRestart: "Click to Restart",
-                score: "Score",
-                next: "Next",
-                level: "Level",
-                boost: "Boost",
-                sound: "Sound",
-                color: "Color",
-                rotate: "ROTATE",
-                pause: "PAUSE",
-                drop: "DROP",
-
-                matrixPhrases: [
-                    "Flow as Liquid",
-                    "Roll with the Form",
-                    "Spin into the World"
-                ]
-            },
-            ja: {
-                hero: "流れる律動<br>形に従う",
-                about: "XIAOについて",
-                viewAbout: "プロフィール",
-                static: "グラフィック作品",
-                viewStatic: "アーカイブ",
-                motion: "モーション作品",
-                viewMotion: "モーションプロジェクト",
-                print: "印刷・パッケージ",
-                viewPrint: "フィジカルプロジェクト",
-                web: "ウェブデザイン",
-                viewWeb: "デジタル体験",
-                close: "閉じる",
-                updateSoon: "詳細はまもなく更新されます。",
-                request: "プロジェクト依頼",
-                pipelineTitle: "パイプラインシステム",
-                carbon: "世界の累積二酸化炭素排出量 (トン)",
-                nowPlaying: "再生中：《Liquid Lobby Loop》液体のように流れ 形に従い 世界を巡る",
-                composedBy: "作曲：xiaostudio ｜ Suno AI 作成",
-
-                nodeArch: "ノード_01 / アーキテクチャ_X64",
-                latitude: "緯度",
-                longitude: "経度",
-                humidityTemp: "湿度 / 温度",
-                pm25: "PM2.5",
-                systemLoc: "システム位置",
-                banqiaoTaiwan: "台湾 板橋",
-                memoryCacheVisualizer: "メモリキャッシュビジュアライザ",
-                workExperience: "実務経験",
-                loadingData: "データ読み込み中...",
-                clockPrecision: "クロック精度",
-                years: "年",
-                months: "ヶ月",
-                days: "日",
-                serviceCapabilities: "サービス対応能力",
-                contactProtocols: "コンタクトプロトコル",
-                mailGateway: "01. メールゲートウェイ",
-                consultation: "02. プロジェクトのご相談",
-                submitRequestForm: "リクエストフォーム送信",
-                externalFormTitle: "外部フォーム: プロジェクト依頼申請",
-
-                initKernel: "カーネル初期化",
-                clickToExecute: "クリックして実行",
-                paused: "一時停止",
-                clickToResume: "クリックまたは P キーで再開",
-                gameOver: "ゲームオーバー",
-                clickToRestart: "クリックして再始動",
-                score: "スコア",
-                next: "ネクスト",
-                level: "レベル",
-                boost: "ブースト",
-                sound: "サウンド",
-                color: "カラー",
-                rotate: "回転",
-                pause: "一時停止",
-                drop: "ドロップ",
-
-                matrixPhrases: [
-                    "液体のように流れ",
-                    "形に従い",
-                    "世界を巡る"
-                ]
-            },
-            ko: {
-                hero: "유체의 흐름<br>형태를 따르다",
-                about: "XIAO 소개",
-                viewAbout: "프로필 보기",
-                static: "정적 작품",
-                viewStatic: "아카이브",
-                motion: "동적 작품",
-                viewMotion: "모션 프로젝트",
-                print: "인쇄 및 패키징",
-                viewPrint: "실체 프로젝트",
-                web: "웹 디자인",
-                viewWeb: "디지털 경험",
-                close: "닫기",
-                updateSoon: "파이프라인 세부 정보가 곧 업데이트됩니다.",
-                request: "프로젝트 요청",
-                pipelineTitle: "파이프라인 시스템",
-                carbon: "전 세계 누적 이산화탄소 배출량 (톤)",
-                nowPlaying: "재생 중: 《Liquid Lobby Loop》 유체처럼 흘러 형태를 따르고 세상으로 회전하다",
-                composedBy: "작곡: xiaostudio ｜ Suno AI 생성",
-
-                nodeArch: "노드_01 / 아키텍처_X64",
-                latitude: "위도",
-                longitude: "경도",
-                humidityTemp: "습도 / 온도",
-                pm25: "PM2.5",
-                systemLoc: "시스템 위치",
-                banqiaoTaiwan: "대만 반차오",
-                memoryCacheVisualizer: "메모리 캐시 비주얼라이저",
-                workExperience: "경력 사항",
-                loadingData: "데이터 로딩 중...",
-                clockPrecision: "시계 정밀도",
-                years: "년",
-                months: "개월",
-                days: "일",
-                serviceCapabilities: "서비스 역량",
-                contactProtocols: "연락처 프로토콜",
-                mailGateway: "01. 메일 게이트웨이",
-                consultation: "02. 프로젝트 상담 요청",
-                submitRequestForm: "요청 양식 제출",
-                externalFormTitle: "외부 양식: 프로젝트 상담 요청",
-
-                initKernel: "커널 초기화",
-                clickToExecute: "클릭하여 실행",
-                paused: "일시 정지",
-                clickToResume: "클릭하거나 P를 눌러 재개",
-                gameOver: "게임 오버",
-                clickToRestart: "클릭하여 재시작",
-                score: "점수",
-                next: "다음",
-                level: "레벨",
-                boost: "부스트",
-                sound: "사운드",
-                color: "컬러",
-                rotate: "회전",
-                pause: "일시 정지",
-                drop: "드롭",
-
-                matrixPhrases: [
-                    "유체처럼 흘러",
-                    "형태를 따르고",
-                    "세상으로 회전하다"
-                ]
-            },
-            fr: {
-                hero: "Flux Liquide<br>Suivre la Forme",
-                about: "À propos de Xiao",
-                viewAbout: "Voir le profil",
-                static: "Travaux Statiques",
-                viewStatic: "Archives",
-                motion: "Travaux Animés",
-                viewMotion: "Projets Motion",
-                print: "Impression & Emballage",
-                viewPrint: "Projets Physiques",
-                web: "Design Web",
-                viewWeb: "Expérience Digitale",
-                close: "Fermer",
-                updateSoon: "Détails mis à jour prochainement.",
-                request: "Demander un Projet",
-                pipelineTitle: "Système Pipeline",
-                carbon: "Émissions mondiales de CO2 cumulées (Tonnes)",
-                nowPlaying: "LECTURE EN COURS : 《Liquid Lobby Loop》 Couler comme du liquide · Suivre la forme · Tourner dans le monde",
-                composedBy: "Composé par xiaostudio · Généré via Suno AI",
-
-                nodeArch: "NŒUD_01 / ARCH_X64",
-                latitude: "LATITUDE",
-                longitude: "LONGITUDE",
-                humidityTemp: "HUMIDITÉ / TEMP",
-                pm25: "PM2.5",
-                systemLoc: "EMPLACEMENT_SYS",
-                banqiaoTaiwan: "BANQIAO, TAIWAN",
-                memoryCacheVisualizer: "Visualiseur de Cache Mémoire",
-                workExperience: "EXPÉRIENCE PROFESSIONNELLE",
-                loadingData: "CHARGEMENT_DONNÉES...",
-                clockPrecision: "Précision de l'Horloge",
-                years: "ANS",
-                months: "MOIS",
-                days: "JOURS",
-                serviceCapabilities: "Capacités_Services",
-                contactProtocols: "Protocole_Contact",
-                mailGateway: "01. PASSERELLE_MAIL",
-                consultation: "02. CONSULTATION",
-                submitRequestForm: "SOUMETTRE_FORMULAIRE",
-                externalFormTitle: "Formulaire_Externe: Demande_Consultation",
-
-                initKernel: "Initialisation Kernel",
-                clickToExecute: "Cliquer pour Exécuter",
-                paused: "EN PAUSE",
-                clickToResume: "Cliquer ou Appuyer sur P pour Reprendre",
-                gameOver: "Fin de Partie",
-                clickToRestart: "Cliquer pour Redémarrer",
-                score: "Score",
-                next: "Suivant",
-                level: "Niveau",
-                boost: "Boost",
-                sound: "Son",
-                color: "Couleur",
-                rotate: "PIVOT",
-                pause: "PAUSE",
-                drop: "CHUTE",
-
-                matrixPhrases: [
-                    "Couler comme du liquide",
-                    "Suivre la forme",
-                    "Tourner dans le monde"
-                ]
-            }
-        };
-
-        // Aliases for compatibility
-        i18nDictionary.jp = i18nDictionary.ja;
-        i18nDictionary.kr = i18nDictionary.ko;
-
-        let currentLang = 'zh';
-
-        function changeLanguage(lang) {
-            let target = (lang || 'zh').toLowerCase();
-            if (target === 'jp') target = 'ja';
-            if (target === 'kr') target = 'ko';
-            if (!i18nDictionary[target]) target = 'zh';
-
-            currentLang = target;
-            const dict = i18nDictionary[currentLang];
-
-            // 1. DOM i18n Data attribute replacement
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[key]) {
-                    el.innerText = dict[key];
-                }
-            });
-
-            // 2. Dynamic style adjustments for overlays (CJK vs Western font)
-            const overlayTitle = document.getElementById('overlay-title');
-            const overlaySub = document.getElementById('overlay-sub');
-            const pauseTitle = document.getElementById('pause-title');
-            const pauseSub = document.getElementById('pause-sub');
-
-            if (overlayTitle) {
-                if (!gameStarted) {
-                    overlayTitle.innerText = dict.initKernel;
-                    overlaySub.innerText = dict.clickToExecute;
-                }
-                if (['zh', 'ja', 'ko'].includes(currentLang)) {
-                    overlayTitle.className = "text-xl sm:text-2xl font-bold font-sans text-white tracking-wider px-4 whitespace-nowrap";
-                } else {
-                    overlayTitle.className = "text-3xl sm:text-4xl font-windsong text-white tracking-[0.05em] px-4 whitespace-nowrap";
-                }
-            }
-
-            if (pauseTitle) pauseTitle.innerText = dict.paused;
-            if (pauseSub) pauseSub.innerText = dict.clickToResume;
-
-            // 3. Reset Cyber Matrix Scrambler
-            resetCyberMatrixScrambler();
-
-            // 4. Sync language to second-level iframe (Form)
-            const formIframe = document.querySelector('#form-modal iframe');
-            if (formIframe) {
-                const baseUrl = "https://xiaostudio.xyz/form/";
-                const targetSrc = `${baseUrl}?lang=${currentLang}`;
-                if (!formIframe.src.includes(`lang=${currentLang}`)) {
-                    formIframe.src = targetSrc;
-                }
-                if (formIframe.contentWindow) {
-                    formIframe.contentWindow.postMessage({ type: 'LANGUAGE_CHANGE', lang: currentLang }, '*');
-                }
-            }
-        }
-
-        function detectInitialLanguage() {
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const paramLang = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('l');
-                if (paramLang) return paramLang;
-            } catch (e) {}
-
-            const navLang = (navigator.language || (navigator.languages && navigator.languages[0]) || '').toLowerCase();
-            if (navLang.startsWith('zh')) return 'zh';
-            if (navLang.startsWith('ja')) return 'ja';
-            if (navLang.startsWith('ko')) return 'ko';
-            if (navLang.startsWith('fr')) return 'fr';
-            if (navLang.startsWith('en')) return 'en';
-
-            return 'zh';
-        }
-
         let audioCtx = null;
         let soundEnabled = true;
-
         function playSound(type) {
             if (!soundEnabled) return;
             try {
@@ -1027,17 +626,7 @@
         }
 
         const modal = document.getElementById('form-modal');
-        function openModal() { 
-            modal.classList.add('active'); 
-            isPaused = true; 
-            const formIframe = document.querySelector('#form-modal iframe');
-            if (formIframe) {
-                const targetSrc = `https://xiaostudio.xyz/form/?lang=${currentLang}`;
-                if (!formIframe.src.includes(`lang=${currentLang}`)) {
-                    formIframe.src = targetSrc;
-                }
-            }
-        }
+        function openModal() { modal.classList.add('active'); isPaused = true; }
         function closeModal() { modal.classList.remove('active'); }
 
         window.addEventListener('load', () => {
@@ -1046,68 +635,57 @@
             });
             initMidiPadsWaveRhythm();
             initCyberMatrixScrambler();
-            
-            const initialLang = detectInitialLanguage();
-            changeLanguage(initialLang);
-
-            try {
-                if (window.parent && window.parent !== window) {
-                    window.parent.postMessage({ type: 'GET_LANGUAGE', request: 'lang' }, '*');
-                }
-            } catch (err) {}
-
             draw();
         });
 
-        let scrambleTimeout = null;
-        let currentScrambleInterval = null;
-        let phraseIdx = 0;
-
         function initCyberMatrixScrambler() {
-            resetCyberMatrixScrambler();
-        }
-
-        function resetCyberMatrixScrambler() {
-            if (currentScrambleInterval) clearInterval(currentScrambleInterval);
-            if (scrambleTimeout) clearTimeout(scrambleTimeout);
-            phraseIdx = 0;
-            cycleCyberMatrix();
-        }
-
-        function cycleCyberMatrix() {
+            const phrases = [
+                "Flow as Liquid",
+                "Roll with the Form",
+                "Spin into the World"
+            ];
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/";
             const displayEl = document.getElementById('cyber-matrix-display');
             if (!displayEl) return;
 
-            const dict = i18nDictionary[currentLang] || i18nDictionary.zh;
-            const phrases = dict.matrixPhrases || i18nDictionary.zh.matrixPhrases;
-            const targetText = phrases[phraseIdx % phrases.length];
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/";
+            let phraseIdx = 0;
 
-            let iteration = 0;
-            const maxIterations = targetText.length * 3;
+            function scrambleTo(targetText, onComplete) {
+                let iteration = 0;
+                const maxIterations = targetText.length * 3;
+                
+                const interval = setInterval(() => {
+                    displayEl.innerText = targetText
+                        .split('')
+                        .map((char, index) => {
+                            if (char === ' ') return ' ';
+                            if (index < iteration / 3) {
+                                return targetText[index];
+                            }
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join('');
 
-            currentScrambleInterval = setInterval(() => {
-                displayEl.innerText = targetText
-                    .split('')
-                    .map((char, index) => {
-                        if (char === ' ') return ' ';
-                        if (index < iteration / 3) {
-                            return targetText[index];
-                        }
-                        return chars[Math.floor(Math.random() * chars.length)];
-                    })
-                    .join('');
+                    if (iteration >= maxIterations) {
+                        clearInterval(interval);
+                        displayEl.innerText = targetText;
+                        if (onComplete) onComplete();
+                    }
+                    iteration++;
+                }, 35);
+            }
 
-                if (iteration >= maxIterations) {
-                    clearInterval(currentScrambleInterval);
-                    displayEl.innerText = targetText;
-                    scrambleTimeout = setTimeout(() => {
+            function cycle() {
+                const target = phrases[phraseIdx];
+                scrambleTo(target, () => {
+                    setTimeout(() => {
                         phraseIdx = (phraseIdx + 1) % phrases.length;
-                        cycleCyberMatrix();
-                    }, 2800);
-                }
-                iteration++;
-            }, 35);
+                        cycle();
+                    }, 2800); // 停留展示2.8秒
+                });
+            }
+
+            cycle();
         }
 
         function initMidiPadsWaveRhythm() {
@@ -1180,14 +758,13 @@
             if (months < 0) { months += 12; years--; }
             const display = document.getElementById('experience-display');
             if (display) {
-                const dict = i18nDictionary[currentLang] || i18nDictionary.zh;
                 display.innerHTML = `
-                    <div class="flex items-center gap-x-2 sm:gap-x-3 text-xs sm:text-sm whitespace-nowrap">
-                        <div><span>${years}</span> ${dict.years || 'YEARS'} </div>
-                        <div><span>${months}</span> ${dict.months || 'MONTHS'} </div>
-                        <div><span>${days}</span> ${dict.days || 'DAYS'}</div>
+                    <div class="flex items-center gap-x-2 sm:gap-x-3 text-xs sm:text-sm font-mono whitespace-nowrap">
+                        <div><span>${years}</span> YEARS </div>
+                        <div><span>${months}</span> MONTHS </div>
+                        <div><span>${days}</span> DAYS</div>
                     </div>
-                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">${dict.clockPrecision || 'Clock Precision'}</div>
+                    <div class="text-[0.65rem] mt-3 opacity-60 uppercase tracking-tighter">Clock Precision</div>
                     <div class="text-3xl font-bold mt-1 text-white">
                         ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}<span class="ms-ticker text-xs">.${milliseconds.toString().padStart(3,'0')}</span>
                     </div>
@@ -1254,12 +831,12 @@
             if (isBoostActive) {
                 boostBtn.classList.remove('bg-neutral-800');
                 boostBtn.classList.add('bg-red-600');
-                boostDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
+                boostDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 canvas.classList.add('overdrive-active');
             } else {
                 boostBtn.classList.remove('bg-red-600');
                 boostBtn.classList.add('bg-neutral-800');
-                boostDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
+                boostDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 canvas.classList.remove('overdrive-active');
             }
             updateScore();
@@ -1272,11 +849,11 @@
                 if (soundEnabled) {
                     soundBtn.classList.remove('bg-neutral-800');
                     soundBtn.classList.add('bg-red-600');
-                    soundDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
+                    soundDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 } else {
                     soundBtn.classList.remove('bg-red-600');
                     soundBtn.classList.add('bg-neutral-800');
-                    soundDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
+                    soundDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 }
             };
         }
@@ -1288,11 +865,11 @@
                 if (colorModeEnabled) {
                     colorBtn.classList.remove('bg-neutral-800');
                     colorBtn.classList.add('bg-red-600');
-                    colorDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
+                    colorDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-white transition-transform duration-300 translate-x-3.5 sm:translate-x-4";
                 } else {
                     colorBtn.classList.remove('bg-red-600');
                     colorBtn.classList.add('bg-neutral-800');
-                    colorDot.className = "inline-block h-2.5 w-2.5 sm:h-3 sm:w-3 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
+                    colorDot.className = "inline-block h-2 w-2 sm:h-2.5 sm:w-2.5 transform rounded-full bg-neutral-400 transition-transform duration-300 translate-x-0.5";
                 }
                 draw();
                 drawNext();
@@ -1368,7 +945,7 @@
             }
 
             context.fillStyle = 'rgba(255, 255, 255, 0.75)';
-            context.font = '0.52px "Barlow", sans-serif';
+            context.font = '0.52px "JetBrains Mono", monospace';
             context.fillText(`HIGH: ${highScore.toString().padStart(6, '0')}`, 0.4, 0.9);
         }
 
@@ -1413,9 +990,8 @@
                     highScore = player.score;
                     localStorage.setItem('xiao_tetris_highscore', highScore.toString());
                 }
-                const dict = i18nDictionary[currentLang] || i18nDictionary.zh;
-                if (overlayTitle) overlayTitle.innerText = dict.gameOver;
-                if (overlaySub) overlaySub.innerText = dict.clickToRestart;
+                overlayTitle.innerText = "Game Over";
+                overlaySub.innerText = "Click to Restart";
                 if (gameOverlay) gameOverlay.classList.remove('hidden');
                 if (pauseOverlay) pauseOverlay.classList.add('hidden');
             }
@@ -1619,27 +1195,6 @@
         document.addEventListener('keyup', e => { 
             keyStates[e.keyCode] = false; 
             if (keyMap[e.keyCode]) inputState[keyMap[e.keyCode]].pressed = false; 
-        });
-
-        // 監聽來自最外層/父頁面的 postMessage 通訊 (支援多元格式)
-        window.addEventListener('message', (e) => {
-            if (!e.data) return;
-
-            let lang = null;
-
-            if (typeof e.data === 'string') {
-                lang = e.data;
-            } else if (typeof e.data === 'object') {
-                if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE' || e.data.action === 'setLanguage') {
-                    lang = e.data.lang || e.data.language || e.data.locale;
-                } else if (e.data.lang || e.data.language || e.data.locale) {
-                    lang = e.data.lang || e.data.language || e.data.locale;
-                }
-            }
-
-            if (lang && typeof changeLanguage === 'function') {
-                changeLanguage(lang);
-            }
         });
     </script>
 </body>
