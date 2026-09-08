@@ -765,128 +765,106 @@
     function normalizeLang(lang) {
         if (!lang) return 'zh';
         const l = String(lang).toLowerCase().trim();
-        if (l.startsWith('ja') || l.startsWith('jp')) return 'ja';
-        if (l.startsWith('ko') || l.startsWith('kr')) return 'ko';
-        if (l.startsWith('en')) return 'en';
-        if (l.startsWith('fr')) return 'fr';
-        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk')) return 'zh';
+        if (l.startsWith('ja') || l.startsWith('jp') || l === 'japanese') return 'ja';
+        if (l.startsWith('ko') || l.startsWith('kr') || l === 'korean') return 'ko';
+        if (l.startsWith('en') || l === 'english') return 'en';
+        if (l.startsWith('fr') || l === 'french') return 'fr';
+        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk') || l === 'chinese') return 'zh';
         return 'zh';
     }
 
-    function applyLanguage(langKey) {
+    function changeLanguage(langKey) {
         currentLang = normalizeLang(langKey);
-        const dict = dictionary[currentLang] || dictionary.zh;
+        const langData = dictionary[currentLang] || dictionary.zh;
 
-        // 1. 更新頂部語言按鈕的高亮狀態
+        // Update active class on top buttons
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            const btnLabel = btn.innerText.trim().toLowerCase();
-            const isCurrent = (currentLang === 'zh' && btnLabel === 'ch') ||
-                              (currentLang === 'en' && btnLabel === 'en') ||
-                              (currentLang === 'ja' && (btnLabel === 'jp' || btnLabel === 'ja')) ||
-                              (currentLang === 'ko' && (btnLabel === 'kr' || btnLabel === 'ko')) ||
-                              (currentLang === 'fr' && btnLabel === 'fr');
-            if (isCurrent) {
+            if (btn.innerText.toLowerCase() === currentLang || (currentLang === 'ja' && btn.innerText.toLowerCase() === 'jp')) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
         });
 
-        // 2. 更新具有 data-i18n 屬性的元素文字內容
+        // Update inner text content
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (dict[key]) {
-                el.innerHTML = dict[key];
+            if (langData[key]) {
+                el.innerHTML = langData[key];
             }
         });
 
-        // 3. 更新具有 data-i18n-placeholder 屬性的輸入框提示文字
+        // Update input placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
-            if (dict[key]) {
-                el.placeholder = dict[key];
+            if (langData[key]) {
+                el.placeholder = langData[key];
             }
         });
     }
 
-    // 暴露供 onclick 呼叫的切換函式
-    function changeLanguage(langKey) {
-        applyLanguage(langKey);
-    }
+    const form = document.getElementById("contact-form");
+    const statusMsg = document.getElementById("status-msg");
+    const btnText = document.getElementById("btn-text");
+    const submitBtn = document.getElementById("submit-btn");
 
-    function detectLanguage() {
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const activeDict = dictionary[currentLang] || dictionary.zh;
+
+        submitBtn.disabled = true;
+        btnText.innerText = activeDict.btnSending;
+
+        const data = new FormData(form);
         try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const paramLang = urlParams.get('lang') || urlParams.get('locale') || urlParams.get('l');
-            if (paramLang) return paramLang;
-        } catch (e) {}
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            });
 
-        const navLang = (navigator.language || '').toLowerCase();
-        if (navLang.startsWith('zh')) return 'zh';
-        if (navLang.startsWith('ja')) return 'ja';
-        if (navLang.startsWith('ko')) return 'ko';
-        if (navLang.startsWith('fr')) return 'fr';
-        if (navLang.startsWith('en')) return 'en';
+            if (response.ok) {
+                form.style.display = "none";
+                statusMsg.style.display = "block";
+                statusMsg.innerHTML = activeDict.statusSuccess;
+            } else { 
+                throw new Error(); 
+            }
+        } catch (err) {
+            submitBtn.disabled = false;
+            btnText.innerText = activeDict.btnError;
+        }
+    };
 
-        return 'zh';
+    // Listen for postMessage window communication
+    function initLangFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang') || urlParams.get('language') || urlParams.get('locale');
+        if (langParam) {
+            changeLanguage(langParam);
+        }
     }
 
     function requestLangFromParent() {
         const msg = JSON.stringify({ type: 'REQUEST_LANG', action: 'getLanguage' });
         
-        // 向直屬第一層 iframe 主動查詢
+        // 1. 發送給直屬第一層 iframe
         if (window.parent && window.parent !== window) {
             window.parent.postMessage(msg, '*');
             window.parent.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
         }
         
-        // 向最頂層主頁面 (window.top) 主動查詢
+        // 2. 穿透發送給最頂層首頁 (window.top)
         if (window.top && window.top !== window && window.top !== window.parent) {
             try {
                 window.top.postMessage(msg, '*');
                 window.top.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
-            } catch (err) {}
+            } catch (err) {
+                // 跨域安全性限制容錯
+            }
         }
     }
 
-    // 表單 AJAX 提交邏輯
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const statusMsg = document.getElementById('status-msg');
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const dict = dictionary[currentLang] || dictionary.zh;
-
-        submitBtn.disabled = true;
-        const btnText = document.getElementById('btn-text');
-        if (btnText) btnText.innerText = dict.btnSending;
-
-        try {
-            const response = await fetch(form.action, {
-                method: form.method,
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (response.ok) {
-                form.style.display = 'none';
-                statusMsg.innerHTML = dict.statusSuccess;
-                statusMsg.style.display = 'block';
-            } else {
-                throw new Error('Form submission failed');
-            }
-        } catch (err) {
-            console.error('Submission Error:', err);
-            submitBtn.disabled = false;
-            if (btnText) btnText.innerText = dict.btnError;
-            setTimeout(() => {
-                if (btnText) btnText.innerText = dict.btnSubmit;
-            }, 3000);
-        }
-    });
-
-    // 跨層 postMessage 視窗通訊監聽器
     window.addEventListener('message', (e) => {
         if (!e.data) return;
         let data = e.data;
@@ -895,20 +873,26 @@
             try {
                 data = JSON.parse(data);
             } catch (err) {
-                applyLanguage(data);
+                changeLanguage(data);
                 return;
             }
         }
 
         const targetLang = data.lang || data.language || data.locale || data.langKey || data.currentLang;
         if (targetLang) {
-            applyLanguage(targetLang);
-        } else if ((data.type === 'LANGUAGE_CHANGE' || data.type === 'CHANGE_LANGUAGE' || data.type === 'SET_LANGUAGE') && (data.lang || data.language)) {
-            applyLanguage(data.lang || data.language);
+            changeLanguage(targetLang);
+        } else if ((data.type === 'LANGUAGE_CHANGE' || data.type === 'SET_LANGUAGE') && (data.lang || data.language)) {
+            changeLanguage(data.lang || data.language);
         }
     });
 
-    // 客製化下拉選單互動事件綁定
+    // 頁面初次載入時自動執行檢測與向頂層請求
+    window.addEventListener('DOMContentLoaded', () => {
+        initLangFromURL();
+        requestLangFromParent();
+    });
+
+    // Custom Select Dropdown behavior
     document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
         const trigger = wrapper.querySelector('.custom-select-trigger');
         const hiddenInput = wrapper.querySelector('input[type="hidden"]');
@@ -943,15 +927,27 @@
         });
     });
 
-    // 點擊選單外部自動關閉下拉選單
+    // Close options on click outside
     document.addEventListener('click', () => {
         document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
     });
+   window.addEventListener('message', (e) => {
+        if (!e.data) return;
+        let lang = null;
+        if (typeof e.data === 'string') {
+            lang = e.data;
+        } else if (typeof e.data === 'object') {
+            if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE') {
+                lang = e.data.lang || e.data.language;
+            } else if (e.data.lang || e.data.language) {
+                lang = e.data.lang || e.data.language;
+            }
+        }
+        if (lang) applyLanguage(lang);
+    });
 
-    // 初始化載入
     window.addEventListener('DOMContentLoaded', () => {
         applyLanguage(detectLanguage());
-        requestLangFromParent();
     });
 </script>
 
