@@ -837,6 +837,34 @@
     };
 
     // Listen for postMessage window communication
+    function initLangFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang') || urlParams.get('language') || urlParams.get('locale');
+        if (langParam) {
+            changeLanguage(langParam);
+        }
+    }
+
+    function requestLangFromParent() {
+        const msg = JSON.stringify({ type: 'REQUEST_LANG', action: 'getLanguage' });
+        
+        // 1. 發送給直屬第一層 iframe
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage(msg, '*');
+            window.parent.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
+        }
+        
+        // 2. 穿透發送給最頂層首頁 (window.top)
+        if (window.top && window.top !== window && window.top !== window.parent) {
+            try {
+                window.top.postMessage(msg, '*');
+                window.top.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
+            } catch (err) {
+                // 跨域安全性限制容錯
+            }
+        }
+    }
+
     window.addEventListener('message', (e) => {
         if (!e.data) return;
         let data = e.data;
@@ -850,12 +878,18 @@
             }
         }
 
-        const targetLang = data.lang || data.language || data.locale || data.langKey;
+        const targetLang = data.lang || data.language || data.locale || data.langKey || data.currentLang;
         if (targetLang) {
             changeLanguage(targetLang);
-        } else if (data.type === 'LANGUAGE_CHANGE' && data.lang) {
-            changeLanguage(data.lang);
+        } else if ((data.type === 'LANGUAGE_CHANGE' || data.type === 'SET_LANGUAGE') && (data.lang || data.language)) {
+            changeLanguage(data.lang || data.language);
         }
+    });
+
+    // 頁面初次載入時自動執行檢測與向頂層請求
+    window.addEventListener('DOMContentLoaded', () => {
+        initLangFromURL();
+        requestLangFromParent();
     });
 
     // Custom Select Dropdown behavior
