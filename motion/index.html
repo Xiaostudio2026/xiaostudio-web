@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | Print Works (Protected)</title>
+    <title>XiaoStudio | Motion Portfolio (Protected)</title>
     
-    <!-- 外部資源與字型 -->
+    <!-- 外部資源與原版字型 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800;900&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
-           1. 基礎變數與全局設定 (包含防護設定)
+           1. 基礎變數與白底黑字視覺設定
            ========================================= */
         :root {
             --bg-color: #ffffff;
-            --text-color: #000000;
-            --accent-gray: #f3f3f3;
-            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --text-main: #000000;
+            --text-sub: #000000;
+            --border-black: #000000;
+            --border-light: #e2e2e2;
+            --bg-gray: #f8f8f8;
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 全局禁止文字與元素選取、禁止移動端長按選單 */
+        /* 全局禁止文字選取、媒體拖曳與點擊高亮 */
         *, *::before, *::after {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
@@ -30,52 +33,54 @@
             user-select: none !important;
             -webkit-touch-callout: none !important;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
 
         body { 
             font-family: 'Montserrat', sans-serif; 
             background-color: var(--bg-color); 
-            color: var(--text-color);
+            color: var(--text-main);
             overflow-x: hidden; 
             margin: 0; 
-            padding: 2rem 2rem 8rem 2rem;
+            padding: 2rem 1.5rem 6rem 1.5rem;
         } 
         
-        @media (min-width: 768px) { body { padding: 3rem 3rem 12rem 3rem; } }
-        @media (min-width: 1024px) { body { padding: 4rem 4rem 16rem 4rem; } }
+        @media (min-width: 768px) { body { padding: 3.5rem 3rem 10rem 3rem; } }
+        @media (min-width: 1024px) { body { padding: 4.5rem 4rem 12rem 4rem; } }
 
         .mono-text { font-family: 'Barlow', sans-serif; }
+        .tech-mono { font-family: 'Share Tech Mono', monospace; }
+        .barlow-condensed { font-family: 'Montserrat', sans-serif; }
         .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
         .no-scroll { overflow: hidden; }
 
-        /* =========================================
-           2. 佈局元件 (Layout & Security Elements)
-           ========================================= */
         .content-container {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
             position: relative;
         }
 
-        .masthead-border { 
-            border-top: 1px solid var(--text-color); 
-            border-bottom: 1px solid var(--text-color); 
-            padding: 0.2rem 0;
-            margin: 0.5rem 0;
+        /* 垂直文字方向 (Montserrat 600) */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
         }
 
-        @media (min-width: 768px) { .masthead-border { padding: 1.25rem 0; } }
-
-        /* 防護標籤指示器 */
+        /* 安全防護標籤 */
         .security-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            background: #000;
-            color: #fff;
-            padding: 4px 10px;
+            gap: 8px;
+            background: #000000;
+            color: #ffffff;
+            padding: 6px 12px;
+            font-family: 'Barlow', sans-serif;
             font-size: 11px;
-            letter-spacing: 0.12em;
+            font-weight: 700;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
         }
 
@@ -89,186 +94,10 @@
             box-shadow: 0 0 6px #00ff66;
         }
 
-        /* =========================================
-           3. 作品網格元件 (Project Card)
-           ========================================= */
-        .project-card {
-            position: relative;
-            display: block;
-            overflow: hidden;
-            background-color: var(--accent-gray);
-            transition: var(--transition-smooth);
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        
-        .project-card.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .project-image-container {
-            width: 100%;
-            aspect-ratio: 1 / 1; /* 手機端預設 1:1 比例 */
-            overflow: hidden;
-            position: relative;
-            background-color: #eee;
-        }
-
-        @media (min-width: 768px) {
-            .project-image-container {
-                aspect-ratio: 4 / 3; /* 平板與電腦端維持 4:3 比例 */
-            }
-        }
-
-        .project-asset {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-            -webkit-user-drag: none;
-            user-drag: none;
-            pointer-events: none; /* 鎖定媒體元素本體 */
-        }
-        
-        .project-asset.loaded { opacity: 1; }
-        .project-card:hover .project-asset { transform: scale(1.06); }
-
-        /* 媒體保護遮罩 (防止使用者直接對圖點選右鍵或另存新檔) */
-        .asset-protection-layer {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            background: transparent;
-            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
-            background-size: 8px 8px;
-            cursor: pointer;
-        }
-
-        .loading-shimmer {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* =========================================
-           4. 專案詳情視窗與安全提示 UI
-           ========================================= */
-        #project-overlay {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--bg-color);
-            z-index: 500;
-            transform: translateX(100%);
-            transition: var(--transition-smooth);
-            display: flex;
-            justify-content: center;
-            visibility: hidden;
-        }
-
-        #project-overlay.active {
-            transform: translateX(0);
-            visibility: visible;
-        }
-
-        .project-modal-content {
-            width: 85vw;
-            max-width: 85vw; 
-            height: 100%;
-            position: relative;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            padding: 0; 
-        }
-
-        @media (max-width: 768px) { 
-            .project-modal-content { 
-                width: 95vw;
-                max-width: 95vw;
-            } 
-            .close-project-btn {
-                width: 25px;
-                height: 25px;
-            }
-        }
-
-        .close-project-btn {
-            position: absolute;
-            top: 0; 
-            right: 0; 
-            width: 35px;
-            height: 35px;
-            background: #fff;
-            color: #000;
-            border: 1px solid #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 601;
-            transition: var(--transition-smooth);
-        }
-
-        .close-project-btn:hover {
-            background: #000;
-            color: #fff;
-            transform: rotate(90deg);
-        }
-
-        #project-iframe {
-            width: 100%;
-            flex-grow: 1;
-            border: none;
-            background: #fff;
-            border-top: 1px solid #000;
-        }
-
-        /* 安全防護 Toast 提示視窗 */
-        #security-toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #000;
-            color: #fff;
-            padding: 14px 28px;
-            font-family: 'Barlow', sans-serif;
-            font-size: 13px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid #333;
-            z-index: 9999;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        #security-toast.active {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
+        /* 版權跑馬燈容器 (無縫跑馬燈) */
         .marquee-container {
             border: 1px solid #000000;
+            background: #ffffff;
             overflow: hidden;
             white-space: nowrap;
             position: relative;
@@ -279,7 +108,7 @@
         .marquee-content {
             display: flex;
             white-space: nowrap;
-            animation: marquee-scroll 14s linear infinite;
+            animation: marquee-scroll 16s linear infinite;
             will-change: transform;
         }
 
@@ -287,33 +116,227 @@
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
+
+        /* =========================================
+           2. 隨性白黑工業風格作品卡片 (Industrial Card)
+           ========================================= */
+        .industrial-card {
+            background-color: #ffffff;
+            border: none;
+            position: relative;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .industrial-card:hover {
+            box-shadow: 6px 6px 0px #000000;
+            transform: translateY(-4px);
+        }
+
+        .project-image-container {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            position: relative;
+            background-color: #f0f0f0;
+        }
+
+        .project-asset {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        
+        .project-asset.loaded { opacity: 1; }
+        .industrial-card:hover .project-asset { transform: scale(1.05); }
+
+        /* 防護網格遮罩 (取消網點效果) */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background-image: none;
+            cursor: pointer;
+        }
+
+        /* 機械式 Terminal 輸入風格 Loader */
+        .terminal-loader {
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.25rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #000000;
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background-color: #000000;
+            vertical-align: middle;
+            animation: cursor-blink 0.8s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* =========================================
+           3. Modal 彈窗與安全防護通知 UI
+           ========================================= */
+        #project-overlay {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            transform: translateX(100%);
+            transition: var(--transition-smooth);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+        }
+
+        #project-overlay.active {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .project-modal-content {
+            width: 90vw;
+            height: 88vh;
+            max-width: 1400px;
+            position: relative;
+            background: #ffffff;
+            border: 2px solid #000000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .close-project-btn {
+            position: absolute;
+            top: -16px; 
+            right: -16px; 
+            width: 42px;
+            height: 42px;
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 601;
+            transition: var(--transition-smooth);
+        }
+
+        .close-project-btn:hover {
+            background: #000000;
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
+
+        #project-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+        }
+
+        /* 安全防護 Toast 提示框 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000000;
+            color: #ffffff;
+            padding: 12px 24px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid #000000;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;">
 
     <div class="content-container">
+        
+        <!-- 頁首頂端數據欄 (整體純黑字) -->
+        <div class="flex flex-wrap justify-between items-center gap-3 mb-6 mono-text text-xs text-black font-bold tracking-widest uppercase pb-2">
+            <div>NODE_03 // 2026 ISSUE</div>
+            <div class="hidden sm:block">XIAOSTUDIO ARCHIVE</div>
+            <div>MODE: PROTECTED_STREAM</div>
+        </div>
+
         <!-- 頁首標題區 -->
-        <header id="main-header" class="mb-6 md:mb-8">
-            <div class="flex justify-between items-end mb-3 mono-text text-xs md:text-sm font-bold tracking-widest uppercase">
-                <div>NODE_03 // 2026 ISSUE</div>
-                <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
-                <div>MOTION PROJECTS</div>
-            </div>
+        <header id="main-header" class="mb-10 md:mb-14 relative">
             
-            <div class="masthead-border">
-                <div class="flex items-center justify-center text-center">
-                    <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase leading-none text-center">
-                         MOTION<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>VIDEO
-                    </h1>
+            <!-- 大字級剪片分割符號 "{" 與機械打字 Console Header 位於同一列 -->
+            <div class="flex items-center gap-3 sm:gap-4 mb-2">
+                <div class="text-7xl sm:text-9xl font-extralight text-black tech-mono leading-none select-none pointer-events-none shrink-0">{</div>
+                <div class="flex-1 py-1 text-xs text-black tech-mono flex items-center justify-between overflow-hidden">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <span class="font-bold">&gt;</span>
+                        <span id="mechanical-typing-text" class="truncate tracking-wider text-black font-semibold"></span>
+                        <span class="typewriter-cursor"></span>
+                    </div>
+                    <span class="hidden md:inline-block text-[10px] bg-black px-2 py-0.5 text-white font-bold shrink-0 ml-2">STATUS: ACTIVE</span>
                 </div>
             </div>
+
+            <!-- 主標題 (靠左對齊) -->
+            <div class="py-2 flex justify-start">
+                <h1 class="text-6xl sm:text-8xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none text-left">
+                    MOTION<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>VIDEO
+                </h1>
+            </div>
             
-            <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4">
-                <span class="security-badge">Protected Area</span>
+            <!-- 版權跑馬燈與防護 Area 資訊區 -->
+            <div class="mt-6 flex flex-wrap justify-between items-center gap-4 py-1 text-xs mono-text uppercase tracking-widest">
+                <div class="flex items-center gap-3">
+                    <span class="security-badge">Protected Area</span>
+                </div>
                 
-                <!-- 黑字黑色外框線跑馬燈 -->
-                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
-                    <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
+                <div class="marquee-container py-1.5 px-3 max-w-[260px] sm:max-w-[380px] md:max-w-[500px]">
+                    <div class="marquee-content gap-8 text-black font-bold text-xs tracking-wider">
                         <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                         <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                     </div>
@@ -322,138 +345,546 @@
         </header>
 
         <!-- 作品網格 -->
-        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            <a href="https://xiaostudio.xyz/motion/Horseyear.html" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb">
-                </div>
-            </a>
-
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772784088/JA_Xmas_1920_30s_S_fxxm7k.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb">
-                </div>
-            </div>
+        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777977760/Rose_2026_1920_preview_zqv1ri.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb">
+            <!-- 專案 01 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4" data-url="https://xiaostudio.xyz/motion/Horseyear.html">
+                <!-- 上方年份 -->
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
                 </div>
-            </div>
-  <!-- 作品網格2 -->
-  <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422197/Spray_uc2wf1.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            HORSE YEAR 2026
+                        </span>
+                    </div>
+                    
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_01</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
                 </div>
-            </div>
-  <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422191/Juniper_wv8obg.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
-                </div>
-            </div>
-  <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422154/Teatree_ec8g2v.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">CNY COMMERCIAL</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:30:00</span>
+                    </div>
                 </div>
             </div>
 
- <!-- 作品網格3 -->
-              <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777532656/JA_Xmas_1920_30s_c9e0mx.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
+            <!-- 專案 02 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772784088/JA_Xmas_1920_30s_S_fxxm7k.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            2025 Holiday Campaign Video Production
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_02</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">HOLIDAY MOTION</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:30:00</span>
+                    </div>
                 </div>
             </div>
 
-               <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788425380/3in1_cucu3t.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
+            <!-- 專案 03 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777977760/Rose_2026_1920_preview_zqv1ri.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
                 </div>
-            </div>
-  
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772788390/Tea_Tree_Series_Video_2025_S_axtnpq.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb">
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            ROSE AURA SERIES
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_03</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
                 </div>
-            </div>
-            
-          
- <!-- 作品網格4 -->
-              
-             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534685/JA_Mask_2_dk49ir.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
-                </div>
-            </div>
-        
 
-
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778154954/Tea_Tree_Series_V2_ucrxdx.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
-                </div>
-            </div>
-
-          
-    <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788426292/JA_Video_bkvoie.mp4">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="asset-protection-layer"></div>
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="Project Preview" class="project-asset auto-thumb">
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PRODUCT VISUAL</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:15:00</span>
+                    </div>
                 </div>
             </div>
 
- 
+            <!-- 專案 04 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422197/Spray_uc2wf1.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            HERBAL SPRAY 
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_04</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">AROMASE</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PRODUCT ANIMATION</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 05 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422191/Juniper_wv8obg.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            JUNIPER LIQUID SHAMPOO
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_05</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">AROMASE</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">BRAND VIDEO</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:40:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 06 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422154/Teatree_ec8g2v.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            TEA TREE SHAMPOO & BODY WASH
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_06</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">AROMASE</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PRODUCT VIDEO</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:20:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 07 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777532656/JA_Xmas_1920_30s_c9e0mx.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            HOIDAY CAMPAIGN VIDEO PRODUCTION
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_07</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PROMOTIONAL VIDEO</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:30:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 08 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788425380/3in1_cucu3t.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                   
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            MY JULIART HELIX 3 IN 1 
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_08</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PRODUCT MOTION</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 09 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772788390/Tea_Tree_Series_Video_2025_S_axtnpq.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            COOLING TEA TREE SERIES
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_09</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">SERIES CAMPAIGN</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:45:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 10 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534685/JA_Mask_2_dk49ir.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            KEY INGREDIENTS
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_10</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">DYNAMIC PRODUCT SHOT</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:15:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 11 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778154954/Tea_Tree_Series_V2_ucrxdx.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                  
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            TEA TREE SERIES
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_11</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PRODUCT LAUNCH</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:30:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案 12 -->
+            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788426292/JA_Video_bkvoie.mp4">
+                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
+                 
+                </div>
+                
+                <div class="flex gap-3 my-1 items-stretch">
+                    <div class="flex items-center justify-center px-1 py-2 shrink-0">
+                        <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
+                            BRAND SHOWCASE
+                        </span>
+                    </div>
+                    <div class="project-image-container flex-1">
+                        <div class="asset-protection-layer"></div>
+                        <div class="terminal-loader">
+                            <div>&gt; INIT STREAM_12</div>
+                            <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
+                        </div>
+                        <img src="" class="project-asset auto-thumb">
+                    </div>
+                </div>
+
+                <div class="mt-2 mono-text text-[11px] flex flex-col gap-1 text-black">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">CLIENT:</span>
+                        <span class="font-bold tracking-wider text-black">JULIART</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium text-black">TYPE:</span>
+                        <span class="font-semibold text-black">PRODUCT VIDEO</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-black">DUR:</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:05:00:00</span>
+                    </div>
+                </div>
+            </div>
+
         </main>
+
+        <!-- 頁面結束右下大字級剪片分割符號 "}" -->
+        <footer class="mt-12 sm:mt-20 flex justify-end items-center">
+            <div class="text-7xl sm:text-9xl font-extralight text-black tech-mono leading-none select-none pointer-events-none">}</div>
+        </footer>
     </div>
 
-    <!-- 專案展示視窗 -->
+    <!-- 專案展示視窗 Modal -->
     <aside id="project-overlay" aria-hidden="true" role="dialog">
         <div class="project-modal-content">
             <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
-            <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
+            <div class="p-2 bg-white border-b border-black tech-mono text-xs flex justify-between items-center text-black">
+                <span>&gt; INDUSTRIAL_PLAYER // ACTIVE_FRAME</span>
+            </div>
+            <iframe id="project-iframe" src="" title="專案詳情內容"></iframe>
         </div>
     </aside>
 
     <!-- 安全防護動態提示框 -->
     <div id="security-toast">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
         <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
     </div>
 
-    <!-- 腳本區 -->
     <script>
         /**
-         * XIAOSTUDIO 防護與核心邏輯系統
+         * 機械打字輸入效果引擎 (Mechanical Typewriter)
          */
+        const MechanicalTypewriter = {
+            phrases: [
+                "INITIALIZING ARCHIVE FRAMEWORK 2026...",
+                "LOADING MOTION GRAPHICS & CGI RENDERS...",
+                "SYSTEM STATUS: ONLINE // SECURITY GUARD: ACTIVE",
+                "XIAOSTUDIO ARCHIVE NODE_03 // PROTECTED STREAM"
+            ],
+            currentPhraseIndex: 0,
+            currentCharIndex: 0,
+            isDeleting: false,
+            element: null,
 
-        // =========================================
-        // 1. 禁止下載與複製安全防護引擎 (Security Module)
-        // =========================================
+            init() {
+                this.element = document.getElementById('mechanical-typing-text');
+                if (this.element) {
+                    this.type();
+                }
+            },
+
+            type() {
+                const currentPhrase = this.phrases[this.currentPhraseIndex];
+                
+                if (this.isDeleting) {
+                    this.element.innerText = currentPhrase.substring(0, this.currentCharIndex - 1);
+                    this.currentCharIndex--;
+                } else {
+                    this.element.innerText = currentPhrase.substring(0, this.currentCharIndex + 1);
+                    this.currentCharIndex++;
+                }
+
+                let typeSpeed = this.isDeleting ? 30 : 60;
+
+                if (!this.isDeleting && this.currentCharIndex === currentPhrase.length) {
+                    typeSpeed = 2500;
+                    this.isDeleting = true;
+                } else if (this.isDeleting && this.currentCharIndex === 0) {
+                    this.isDeleting = false;
+                    this.currentPhraseIndex = (this.currentPhraseIndex + 1) % this.phrases.length;
+                    typeSpeed = 500;
+                }
+
+                setTimeout(() => this.type(), typeSpeed);
+            }
+        };
+
+        /**
+         * 安全防護模組 (Security Guard Module)
+         */
         const SecurityGuard = {
             toastTimeout: null,
 
@@ -461,7 +892,6 @@
                 this.disableContextMenu();
                 this.disableDragAndDrop();
                 this.disableShortcuts();
-                this.preventPrintScreen();
             },
 
             showToast(message) {
@@ -479,7 +909,6 @@
             },
 
             disableContextMenu() {
-                // 阻擋右鍵選單
                 document.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     this.showToast('RIGHT CLICK DISABLED // 內容受著作權保護');
@@ -488,7 +917,6 @@
             },
 
             disableDragAndDrop() {
-                // 阻擋圖片/媒體拖曳
                 document.addEventListener('dragstart', (e) => {
                     e.preventDefault();
                     this.showToast('DRAG & DROP DISABLED // 禁止拖曳下載');
@@ -497,68 +925,34 @@
             },
 
             disableShortcuts() {
-                // 阻擋鍵盤組合鍵 (DevTools, 另存新檔, 檢視原始碼, 列印等)
                 document.addEventListener('keydown', (e) => {
                     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
                     const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
                     const keyCode = e.keyCode || e.which;
 
-                    // F12 (DevTools)
                     if (keyCode === 123) {
                         e.preventDefault();
                         this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
                         return false;
                     }
 
-                    if (ctrlOrCmd) {
-                        // S: 另存新檔, U: 檢視原始碼, P: 列印
-                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
-                            e.preventDefault();
-                            this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
-                            return false;
-                        }
-
-                        // Shift + I / J / C (開啟檢查元素與 Console)
-                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
-                            e.preventDefault();
-                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
-                            return false;
-                        }
-
-                        // A: 全選, C: 複製
-                        if (keyCode === 65 || keyCode === 67) {
-                            // 允許在輸入框內正常鍵入，其他區域禁止全選複製
-                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-                                e.preventDefault();
-                                this.showToast('COPYING DISABLED // 禁止複製');
-                                return false;
-                            }
-                        }
+                    if (ctrlOrCmd && (keyCode === 83 || keyCode === 85 || keyCode === 80)) {
+                        e.preventDefault();
+                        this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
+                        return false;
                     }
                 }, false);
-            },
-
-            preventPrintScreen() {
-                // 當按下 PrintScreen 鍵時清空剪貼簿 (對部分系統提供基本干擾)
-                window.addEventListener('keyup', (e) => {
-                    if (e.key === 'PrintScreen') {
-                        navigator.clipboard.writeText('');
-                        this.showToast('SCREENSHOT DETECTED // 圖片受到保護');
-                    }
-                });
             }
         };
 
-        // =========================================
-        // 2. Portfolio Core Logic (原本的核心邏輯)
-        // =========================================
+        /**
+         * 作品集核心模組 (Portfolio Core Module)
+         */
         const Portfolio = {
             elements: {
-                header: document.getElementById('main-header'),
-                masthead: document.querySelector('.masthead-border'),
                 overlay: document.getElementById('project-overlay'),
                 iframe: document.getElementById('project-iframe'),
-                cards: document.querySelectorAll('.project-card')
+                cards: document.querySelectorAll('.industrial-card')
             },
 
             init() {
@@ -568,35 +962,28 @@
 
             bindEvents() {
                 this.elements.cards.forEach(card => {
-                    // 支持 <a> 標籤與普通的 <div> 點擊觸發
-                    card.addEventListener('click', (e) => {
-                        const href = card.getAttribute('href');
-                        if (href) {
-                            e.preventDefault();
-                            this.open(href);
+                    card.addEventListener('click', () => {
+                        const targetUrl = card.getAttribute('data-url');
+                        if (targetUrl) {
+                            this.open(targetUrl);
+                        } else {
+                            SecurityGuard.showToast('PROJECT DETAIL PREVIEW ACTIVE');
                         }
                     });
                 });
 
-                window.addEventListener('resize', () => {
-                    if (this.elements.overlay.classList.contains('active')) {
-                        this.updateOverlayPosition();
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.elements.overlay.classList.contains('active')) {
+                        this.close();
                     }
                 });
             },
 
             setupIntersectionObserver() {
-                const options = {
-                    threshold: 0.01,
-                    rootMargin: '200px 0px'
-                };
-
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             const card = entry.target;
-                            card.classList.add('is-visible');
-                            
                             const placeholder = card.querySelector('.auto-thumb');
                             const assetUrl = card.getAttribute('data-thumb');
                             
@@ -605,17 +992,24 @@
                             }
                         }
                     });
-                }, options);
+                }, { threshold: 0.05, rootMargin: '100px 0px' });
 
                 this.elements.cards.forEach(card => observer.observe(card));
             },
 
-            /**
-             * 資源加載處理：自動偵測圖片或影片 (帶下載保護屬性)
-             */
             loadAsset(placeholder, url, card) {
                 const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
+                const statusText = card.querySelector('.loading-status-text');
+                const loader = card.querySelector('.terminal-loader');
                 
+                // 機械式百分比輸入數字載入模擬
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.floor(Math.random() * 25) + 12;
+                    if (progress > 90) progress = 90;
+                    if (statusText) statusText.innerText = `> LOADING... ${progress}%`;
+                }, 100);
+
                 if (isVideo) {
                     const video = document.createElement('video');
                     video.className = placeholder.className;
@@ -625,21 +1019,17 @@
                     video.muted = true;
                     video.playsInline = true;
                     video.setAttribute('muted', '');
-                    video.setAttribute('controlsList', 'nodownload noplaybackrate'); // 停用下載選單
-                    video.setAttribute('disablePictureInPicture', 'true'); // 停用畫中畫
+                    video.setAttribute('controlsList', 'nodownload noplaybackrate');
+                    video.setAttribute('disablePictureInPicture', 'true');
                     video.setAttribute('oncontextmenu', 'return false;');
                     
-                    // 安全播放函式，隱藏瀏覽器省電模式或切頁引起的 AbortError
                     const safePlay = () => {
                         const playPromise = video.play();
                         if (playPromise && typeof playPromise.catch === 'function') {
-                            playPromise.catch(() => {
-                                // 忽略省電模式或背景頁面暫停媒體導致的控制台錯誤
-                            });
+                            playPromise.catch(() => {});
                         }
                     };
 
-                    // --- 5秒循環邏輯 ---
                     video.addEventListener('timeupdate', function() {
                         if (this.currentTime >= 5) {
                             this.currentTime = 0;
@@ -648,37 +1038,32 @@
                     });
                     
                     video.oncanplay = () => {
-                        safePlay();
-                        this.finalizeLoading(placeholder, video, card);
+                        clearInterval(progressInterval);
+                        if (statusText) statusText.innerText = `> READY 100%`;
+                        setTimeout(() => {
+                            if (loader) loader.style.display = 'none';
+                            safePlay();
+                            this.finalizeLoading(placeholder, video, card);
+                        }, 180);
                     };
-                    
-                    video.onerror = () => this.handleError(card);
                     
                     placeholder.parentNode.replaceChild(video, placeholder);
                 } else {
                     placeholder.src = url;
-                    placeholder.setAttribute('oncontextmenu', 'return false;');
                     placeholder.onload = () => {
+                        clearInterval(progressInterval);
+                        if (loader) loader.style.display = 'none';
                         this.finalizeLoading(null, placeholder, card);
                     };
-                    placeholder.onerror = () => this.handleError(card);
                 }
             },
 
             finalizeLoading(oldEl, newEl, card) {
                 newEl.classList.add('loaded');
                 newEl.dataset.loaded = "true";
-                const shimmer = card.querySelector('.loading-shimmer');
-                if (shimmer) shimmer.style.display = 'none';
-            },
-
-            handleError(card) {
-                const shimmer = card.querySelector('.loading-shimmer');
-                if (shimmer) shimmer.style.background = '#e0e0e0';
             },
 
             open(url) {
-                this.updateOverlayPosition();
                 this.elements.iframe.src = url;
                 this.elements.overlay.classList.add('active');
                 this.elements.overlay.setAttribute('aria-hidden', 'false');
@@ -689,18 +1074,12 @@
                 this.elements.overlay.classList.remove('active');
                 this.elements.overlay.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('no-scroll');
-                setTimeout(() => { this.elements.iframe.src = ''; }, 600);
-            },
-
-            updateOverlayPosition() {
-                if (this.elements.masthead) {
-                    const rect = this.elements.masthead.getBoundingClientRect();
-                    this.elements.overlay.style.top = rect.top + 'px';
-                }
+                setTimeout(() => { this.elements.iframe.src = ''; }, 400);
             }
         };
 
         document.addEventListener('DOMContentLoaded', () => {
+            MechanicalTypewriter.init();
             SecurityGuard.init();
             Portfolio.init();
         });
