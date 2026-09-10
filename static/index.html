@@ -3,101 +3,1510 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | Print Works</title>
+    <title>XiaoStudio | Web Works (Protected)</title>
     
-    <!-- 1. 外部資源：Tailwind CSS (CDN) -->
+    <!-- 外部資源與字型 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- 2. 外部資源：Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
-    
-    <!-- 3. 修正路徑：指向上一層目錄的 CSS -->
-  <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        /* =========================================
+           1. 基礎變數與全局設定 (包含防護設定)
+           ========================================= */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-gray: #f3f3f3;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 隱藏原生鼠標以使用自訂相機對焦鼠標 */
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (pointer: fine) {
+            body, a, button, input, textarea, .project-card, .asset-protection-layer {
+                cursor: none !important;
+            }
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 2rem 2rem 8rem 2rem;
+        } 
+        
+        @media (min-width: 768px) { body { padding: 3rem 3rem 12rem 3rem; } }
+        @media (min-width: 1024px) { body { padding: 4rem 4rem 16rem 4rem; } }
+
+        .mono-text { font-family: 'Barlow', sans-serif; }
+        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
+        .no-scroll { overflow: hidden; }
+
+        /* =========================================
+           1.2 相機對焦鼠標 (Camera Focus Custom Cursor)
+           ========================================= */
+        #camera-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                        height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.2s ease;
+            display: none;
+        }
+
+        @media (pointer: fine) {
+            #camera-cursor { display: block; }
+        }
+
+        /* 對焦框四角外殼 */
+        .cursor-box {
+            position: absolute;
+            inset: 0;
+            border: 1.5px solid #000;
+            transition: all 0.25s ease;
+        }
+
+        .cursor-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+
+        /* 滑過可點擊物件與作品卡片時的對焦狀態 */
+        #camera-cursor.hovering-card {
+            width: 48px;
+            height: 48px;
+        }
+
+        #camera-cursor.hovering-card .cursor-box {
+            border-color: #000;
+            border-width: 2px;
+            box-shadow: 0 0 0 1px #fff;
+        }
+
+        #camera-cursor.hovering-card .cursor-dot {
+            background: #ff0033;
+            box-shadow: 0 0 8px #ff0033;
+        }
+
+        #camera-cursor.hovering-btn {
+            width: 26px;
+            height: 26px;
+        }
+
+        #camera-cursor.hovering-btn .cursor-box {
+            border-radius: 50%;
+            border-color: #000;
+        }
+
+        /* =========================================
+           1.5 載入動畫 (Vertical & Horizontal Slide-In)
+           ========================================= */
+        .animate-text-diag {
+            opacity: 0;
+            animation: textDiagIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-text-horiz {
+            opacity: 0;
+            animation: textHorizIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+        }
+        .animate-text-vert {
+            opacity: 0;
+            animation: textVertIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+        }
+
+        @keyframes textDiagIn {
+            0% { opacity: 0; transform: translate(-35px, -20px); }
+            100% { opacity: 1; transform: translate(0, 0); }
+        }
+        @keyframes textHorizIn {
+            0% { opacity: 0; transform: translateX(-35px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes textVertIn {
+            0% { opacity: 0; transform: translateY(-25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================
+           2. 佈局元件 (Layout & Security Elements)
+           ========================================= */
+        .content-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .masthead-border { 
+            padding: 0.2rem 0;
+            margin: 0.5rem 0;
+        }
+
+        @media (min-width: 768px) { .masthead-border { padding: 1.25rem 0; } }
+
+        /* 防護標籤指示器 */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #000;
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .security-badge::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #00ff66;
+        }
+
+        /* =========================================
+           3. 作品網格與相機對焦 Hover 特效 (黑框線 + Viewfinder)
+           ========================================= */
+        .project-card {
+            position: relative;
+            display: block;
+            background-color: transparent;
+            transition: var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(35px);
+            padding-bottom: 0;
+        }
+        
+        .project-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 垂直標題樣式 */
+        .vertical-title {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg) translateY(30px);
+            white-space: nowrap;
+            text-orientation: mixed;
+            line-height: 1;
+            max-height: 100%;
+            text-transform: uppercase;
+            letter-spacing: normal;
+            font-stretch: normal;
+            opacity: 0;
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        }
+
+        .project-card.is-visible .vertical-title {
+            opacity: 1;
+            transform: rotate(180deg) translateY(0);
+        }
+
+        /* 專案描述文字 */
+        .project-meta-text {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.12s, opacity 0.7s ease 0.12s;
+        }
+
+        .project-card.is-visible .project-meta-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-image-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            background-color: var(--accent-gray);
+            /* Hover 時外圍顯示黑框線 */
+            outline: 0px solid #000;
+            transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-card:hover .project-image-container {
+            outline: 3px solid #000;
+            outline-offset: -3px;
+        }
+
+        /* 相機對焦觀景窗框線 Overlay (Viewfinder Frame) */
+        .focus-frame-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-card:hover .focus-frame-overlay {
+            opacity: 1;
+        }
+
+        /* 相機對焦四角 L 型標籤 */
+        .focus-corner {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: #000;
+            border-style: solid;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .focus-corner-tl { top: 12px; left: 12px; border-width: 3px 0 0 3px; transform: translate(-10px, -10px); }
+        .focus-corner-tr { top: 12px; right: 12px; border-width: 3px 3px 0 0; transform: translate(10px, -10px); }
+        .focus-corner-bl { bottom: 12px; left: 12px; border-width: 0 0 3px 3px; transform: translate(-10px, 10px); }
+        .focus-corner-br { bottom: 12px; right: 12px; border-width: 0 3px 3px 0; transform: translate(10px, 10px); }
+
+        .project-card:hover .focus-corner-tl { transform: translate(0, 0); }
+        .project-card:hover .focus-corner-tr { transform: translate(0, 0); }
+        .project-card:hover .focus-corner-bl { transform: translate(0, 0); }
+        .project-card:hover .focus-corner-br { transform: translate(0, 0); }
+
+        /* 相機觀景窗數據標籤 (HUD Tags) */
+        .focus-meta-tag {
+            position: absolute;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: #fff;
+            background: #000;
+            padding: 3px 7px;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+        }
+
+        .focus-meta-tl { top: 16px; left: 36px; transform: translateY(-6px); }
+        .focus-meta-br { bottom: 16px; right: 36px; transform: translateY(6px); }
+
+        .project-card:hover .focus-meta-tag {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 圖片微幅放大與細節 */
+        .project-asset {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transform: translateY(-25px) scale(1.04);
+            transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        
+        .project-asset.loaded { 
+            opacity: 1; 
+            transform: translateY(0) scale(1);
+        }
+        .project-card:hover .project-asset.loaded { transform: scale(1.03); }
+
+        /* 媒體保護遮罩 */
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: transparent;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+            background-size: 8px 8px;
+        }
+
+        .loading-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================
+           4. 專案詳情視窗與安全提示 UI
+           ========================================= */
+        #project-overlay {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-color);
+            z-index: 500;
+            transform: translateX(100%);
+            transition: var(--transition-smooth);
+            display: flex;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+        #project-overlay.active {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .project-modal-content {
+            width: 85vw;
+            max-width: 85vw; 
+            height: 100%;
+            position: relative;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            padding: 0; 
+        }
+
+        @media (max-width: 768px) { 
+            .project-modal-content { 
+                width: 95vw;
+                max-width: 95vw;
+            } 
+            .close-project-btn {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        .close-project-btn {
+            position: absolute;
+            top: 0; 
+            right: 0; 
+            width: 35px;
+            height: 35px;
+            background: #fff;
+            color: #000;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 601;
+            transition: var(--transition-smooth);
+        }
+
+        .close-project-btn:hover {
+            background: #000;
+            color: #fff;
+            transform: rotate(90deg);
+        }
+
+        #project-iframe {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+            background: #fff;
+        }
+
+        /* 安全防護 Toast 提示視窗 */
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 14px 28px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #security-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .marquee-container {
+            border: 1px solid #000000;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-scroll 14s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
 </head>
-<body class="p-8 md:p-12 lg:p-16">
+<body oncontextmenu="return false;" ondragstart="return false;">
 
-    <!-- 雜誌編排風格 Header -->
-    <header class="mb-8 md:mb-12">
-        <div class="flex justify-between items-end mb-2 mono-text text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-black">
-            <div>NODE_02 // 2026 ISSUE</div>
-            <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
-            <div>ARCHIVE</div>
-        </div>
-        
-        <div class="masthead-border">
-            <div class="flex items-center justify-center md:justify-start">
-                <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none">
-                    STATIC<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>GRAPHIC
-                </h1>
-            </div>
-        </div>
-        
-        <div class="mt-4 flex justify-between mono-text text-[9px] md:text-[10px] font-medium tracking-wider text-black-400 uppercase">
-            <span>DEFINING VISUAL IDENTITY & ARTWORK </span>
-            <span>Vol. 001</span>
-        </div>
-    </header>
-
-   
-    <!-- 作品網格 -->
-        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-               <!-- AR_poster
-            <a href="https://xiaostudio.xyz/print/ar-zine" class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/q_auto/f_auto/v1776344739/AR-zine-01_tcduwr.jpg">
-            
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" alt="AR VISUAL" class="project-asset auto-thumb">
-                </div>
-            </a> -->
-            
-           
-
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div> <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div> <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-
-            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1774519177/soon_sumlkv.jpg">
-                <div class="project-image-container aspect-square md:aspect-[4/3]">
-                    <div class="loading-shimmer"></div>
-                    <img src="" class="project-asset auto-thumb grayscale opacity-40">
-                </div>
-            </div>
-        </main>
-
-    <!-- 全螢幕作品彈窗 -->
-    <div id="project-overlay">
-        <div class="close-overlay" onclick="closeProject()">
-            <span>CLOSE</span>
-        </div>
-        <iframe id="project-iframe" src="" frameborder="0"></iframe>
+    <!-- 相機對焦自訂鼠標 -->
+    <div id="camera-cursor">
+        <div class="cursor-box"></div>
+        <div class="cursor-dot"></div>
     </div>
 
-    <!-- 4. 修正路徑：指向上一層目錄的 JS -->
-    <script src="../assets/script.js"></script>
+    <div class="content-container">
+        <!-- Header 區塊 -->
+        <header id="main-header" class="mb-8 md:mb-16">
+            <div class="flex justify-between items-end mb-3 mono-text text-xs md:text-sm font-bold tracking-widest uppercase animate-text-horiz">
+                <div>NODE_04 // ISSUE</div>
+                <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
+                <div>DEFINING VISUAL IDENTITY & ARTWORK</div>
+            </div>
+            
+            <div class="masthead-border">
+                <div class="flex items-center justify-start text-left">
+                    <h1 class="text-[9vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase leading-none text-left animate-text-diag">
+                         STATIC<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>GRAPHIC
+                    </h1>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 animate-text-vert">
+                <span class="security-badge">PROTECTED AREA</span>
+                
+                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
+                    <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
+                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Portfolio Grid: 寬廣不對稱雙欄與單欄排列 (無分隔線) -->
+        <main id="project-grid" class="grid grid-cols-12 gap-x-8 md:gap-x-12 gap-y-16 md:gap-y-24">
+
+            <!-- ==================== PROJECT 01 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239244/Static_cover_2_ddluqh.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">PRODUCT COLLECTION PHOTO</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <!-- 相機鏡頭對焦框 Overlay -->
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/250s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="PRODUCT COLLECTION PHOTO">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">STYLIZED PRODUCT PHOTOGRAPHY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 02 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239243/Static_cover_3_iuiqsu.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">MEDIPRO PHOTOGRAPHY</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/200s F4.0</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="MEDIPRO PHOTOGRAPHY">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">AROMASE</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">PHOTOGRAPHY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 03 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239242/Static_cover_4_htztpf.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">FATHER'S DAY CAMPAIGN VISUAL</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.0</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="FATHER'S DAY CAMPAIGN VISUAL">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 04 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239241/Static_cover_6_hytix9.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">MEDIPRO KEY VISUAL</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/500s F5.6</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="MEDIPRO KEY VISUAL">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">AROMASE</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">VISUAL DESIGN</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">KEY VISUAL PRODUCTION</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 06 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239239/Static_cover_8_g5ufag.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">COLLECTION PHOTO SHOOT</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/250s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="COLLECTION PHOTO SHOOT">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 07 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239238/Static_cover_9_aigapo.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">COLLECTION PHOTO SHOOT</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/320s F4.0</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="COLLECTION PHOTO SHOOT">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 08 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239238/Static_cover_10_rakvw5.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">FATHER'S DAY</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">DIGITAL ART</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="FATHER'S DAY">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">AROMASE</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">ILLUSTRATION</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">DIGITAL ILLUSTRATION CREATION</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 09 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239237/Static_cover_11_zerien.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">SCALP PSORIASIS SOCIAL CONTENT</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">DIGITAL ART</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="SCALP PSORIASIS SOCIAL CONTENT">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">AROMASE</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">ILLUSTRATION</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">DIGITAL ILLUSTRATION CREATION</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 10 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239236/Static_cover_12_onnx3i.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">DAMASK ROSE SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/200s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="DAMASK ROSE SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 11 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239235/Static_cover_13_pwbfzd.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">DAMASK ROSE SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/200s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="DAMASK ROSE SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 12 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239234/Static_cover_17_xv2uxi.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CNY RED ENVELOPE VISUAL</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">AI-PROMPT</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="CNY RED ENVELOPE VISUAL">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">GRAPHIC VISUALS</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">AI-GENERATED COMMERCIAL PHOTOGRAPHY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 13 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239234/Static_cover_14_h7vrk8.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="WHITE TRUFFLE & SUBLIME SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 14 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239231/Static_cover_23_qekure.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="WHITE TRUFFLE & SUBLIME SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 15 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239232/Static_cover_22_peygvm.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                           <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="WHITE TRUFFLE & SUBLIME SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 16 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239228/Static_cover_28_jpdyib.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                           <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="WHITE TRUFFLE & SUBLIME SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 17 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239224/Static_cover_25_nfwy2v.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">LIQUID SHAMPOO FOR COLOR PROTECTION</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/250s F4.0</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="LIQUID SHAMPOO FOR COLOR PROTECTION">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">VISUAL DESIGN</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION / SHOOT / RETOUCHING</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 18 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239225/Static_cover_24_dxnlkq.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">LIQUID SHAMPOO FOR COLOR PROTECTION</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/250s F4.0</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="LIQUID SHAMPOO FOR COLOR PROTECTION">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">KEY VISUAL DESIGN</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION / SHOOT / RETOUCHING</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 19 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1788886490/Splendid_08_okbzyv.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">SPLENDID SERIES</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/400s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="SPLENDID SERIES">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION / SHOOT / RETOUCHING</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 20 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239245/Static_cover_1_hiigci.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">PRFESSIONAL SALON COLLECTION</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">AI-PROMPT</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="PRFESSIONAL SALON COLLECTION">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">GRAPHIC VISUALS</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">AI-GENERATED COMMERCIAL PHOTOGRAPHY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PROJECT 21 / 22 ==================== -->
+            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239227/Static_cover_26_wstoeh.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CO-BRANDING CAMPAIGN VISUALS</h2>
+                        </div>
+                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/200s F2.0</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="CO-BRANDING CAMPAIGN VISUALS">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">TEK</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PHOTOGRAPHY</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">CONCEPTION & SHOOT</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 頁尾 Footer 區域 (已移除分隔線) -->
+        <footer class="w-full pt-20 pb-8 text-center text-sm md:text-xs text-black font-bold tracking-[0.2em] uppercase">
+            &copy; XIAOSTUDIO. ALL RIGHTS RESERVED.
+        </footer>
+    </div>
+
+    <!-- 專案展示視窗 -->
+    <aside id="project-overlay" aria-hidden="true" role="dialog">
+        <div class="project-modal-content">
+            <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
+            <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
+        </div>
+    </aside>
+
+    <!-- 安全防護動態提示框 -->
+    <div id="security-toast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
+    </div>
+
+    <!-- 腳本區 -->
+    <script>
+        /**
+         * XIAOSTUDIO 相機對焦鼠標與保護系統
+         */
+
+        const CameraCursor = {
+            cursorEl: document.getElementById('camera-cursor'),
+            mouseX: 0,
+            mouseY: 0,
+            currentX: 0,
+            currentY: 0,
+
+            init() {
+                if (!this.cursorEl) return;
+                
+                window.addEventListener('mousemove', (e) => {
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                this.bindHoverEvents();
+                this.render();
+            },
+
+            bindHoverEvents() {
+                // 專案卡片 Hover 狀態
+                document.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        this.cursorEl.classList.add('hovering-card');
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        this.cursorEl.classList.remove('hovering-card');
+                    });
+                });
+
+                // 一般按鈕 Hover 狀態
+                document.querySelectorAll('button, a, .security-badge').forEach(btn => {
+                    btn.addEventListener('mouseenter', () => {
+                        this.cursorEl.classList.add('hovering-btn');
+                    });
+                    btn.addEventListener('mouseleave', () => {
+                        this.cursorEl.classList.remove('hovering-btn');
+                    });
+                });
+            },
+
+            render() {
+                // 流暢平滑跟隨 (Lerp)
+                this.currentX += (this.mouseX - this.currentX) * 0.25;
+                this.currentY += (this.mouseY - this.currentY) * 0.25;
+
+                if (this.cursorEl) {
+                    this.cursorEl.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0) translate(-50%, -50%)`;
+                }
+
+                requestAnimationFrame(() => this.render());
+            }
+        };
+
+        const SecurityGuard = {
+            toastTimeout: null,
+
+            init() {
+                this.disableContextMenu();
+                this.disableDragAndDrop();
+                this.disableShortcuts();
+                this.preventPrintScreen();
+            },
+
+            showToast(message) {
+                const toast = document.getElementById('security-toast');
+                const msgEl = document.getElementById('toast-message');
+                if (!toast || !msgEl) return;
+
+                msgEl.innerText = message || 'PROTECTED // CONTENT DOWNLOAD DISABLED';
+                toast.classList.add('active');
+
+                if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                this.toastTimeout = setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 2500);
+            },
+
+            disableContextMenu() {
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showToast('RIGHT CLICK DISABLED // 內容受著作權保護');
+                    return false;
+                }, false);
+            },
+
+            disableDragAndDrop() {
+                document.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                    this.showToast('DRAG & DROP DISABLED // 禁止拖曳下載');
+                    return false;
+                }, false);
+            },
+
+            disableShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                    const keyCode = e.keyCode || e.which;
+
+                    if (keyCode === 123) {
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                        return false;
+                    }
+
+                    if (ctrlOrCmd) {
+                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                            e.preventDefault();
+                            this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
+                            return false;
+                        }
+
+                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
+                            e.preventDefault();
+                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
+                            return false;
+                        }
+
+                        if (keyCode === 65 || keyCode === 67) {
+                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                                e.preventDefault();
+                                this.showToast('COPYING DISABLED // 禁止複製');
+                                return false;
+                            }
+                        }
+                    }
+                }, false);
+            },
+
+            preventPrintScreen() {
+                window.addEventListener('keyup', (e) => {
+                    if (e.key === 'PrintScreen') {
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText('');
+                        }
+                        this.showToast('SCREENSHOT DETECTED // 圖片受到保護');
+                    }
+                });
+            }
+        };
+
+        const Portfolio = {
+            elements: {
+                header: document.getElementById('main-header'),
+                masthead: document.querySelector('.masthead-border'),
+                overlay: document.getElementById('project-overlay'),
+                iframe: document.getElementById('project-iframe'),
+                cards: document.querySelectorAll('.project-card')
+            },
+
+            init() {
+                this.bindEvents();
+                this.setupIntersectionObserver();
+                this.forceLoadFirstBatch();
+            },
+
+            bindEvents() {
+                this.elements.cards.forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const href = card.getAttribute('href');
+                        if (href) {
+                            e.preventDefault();
+                            this.open(href);
+                        }
+                    });
+                });
+
+                window.addEventListener('resize', () => {
+                    if (this.elements.overlay.classList.contains('active')) {
+                        this.updateOverlayPosition();
+                    }
+                });
+            },
+
+            forceLoadFirstBatch() {
+                this.elements.cards.forEach((card, index) => {
+                    if (index < 4) {
+                        setTimeout(() => {
+                            card.classList.add('is-visible');
+                            const placeholder = card.querySelector('.auto-thumb');
+                            const assetUrl = card.getAttribute('data-thumb');
+                            if (placeholder && assetUrl && !placeholder.dataset.loaded) {
+                                this.loadAsset(placeholder, assetUrl, card);
+                            }
+                        }, index * 120);
+                    }
+                });
+            },
+
+            setupIntersectionObserver() {
+                if (!('IntersectionObserver' in window)) {
+                    this.elements.cards.forEach(card => {
+                        const placeholder = card.querySelector('.auto-thumb');
+                        const assetUrl = card.getAttribute('data-thumb');
+                        if (placeholder && assetUrl) this.loadAsset(placeholder, assetUrl, card);
+                    });
+                    return;
+                }
+
+                const options = {
+                    threshold: 0.05,
+                    rootMargin: '150px 0px'
+                };
+
+                let visibleQueue = 0;
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const card = entry.target;
+                            
+                            const staggerDelay = (visibleQueue % 4) * 100;
+                            visibleQueue++;
+
+                            setTimeout(() => {
+                                card.classList.add('is-visible');
+                                const placeholder = card.querySelector('.auto-thumb');
+                                const assetUrl = card.getAttribute('data-thumb');
+                                
+                                if (placeholder && assetUrl && !placeholder.dataset.loaded) {
+                                    this.loadAsset(placeholder, assetUrl, card);
+                                }
+                            }, staggerDelay);
+
+                            observer.unobserve(card);
+                        }
+                    });
+                }, options);
+
+                this.elements.cards.forEach(card => observer.observe(card));
+            },
+
+            loadAsset(placeholder, url, card) {
+                if (!placeholder || placeholder.dataset.loaded) return;
+                placeholder.dataset.loaded = "true";
+
+                const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
+                
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.className = placeholder.className;
+                    video.src = url;
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.setAttribute('muted', '');
+                    video.setAttribute('playsinline', '');
+                    video.setAttribute('controlsList', 'nodownload noplaybackrate');
+                    video.setAttribute('disablePictureInPicture', 'true');
+                    video.setAttribute('oncontextmenu', 'return false;');
+                    
+                    const safePlay = () => {
+                        const playPromise = video.play();
+                        if (playPromise && typeof playPromise.catch === 'function') {
+                            playPromise.catch(() => {});
+                        }
+                    };
+
+                    video.addEventListener('timeupdate', function() {
+                        if (this.currentTime >= 5) {
+                            this.currentTime = 0;
+                            safePlay();
+                        }
+                    });
+                    
+                    video.addEventListener('loadeddata', () => {
+                        safePlay();
+                        this.finalizeLoading(placeholder, video, card);
+                    });
+                    
+                    video.onerror = () => this.handleError(card);
+                    
+                    if (placeholder.parentNode) {
+                        placeholder.parentNode.replaceChild(video, placeholder);
+                    }
+                    safePlay();
+                } else {
+                    placeholder.src = url;
+                    placeholder.setAttribute('oncontextmenu', 'return false;');
+                    placeholder.onload = () => {
+                        this.finalizeLoading(null, placeholder, card);
+                    };
+                    placeholder.onerror = () => this.handleError(card);
+                }
+            },
+
+            finalizeLoading(oldEl, newEl, card) {
+                newEl.classList.add('loaded');
+                const shimmer = card.querySelector('.loading-shimmer');
+                if (shimmer) shimmer.style.display = 'none';
+            },
+
+            handleError(card) {
+                const shimmer = card.querySelector('.loading-shimmer');
+                if (shimmer) shimmer.style.background = '#e0e0e0';
+            },
+
+            open(url) {
+                this.updateOverlayPosition();
+                this.elements.iframe.src = url;
+                this.elements.overlay.classList.add('active');
+                this.elements.overlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('no-scroll');
+            },
+
+            close() {
+                this.elements.overlay.classList.remove('active');
+                this.elements.overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('no-scroll');
+                setTimeout(() => { this.elements.iframe.src = ''; }, 600);
+            },
+
+            updateOverlayPosition() {
+                if (this.elements.masthead) {
+                    const rect = this.elements.masthead.getBoundingClientRect();
+                    this.elements.overlay.style.top = rect.top + 'px';
+                }
+            }
+        };
+
+        function startApp() {
+            SecurityGuard.init();
+            Portfolio.init();
+            CameraCursor.init();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startApp);
+        } else {
+            startApp();
+        }
+    </script>
 </body>
 </html>
