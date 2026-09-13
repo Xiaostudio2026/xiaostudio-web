@@ -650,7 +650,7 @@
         ja: {
             header: "お問い合わせ",
             labelName: "01 // NAME お名前",
-            placeholderName: "浦飯 幽助",
+            placeholderName: "山田 太郎",
             labelEmail: "02 // EMAIL メール",
             placeholderEmail: "jewuenxiao@gmail.com",
             labelService: "03 // SERVICE サービス",
@@ -756,15 +756,22 @@
 
     let currentLang = 'zh';
 
+    function normalizeLang(lang) {
+        if (!lang) return 'zh';
+        const l = String(lang).toLowerCase().trim();
+        if (l.startsWith('ja') || l.startsWith('jp')) return 'ja';
+        if (l.startsWith('ko') || l.startsWith('kr')) return 'ko';
+        if (l.startsWith('en')) return 'en';
+        if (l.startsWith('fr')) return 'fr';
+        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk')) return 'zh';
+        return 'zh';
+    }
+
     function applyLanguage(lang) {
-        let target = (lang || 'zh').toLowerCase();
-        if (target === 'jp') target = 'ja';
-        if (target === 'kr') target = 'ko';
-        if (!dictionary[target]) target = 'zh';
+        currentLang = normalizeLang(lang);
+        const dict = dictionary[currentLang] || dictionary.zh;
 
-        currentLang = target;
-        const dict = dictionary[currentLang];
-
+        // 1. Update text elements with data-i18n
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (dict[key]) {
@@ -772,12 +779,6 @@
             }
         });
 
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            if (dict[key]) {
-                el.placeholder = dict[key];
-            }
-        });
         // 2. Update placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
@@ -797,7 +798,7 @@
                 }
             }
         });
-}
+    }
 
     function detectLanguage() {
         try {
@@ -816,8 +817,23 @@
         return 'zh';
     }
 
+    function requestLangFromParent() {
+        const msg = JSON.stringify({ type: 'REQUEST_LANG', action: 'getLanguage' });
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage(msg, '*');
+            window.parent.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
+        }
+        if (window.top && window.top !== window && window.top !== window.parent) {
+            try {
+                window.top.postMessage(msg, '*');
+                window.top.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
+            } catch (err) {}
+        }
+    }
+
     const form = document.getElementById('contact-form');
     const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
     const statusMsg = document.getElementById('status-msg');
 
     form.addEventListener('submit', async function(e) {
@@ -825,20 +841,17 @@
         const dict = dictionary[currentLang] || dictionary.zh;
 
         submitBtn.disabled = true;
-        submitBtn.innerText = dict.btnSending;
+        if (btnText) btnText.innerText = dict.btnSending;
 
         try {
             const response = await fetch(form.action, {
                 method: form.method,
                 body: new FormData(form),
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
 
             if (response.ok) {
                 form.style.display = 'none';
-                document.querySelector('h2').style.display = 'none';
                 statusMsg.innerHTML = dict.statusSuccess;
                 statusMsg.style.display = 'block';
             } else {
@@ -847,30 +860,76 @@
         } catch (err) {
             console.error('Submission Error:', err);
             submitBtn.disabled = false;
-            submitBtn.innerText = dict.btnError;
+            if (btnText) btnText.innerText = dict.btnError;
             setTimeout(() => {
-                submitBtn.innerText = dict.btnSubmit;
+                if (btnText) btnText.innerText = dict.btnSubmit;
             }, 3000);
         }
     });
 
+    // Custom Dropdown Interactions
+    document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+        const trigger = wrapper.querySelector('.custom-select-trigger');
+        const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+        const selectedText = wrapper.querySelector('.selected-text');
+        const options = wrapper.querySelectorAll('.custom-option');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                if (w !== wrapper) w.classList.remove('open');
+            });
+            wrapper.classList.toggle('open');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                options.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+
+                const val = opt.getAttribute('data-value');
+                hiddenInput.value = val;
+                
+                const i18nKey = opt.getAttribute('data-i18n');
+                if (i18nKey) {
+                    selectedText.setAttribute('data-i18n', i18nKey);
+                }
+                selectedText.innerHTML = opt.innerHTML;
+
+                wrapper.classList.remove('open');
+            });
+        });
+    });
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+    });
+
     window.addEventListener('message', (e) => {
         if (!e.data) return;
-        let lang = null;
-        if (typeof e.data === 'string') {
-            lang = e.data;
-        } else if (typeof e.data === 'object') {
-            if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE') {
-                lang = e.data.lang || e.data.language;
-            } else if (e.data.lang || e.data.language) {
-                lang = e.data.lang || e.data.language;
+        let data = e.data;
+
+        if (typeof data === 'string') {
+            try {
+                data = JSON.parse(data);
+            } catch (err) {
+                applyLanguage(data);
+                return;
             }
         }
-        if (lang) applyLanguage(lang);
+
+        const targetLang = data.lang || data.language || data.locale || data.langKey || data.currentLang;
+        if (targetLang) {
+            applyLanguage(targetLang);
+        } else if ((data.type === 'LANGUAGE_CHANGE' || data.type === 'CHANGE_LANGUAGE' || data.type === 'SET_LANGUAGE') && (data.lang || data.language)) {
+            applyLanguage(data.lang || data.language);
+        }
     });
 
     window.addEventListener('DOMContentLoaded', () => {
         applyLanguage(detectLanguage());
+        requestLangFromParent();
     });
 </script>
 
