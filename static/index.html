@@ -152,6 +152,28 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
+        /* 修正版權跑馬燈動畫 */
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-container {
+            border: 1px solid #000000;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-scroll 12s linear infinite;
+            will-change: transform;
+        }
+
         /* =========================================
            2. 佈局元件 (Layout & Security Elements)
            ========================================= */
@@ -193,7 +215,7 @@
         }
 
         /* =========================================
-           3. 作品網格與相機對焦 Hover 特效 (黑框線 + Viewfinder)
+           3. 作品網格與相機對焦 Hover 特效
            ========================================= */
         .project-card {
             position: relative;
@@ -247,7 +269,6 @@
             overflow: hidden;
             position: relative;
             background-color: var(--accent-gray);
-            /* Hover 時外圍顯示黑框線 */
             outline: 0px solid #000;
             transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -461,25 +482,72 @@
             opacity: 1;
         }
 
-        .marquee-container {
-            border: 1px solid #000000;
-            overflow: hidden;
-            white-space: nowrap;
+        /* =========================================
+           5. 極簡工業風格調色控制區塊 (Spectrum & Image Adjustments)
+           ========================================= */
+        .spectrum-bar {
+            width: 100%;
+            height: 28px;
+            background: linear-gradient(to right, #ff3b00, #ff8800, #ffc570, #ffffff, #cce3ff, #5599ff, #0033ff);
             position: relative;
-            display: inline-flex;
-            align-items: center;
+            cursor: pointer;
         }
 
-        .marquee-content {
-            display: flex;
-            white-space: nowrap;
-            animation: marquee-scroll 14s linear infinite;
-            will-change: transform;
+        .spectrum-thumb {
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            width: 100px;
+            height: 36px;
+            background: #ffffff;
+            border: 1px solid #000000;
+            box-shadow: 0 0 8px rgba(0,0,0,0.25);
+            transform: translateX(-50%);
+            pointer-events: none;
+            transition: left 0.05s linear;
         }
 
-        @keyframes marquee-scroll {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
+        /* 自訂極簡黑白 Range 滑桿樣式 */
+        input[type=range].custom-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #e5e5e5;
+            outline: none;
+            border: 1px solid #000;
+        }
+
+        /* 動態測量標記線 */
+        .spectrum-guide-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: repeating-linear-gradient(to bottom, #000 0, #000 4px, transparent 4px, transparent 8px);
+            pointer-events: none;
+            z-index: 15;
+            transition: left 0.05s linear;
+        }
+
+        input[type=range].custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #000000;
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+        }
+
+        input[type=range].custom-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: #000000;
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
         }
     </style>
 </head>
@@ -493,7 +561,7 @@
 
     <div class="content-container">
         <!-- Header 區塊 -->
-        <header id="main-header" class="mb-8 md:mb-16">
+        <header id="main-header" class="mb-8 md:mb-12">
             <div class="flex justify-between items-end mb-3 mono-text text-xs md:text-sm font-bold tracking-widest uppercase animate-text-horiz">
                 <div>NODE_04 // ISSUE</div>
                 <div class="hidden md:block">XIAOSTUDIO ARCHIVE</div>
@@ -511,14 +579,144 @@
             <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 animate-text-vert">
                 <span class="security-badge">PROTECTED AREA</span>
                 
+                <!-- 修正跑馬燈容器與動畫 -->
                 <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
-                    <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
-                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
-                        <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                    <div class="marquee-content text-black font-bold text-xs md:text-xs">
+                        <span class="shrink-0 mr-6">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                        <span class="shrink-0 mr-6">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                     </div>
                 </div>
             </div>
         </header>
+
+        <!-- 標題下方：極簡黑白調色介面 (Color Adjustment Panel) -->
+        <section id="color-adjust-section" class="mb-12 md:mb-16 p-2 md:p-4 mono-text uppercase animate-text-vert">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-2 border-b border-black/10">
+                <div class="flex items-center gap-3">
+                    <span class="bg-black text-white px-2 py-0.5 text-[10px] md:text-[11px] font-bold tracking-widest">COLOR_LAB // 01</span>
+                    <span class="font-bold text-black tracking-wider text-xs md:text-sm">COLOR TEMPERATURE & IMAGE CALIBRATION</span>
+                </div>
+                <button id="ps-reset-btn" class="self-start sm:self-auto border border-black px-3 py-1 text-[11px] font-bold tracking-wider hover:bg-black hover:text-white transition-colors cursor-pointer">
+                    RESET ALL [ ↺ ]
+                </button>
+            </div>
+
+            <!-- 色溫調節與熱溫測量系統區塊 (Color Temperature Calibration System) -->
+            <div class="mb-8 select-none relative" id="spectrum-container">
+                <!-- 動態貫穿測量指示線 -->
+                <div class="spectrum-guide-line" id="spectrum-guide-line-el" style="left: 56.25%;"></div>
+
+                <div class="flex flex-wrap justify-between items-center text-[11px] font-bold mb-2 tracking-wider gap-2">
+                    <span class="flex items-center gap-2">
+                        <span>COLOR TEMPERATURE</span>
+                        <span class="text-[10px] text-gray-400 font-normal hidden sm:inline">[ 2000K — 10000K ]</span>
+                        <span id="fun-color-badge" class="border border-black text-black bg-white text-[9px] px-2 py-0.5 tracking-widest transition-all duration-300 font-mono">NEUTRAL WHITE</span>
+                    </span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-gray-500 text-[10px] sm:text-[11px]">KELVIN: <span id="frequency-display" class="text-black font-bold font-mono">6500 K</span></span>
+                        <span class="text-gray-500 text-[10px] sm:text-[11px]">TINT SHIFT: <span id="wavelength-display" class="text-black font-bold font-mono">NEUTRAL</span></span>
+                        <span class="text-gray-500 text-[10px] sm:text-[11px]">PHASE: <span id="hue-value-display" class="text-black font-bold font-mono">D65 DAYLIGHT</span></span>
+                    </div>
+                </div>
+
+                <!-- 色溫漸變選擇條 -->
+                <div class="spectrum-bar" id="spectrum-bar-el">
+                    <div class="spectrum-thumb" id="spectrum-thumb-el" style="left: 56.25%;"></div>
+                </div>
+
+                <!-- 色溫 K 數刻度線與圖例標籤 -->
+                <div class="relative w-full h-8 text-[9px] font-mono text-gray-700 pt-1 flex justify-between">
+                    <div class="flex flex-col items-start"><span class="h-2 w-[1px] bg-black mb-0.5"></span><span class="font-bold">2000K</span><span class="text-[7px] text-amber-600 font-sans hidden sm:block">CANDLELIGHT</span></div>
+                    <div class="flex flex-col items-center"><span class="h-1.5 w-[1px] bg-gray-400 mb-0.5"></span><span class="hidden sm:inline">3200K</span><span class="text-[7px] text-orange-600 font-sans hidden sm:block">TUNGSTEN</span></div>
+                    <div class="flex flex-col items-center"><span class="h-2 w-[1px] bg-black mb-0.5"></span><span>4500K</span><span class="text-[7px] text-yellow-700 font-sans hidden sm:block">WARM WHITE</span></div>
+                    <div class="flex flex-col items-center"><span class="h-1.5 w-[1px] bg-gray-400 mb-0.5"></span><span class="hidden sm:inline">6500K</span><span class="text-[7px] text-gray-700 font-sans hidden sm:block">DAYLIGHT</span></div>
+                    <div class="flex flex-col items-center"><span class="h-2 w-[1px] bg-black mb-0.5"></span><span>8000K</span><span class="text-[7px] text-blue-600 font-sans hidden sm:block">OVERCAST</span></div>
+                    <div class="flex flex-col items-end"><span class="h-2 w-[1px] bg-black mb-0.5"></span><span>10000K</span><span class="text-[7px] text-blue-800 font-sans hidden sm:block">ARCTIC BLUE</span></div>
+                </div>
+
+                <!-- 放射式連接虛線 -->
+                <div class="w-full relative h-6 my-1">
+                    <svg class="w-full h-full text-black/40" preserveAspectRatio="none" viewBox="0 0 1000 24">
+                        <line x1="0" y1="0" x2="350" y2="24" stroke="currentColor" stroke-width="0.8" stroke-dasharray="3 2" />
+                        <line x1="1000" y1="0" x2="520" y2="24" stroke="currentColor" stroke-width="0.8" stroke-dasharray="3 2" />
+                        <text x="435" y="16" text-anchor="middle" font-size="8" font-family="sans-serif" fill="#666" letter-spacing="1.5">PLANCKIAN LOCUS (KELVIN SCALE)</text>
+                    </svg>
+                </div>
+
+                <!-- 色溫區域對照區塊 (Kelvin Thermal Spectrum Band) -->
+                <div class="w-full border border-black text-[10px] grid grid-cols-12 text-center bg-white relative">
+                    <div class="col-span-2 border-r border-black py-1.5 px-0.5 flex flex-col justify-center">
+                        <span class="font-bold text-[8px] sm:text-[10px] leading-tight">WARM FLAME</span>
+                    </div>
+                    <div class="col-span-2 border-r border-black py-1.5 px-0.5 flex flex-col justify-center">
+                        <span class="font-bold text-[8px] sm:text-[10px] leading-tight">STUDIO TUNGSTEN</span>
+                    </div>
+                    <div class="col-span-2 border-r border-black py-1.5 px-0.5 flex flex-col justify-center">
+                        <span class="font-bold text-[8px] sm:text-[10px]">GOLDEN HOUR</span>
+                    </div>
+                    <div class="col-span-2 border-r border-black py-1.5 px-0.5 bg-black text-white font-bold flex flex-col justify-center">
+                        <span class="text-[8px] sm:text-[10px] tracking-wider">D65 DAYLIGHT</span>
+                    </div>
+                    <div class="col-span-2 border-r border-black py-1.5 px-0.5 flex flex-col justify-center">
+                        <span class="font-bold text-[8px] sm:text-[10px] leading-tight">OPEN SHADE</span>
+                    </div>
+                    <div class="col-span-2 py-1.5 px-0.5 flex flex-col justify-center">
+                        <span class="font-bold text-[8px] sm:text-[10px] leading-tight">DEEP NOCTURNE</span>
+                    </div>
+                </div>
+
+                <!-- 溫度單位刻度 -->
+                <div class="w-full grid grid-cols-12 text-[8px] sm:text-[9px] font-mono text-gray-500 pt-1 pb-2 text-center">
+                    <span class="col-span-2 text-left">2000 K</span>
+                    <span class="col-span-2">3200 K</span>
+                    <span class="col-span-2">4500 K</span>
+                    <span class="col-span-2 font-bold text-black">6500 K NEUTRAL</span>
+                    <span class="col-span-2">8000 K</span>
+                    <span class="col-span-2 text-right">10000 K</span>
+                </div>
+
+                <!-- 波動頻率示意圖 (Dynamic Sine Wave Visualizer) -->
+                <div class="w-full h-11 pt-3 pb-1 relative bg-gray-50/60 border border-black/20 overflow-hidden mt-3">
+                    <div class="absolute top-1 left-2 text-[8px] font-mono text-gray-500 flex items-center gap-2">
+                        <span>WAVE FREQUENCY SIMULATOR:</span>
+                        <span id="wave-freq-tag" class="text-black font-bold font-mono">NEUTRAL DAYLIGHT [6500 K]</span>
+                    </div>
+                    <svg class="w-full h-full text-black/90" preserveAspectRatio="none" viewBox="0 0 1000 40">
+                        <path id="sine-wave-path" d="" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- 飽和度、對比度、曝光度控制區塊 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+                <!-- 飽和度 Saturation -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-[11px] font-bold tracking-wider">
+                        <span>SATURATION</span>
+                        <span id="sat-val-display" class="font-mono">100%</span>
+                    </div>
+                    <input type="range" id="sat-slider" min="0" max="200" value="100" class="custom-slider">
+                </div>
+
+                <!-- 對比度 Contrast -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-[11px] font-bold tracking-wider">
+                        <span>CONTRAST</span>
+                        <span id="con-val-display" class="font-mono">100%</span>
+                    </div>
+                    <input type="range" id="con-slider" min="50" max="150" value="100" class="custom-slider">
+                </div>
+
+                <!-- 曝光度 Brightness/Exposure -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-[11px] font-bold tracking-wider">
+                        <span>EXPOSURE</span>
+                        <span id="exp-val-display" class="font-mono">100%</span>
+                    </div>
+                    <input type="range" id="exp-slider" min="50" max="150" value="100" class="custom-slider">
+                </div>
+            </div>
+        </section>
 
         <!-- Main Portfolio Grid: 寬廣不對稱雙欄與單欄排列 (無分隔線) -->
         <main id="project-grid" class="grid grid-cols-12 gap-x-8 md:gap-x-12 gap-y-16 md:gap-y-24">
@@ -1146,7 +1344,7 @@
 
         </main>
 
-        <!-- 頁尾 Footer 區域 (已移除分隔線) -->
+        <!-- 頁尾 Footer 區域 -->
         <footer class="w-full pt-20 pb-8 text-right text-sm md:text-xs text-black font-bold tracking-[0.2em] uppercase">
             &copy; XIAOSTUDIO. ALL RIGHTS RESERVED.
         </footer>
@@ -1172,327 +1370,371 @@
     <!-- 腳本區 -->
     <script>
         /**
-         * XIAOSTUDIO 相機對焦鼠標與保護系統
+         * SecurityGuard: 資安與保護控制 Logic
          */
-
-        const CameraCursor = {
-            cursorEl: document.getElementById('camera-cursor'),
-            mouseX: 0,
-            mouseY: 0,
-            currentX: 0,
-            currentY: 0,
+        const SecurityGuard = {
+            toast: document.getElementById('security-toast'),
+            toastMsg: document.getElementById('toast-message'),
+            toastTimer: null,
 
             init() {
-                if (!this.cursorEl) return;
-                
-                window.addEventListener('mousemove', (e) => {
-                    this.mouseX = e.clientX;
-                    this.mouseY = e.clientY;
+                this.bindEvents();
+            },
+
+            showToast(message = 'PROTECTED // CONTENT DOWNLOAD DISABLED') {
+                if (!this.toast) return;
+                if (this.toastMsg) this.toastMsg.innerText = message;
+                this.toast.classList.add('active');
+                clearTimeout(this.toastTimer);
+                this.toastTimer = setTimeout(() => {
+                    this.toast.classList.remove('active');
+                }, 2500);
+            },
+
+            bindEvents() {
+                // 右鍵保護
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showToast('PROTECTED // RIGHT CLICK DISABLED');
                 });
 
-                this.bindHoverEvents();
+                // 拖拽保護
+                document.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                    this.showToast('PROTECTED // ASSET DRAGGING DISABLED');
+                });
+
+                // 鍵盤快速鍵保護
+                document.addEventListener('keydown', (e) => {
+                    if (
+                        e.key === 'F12' ||
+                        (e.ctrlKey && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) ||
+                        (e.ctrlKey && ['u', 'U', 's', 'S'].includes(e.key))
+                    ) {
+                        e.preventDefault();
+                        this.showToast('PROTECTED // SYSTEM SHORTCUTS DISABLED');
+                    }
+                });
+            }
+        };
+
+        /**
+         * CameraCursor: 相機對焦自訂鼠標 Logic
+         */
+        const CameraCursor = {
+            cursor: document.getElementById('camera-cursor'),
+            posX: 0,
+            posY: 0,
+            targetX: 0,
+            targetY: 0,
+
+            init() {
+                if (!this.cursor) return;
+                this.bindEvents();
                 this.render();
             },
 
-            bindHoverEvents() {
-                // 專案卡片 Hover 狀態
-                document.querySelectorAll('.project-card').forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        this.cursorEl.classList.add('hovering-card');
-                    });
-                    card.addEventListener('mouseleave', () => {
-                        this.cursorEl.classList.remove('hovering-card');
-                    });
+            bindEvents() {
+                window.addEventListener('mousemove', (e) => {
+                    this.targetX = e.clientX;
+                    this.targetY = e.clientY;
                 });
 
-                // 一般按鈕 Hover 狀態
-                document.querySelectorAll('button, a, .security-badge').forEach(btn => {
-                    btn.addEventListener('mouseenter', () => {
-                        this.cursorEl.classList.add('hovering-btn');
-                    });
-                    btn.addEventListener('mouseleave', () => {
-                        this.cursorEl.classList.remove('hovering-btn');
-                    });
+                // Hover 狀態控制 (卡片與按鈕)
+                document.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => this.cursor.classList.add('hovering-card'));
+                    card.addEventListener('mouseleave', () => this.cursor.classList.remove('hovering-card'));
+                });
+
+                document.querySelectorAll('button, a, input, .spectrum-bar').forEach(btn => {
+                    btn.addEventListener('mouseenter', () => this.cursor.classList.add('hovering-btn'));
+                    btn.addEventListener('mouseleave', () => this.cursor.classList.remove('hovering-btn'));
                 });
             },
 
             render() {
-                // 流暢平滑跟隨 (Lerp)
-                this.currentX += (this.mouseX - this.currentX) * 0.25;
-                this.currentY += (this.mouseY - this.currentY) * 0.25;
-
-                if (this.cursorEl) {
-                    this.cursorEl.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0) translate(-50%, -50%)`;
-                }
-
+                this.posX += (this.targetX - this.posX) * 0.25;
+                this.posY += (this.targetY - this.posY) * 0.25;
+                this.cursor.style.transform = `translate3d(${this.posX}px, ${this.posY}px, 0) translate(-50%, -50%)`;
                 requestAnimationFrame(() => this.render());
             }
         };
 
-        const SecurityGuard = {
-            toastTimeout: null,
-
-            init() {
-                this.disableContextMenu();
-                this.disableDragAndDrop();
-                this.disableShortcuts();
-                this.preventPrintScreen();
-            },
-
-            showToast(message) {
-                const toast = document.getElementById('security-toast');
-                const msgEl = document.getElementById('toast-message');
-                if (!toast || !msgEl) return;
-
-                msgEl.innerText = message || 'PROTECTED // CONTENT DOWNLOAD DISABLED';
-                toast.classList.add('active');
-
-                if (this.toastTimeout) clearTimeout(this.toastTimeout);
-                this.toastTimeout = setTimeout(() => {
-                    toast.classList.remove('active');
-                }, 2500);
-            },
-
-            disableContextMenu() {
-                document.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    this.showToast('RIGHT CLICK DISABLED // 內容受著作權保護');
-                    return false;
-                }, false);
-            },
-
-            disableDragAndDrop() {
-                document.addEventListener('dragstart', (e) => {
-                    e.preventDefault();
-                    this.showToast('DRAG & DROP DISABLED // 禁止拖曳下載');
-                    return false;
-                }, false);
-            },
-
-            disableShortcuts() {
-                document.addEventListener('keydown', (e) => {
-                    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-                    const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
-                    const keyCode = e.keyCode || e.which;
-
-                    if (keyCode === 123) {
-                        e.preventDefault();
-                        this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
-                        return false;
-                    }
-
-                    if (ctrlOrCmd) {
-                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
-                            e.preventDefault();
-                            this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
-                            return false;
-                        }
-
-                        if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
-                            e.preventDefault();
-                            this.showToast('DEVTOOLS ACCESS RESTRICTED // 開發者工具已關閉');
-                            return false;
-                        }
-
-                        if (keyCode === 65 || keyCode === 67) {
-                            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-                                e.preventDefault();
-                                this.showToast('COPYING DISABLED // 禁止複製');
-                                return false;
-                            }
-                        }
-                    }
-                }, false);
-            },
-
-            preventPrintScreen() {
-                window.addEventListener('keyup', (e) => {
-                    if (e.key === 'PrintScreen') {
-                        if (navigator.clipboard) {
-                            navigator.clipboard.writeText('');
-                        }
-                        this.showToast('SCREENSHOT DETECTED // 圖片受到保護');
-                    }
-                });
-            }
-        };
-
+        /**
+         * Portfolio: 作品集縮圖載入、Scroll Reveal 及視窗對話框 Logic
+         */
         const Portfolio = {
-            elements: {
-                header: document.getElementById('main-header'),
-                masthead: document.querySelector('.masthead-border'),
-                overlay: document.getElementById('project-overlay'),
-                iframe: document.getElementById('project-iframe'),
-                cards: document.querySelectorAll('.project-card')
-            },
+            overlay: document.getElementById('project-overlay'),
+            iframe: document.getElementById('project-iframe'),
 
             init() {
-                this.bindEvents();
-                this.setupIntersectionObserver();
-                this.forceLoadFirstBatch();
+                this.loadImages();
+                this.initIntersectionObserver();
+                this.bindCardClicks();
             },
 
-            bindEvents() {
-                this.elements.cards.forEach(card => {
-                    card.addEventListener('click', (e) => {
-                        const href = card.getAttribute('href');
-                        if (href) {
-                            e.preventDefault();
-                            this.open(href);
-                        }
-                    });
-                });
+            loadImages() {
+                const cards = document.querySelectorAll('.project-card');
+                cards.forEach(card => {
+                    const thumbUrl = card.getAttribute('data-thumb');
+                    const img = card.querySelector('.project-asset');
+                    const shimmer = card.querySelector('.loading-shimmer');
 
-                window.addEventListener('resize', () => {
-                    if (this.elements.overlay.classList.contains('active')) {
-                        this.updateOverlayPosition();
+                    if (img && thumbUrl) {
+                        img.src = thumbUrl;
+                        img.onload = () => {
+                            img.classList.add('loaded');
+                            if (shimmer) shimmer.style.display = 'none';
+                        };
+                        img.onerror = () => {
+                            img.src = `https://placehold.co/800x500/111111/ffffff?text=${encodeURIComponent(img.alt || 'IMAGE')}`;
+                            img.classList.add('loaded');
+                            if (shimmer) shimmer.style.display = 'none';
+                        };
                     }
                 });
             },
 
-            forceLoadFirstBatch() {
-                this.elements.cards.forEach((card, index) => {
-                    if (index < 4) {
-                        setTimeout(() => {
-                            card.classList.add('is-visible');
-                            const placeholder = card.querySelector('.auto-thumb');
-                            const assetUrl = card.getAttribute('data-thumb');
-                            if (placeholder && assetUrl && !placeholder.dataset.loaded) {
-                                this.loadAsset(placeholder, assetUrl, card);
-                            }
-                        }, index * 120);
-                    }
-                });
-            },
-
-            setupIntersectionObserver() {
-                if (!('IntersectionObserver' in window)) {
-                    this.elements.cards.forEach(card => {
-                        const placeholder = card.querySelector('.auto-thumb');
-                        const assetUrl = card.getAttribute('data-thumb');
-                        if (placeholder && assetUrl) this.loadAsset(placeholder, assetUrl, card);
-                    });
-                    return;
-                }
-
-                const options = {
-                    threshold: 0.05,
-                    rootMargin: '150px 0px'
-                };
-
-                let visibleQueue = 0;
+            initIntersectionObserver() {
+                const cards = document.querySelectorAll('.project-card');
                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
+                    entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            const card = entry.target;
-                            
-                            const staggerDelay = (visibleQueue % 4) * 100;
-                            visibleQueue++;
-
-                            setTimeout(() => {
-                                card.classList.add('is-visible');
-                                const placeholder = card.querySelector('.auto-thumb');
-                                const assetUrl = card.getAttribute('data-thumb');
-                                
-                                if (placeholder && assetUrl && !placeholder.dataset.loaded) {
-                                    this.loadAsset(placeholder, assetUrl, card);
-                                }
-                            }, staggerDelay);
-
-                            observer.unobserve(card);
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
                         }
                     });
-                }, options);
+                }, { threshold: 0.1 });
 
-                this.elements.cards.forEach(card => observer.observe(card));
+                cards.forEach(card => observer.observe(card));
             },
 
-            loadAsset(placeholder, url, card) {
-                if (!placeholder || placeholder.dataset.loaded) return;
-                placeholder.dataset.loaded = "true";
-
-                const isVideo = url.match(/\.(mp4|webm|ogg)$/i);
-                
-                if (isVideo) {
-                    const video = document.createElement('video');
-                    video.className = placeholder.className;
-                    video.src = url;
-                    video.autoplay = true;
-                    video.loop = true;
-                    video.muted = true;
-                    video.playsInline = true;
-                    video.setAttribute('muted', '');
-                    video.setAttribute('playsinline', '');
-                    video.setAttribute('controlsList', 'nodownload noplaybackrate');
-                    video.setAttribute('disablePictureInPicture', 'true');
-                    video.setAttribute('oncontextmenu', 'return false;');
-                    
-                    const safePlay = () => {
-                        const playPromise = video.play();
-                        if (playPromise && typeof playPromise.catch === 'function') {
-                            playPromise.catch(() => {});
-                        }
-                    };
-
-                    video.addEventListener('timeupdate', function() {
-                        if (this.currentTime >= 5) {
-                            this.currentTime = 0;
-                            safePlay();
-                        }
+            bindCardClicks() {
+                const cards = document.querySelectorAll('.project-card');
+                cards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const thumb = card.getAttribute('data-thumb');
+                        this.open(thumb);
                     });
-                    
-                    video.addEventListener('loadeddata', () => {
-                        safePlay();
-                        this.finalizeLoading(placeholder, video, card);
-                    });
-                    
-                    video.onerror = () => this.handleError(card);
-                    
-                    if (placeholder.parentNode) {
-                        placeholder.parentNode.replaceChild(video, placeholder);
-                    }
-                    safePlay();
-                } else {
-                    placeholder.src = url;
-                    placeholder.setAttribute('oncontextmenu', 'return false;');
-                    placeholder.onload = () => {
-                        this.finalizeLoading(null, placeholder, card);
-                    };
-                    placeholder.onerror = () => this.handleError(card);
+                });
+            },
+
+            open(src) {
+                if (!this.overlay) return;
+                if (this.iframe && src) {
+                    this.iframe.src = src;
                 }
-            },
-
-            finalizeLoading(oldEl, newEl, card) {
-                newEl.classList.add('loaded');
-                const shimmer = card.querySelector('.loading-shimmer');
-                if (shimmer) shimmer.style.display = 'none';
-            },
-
-            handleError(card) {
-                const shimmer = card.querySelector('.loading-shimmer');
-                if (shimmer) shimmer.style.background = '#e0e0e0';
-            },
-
-            open(url) {
-                this.updateOverlayPosition();
-                this.elements.iframe.src = url;
-                this.elements.overlay.classList.add('active');
-                this.elements.overlay.setAttribute('aria-hidden', 'false');
+                this.overlay.classList.add('active');
                 document.body.classList.add('no-scroll');
             },
 
             close() {
-                this.elements.overlay.classList.remove('active');
-                this.elements.overlay.setAttribute('aria-hidden', 'true');
+                if (!this.overlay) return;
+                this.overlay.classList.remove('active');
                 document.body.classList.remove('no-scroll');
-                setTimeout(() => { this.elements.iframe.src = ''; }, 600);
+                if (this.iframe) this.iframe.src = '';
+            }
+        };
+
+        /**
+         * 光譜與影像調色控制 Logic
+         */
+        const ColorAdjustmentControl = {
+            resetBtn: document.getElementById('ps-reset-btn'),
+            spectrumBar: document.getElementById('spectrum-bar-el'),
+            spectrumThumb: document.getElementById('spectrum-thumb-el'),
+            guideLine: document.getElementById('spectrum-guide-line-el'),
+            funBadge: document.getElementById('fun-color-badge'),
+            freqDisplay: document.getElementById('frequency-display'),
+            waveFreqTag: document.getElementById('wave-freq-tag'),
+            sineWavePath: document.getElementById('sine-wave-path'),
+            
+            // 數據顯示元素
+            hueDisplay: document.getElementById('hue-value-display'),
+            wavelengthDisplay: document.getElementById('wavelength-display'),
+            satDisplay: document.getElementById('sat-val-display'),
+            conDisplay: document.getElementById('con-val-display'),
+            expDisplay: document.getElementById('exp-val-display'),
+            
+            // 滑桿元素
+            satSlider: document.getElementById('sat-slider'),
+            conSlider: document.getElementById('con-slider'),
+            expSlider: document.getElementById('exp-slider'),
+            
+            isDraggingSpectrum: false,
+            
+            // 數值狀態 (預設 6500K 色溫)
+            kelvin: 6500,
+            hueAngle: 0,
+            saturation: 100,
+            contrast: 100,
+            exposure: 100,
+
+            // 色溫 Kelvin 與對應名稱表
+            tempColorMap: [
+                { maxK: 3000, name: "WARM CANDLELIGHT" },
+                { maxK: 4000, name: "STUDIO TUNGSTEN" },
+                { maxK: 5500, name: "GOLDEN DAYLIGHT" },
+                { maxK: 7000, name: "NEUTRAL DAYLIGHT" },
+                { maxK: 8500, name: "COOL OPEN SHADE" },
+                { maxK: 10000, name: "ARCTIC NOCTURNE" }
+            ],
+
+            init() {
+                if (!this.spectrumBar) return;
+                this.bindSpectrumDragging();
+                this.bindSliders();
+                this.bindReset();
+                this.updateSpectrumUI(0.5625); // 預設 6500K
+                this.applyFilters();
             },
 
-            updateOverlayPosition() {
-                if (this.elements.masthead) {
-                    const rect = this.elements.masthead.getBoundingClientRect();
-                    this.elements.overlay.style.top = rect.top + 'px';
+            bindSpectrumDragging() {
+                const handleSpectrum = (e) => {
+                    const rect = this.spectrumBar.getBoundingClientRect();
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    let pct = (clientX - rect.left) / rect.width;
+                    pct = Math.max(0, Math.min(1, pct));
+                    
+                    this.updateSpectrumUI(pct);
+                    this.applyFilters();
+                };
+
+                this.spectrumBar.addEventListener('mousedown', (e) => {
+                    this.isDraggingSpectrum = true;
+                    handleSpectrum(e);
+                });
+
+                this.spectrumBar.addEventListener('touchstart', (e) => {
+                    this.isDraggingSpectrum = true;
+                    handleSpectrum(e);
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    if (this.isDraggingSpectrum) handleSpectrum(e);
+                });
+
+                window.addEventListener('touchmove', (e) => {
+                    if (this.isDraggingSpectrum) handleSpectrum(e);
+                });
+
+                window.addEventListener('mouseup', () => { this.isDraggingSpectrum = false; });
+                window.addEventListener('touchend', () => { this.isDraggingSpectrum = false; });
+            },
+
+            updateSpectrumUI(pct) {
+                // 2000K 到 10000K 換算
+                this.kelvin = Math.round(2000 + (pct * 8000));
+                
+                // 透過 Kelvin 偏離 6500K 計算 Hue 角度變化
+                if (this.kelvin <= 6500) {
+                    this.hueAngle = -Math.round(((6500 - this.kelvin) / 4500) * 25);
+                } else {
+                    this.hueAngle = Math.round(((this.kelvin - 6500) / 3500) * 35);
                 }
+
+                if (this.spectrumThumb) this.spectrumThumb.style.left = `${pct * 100}%`;
+                if (this.guideLine) this.guideLine.style.left = `${pct * 100}%`;
+                if (this.freqDisplay) this.freqDisplay.innerText = `${this.kelvin} K`;
+                
+                const shiftText = this.kelvin < 6200 ? 'WARM AMBER' : this.kelvin > 6800 ? 'COOL BLUE' : 'NEUTRAL';
+                const phaseText = this.kelvin < 3200 ? 'TUNGSTEN 2000-3200K' : this.kelvin > 8000 ? 'ARCTIC 8000-10000K' : 'D65 DAYLIGHT 6500K';
+
+                if (this.wavelengthDisplay) this.wavelengthDisplay.innerText = shiftText;
+                if (this.hueDisplay) this.hueDisplay.innerText = phaseText;
+
+                // 更新色溫名稱
+                const matched = this.tempColorMap.find(m => this.kelvin <= m.maxK) || this.tempColorMap[this.tempColorMap.length - 1];
+                if (this.funBadge) {
+                    this.funBadge.innerText = matched.name;
+                }
+
+                if (this.waveFreqTag) {
+                    const level = this.kelvin < 3000 ? 'WARM AMBER SPECTRUM' : this.kelvin > 8500 ? 'COOL BLUE SPECTRUM' : 'STANDARD OPTICAL';
+                    this.waveFreqTag.innerText = `${level} [${this.kelvin} K]`;
+                }
+
+                // 動態運算生成 Sine Wave SVG 繪製路徑
+                this.renderSineWave(this.kelvin);
+            },
+
+            renderSineWave(kelvin) {
+                if (!this.sineWavePath) return;
+                // 色溫越高波形越密
+                const cycles = 10 + ((kelvin - 2000) / 8000) * 28;
+                const points = 250;
+                let d = `M 0 20`;
+                for (let i = 0; i <= points; i++) {
+                    const x = (i / points) * 1000;
+                    const angle = (i / points) * cycles * 2 * Math.PI;
+                    const y = 20 + Math.sin(angle) * 13;
+                    d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+                }
+                this.sineWavePath.setAttribute('d', d);
+            },
+
+            bindSliders() {
+                if (this.satSlider) {
+                    this.satSlider.addEventListener('input', (e) => {
+                        this.saturation = e.target.value;
+                        if (this.satDisplay) this.satDisplay.innerText = `${this.saturation}%`;
+                        this.applyFilters();
+                    });
+                }
+
+                if (this.conSlider) {
+                    this.conSlider.addEventListener('input', (e) => {
+                        this.contrast = e.target.value;
+                        if (this.conDisplay) this.conDisplay.innerText = `${this.contrast}%`;
+                        this.applyFilters();
+                    });
+                }
+
+                if (this.expSlider) {
+                    this.expSlider.addEventListener('input', (e) => {
+                        this.exposure = e.target.value;
+                        if (this.expDisplay) this.expDisplay.innerText = `${this.exposure}%`;
+                        this.applyFilters();
+                    });
+                }
+            },
+
+            bindReset() {
+                if (this.resetBtn) {
+                    this.resetBtn.addEventListener('click', () => {
+                        this.kelvin = 6500;
+                        this.saturation = 100;
+                        this.contrast = 100;
+                        this.exposure = 100;
+
+                        this.updateSpectrumUI(0.5625);
+
+                        if (this.satSlider) this.satSlider.value = 100;
+                        if (this.satDisplay) this.satDisplay.innerText = '100%';
+
+                        if (this.conSlider) this.conSlider.value = 100;
+                        if (this.conDisplay) this.conDisplay.innerText = '100%';
+
+                        if (this.expSlider) this.expSlider.value = 100;
+                        if (this.expDisplay) this.expDisplay.innerText = '100%';
+
+                        this.applyFilters();
+                    });
+                }
+            },
+
+            applyFilters() {
+                let sepiaVal = 0;
+                if (this.kelvin < 6500) {
+                    sepiaVal = ((6500 - this.kelvin) / 4500) * 0.45;
+                }
+
+                const filterString = `sepia(${sepiaVal}) hue-rotate(${this.hueAngle}deg) saturate(${this.saturation}%) contrast(${this.contrast}%) brightness(${this.exposure}%)`;
+
+                document.querySelectorAll('.project-image-container').forEach(container => {
+                    container.style.filter = filterString;
+                    container.style.transition = 'filter 0.1s ease-out';
+                });
             }
         };
 
@@ -1500,6 +1742,7 @@
             SecurityGuard.init();
             Portfolio.init();
             CameraCursor.init();
+            ColorAdjustmentControl.init();
         }
 
         if (document.readyState === 'loading') {
