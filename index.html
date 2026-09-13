@@ -785,7 +785,7 @@
                 <div class="node-box"><span class="node-id mono block opacity-40 mb-1">NODE_05</span><span class="node-label"><i class="status-indicator"></i><span id="txt-print">Print &amp; Packaging</span></span><div class="mt-2.5 pt-2 border-t border-white/10 cursor-pointer" onclick="showOverlay('print')"><span id="btn-print" class="node-btn-text mono opacity-50 uppercase tracking-widest">Physical Projects</span></div></div>
             </div>
             <div id="node6" class="workflow-node" style="top: 20%; left: 70%;">
-                <div class="node-box special"><span class="node-id mono block opacity-40 mb-1">NODE_06</span><div class="flex flex-col gap-1"><span class="node-label lowercase text-[15px] sm:text-[16px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-2.5 pt-2 border-t border-white/10 cursor-pointer" onclick="showOverlay(')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Request Project</span></div></div>
+                <div class="node-box special"><span class="node-id mono block opacity-40 mb-1">NODE_06</span><div class="flex flex-col gap-1"><span class="node-label lowercase text-[15px] sm:text-[16px] tracking-normal"><i class="status-indicator"></i><a href="mailto:jewuenxiao@gmail.com" class="hover:underline">jewuenxiao@gmail.com</a></span></div><div class="mt-2.5 pt-2 border-t border-white/10 cursor-pointer" onclick="showOverlay('form')"><span id="btn-form" class="node-btn-text mono opacity-50 uppercase tracking-widest">Request Project</span></div></div>
             </div>
         </div>
 
@@ -1609,7 +1609,7 @@
             
             const baseUrl = "https://xiaostudio.xyz";
             let targetUrl = "";
-            const isPop = (type === 'about' || type === ' || type === 'ai');
+            const isPop = (type === 'about' || type === 'form' || type === 'ai');
             
             if (container) {
                 container.classList.remove('is-pop', 'is-slide-down');
