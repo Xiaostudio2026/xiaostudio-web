@@ -1,31 +1,29 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+    <!-- Chosen Palette: Pure Monochrome Industrial White/Black -->
+    <!-- Application Structure Plan: Waterfall masonry collage layout for protected motion graphics portfolio, featuring dynamic aspect-ratio cards, custom camera reticle cursor, terminal typewriter header, focus frame hover overlays, and video stream protection without card borders and ratio tags. -->
+    <!-- Visualization & Content Choices: Pure black & white interactive camera focus overlays, responsive CSS columns waterfall collage grid, auto-playing lazy video streams, and modal iframe player without any SVG or Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XiaoStudio | Motion Portfolio (Protected)</title>
     
-    <!-- 外部資源與原版字型 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800;900&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* =========================================
-           1. 基礎變數與白底黑字視覺設定
-           ========================================= */
         :root {
             --bg-color: #ffffff;
             --text-main: #000000;
-            --text-sub: #000000;
             --border-black: #000000;
-            --border-light: #e2e2e2;
-            --bg-gray: #f8f8f8;
-            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --focus-white: #ffffff;
+            --focus-black: #000000;
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 全局禁止文字選取、媒體拖曳與點擊高亮 */
         *, *::before, *::after {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
@@ -43,24 +41,106 @@
             overflow-x: hidden; 
             margin: 0; 
             padding: 2rem 1.5rem 6rem 1.5rem;
+            cursor: none;
         } 
         
+        a, button, .industrial-card, .close-project-btn {
+            cursor: none !important;
+        }
+
         @media (min-width: 768px) { body { padding: 3.5rem 3rem 10rem 3rem; } }
         @media (min-width: 1024px) { body { padding: 4.5rem 4rem 12rem 4rem; } }
 
         .mono-text { font-family: 'Barlow', sans-serif; }
         .tech-mono { font-family: 'Share Tech Mono', monospace; }
-        .barlow-condensed { font-family: 'Montserrat', sans-serif; }
         .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
         .no-scroll { overflow: hidden; }
 
         .content-container {
-            max-width: 1500px;
+            max-width: 1550px;
             margin: 0 auto;
             position: relative;
         }
 
-        /* 垂直文字方向 (Montserrat 600) */
+        #camera-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 36px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+        }
+
+        .cursor-cross-h {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0.75);
+            transform: translateY(-50%);
+        }
+
+        .cursor-cross-v {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: rgba(0, 0, 0, 0.75);
+            transform: translateX(-50%);
+        }
+
+        .cursor-center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background-color: #000000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition-smooth);
+        }
+
+        .cursor-reticle-ring {
+            position: absolute;
+            inset: 4px;
+            border: 1px dashed rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            transition: var(--transition-smooth);
+        }
+
+        body.cursor-active #camera-cursor {
+            width: 48px;
+            height: 48px;
+        }
+
+        body.cursor-active .cursor-center-dot {
+            background-color: #000000;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+            width: 6px;
+            height: 6px;
+        }
+
+        body.cursor-active .cursor-reticle-ring {
+            border: 1.5px solid #000000;
+            animation: spin-ring 4s linear infinite;
+        }
+
+        body.cursor-active .cursor-cross-h,
+        body.cursor-active .cursor-cross-v {
+            background-color: #000000;
+        }
+
+        @keyframes spin-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .vertical-text {
             writing-mode: vertical-rl;
             text-orientation: mixed;
@@ -69,7 +149,6 @@
             font-weight: 600;
         }
 
-        /* 安全防護標籤 */
         .security-badge {
             display: inline-flex;
             align-items: center;
@@ -89,12 +168,11 @@
             display: inline-block;
             width: 6px;
             height: 6px;
-            background-color: #00ff66;
+            background-color: #ffffff;
             border-radius: 50%;
-            box-shadow: 0 0 6px #00ff66;
+            box-shadow: 0 0 4px #ffffff;
         }
 
-        /* 版權跑馬燈容器 (無縫跑馬燈) */
         .marquee-container {
             border: 1px solid #000000;
             background: #ffffff;
@@ -117,57 +195,163 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* =========================================
-           2. 隨性白黑工業風格作品卡片 (Industrial Card)
-           ========================================= */
+        .waterfall-grid {
+            column-count: 1;
+            column-gap: 2rem;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .waterfall-grid {
+                column-count: 2;
+                column-gap: 2rem;
+            }
+        }
+
+        @media (min-width: 1100px) {
+            .waterfall-grid {
+                column-count: 3;
+                column-gap: 2.5rem;
+            }
+        }
+
         .industrial-card {
+            display: inline-block;
+            width: 100%;
+            break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            margin-bottom: 2.5rem;
             background-color: #ffffff;
             border: none;
             position: relative;
             transition: var(--transition-smooth);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
         }
 
         .industrial-card:hover {
-            box-shadow: 6px 6px 0px #000000;
             transform: translateY(-4px);
         }
 
         .project-image-container {
             width: 100%;
-            aspect-ratio: 4 / 3;
             overflow: hidden;
             position: relative;
-            background-color: #f0f0f0;
+            background-color: #000000;
         }
+
+        .ratio-16-9 .project-image-container { aspect-ratio: 16 / 9; }
+        .ratio-4-5 .project-image-container { aspect-ratio: 4 / 5; }
+        .ratio-9-16 .project-image-container { aspect-ratio: 9 / 16; }
+        .ratio-1-1 .project-image-container { aspect-ratio: 1 / 1; }
+        .ratio-3-4 .project-image-container { aspect-ratio: 3 / 4; }
 
         .project-asset {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
             opacity: 0;
             transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            -webkit-user-drag: none;
-            user-drag: none;
             pointer-events: none;
         }
         
         .project-asset.loaded { opacity: 1; }
-        .industrial-card:hover .project-asset { transform: scale(1.05); }
+        .industrial-card:hover .project-asset { transform: scale(1.04); }
 
-        /* 防護網格遮罩 (取消網點效果) */
         .asset-protection-layer {
             position: absolute;
             inset: 0;
             z-index: 10;
-            background-image: none;
-            cursor: pointer;
         }
 
-        /* 機械式 Terminal 輸入風格 Loader */
+        .camera-focus-frame {
+            position: absolute;
+            inset: 24px;
+            z-index: 20;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .industrial-card:hover .camera-focus-frame {
+            opacity: 1;
+            inset: 16px;
+        }
+
+        .focus-corner {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: #ffffff;
+            transition: var(--transition-smooth);
+        }
+
+        .corner-tl { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
+        .corner-tr { top: 0; right: 0; border-top: 2px solid; border-right: 2px solid; }
+        .corner-bl { bottom: 0; left: 0; border-bottom: 2px solid; border-left: 2px solid; }
+        .corner-br { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+
+        .industrial-card:hover .focus-corner {
+            border-color: #ffffff;
+            width: 22px;
+            height: 22px;
+        }
+
+        .camera-center-target {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 28px;
+            height: 28px;
+            transform: translate(-50%, -50%) scale(1.3);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+
+        .camera-center-target::after {
+            content: "";
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            transition: var(--transition-smooth);
+        }
+
+        .industrial-card:hover .camera-center-target {
+            transform: translate(-50%, -50%) scale(1);
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .industrial-card:hover .camera-center-target::after {
+            background-color: #ffffff;
+            box-shadow: 0 0 4px #ffffff;
+        }
+
+        .af-status-tag {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            color: #ffffff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            padding: 2px 6px;
+            letter-spacing: 0.1em;
+            transition: var(--transition-smooth);
+        }
+
+        .industrial-card:hover .af-status-tag {
+         
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
         .terminal-loader {
             position: absolute;
             inset: 0;
@@ -197,9 +381,6 @@
             50% { opacity: 0; }
         }
 
-        /* =========================================
-           3. Modal 彈窗與安全防護通知 UI
-           ========================================= */
         #project-overlay {
             position: fixed;
             left: 0;
@@ -247,7 +428,6 @@
             justify-content: center;
             font-size: 20px;
             font-weight: bold;
-            cursor: pointer;
             z-index: 601;
             transition: var(--transition-smooth);
         }
@@ -265,7 +445,6 @@
             background: #ffffff;
         }
 
-        /* 安全防護 Toast 提示框 */
         #security-toast {
             position: fixed;
             bottom: 24px;
@@ -279,7 +458,7 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border: 1px solid #000000;
+            border: 1px solid #ffffff;
             z-index: 9999;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -293,23 +472,39 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
+
+        .security-icon-badge {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            font-family: 'Share Tech Mono', monospace;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;">
 
+    <div id="camera-cursor" aria-hidden="true">
+        <div class="cursor-cross-h"></div>
+        <div class="cursor-cross-v"></div>
+        <div class="cursor-reticle-ring"></div>
+        <div class="cursor-center-dot"></div>
+    </div>
+
     <div class="content-container">
         
-        <!-- 頁首頂端數據欄 (整體純黑字) -->
         <div class="flex flex-wrap justify-between items-center gap-3 mb-6 mono-text text-xs text-black font-bold tracking-widest uppercase pb-2">
             <div>NODE_03 // 2026 ISSUE</div>
             <div class="hidden sm:block">XIAOSTUDIO ARCHIVE</div>
-            <div>MODE: PROTECTED_STREAM</div>
+            <div>LAYOUT: WATERFALL_COLLAGE</div>
         </div>
 
-        <!-- 頁首標題區 -->
         <header id="main-header" class="mb-10 md:mb-14 relative">
-            
-            <!-- 大字級剪片分割符號 "{" 與機械打字 Console Header 位於同一列 -->
             <div class="flex items-center gap-3 sm:gap-4 mb-2">
                 <div class="text-7xl sm:text-9xl font-extralight text-black tech-mono leading-none select-none pointer-events-none shrink-0">{</div>
                 <div class="flex-1 py-1 text-xs text-black tech-mono flex items-center justify-between overflow-hidden">
@@ -322,17 +517,16 @@
                 </div>
             </div>
 
-            <!-- 主標題 (靠左對齊) -->
             <div class="py-2 flex justify-start">
                 <h1 class="text-6xl sm:text-8xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase text-black leading-none text-left">
                     MOTION<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>VIDEO
                 </h1>
             </div>
             
-            <!-- 版權跑馬燈與防護 Area 資訊區 -->
             <div class="mt-6 flex flex-wrap justify-between items-center gap-4 py-1 text-xs mono-text uppercase tracking-widest">
                 <div class="flex items-center gap-3">
                     <span class="security-badge">Protected Area</span>
+                    <span class="hidden sm:inline-block tech-mono text-[11px] font-bold">[ WATERFALL MASONRY ]</span>
                 </div>
                 
                 <div class="marquee-container py-1.5 px-3 max-w-[260px] sm:max-w-[380px] md:max-w-[500px]">
@@ -344,14 +538,11 @@
             </div>
         </header>
 
-        <!-- 作品網格 -->
-        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <main id="project-grid" class="waterfall-grid">
             
-            <!-- 專案 01 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4" data-url="https://xiaostudio.xyz/motion/Horseyear.html">
-                <!-- 上方年份 -->
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-1-1" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778058437/JA_CNY_2026_1920_cover_iugvnx.mp4" data-url="https://xiaostudio.xyz/motion/Horseyear.html">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 01</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -363,11 +554,19 @@
                     
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 24mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_01</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 01 Preview">
                     </div>
                 </div>
 
@@ -387,25 +586,32 @@
                 </div>
             </div>
 
-            <!-- 專案 02 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772784088/JA_Xmas_1920_30s_S_fxxm7k.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                
+            <div class="industrial-card p-4 ratio-4-5" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772784088/JA_Xmas_1920_30s_S_fxxm7k.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 02</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
                     <div class="flex items-center justify-center px-1 py-2 shrink-0">
                         <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
-                            2025 Holiday Campaign Video Production
+                            Holiday Campaign Video
                         </span>
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 50mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_02</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 02 Preview">
                     </div>
                 </div>
 
@@ -425,10 +631,9 @@
                 </div>
             </div>
 
-            <!-- 專案 03 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777977760/Rose_2026_1920_preview_zqv1ri.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-16-9" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1777977760/Rose_2026_1920_preview_zqv1ri.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 03</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -439,11 +644,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 35mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_03</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 03 Preview">
                     </div>
                 </div>
 
@@ -463,10 +676,9 @@
                 </div>
             </div>
 
-            <!-- 專案 04 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422197/Spray_uc2wf1.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-9-16" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422197/Spray_uc2wf1.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 04</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -477,11 +689,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 85mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_04</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 04 Preview">
                     </div>
                 </div>
 
@@ -496,15 +716,14 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-black">DUR:</span>
-                        <span class="tech-mono font-bold tracking-wider text-black">00:00:00:00</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:18:00</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 專案 05 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422191/Juniper_wv8obg.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-16-9" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422191/Juniper_wv8obg.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 05</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -515,11 +734,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 35mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_05</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 05 Preview">
                     </div>
                 </div>
 
@@ -539,10 +766,9 @@
                 </div>
             </div>
 
-            <!-- 專案 06 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422154/Teatree_ec8g2v.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-3-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788422154/Teatree_ec8g2v.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 06</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -553,11 +779,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 50mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_06</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 06 Preview">
                     </div>
                 </div>
 
@@ -577,25 +811,32 @@
                 </div>
             </div>
 
-            <!-- 專案 07 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777532656/JA_Xmas_1920_30s_c9e0mx.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-16-9" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777532656/JA_Xmas_1920_30s_c9e0mx.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 07</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
                     <div class="flex items-center justify-center px-1 py-2 shrink-0">
                         <span class="vertical-text font-semibold text-xl tracking-widest text-black uppercase transition-all duration-300">
-                            HOIDAY CAMPAIGN VIDEO PRODUCTION
+                            HOLIDAY CAMPAIGN VIDEO 
                         </span>
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 24mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_07</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 07 Preview">
                     </div>
                 </div>
 
@@ -615,10 +856,9 @@
                 </div>
             </div>
 
-            <!-- 專案 08 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788425380/3in1_cucu3t.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                   
+            <div class="industrial-card p-4 ratio-4-5" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788425380/3in1_cucu3t.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 08</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -629,11 +869,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 85mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_08</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 08 Preview">
                     </div>
                 </div>
 
@@ -648,15 +896,14 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-black">DUR:</span>
-                        <span class="tech-mono font-bold tracking-wider text-black">00:00:00:00</span>
+                        <span class="tech-mono font-bold tracking-wider text-black">00:00:25:00</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 專案 09 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772788390/Tea_Tree_Series_Video_2025_S_axtnpq.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-16-9" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1772788390/Tea_Tree_Series_Video_2025_S_axtnpq.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 09</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -667,11 +914,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 35mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_09</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 09 Preview">
                     </div>
                 </div>
 
@@ -691,10 +946,9 @@
                 </div>
             </div>
 
-            <!-- 專案 10 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534685/JA_Mask_2_dk49ir.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-1-1" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/f_auto,q_auto/v1777534685/JA_Mask_2_dk49ir.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 10</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -705,11 +959,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 50mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_10</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 10 Preview">
                     </div>
                 </div>
 
@@ -729,10 +991,9 @@
                 </div>
             </div>
 
-            <!-- 專案 11 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778154954/Tea_Tree_Series_V2_ucrxdx.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                  
+            <div class="industrial-card p-4 ratio-16-9" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1778154954/Tea_Tree_Series_V2_ucrxdx.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 11</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -743,11 +1004,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 35mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_11</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 11 Preview">
                     </div>
                 </div>
 
@@ -767,10 +1036,9 @@
                 </div>
             </div>
 
-            <!-- 專案 12 -->
-            <div class="industrial-card p-4" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788426292/JA_Video_bkvoie.mp4">
-                <div class="flex justify-end items-center mono-text text-[11px] font-bold text-black mb-2">
-                 
+            <div class="industrial-card p-4 ratio-4-5" data-thumb="https://res.cloudinary.com/dssycfvxr/video/upload/v1788426292/JA_Video_bkvoie.mp4">
+                <div class="flex justify-between items-center mono-text text-[10px] font-bold text-black mb-2 pb-1">
+                    <span>GRID_ID: 12</span>
                 </div>
                 
                 <div class="flex gap-3 my-1 items-stretch">
@@ -781,11 +1049,19 @@
                     </div>
                     <div class="project-image-container flex-1">
                         <div class="asset-protection-layer"></div>
+                        <div class="camera-focus-frame">
+                            <div class="focus-corner corner-tl"></div>
+                            <div class="focus-corner corner-tr"></div>
+                            <div class="focus-corner corner-bl"></div>
+                            <div class="focus-corner corner-br"></div>
+                            <div class="camera-center-target"></div>
+                            <div class="af-status-tag">AF-LOCK // 50mm</div>
+                        </div>
                         <div class="terminal-loader">
                             <div>&gt; INIT STREAM_12</div>
                             <div class="loading-status-text font-bold">&gt; LOADING... 0%</div>
                         </div>
-                        <img src="" class="project-asset auto-thumb">
+                        <img src="" class="project-asset auto-thumb" alt="Project 12 Preview">
                     </div>
                 </div>
 
@@ -807,13 +1083,11 @@
 
         </main>
 
-        <!-- 頁面結束右下大字級剪片分割符號 "}" -->
         <footer class="mt-12 sm:mt-20 flex justify-end items-center">
             <div class="text-7xl sm:text-9xl font-extralight text-black tech-mono leading-none select-none pointer-events-none">}</div>
         </footer>
     </div>
 
-    <!-- 專案展示視窗 Modal -->
     <aside id="project-overlay" aria-hidden="true" role="dialog">
         <div class="project-modal-content">
             <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
@@ -824,24 +1098,49 @@
         </div>
     </aside>
 
-    <!-- 安全防護動態提示框 -->
     <div id="security-toast">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
+        <div class="security-icon-badge">!</div>
         <span id="toast-message">PROTECTED // CONTENT DOWNLOAD DISABLED</span>
     </div>
 
     <script>
-        /**
-         * 機械打字輸入效果引擎 (Mechanical Typewriter)
-         */
+        const CameraCursor = {
+            element: null,
+
+            init() {
+                this.element = document.getElementById('camera-cursor');
+                if (!this.element) return;
+
+                window.addEventListener('mousemove', (e) => {
+                    this.element.style.left = `${e.clientX}px`;
+                    this.element.style.top = `${e.clientY}px`;
+                });
+
+                document.addEventListener('mouseleave', () => {
+                    this.element.style.opacity = '0';
+                });
+
+                document.addEventListener('mouseenter', () => {
+                    this.element.style.opacity = '1';
+                });
+
+                const interactiveElements = document.querySelectorAll('.industrial-card, button, a');
+                interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        document.body.classList.add('cursor-active');
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        document.body.classList.remove('cursor-active');
+                    });
+                });
+            }
+        };
+
         const MechanicalTypewriter = {
             phrases: [
                 "INITIALIZING ARCHIVE FRAMEWORK 2026...",
-                "LOADING MOTION GRAPHICS & CGI RENDERS...",
-                "SYSTEM STATUS: ONLINE // SECURITY GUARD: ACTIVE",
+                "WATERFALL COLLAGE LAYOUT ENABLED...",
+                "DYNAMIC ASPECT-RATIO PREVIEW MASONRY STREAM",
                 "XIAOSTUDIO ARCHIVE NODE_03 // PROTECTED STREAM"
             ],
             currentPhraseIndex: 0,
@@ -882,9 +1181,6 @@
             }
         };
 
-        /**
-         * 安全防護模組 (Security Guard Module)
-         */
         const SecurityGuard = {
             toastTimeout: null,
 
@@ -936,7 +1232,7 @@
                         return false;
                     }
 
-                    if (ctrlOrCmd && (keyCode === 83 || keyCode === 85 || keyCode === 80)) {
+                    if (ctrlOrCmd && (keyCode === 83 || keyCode === 80)) {
                         e.preventDefault();
                         this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
                         return false;
@@ -945,9 +1241,6 @@
             }
         };
 
-        /**
-         * 作品集核心模組 (Portfolio Core Module)
-         */
         const Portfolio = {
             elements: {
                 overlay: document.getElementById('project-overlay'),
@@ -992,7 +1285,7 @@
                             }
                         }
                     });
-                }, { threshold: 0.05, rootMargin: '100px 0px' });
+                }, { threshold: 0.05, rootMargin: '120px 0px' });
 
                 this.elements.cards.forEach(card => observer.observe(card));
             },
@@ -1002,7 +1295,6 @@
                 const statusText = card.querySelector('.loading-status-text');
                 const loader = card.querySelector('.terminal-loader');
                 
-                // 機械式百分比輸入數字載入模擬
                 let progress = 0;
                 const progressInterval = setInterval(() => {
                     progress += Math.floor(Math.random() * 25) + 12;
@@ -1079,6 +1371,7 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
+            CameraCursor.init();
             MechanicalTypewriter.init();
             SecurityGuard.init();
             Portfolio.init();
@@ -1086,4 +1379,3 @@
     </script>
 </body>
 </html>
-
