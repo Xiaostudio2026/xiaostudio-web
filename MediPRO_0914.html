@@ -1,0 +1,1030 @@
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+        --accent-gray: #f8f8f8;
+        --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (pointer: fine) {
+        body, a, button, input, textarea, .project-card, .asset-protection-layer {
+            cursor: none !important;
+        }
+    }
+
+    body { 
+        font-family: 'Montserrat', sans-serif; 
+        background-color: var(--bg-color); 
+        color: var(--text-color);
+        overflow-x: hidden; 
+        margin: 0; 
+        padding: 3rem 2.5rem 10rem 2.5rem;
+    } 
+    
+    @media (min-width: 768px) { body { padding: 4rem 4rem 14rem 4rem; } }
+    @media (min-width: 1024px) { body { padding: 5rem 6rem 18rem 6rem; } }
+
+    .mono-text { font-family: 'Barlow', sans-serif; }
+    .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
+    .no-scroll { overflow: hidden; }
+
+    /* Camera Focus Cursor */
+    #camera-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 32px;
+        height: 32px;
+        pointer-events: none;
+        z-index: 10000;
+        transform: translate(-50%, -50%);
+        transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                    height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                    opacity 0.2s ease;
+        display: none;
+    }
+
+    @media (pointer: fine) {
+        #camera-cursor { display: block; }
+    }
+
+    .cursor-box {
+        position: absolute;
+        inset: 0;
+        border: 1.5px solid #000;
+        transition: all 0.25s ease;
+    }
+
+    .cursor-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        background: #000;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.2s ease;
+    }
+
+    #camera-cursor.hovering-card {
+        width: 48px;
+        height: 48px;
+    }
+
+    #camera-cursor.hovering-card .cursor-box {
+        border-color: #000;
+        border-width: 2px;
+        box-shadow: 0 0 0 1px #fff;
+    }
+
+    #camera-cursor.hovering-card .cursor-dot {
+        background: #ff0033;
+        box-shadow: 0 0 8px #ff0033;
+    }
+
+    #camera-cursor.hovering-btn {
+        width: 26px;
+        height: 26px;
+    }
+
+    #camera-cursor.hovering-btn .cursor-box {
+        border-radius: 50%;
+        border-color: #000;
+    }
+
+    .animate-text-diag {
+        opacity: 0;
+        animation: textDiagIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animate-text-horiz {
+        opacity: 0;
+        animation: textHorizIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    }
+    .animate-text-vert {
+        opacity: 0;
+        animation: textVertIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+
+    @keyframes textDiagIn {
+        0% { opacity: 0; transform: translate(-35px, -20px); }
+        100% { opacity: 1; transform: translate(0, 0); }
+    }
+    @keyframes textHorizIn {
+        0% { opacity: 0; transform: translateX(-35px); }
+        100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes textVertIn {
+        0% { opacity: 0; transform: translateY(-25px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .content-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .masthead-border { 
+        padding: 0.5rem 0;
+        margin: 1rem 0;
+    }
+
+    @media (min-width: 768px) { .masthead-border { padding: 1.5rem 0; margin: 1.5rem 0; } }
+
+    .security-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #000;
+        color: #fff;
+        padding: 4px 10px;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .security-badge::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #00ff66;
+        border-radius: 50%;
+        box-shadow: 0 0 6px #00ff66;
+    }
+
+    .project-card {
+        position: relative;
+        display: block;
+        background-color: transparent;
+        transition: var(--transition-smooth);
+        opacity: 0;
+        transform: translateY(35px);
+        padding-bottom: 0;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .project-card.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .vertical-title {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg) translateY(30px);
+        white-space: nowrap;
+        text-orientation: mixed;
+        line-height: 1;
+        max-height: 100%;
+        text-transform: uppercase;
+        letter-spacing: normal;
+        font-stretch: normal;
+        opacity: 0;
+        transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+    }
+
+    .project-card.is-visible .vertical-title {
+        opacity: 1;
+        transform: rotate(180deg) translateY(0);
+    }
+
+    .project-meta-text {
+        opacity: 0;
+        transform: translateY(15px);
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.12s, opacity 0.7s ease 0.12s;
+    }
+
+    .project-card.is-visible .project-meta-text {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Image Container & Aspect Ratio Locking without Cropping */
+    .project-image-container {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        background-color: var(--accent-gray);
+        outline: 0px solid #000;
+        transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .project-card:hover .project-image-container {
+        outline: 2px solid #000;
+        outline-offset: -2px;
+    }
+
+    .focus-frame-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .project-card:hover .focus-frame-overlay {
+        opacity: 1;
+    }
+
+    .focus-corner {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-color: #000;
+        border-style: solid;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .focus-corner-tl { top: 12px; left: 12px; border-width: 3px 0 0 3px; transform: translate(-10px, -10px); }
+    .focus-corner-tr { top: 12px; right: 12px; border-width: 3px 3px 0 0; transform: translate(10px, -10px); }
+    .focus-corner-bl { bottom: 12px; left: 12px; border-width: 0 0 3px 3px; transform: translate(-10px, 10px); }
+    .focus-corner-br { bottom: 12px; right: 12px; border-width: 0 3px 3px 0; transform: translate(10px, 10px); }
+
+    .project-card:hover .focus-corner-tl { transform: translate(0, 0); }
+    .project-card:hover .focus-corner-tr { transform: translate(0, 0); }
+    .project-card:hover .focus-corner-bl { transform: translate(0, 0); }
+    .project-card:hover .focus-corner-br { transform: translate(0, 0); }
+
+    .focus-meta-tag {
+        position: absolute;
+        font-family: 'Barlow', sans-serif;
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: #fff;
+        background: #000;
+        padding: 3px 7px;
+        text-transform: uppercase;
+        opacity: 0;
+        transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+        white-space: nowrap;
+        z-index: 25;
+    }
+
+    .focus-meta-tl { top: 16px; left: 36px; transform: translateY(-6px); }
+    .focus-meta-br { bottom: 16px; right: 36px; transform: translateY(6px); }
+    
+    .focus-meta-center { 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%) scale(0.9); 
+    }
+
+    .project-card:hover .focus-meta-tl { opacity: 1; transform: translateY(0); }
+    .project-card:hover .focus-meta-br { opacity: 1; transform: translateY(0); }
+    .project-card:hover .focus-meta-center { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    /* Preserve image aspect ratio without cutting/cropping */
+    .project-asset {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0;
+        transform: scale(0.98);
+        transition: opacity 0.8s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        -webkit-user-drag: none;
+        user-drag: none;
+        pointer-events: none;
+    }
+    
+    .project-asset.loaded { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    .project-card:hover .project-asset.loaded { transform: scale(1.01); }
+
+    .asset-protection-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        background: transparent;
+        background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+        background-size: 8px 8px;
+    }
+
+    .loading-shimmer {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    #project-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.96);
+        z-index: 900;
+        transform: translateY(100%);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+    }
+
+    #project-overlay.active {
+        transform: translateY(0);
+        visibility: visible;
+    }
+
+    .project-modal-content {
+        width: 92vw;
+        height: 90vh;
+        position: relative;
+        background: var(--bg-color);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #000;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width: 768px) { 
+        .project-modal-content { 
+            width: 96vw;
+            height: 94vh;
+        } 
+    }
+
+    .close-project-btn {
+        position: absolute;
+        top: 12px; 
+        right: 12px; 
+        width: 36px;
+        height: 36px;
+        background: #000;
+        color: #fff;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        z-index: 950;
+        transition: var(--transition-smooth);
+    }
+
+    .close-project-btn:hover {
+        background: #ff0033;
+        color: #fff;
+        transform: rotate(90deg);
+    }
+
+    #project-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: #fff;
+    }
+
+    #security-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #000;
+        color: #fff;
+        padding: 14px 28px;
+        font-family: 'Barlow', sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        border: 1px solid #333;
+        z-index: 9999;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #security-toast.active {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+
+    .proposal-section {
+        padding-top: 2rem;
+        margin-top: 3rem;
+    }
+
+    .section-label {
+        font-family: 'Barlow', sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #000;
+    }
+
+    .marquee-container {
+        border: 1px solid #000000;
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .marquee-content {
+        display: flex;
+        white-space: nowrap;
+        animation: marquee-scroll 14s linear infinite;
+        will-change: transform;
+    }
+
+    @keyframes marquee-scroll {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+</style>
+
+
+<!-- Camera Focus Custom Cursor -->
+<div id="camera-cursor">
+    <div class="cursor-box"></div>
+    <div class="cursor-dot"></div>
+</div>
+
+<div class="content-container">
+    <!-- Header & Proposal Metadata -->
+    <header id="main-header" class="mb-16 md:mb-24">
+        <div class="flex flex-wrap justify-between items-end mb-6 mono-text text-xs md:text-sm font-bold tracking-widest uppercase animate-text-horiz gap-4">
+            <div>PROPOSAL NO. // 2026-MEDIPRO-012</div>
+            <div>CLIENT: MEDIPRO CLINICAL SCALP CARE</div>
+            <div>DATE: 2026.09</div>
+        </div>
+        
+        <div class="masthead-border">
+            <div class="flex items-center justify-start text-left">
+                <h1 class="text-[8.5vw] md:text-7xl lg:text-9xl font-[900] tracking-[-0.05em] uppercase leading-none text-left animate-text-diag py-2">
+                     MEDIPRO<span class="ampersand mx-[-0.05em] md:mx-[-0.02em] text-[0.85em] align-[0.05em]">&</span>DESIGN
+                </h1>
+            </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-6 animate-text-vert">
+            <span class="security-badge">CONFIDENTIAL / MEDIPRO PROPOSAL</span>
+            
+            <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[340px] md:max-w-[480px]">
+                <div class="marquee-content gap-6 text-black font-bold text-xs">
+                    <span class="shrink-0">PROPRIETARY PROPOSAL // MEDIPRO WEB BANNER & INGREDIENT VISUAL ASSET PROPOSAL. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED</span>
+                    <span class="shrink-0">PROPRIETARY PROPOSAL // MEDIPRO WEB BANNER & INGREDIENT VISUAL ASSET PROPOSAL. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 01. VISUAL CONCEPTS: WEB BANNERS (1600 X 400 PX) -->
+    <section class="proposal-section mb-32 max-w-6xl mx-auto">
+        <div class="mb-16 text-center md:text-left">
+            <div class="section-label">01 // WEB BANNER DESIGN OPTIONS (1600 × 400 PX)</div>
+            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Hero Banner Concepts</h2>
+            
+            <!-- Shared Text Specification -->
+            <div class="mono-text text-xs text-gray-800 uppercase mt-6 leading-relaxed space-y-2">
+                <div>MAIN TITLE: Find My Scalp Solution</div>
+                <div>SUB TITLE: CLINICAL SCALP SOLUTIONS, TAILORED BY DERMATOLOGISTS</div>
+                <div>CTA BUTTON: START THE QUIZ</div>
+            </div>
+        </div>
+
+        <main id="project-grid" class="flex flex-col gap-20 md:gap-28 items-center">
+
+            <!-- Proposal Item 01: Banner Option A -->
+            <div class="project-card reveal w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384827/MediPRO_banner_02.jpg" data-thumb="https://res.cloudinary.com/opovqate/image/upload/v1789384827/MediPRO_banner_02.jpg">
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-stretch">
+                    <div class="sm:col-span-9 flex flex-row gap-4 md:gap-6 items-stretch">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h3 class="vertical-title text-lg md:text-xl font-bold tracking-normal text-black">OPTION A</h3>
+                        </div>
+                        <!-- Maintain 1600x400 aspect ratio (4:1) without cropping -->
+                        <div class="project-image-container aspect-[4/1] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-center">1600 × 400 PX</div>
+                                <div class="focus-meta-tag focus-meta-br">OPTION A</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="MediPRO Web Banner Option A">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase text-gray-700">
+                        <div>
+                            CONCEPT A: BOTANICAL WATER-INFUSED AESTHETIC HIGHLIGHTING HERBAL FORMULATION AND SCALP REPAIR.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposal Item 02: Banner Option B -->
+            <div class="project-card reveal w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384450/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_%E8%A4%87%E6%9C%AC.jpg" data-thumb="https://res.cloudinary.com/opovqate/image/upload/v1789384450/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_%E8%A4%87%E6%9C%AC.jpg">
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-stretch">
+                    <div class="sm:col-span-9 flex flex-row gap-4 md:gap-6 items-stretch">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                            <h3 class="vertical-title text-lg md:text-xl font-bold tracking-normal text-black">OPTION B</h3>
+                        </div>
+                        <!-- Maintain 1600x400 aspect ratio (4:1) without cropping -->
+                        <div class="project-image-container aspect-[4/1] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-center">1600 × 400 PX</div>
+                                <div class="focus-meta-tag focus-meta-br">OPTION B</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="MediPRO Web Banner Option B">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase text-gray-700">
+                        <div>
+                            CONCEPT B: CLINICAL DERMATOLOGICAL PRECISION HIGHLIGHTING MEDICAL AUTHORITY AND ACCURATE DIAGNOSIS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- 02. INGREDIENT GRAPHICS PRODUCTION (300 X 300 PX) -->
+        <div class="mt-28 md:mt-36 mb-16 text-center md:text-left">
+            <div class="section-label">02 // INGREDIENT GRAPHICS PRODUCTION (300 X 300 PX)</div>
+            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Core Ingredient Visual Assets</h2>
+        </div>
+
+        <!-- INGREDIENT ROW 1: NcPA -->
+        <div class="mb-28 md:mb-36">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-10 flex justify-between items-center max-w-4xl mx-auto px-2">
+                <span>INGREDIENT 01 // NcPA (NASACYL LIPID)</span>
+                <span class="text-gray-500 font-normal">SPEC: 300 × 300 PX</span>
+            </div>
+            
+            <!-- Centered 2-Column Row for NcPA -->
+            <div class="flex flex-wrap justify-center gap-16 md:gap-24 items-start max-w-4xl mx-auto">
+                
+                <!-- NcPA Option A -->
+                <div class="project-card reveal flex flex-row gap-4 md:gap-6 items-stretch" href="https://res.cloudinary.com/opovqate/image/upload/v1789384828/NCPA_01.jpg" data-thumb="https://res.cloudinary.com/opovqate/image/upload/v1789384828/NCPA_01.jpg">
+                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION A</h3>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="project-image-container aspect-square w-[300px] h-[300px] max-w-full">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
+                                <div class="focus-meta-tag focus-meta-br">NcPA A</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="NcPA Option A">
+                        </div>
+                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
+                            MINIMALIST MODERN PATTERN STYLE
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NcPA Option B -->
+                <div class="project-card reveal flex flex-row gap-4 md:gap-6 items-stretch" href="https://res.cloudinary.com/opovqate/image/upload/v1789384827/NCPA_02.jpg" data-thumb="https://res.cloudinary.com/opovqate/image/upload/v1789384827/NCPA_02.jpg">
+                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION B</h3>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="project-image-container aspect-square w-[300px] h-[300px] max-w-full">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
+                                <div class="focus-meta-tag focus-meta-br">NcPA B</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="NcPA Option B">
+                        </div>
+                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
+                            CLINICAL SCIENTIFIC DECONSTRUCTION STYLE
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- INGREDIENT ROW 2: Decyl Glucoside -->
+        <div class="mb-28 md:mb-36">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-10 flex justify-between items-center max-w-4xl mx-auto px-2">
+                <span>INGREDIENT 02 // DECYL GLUCOSIDE</span>
+                <span class="text-gray-500 font-normal">SPEC: 300 × 300 PX</span>
+            </div>
+
+            <!-- Centered 2-Column Row for Decyl Glucoside -->
+            <div class="flex flex-wrap justify-center gap-16 md:gap-24 items-start max-w-4xl mx-auto">
+                
+                <!-- Decyl Glucoside Option A -->
+                <div class="project-card reveal flex flex-row gap-4 md:gap-6 items-stretch" href="https://res.cloudinary.com/opovqate/image/upload/v1789384828/Decyl-Glucoside_01.jpg" data-thumb="https://res.cloudinary.com/opovqate/image/upload/v1789384828/Decyl-Glucoside_01.jpg">
+                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION A</h3>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="project-image-container aspect-square w-[300px] h-[300px] max-w-full">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
+                                <div class="focus-meta-tag focus-meta-br">Glucoside A</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="Decyl Glucoside Option A">
+                        </div>
+                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
+                            GENTLE GLUCOSIDE CLEANSER CONCEPT
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decyl Glucoside Option B -->
+                <div class="project-card reveal flex flex-row gap-4 md:gap-6 items-stretch" href="https://res.cloudinary.com/opovqate/image/upload/v1789384827/Decyl-Glucoside_02.jpg" data-thumb="https://res.cloudinary.com/opovqate/image/upload/v1789384827/Decyl-Glucoside_02.jpg">
+                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION B</h3>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="project-image-container aspect-square w-[300px] h-[300px] max-w-full">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
+                                <div class="focus-meta-tag focus-meta-br">Glucoside B</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="Decyl Glucoside Option B">
+                        </div>
+                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
+                            PURIFYING DENSE FOAM CONCEPT
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Footer with Official Website Link (No Divider Line) -->
+    <footer class="w-full pt-20 pb-10 flex flex-col md:flex-row justify-between items-center text-xs text-black font-bold tracking-[0.15em] uppercase gap-6">
+        <div>&copy; XIAOSTUDIO. ALL RIGHTS RESERVED.</div>
+        
+        <div class="mono-text text-xs flex items-center gap-2">
+            <span class="text-gray-400 font-normal">OFFICIAL WEBSITE:</span>
+            <a href="https://xiaostudio.xyz" target="_blank" rel="noopener noreferrer" class="interactive-el underline hover:text-red-600 transition-colors tracking-widest font-extrabold text-black">
+                XIAOSTUDIO.XYZ ↗
+            </a>
+        </div>
+
+        <div class="mono-text text-gray-500">CONFIDENTIAL PROPOSAL // FOR CLIENT REVIEW ONLY</div>
+    </footer>
+</div>
+
+<!-- Modal Overlay -->
+<aside id="project-overlay" aria-hidden="true" role="dialog">
+    <div class="project-modal-content">
+        <button class="close-project-btn interactive-el" onclick="Portfolio.close()" aria-label="Close Project Preview">✕</button>
+        <iframe id="project-iframe" src="" frameborder="0" title="Project Details"></iframe>
+    </div>
+</aside>
+
+<!-- Security Toast -->
+<div id="security-toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span id="toast-message">PROTECTED // PROPOSAL CONTENT DOWNLOAD DISABLED</span>
+</div>
+
+<script>
+    /* Camera Cursor Controller */
+    const CameraCursor = {
+        cursorEl: document.getElementById('camera-cursor'),
+        mouseX: 0,
+        mouseY: 0,
+        currentX: 0,
+        currentY: 0,
+
+        init() {
+            if (!this.cursorEl) return;
+            
+            window.addEventListener('mousemove', (e) => {
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+            });
+
+            this.bindHoverEvents();
+            this.render();
+        },
+
+        bindHoverEvents() {
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    this.cursorEl.classList.add('hovering-card');
+                });
+                card.addEventListener('mouseleave', () => {
+                    this.cursorEl.classList.remove('hovering-card');
+                });
+            });
+
+            document.querySelectorAll('button, a, .security-badge, .interactive-el').forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    this.cursorEl.classList.add('hovering-btn');
+                });
+                btn.addEventListener('mouseleave', () => {
+                    this.cursorEl.classList.remove('hovering-btn');
+                });
+            });
+        },
+
+        render() {
+            this.currentX += (this.mouseX - this.currentX) * 0.25;
+            this.currentY += (this.mouseY - this.currentY) * 0.25;
+
+            if (this.cursorEl) {
+                this.cursorEl.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0) translate(-50%, -50%)`;
+            }
+
+            requestAnimationFrame(() => this.render());
+        }
+    };
+
+    const SecurityGuard = {
+        toastTimeout: null,
+
+        init() {
+            this.disableContextMenu();
+            this.disableDragAndDrop();
+            this.disableShortcuts();
+            this.preventPrintScreen();
+        },
+
+        showToast(message) {
+            const toast = document.getElementById('security-toast');
+            const msgEl = document.getElementById('toast-message');
+            if (!toast || !msgEl) return;
+
+            msgEl.innerText = message || 'PROTECTED // PROPOSAL CONTENT DOWNLOAD DISABLED';
+            toast.classList.add('active');
+
+            if (this.toastTimeout) clearTimeout(this.toastTimeout);
+            this.toastTimeout = setTimeout(() => {
+                toast.classList.remove('active');
+            }, 2500);
+        },
+
+        disableContextMenu() {
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                this.showToast('RIGHT CLICK DISABLED // PROPOSAL CONTENT IS COPYRIGHT PROTECTED');
+                return false;
+            }, false);
+        },
+
+        disableDragAndDrop() {
+            document.addEventListener('dragstart', (e) => {
+                e.preventDefault();
+                this.showToast('DRAG & DROP DISABLED // ASSET DOWNLOAD IS RESTRICTED');
+                return false;
+            }, false);
+        },
+
+        disableShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                const keyCode = e.keyCode || e.which;
+
+                if (keyCode === 123) {
+                    e.preventDefault();
+                    this.showToast('DEVTOOLS ACCESS RESTRICTED');
+                    return false;
+                }
+
+                if (ctrlOrCmd) {
+                    if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                        e.preventDefault();
+                        this.showToast('SAVING/PRINTING DISABLED // PROPOSAL DOWNLOADING RESTRICTED');
+                        return false;
+                    }
+
+                    if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) {
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED');
+                        return false;
+                    }
+
+                    if (keyCode === 65 || keyCode === 67) {
+                        if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                            e.preventDefault();
+                            this.showToast('COPYING DISABLED // CONTENT IS COPYRIGHT PROTECTED');
+                            return false;
+                        }
+                    }
+                }
+            }, false);
+        },
+
+        preventPrintScreen() {
+            window.addEventListener('keyup', (e) => {
+                if (e.key === 'PrintScreen') {
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText('');
+                    }
+                    this.showToast('SCREENSHOT DETECTED // PROPOSAL ASSETS ARE PROTECTED');
+                }
+            });
+        }
+    };
+
+    const Portfolio = {
+        elements: {
+            header: document.getElementById('main-header'),
+            overlay: document.getElementById('project-overlay'),
+            iframe: document.getElementById('project-iframe'),
+            cards: document.querySelectorAll('.project-card')
+        },
+
+        init() {
+            this.bindEvents();
+            this.setupIntersectionObserver();
+            this.forceLoadFirstBatch();
+        },
+
+        bindEvents() {
+            this.elements.cards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const href = card.getAttribute('href');
+                    if (href) {
+                        e.preventDefault();
+                        this.open(href);
+                    }
+                });
+            });
+        },
+
+        forceLoadFirstBatch() {
+            this.elements.cards.forEach((card, index) => {
+                if (index < 4) {
+                    setTimeout(() => {
+                        card.classList.add('is-visible');
+                        const placeholder = card.querySelector('.auto-thumb');
+                        const assetUrl = card.getAttribute('data-thumb');
+                        if (placeholder && assetUrl && !placeholder.dataset.loaded) {
+                            this.loadAsset(placeholder, assetUrl, card);
+                        }
+                    }, index * 120);
+                }
+            });
+        },
+
+        setupIntersectionObserver() {
+            if (!('IntersectionObserver' in window)) {
+                this.elements.cards.forEach(card => {
+                    const placeholder = card.querySelector('.auto-thumb');
+                    const assetUrl = card.getAttribute('data-thumb');
+                    if (placeholder && assetUrl) this.loadAsset(placeholder, assetUrl, card);
+                });
+                return;
+            }
+
+            const options = {
+                threshold: 0.05,
+                rootMargin: '150px 0px'
+            };
+
+            let visibleQueue = 0;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        
+                        const staggerDelay = (visibleQueue % 4) * 100;
+                        visibleQueue++;
+
+                        setTimeout(() => {
+                            card.classList.add('is-visible');
+                            const placeholder = card.querySelector('.auto-thumb');
+                            const assetUrl = card.getAttribute('data-thumb');
+                            
+                            if (placeholder && assetUrl && !placeholder.dataset.loaded) {
+                                this.loadAsset(placeholder, assetUrl, card);
+                            }
+                        }, staggerDelay);
+
+                        observer.unobserve(card);
+                    }
+                });
+            }, options);
+
+            this.elements.cards.forEach(card => observer.observe(card));
+        },
+
+        loadAsset(placeholder, url, card) {
+            if (!placeholder || placeholder.dataset.loaded) return;
+            placeholder.dataset.loaded = "true";
+
+            placeholder.src = url;
+            placeholder.setAttribute('oncontextmenu', 'return false;');
+            placeholder.onload = () => {
+                this.finalizeLoading(null, placeholder, card);
+            };
+            placeholder.onerror = () => this.handleError(card);
+        },
+
+        finalizeLoading(oldEl, newEl, card) {
+            newEl.classList.add('loaded');
+            const shimmer = card.querySelector('.loading-shimmer');
+            if (shimmer) shimmer.style.display = 'none';
+        },
+
+        handleError(card) {
+            const shimmer = card.querySelector('.loading-shimmer');
+            if (shimmer) shimmer.style.background = '#e0e0e0';
+        },
+
+        open(url) {
+            this.elements.iframe.src = url;
+            this.elements.overlay.classList.add('active');
+            this.elements.overlay.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('no-scroll');
+        },
+
+        close() {
+            this.elements.overlay.classList.remove('active');
+            this.elements.overlay.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('no-scroll');
+            setTimeout(() => { this.elements.iframe.src = ''; }, 500);
+        }
+    };
+
+    /* App Initialization */
+    function startApp() {
+        SecurityGuard.init();
+        Portfolio.init();
+        CameraCursor.init();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startApp);
+    } else {
+        startApp();
+    }
+</script>
