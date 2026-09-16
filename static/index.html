@@ -422,7 +422,7 @@
                 height: 25px;
             }
         }
-
+      
         .close-project-btn {
             position: absolute;
             top: 0; 
@@ -687,8 +687,8 @@
                 </div>
             </div>
 
-            <!-- 飽和度、對比度、曝光度控制區塊 -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+            <!-- 飽和度、對比度、曝光度控制區塊（手機版隱藏：hidden sm:grid，避免下滑時誤觸） -->
+            <div class="hidden sm:grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
                 <!-- 飽和度 Saturation -->
                 <div class="space-y-2">
                     <div class="flex justify-between text-[11px] font-bold tracking-wider">
@@ -718,7 +718,7 @@
             </div>
         </section>
 
-        <!-- Main Portfolio Grid: 寬廣不對稱雙欄與單欄排列 (無分隔線) -->
+        <!-- Main Portfolio Grid: 寬廣不對稱雙欄與單欄排列 (圖片統一 1:1 aspect-square 顯示) -->
         <main id="project-grid" class="grid grid-cols-12 gap-x-8 md:gap-x-12 gap-y-16 md:gap-y-24">
 
             <!-- ==================== PROJECT 01 / 22 ==================== -->
@@ -728,7 +728,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">PRODUCT COLLECTION PHOTO</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <!-- 相機鏡頭對焦框 Overlay -->
@@ -760,7 +760,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">MEDIPRO PHOTOGRAPHY</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -791,7 +791,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">FATHER'S DAY CAMPAIGN VISUAL</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -822,7 +822,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">MEDIPRO KEY VISUAL</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -853,7 +853,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">COLLECTION PHOTO SHOOT</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -884,7 +884,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">COLLECTION PHOTO SHOOT</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -915,7 +915,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">FATHER'S DAY</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -946,7 +946,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">SCALP PSORIASIS SOCIAL CONTENT</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -977,7 +977,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">DAMASK ROSE SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1008,7 +1008,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">DAMASK ROSE SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1039,7 +1039,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CNY RED ENVELOPE VISUAL</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1070,7 +1070,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1101,7 +1101,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1132,7 +1132,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1163,7 +1163,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1194,7 +1194,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">LIQUID SHAMPOO FOR COLOR PROTECTION</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1225,7 +1225,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">LIQUID SHAMPOO FOR COLOR PROTECTION</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1256,7 +1256,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">SPLENDID SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1287,7 +1287,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">PRFESSIONAL SALON COLLECTION</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1318,7 +1318,7 @@
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CO-BRANDING CAMPAIGN VISUALS</h2>
                         </div>
-                        <div class="project-image-container aspect-[16/10] w-full flex-grow">
+                        <div class="project-image-container aspect-square w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1487,7 +1487,7 @@
                             if (shimmer) shimmer.style.display = 'none';
                         };
                         img.onerror = () => {
-                            img.src = `https://placehold.co/800x500/111111/ffffff?text=${encodeURIComponent(img.alt || 'IMAGE')}`;
+                            img.src = `https://placehold.co/800x800/111111/ffffff?text=${encodeURIComponent(img.alt || 'IMAGE')}`;
                             img.classList.add('loaded');
                             if (shimmer) shimmer.style.display = 'none';
                         };
