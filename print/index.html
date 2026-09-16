@@ -481,6 +481,62 @@
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
+
+        /* 手機版強制 1:1 比例與瀑布流排版 */
+        @media (max-width: 767px) {
+            .project-image-container {
+                aspect-ratio: 1 / 1 !important;
+            }
+        }
+        
+        .masonry-grid {
+            column-gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-gap: 2.5rem;
+            }
+        }
+
+        .project-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 3.5rem;
+        }
+
+        /* 自訂相機風格簡約滑桿 (Range Slider) */
+        input[type=range].col-range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #000;
+            height: 2px;
+            outline: none;
+        }
+        input[type=range].col-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #000;
+            cursor: pointer;
+            border-radius: 0;
+            transition: transform 0.15s ease;
+        }
+        input[type=range].col-range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        input[type=range].col-range-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #000;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #000;
+            cursor: pointer;
+            border-radius: 0;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;">
@@ -508,10 +564,22 @@
                 </div>
             </div>
             
-            <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 animate-text-vert">
-                <span class="security-badge">PROTECTED AREA</span>
+            <div class="mt-4 flex flex-wrap sm:flex-nowrap justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 animate-text-vert">
+                <div class="flex items-center gap-3 md:gap-4 flex-1">
+                    <span class="security-badge shrink-0">PROTECTED AREA</span>
+                    
+                    <!-- 即時滑桿切換欄數工具列 -->
+                    <div id="grid-controls" class="flex items-center gap-2 flex-1 pr-2 md:pr-4">
+                        <label for="col-slider" class="text-gray-400 text-[10px] md:text-xs font-bold whitespace-nowrap shrink-0">
+                            GRID: <span id="col-count-label" class="text-black font-extrabold">2 COLS</span>
+                        </label>
+                        <input type="range" id="col-slider" min="1" max="4" value="2" step="1" 
+                               oninput="Portfolio.setColumns(parseInt(this.value))" 
+                               class="col-range-slider cursor-pointer accent-black w-full my-auto" aria-label="切換每列作品顯示數量">
+                    </div>
+                </div>
                 
-                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
+                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px] shrink-0">
                     <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
                         <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                         <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
@@ -520,17 +588,17 @@
             </div>
         </header>
 
-        <!-- Main Portfolio Grid: 寬廣不對稱雙欄與單欄排列 (無分隔線) -->
-        <main id="project-grid" class="grid grid-cols-12 gap-x-8 md:gap-x-12 gap-y-16 md:gap-y-24">
+        <!-- Main Portfolio Grid: 瀑布流動態欄數排列 (Masonry layout) -->
+        <main id="project-grid" class="masonry-grid columns-1 md:columns-2 transition-all duration-500">
 
              <!-- ==================== PROJECT 01 ==================== -->
-             <div class="project-card reveal col-span-12" href="https://xiaostudio.xyz/print/ar-zine.html" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1776679615/AR_cover_te9ids.jpg">
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
-                    <div class="sm:col-span-9 flex flex-row gap-3 md:gap-4 items-stretch">
+             <div class="project-card reveal" href="https://xiaostudio.xyz/print/ar-zine.html" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1776679615/AR_cover_te9ids.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">BRAND ZINE</h2>
                         </div>
-                        <div class="project-image-container aspect-square sm:aspect-[4/3] w-full flex-grow">
+                        <div class="project-image-container aspect-square md:aspect-[16/9] w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -544,32 +612,24 @@
                             <img src="" class="project-asset auto-thumb" alt="BRAND ZINE">
                         </div>
                     </div>
-                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase">
-                        <div class="space-y-3">
-                            <div>
-                                <span class="block text-gray-400 font-semibold uppercase text-[10px]">CLIENT</span>
-                                <span class="font-bold text-black text-xs md:text-sm">AROMASE</span>
-                            </div>
-                            <div>
-                                <span class="block text-gray-400 font-semibold uppercase text-[10px]">CATEGORY</span>
-                                <span class="font-bold text-black text-xs md:text-sm">PRINT DESIGN</span>
-                            </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">AROMASE</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PRINT DESIGN</span></div>
                         </div>
-                        <div class="pt-4 text-gray-600 text-xs font-medium uppercase">
-                            VISUAL PRODUCTION / LAYOUT / PRINT CRAFT
-                        </div>
+                        <div class="text-gray-600 text-xs font-medium">VISUAL PRODUCTION</div>
                     </div>
                 </div>
             </div>
 
             <!-- ==================== PROJECT 2 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789411970/Seafood_packaging.jpg">
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789411970/Seafood_packaging.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">NATURAL FROZEN SHRIMP BOX</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container aspect-square md:aspect-[4/5] w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -594,13 +654,13 @@
             </div>
 
             <!-- ==================== PROJECT 3 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/THA_Invitation_06.jpg">
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/THA_Invitation_06.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">STAGE SHOW INVITATION</h2>
                         </div>
-                        <div class="project-image-container aspect-square sm:aspect-[4/3] w-full flex-grow">
+                        <div class="project-image-container aspect-square md:aspect-[4/3] w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -623,14 +683,15 @@
                     </div>
                 </div>
             </div>
- <!-- ==================== PROJECT 5 ==================== -->
-            <div class="project-card reveal col-span-12" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789416838/WORKBOOK-COVER-_-VISUAL-DESIGN.jpg">
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
-                    <div class="sm:col-span-9 flex flex-row gap-3 md:gap-4 items-stretch">
+
+            <!-- ==================== PROJECT 4 ==================== -->
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789416838/WORKBOOK-COVER-_-VISUAL-DESIGN.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WORKBOOK COVER & VISUAL DESIGN</h2>
+                           <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">STARTING PACKAGE FOR KINDER</h2>
                         </div>
-                        <div class="project-image-container aspect-square sm:aspect-[4/3] w-full flex-grow">
+                        <div class="project-image-container aspect-square md:aspect-[3/4] w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -639,38 +700,60 @@
                                 <div class="focus-corner focus-corner-bl"></div>
                                 <div class="focus-corner focus-corner-br"></div>
                                 <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
-                                <div class="focus-meta-tag focus-meta-br">PRINT CRAFT</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
                             </div>
-                            <img src="" class="project-asset auto-thumb" alt="BRAND ZINE">
+                            <img src="" class="project-asset auto-thumb" alt="STARTING PACKAGE FOR KINDER">
                         </div>
                     </div>
-                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase">
-                        <div class="space-y-3">
-                            <div>
-                                <span class="block text-gray-400 font-semibold uppercase text-[10px]">CLIENT</span>
-                                <span class="font-bold text-black text-xs md:text-sm">TREE HOUSE ACADEMY</span>
-                            </div>
-                            <div>
-                                <span class="block text-gray-400 font-semibold uppercase text-[10px]">CATEGORY</span>
-                                <span class="font-bold text-black text-xs md:text-sm">PRINT DESIGN</span>
-                            </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">TREE HOUSE ACADEMY</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PRINT</span></div>
                         </div>
-                        <div class="pt-4 text-gray-600 text-xs font-medium uppercase">
-                            VISUAL PRODUCTION / LAYOUT / PRINT CRAFT
-                        </div>
+                        <div class="text-gray-600 text-xs font-medium">GRAPHIC DESIGN</div>
                     </div>
                 </div>
             </div>
 
+            <!-- ==================== PROJECT 5 ==================== -->
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789538603/StudyPackage_Profile.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                           <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WORKBOOK COVER & VISUAL DESIGN</h2>
+                        </div>
+                        <div class="project-image-container aspect-square md:aspect-[1/1] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt="WORKBOOK COVER & VISUAL DESIGN">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">TREE HOUSE ACADEMY</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PRINT</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">GRAPHIC DESIGN</div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- ==================== PROJECT 04 ==================== -->
-            <div class="project-card reveal col-span-12" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239240/Static_cover_7_sl4dz7.jpg">
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
-                    <div class="sm:col-span-9 flex flex-row gap-3 md:gap-4 items-stretch">
+            <!-- ==================== PROJECT 06 ==================== -->
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239240/Static_cover_7_sl4dz7.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">ROYAL SANDALWOOD & JASMINE SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-square sm:aspect-[5/3] w-full flex-grow">
+                        <div class="project-image-container aspect-square md:aspect-[16/10] w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -684,25 +767,16 @@
                             <img src="" class="project-asset auto-thumb" alt="ROYAL SANDALWOOD & JASMINE SERIES">
                         </div>
                     </div>
-                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase">
-                        <div class="space-y-3">
-                            <div>
-                                <span class="block text-gray-400 font-semibold uppercase text-[10px]">CLIENT</span>
-                                <span class="font-bold text-black text-xs md:text-sm">JULIART</span>
-                            </div>
-                            <div>
-                                <span class="block text-gray-400 font-semibold uppercase text-[10px]">CATEGORY</span>
-                                <span class="font-bold text-black text-xs md:text-sm">PACKAGING</span>
-                            </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">JULIART</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PACKAGING</span></div>
                         </div>
-                        <div class="pt-4 text-gray-600 text-xs font-medium uppercase">
-                            COLLECTION PACKAGING DESIGN
-                        </div>
+                        <div class="text-gray-600 text-xs font-medium">COLLECTION PACKAGING</div>
                     </div>
                 </div>
             </div>
 
-           
         </main>
 
         <!-- 頁尾 Footer 區域 -->
@@ -909,6 +983,28 @@
                 });
             },
 
+            setColumns(num) {
+                const grid = document.getElementById('project-grid');
+                const slider = document.getElementById('col-slider');
+                const label = document.getElementById('col-count-label');
+                if (!grid) return;
+
+                // 同步更新滑桿數值與標籤文字
+                if (slider && parseInt(slider.value) !== num) {
+                    slider.value = num;
+                }
+                if (label) {
+                    label.textContent = `${num} ${num === 1 ? 'COL' : 'COLS'}`;
+                }
+
+                // 動態切換瀑布流欄數類別
+                grid.className = 'masonry-grid transition-all duration-500 ';
+                if (num === 1) grid.className += 'columns-1';
+                else if (num === 2) grid.className += 'columns-1 md:columns-2';
+                else if (num === 3) grid.className += 'columns-1 md:columns-2 lg:columns-3';
+                else if (num === 4) grid.className += 'columns-1 md:columns-2 lg:columns-3 xl:columns-4';
+            },
+
             forceLoadFirstBatch() {
                 this.elements.cards.forEach((card, index) => {
                     if (index < 4) {
@@ -1061,7 +1157,7 @@
             CameraCursor.init();
         }
 
-        if (document.readyState === 'loading') {
+        if (document.readyStates === 'loading') {
             document.addEventListener('DOMContentLoaded', startApp);
         } else {
             startApp();
