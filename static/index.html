@@ -152,7 +152,7 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* 修正版權跑馬燈動畫 */
+        /* 版權跑馬燈動畫 */
         @keyframes marquee-scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -215,13 +215,13 @@
         }
 
         /* =========================================
-           3. 作品網格與相機對焦 Hover 特效
+           3. 作品網格與動態比例相機對焦 Hover 特效
            ========================================= */
         .project-card {
             position: relative;
             display: block;
             background-color: transparent;
-            transition: var(--transition-smooth);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
             opacity: 0;
             transform: translateY(35px);
             padding-bottom: 0;
@@ -264,13 +264,16 @@
             transform: translateY(0);
         }
 
+        /* 動態比例圖片容器 */
         .project-image-container {
             width: 100%;
             overflow: hidden;
             position: relative;
             background-color: var(--accent-gray);
             outline: 0px solid #000;
-            transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1), aspect-ratio 0.4s ease;
+            /* 預設維持正方形，載入後由 JS 依據實際寬高比設定 */
+            aspect-ratio: 1 / 1; 
         }
 
         .project-card:hover .project-image-container {
@@ -335,7 +338,7 @@
             transform: translateY(0);
         }
 
-        /* 圖片微幅放大與細節 */
+        /* 圖片縮放與細節 */
         .project-asset {
             width: 100%;
             height: 100%;
@@ -507,7 +510,6 @@
             transition: left 0.05s linear;
         }
 
-        /* 自訂極簡黑白 Range 滑桿樣式 */
         input[type=range].custom-slider {
             -webkit-appearance: none;
             appearance: none;
@@ -518,7 +520,6 @@
             border: 1px solid #000;
         }
 
-        /* 動態測量標記線 */
         .spectrum-guide-line {
             position: absolute;
             top: 0;
@@ -579,7 +580,6 @@
             <div class="mt-4 flex justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 animate-text-vert">
                 <span class="security-badge">PROTECTED AREA</span>
                 
-                <!-- 修正跑馬燈容器與動畫 -->
                 <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
                     <div class="marquee-content text-black font-bold text-xs md:text-xs">
                         <span class="shrink-0 mr-6">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
@@ -601,9 +601,8 @@
                 </button>
             </div>
 
-            <!-- 色溫調節與熱溫測量系統區塊 (Color Temperature Calibration System) -->
+            <!-- 色溫調節與熱溫測量系統區塊 -->
             <div class="mb-8 select-none relative" id="spectrum-container">
-                <!-- 動態貫穿測量指示線 -->
                 <div class="spectrum-guide-line" id="spectrum-guide-line-el" style="left: 56.25%;"></div>
 
                 <div class="flex flex-wrap justify-between items-center text-[11px] font-bold mb-2 tracking-wider gap-2">
@@ -643,7 +642,7 @@
                     </svg>
                 </div>
 
-                <!-- 色溫區域對照區塊 (Kelvin Thermal Spectrum Band) -->
+                <!-- 色溫區域對照區塊 -->
                 <div class="w-full border border-black text-[10px] grid grid-cols-12 text-center bg-white relative">
                     <div class="col-span-2 border-r border-black py-1.5 px-0.5 flex flex-col justify-center">
                         <span class="font-bold text-[8px] sm:text-[10px] leading-tight">WARM FLAME</span>
@@ -675,7 +674,7 @@
                     <span class="col-span-2 text-right">10000 K</span>
                 </div>
 
-                <!-- 波動頻率示意圖 (Dynamic Sine Wave Visualizer) -->
+                <!-- 波動頻率示意圖 -->
                 <div class="w-full h-11 pt-3 pb-1 relative bg-gray-50/60 border border-black/20 overflow-hidden mt-3">
                     <div class="absolute top-1 left-2 text-[8px] font-mono text-gray-500 flex items-center gap-2">
                         <span>WAVE FREQUENCY SIMULATOR:</span>
@@ -687,9 +686,8 @@
                 </div>
             </div>
 
-            <!-- 飽和度、對比度、曝光度控制區塊（手機版隱藏：hidden sm:grid，避免下滑時誤觸） -->
+            <!-- 飽和度、對比度、曝光度控制區塊 -->
             <div class="hidden sm:grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
-                <!-- 飽和度 Saturation -->
                 <div class="space-y-2">
                     <div class="flex justify-between text-[11px] font-bold tracking-wider">
                         <span>SATURATION</span>
@@ -698,7 +696,6 @@
                     <input type="range" id="sat-slider" min="0" max="200" value="100" class="custom-slider">
                 </div>
 
-                <!-- 對比度 Contrast -->
                 <div class="space-y-2">
                     <div class="flex justify-between text-[11px] font-bold tracking-wider">
                         <span>CONTRAST</span>
@@ -707,7 +704,6 @@
                     <input type="range" id="con-slider" min="50" max="150" value="100" class="custom-slider">
                 </div>
 
-                <!-- 曝光度 Brightness/Exposure -->
                 <div class="space-y-2">
                     <div class="flex justify-between text-[11px] font-bold tracking-wider">
                         <span>EXPOSURE</span>
@@ -718,20 +714,19 @@
             </div>
         </section>
 
-        <!-- Main Portfolio Grid: 寬廣不對稱雙欄與單欄排列 (圖片統一 1:1 aspect-square 顯示) -->
-        <main id="project-grid" class="grid grid-cols-12 gap-x-8 md:gap-x-12 gap-y-16 md:gap-y-24">
+        <!-- Main Portfolio Grid: 12欄系統，電腦版經由 JS 依據圖片長寬比智慧組合每列 2-3 個項目的瀑布流拼貼 -->
+        <main id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-8 md:gap-x-10 lg:gap-x-12 gap-y-12 md:gap-y-16 lg:gap-y-20">
 
-            <!-- ==================== PROJECT 01 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239244/Static_cover_2_ddluqh.jpg">
+            <!-- ==================== PROJECT 01 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239244/Static_cover_2_ddluqh.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">PRODUCT COLLECTION PHOTO</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
-                            <!-- 相機鏡頭對焦框 Overlay -->
                             <div class="focus-frame-overlay">
                                 <div class="focus-corner focus-corner-tl"></div>
                                 <div class="focus-corner focus-corner-tr"></div>
@@ -753,14 +748,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 02 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789642745/Dungeon_branding.jpg">
+            <!-- ==================== PROJECT 02 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789642745/Dungeon_branding.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">DUNGEON PRIVATE CLUB BRANDING</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -784,14 +779,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 03 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239242/Static_cover_4_htztpf.jpg">
+            <!-- ==================== PROJECT 03 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239242/Static_cover_4_htztpf.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">FATHER'S DAY CAMPAIGN VISUAL</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -815,14 +810,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 04 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239241/Static_cover_6_hytix9.jpg">
+            <!-- ==================== PROJECT 04 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239241/Static_cover_6_hytix9.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">MEDIPRO KEY VISUAL</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -846,14 +841,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 06 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239239/Static_cover_8_g5ufag.jpg">
+            <!-- ==================== PROJECT 05 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239239/Static_cover_8_g5ufag.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">COLLECTION PHOTO SHOOT</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -877,14 +872,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 07 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239238/Static_cover_9_aigapo.jpg">
+            <!-- ==================== PROJECT 06 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239238/Static_cover_9_aigapo.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">COLLECTION PHOTO SHOOT</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -908,14 +903,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 08 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239238/Static_cover_10_rakvw5.jpg">
+            <!-- ==================== PROJECT 07 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239238/Static_cover_10_rakvw5.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">FATHER'S DAY</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -939,14 +934,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 09 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239237/Static_cover_11_zerien.jpg">
+            <!-- ==================== PROJECT 08 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239237/Static_cover_11_zerien.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">SCALP PSORIASIS SOCIAL CONTENT</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -970,14 +965,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 10 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789589611/chill_logo.jpg">
+            <!-- ==================== PROJECT 09 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789589611/chill_logo.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CHILL CHILL WILD LOGO</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1001,14 +996,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 11 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/%E5%A5%BD%E5%A5%BD%E7%BE%8E%E5%AD%B8_02.jpg">
+            <!-- ==================== PROJECT 10 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/%E5%A5%BD%E5%A5%BD%E7%BE%8E%E5%AD%B8_02.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">HAO HAO</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1032,14 +1027,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 12 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239234/Static_cover_17_xv2uxi.jpg">
+            <!-- ==================== PROJECT 11 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239234/Static_cover_17_xv2uxi.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CNY RED ENVELOPE VISUAL</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1063,14 +1058,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 13 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239234/Static_cover_14_h7vrk8.jpg">
+            <!-- ==================== PROJECT 12 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239234/Static_cover_14_h7vrk8.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1094,14 +1089,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 14 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239231/Static_cover_23_qekure.jpg">
+            <!-- ==================== PROJECT 13 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239231/Static_cover_23_qekure.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1125,14 +1120,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 15 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239232/Static_cover_22_peygvm.jpg">
+            <!-- ==================== PROJECT 14 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239232/Static_cover_22_peygvm.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1156,14 +1151,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 16 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239228/Static_cover_28_jpdyib.jpg">
+            <!-- ==================== PROJECT 15 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239228/Static_cover_28_jpdyib.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                            <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">WHITE TRUFFLE & SUBLIME SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1187,14 +1182,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 17 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239224/Static_cover_25_nfwy2v.jpg">
+            <!-- ==================== PROJECT 16 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239224/Static_cover_25_nfwy2v.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">LIQUID SHAMPOO FOR COLOR PROTECTION</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1218,14 +1213,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 18 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-5" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239225/Static_cover_24_dxnlkq.jpg">
+            <!-- ==================== PROJECT 17 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239225/Static_cover_24_dxnlkq.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">LIQUID SHAMPOO FOR COLOR PROTECTION</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1249,14 +1244,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 19 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-7" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1788886490/Splendid_08_okbzyv.jpg">
+            <!-- ==================== PROJECT 18 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1788886490/Splendid_08_okbzyv.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">SPLENDID SERIES</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1280,14 +1275,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 20 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239245/Static_cover_1_hiigci.jpg">
+            <!-- ==================== PROJECT 19 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239245/Static_cover_1_hiigci.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">PRFESSIONAL SALON COLLECTION</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1311,14 +1306,14 @@
                 </div>
             </div>
 
-            <!-- ==================== PROJECT 21 / 22 ==================== -->
-            <div class="project-card reveal col-span-12 lg:col-span-6" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239227/Static_cover_26_wstoeh.jpg">
+            <!-- ==================== PROJECT 20 ==================== -->
+            <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1787239227/Static_cover_26_wstoeh.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
                             <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black">CO-BRANDING CAMPAIGN VISUALS</h2>
                         </div>
-                        <div class="project-image-container aspect-square w-full flex-grow">
+                        <div class="project-image-container w-full flex-grow">
                             <div class="asset-protection-layer"></div>
                             <div class="loading-shimmer"></div>
                             <div class="focus-frame-overlay">
@@ -1392,19 +1387,16 @@
             },
 
             bindEvents() {
-                // 右鍵保護
                 document.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     this.showToast('PROTECTED // RIGHT CLICK DISABLED');
                 });
 
-                // 拖拽保護
                 document.addEventListener('dragstart', (e) => {
                     e.preventDefault();
                     this.showToast('PROTECTED // ASSET DRAGGING DISABLED');
                 });
 
-                // 鍵盤快速鍵保護
                 document.addEventListener('keydown', (e) => {
                     if (
                         e.key === 'F12' ||
@@ -1440,7 +1432,6 @@
                     this.targetY = e.clientY;
                 });
 
-                // Hover 狀態控制 (卡片與按鈕)
                 document.querySelectorAll('.project-card').forEach(card => {
                     card.addEventListener('mouseenter', () => this.cursor.classList.add('hovering-card'));
                     card.addEventListener('mouseleave', () => this.cursor.classList.remove('hovering-card'));
@@ -1461,38 +1452,151 @@
         };
 
         /**
-         * Portfolio: 作品集縮圖載入、Scroll Reveal 及視窗對話框 Logic
+         * Portfolio: 作品集縮圖載入、電腦版長寬比瀑布流動態排版、Scroll Reveal 及視窗對話框
          */
         const Portfolio = {
             overlay: document.getElementById('project-overlay'),
             iframe: document.getElementById('project-iframe'),
+            loadedCount: 0,
+            totalCards: 0,
 
             init() {
                 this.loadImages();
                 this.initIntersectionObserver();
                 this.bindCardClicks();
+                
+                // 監聽螢幕縮放以重新配置電腦版列拼貼
+                window.addEventListener('resize', () => {
+                    this.adjustDesktopMasonry();
+                });
             },
 
             loadImages() {
                 const cards = document.querySelectorAll('.project-card');
+                this.totalCards = cards.length;
+
                 cards.forEach(card => {
                     const thumbUrl = card.getAttribute('data-thumb');
                     const img = card.querySelector('.project-asset');
                     const shimmer = card.querySelector('.loading-shimmer');
+                    const imgContainer = card.querySelector('.project-image-container');
 
                     if (img && thumbUrl) {
                         img.src = thumbUrl;
-                        img.onload = () => {
+
+                        const onAssetReady = () => {
                             img.classList.add('loaded');
                             if (shimmer) shimmer.style.display = 'none';
+
+                            // 獲取圖片原始寬高比
+                            if (img.naturalWidth && img.naturalHeight) {
+                                const ratio = img.naturalWidth / img.naturalHeight;
+                                // 依真實比例設定容器 aspect-ratio，讓圖片不被硬性切成正方形
+                                if (imgContainer) {
+                                    imgContainer.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+                                }
+                                card.dataset.aspectRatio = ratio;
+                            } else {
+                                card.dataset.aspectRatio = "1.0";
+                            }
+
+                            this.loadedCount++;
+                            // 定期更新瀑布流配置
+                            this.adjustDesktopMasonry();
                         };
+
+                        img.onload = onAssetReady;
                         img.onerror = () => {
                             img.src = `https://placehold.co/800x800/111111/ffffff?text=${encodeURIComponent(img.alt || 'IMAGE')}`;
-                            img.classList.add('loaded');
-                            if (shimmer) shimmer.style.display = 'none';
+                            onAssetReady();
                         };
                     }
                 });
+            },
+
+            /**
+             * 電腦版專案瀑布流拼貼演算法：
+             * 根據不同圖片寬度/長寬比，彈性將每一列組合為 2 或 3 個項目 (Col-span 比率配比)
+             */
+            adjustDesktopMasonry() {
+                // 僅在桌面大螢幕 (min-width: 1024px) 啟用動態拼貼
+                if (window.innerWidth < 1024) {
+                    document.querySelectorAll('.project-card').forEach(card => {
+                        card.style.gridColumn = '';
+                    });
+                    return;
+                }
+
+                const cards = Array.from(document.querySelectorAll('.project-card'));
+                let idx = 0;
+
+                while (idx < cards.length) {
+                    const remaining = cards.length - idx;
+                    const c1 = cards[idx];
+                    const r1 = parseFloat(c1.dataset.aspectRatio || "1.0");
+
+                    let itemsInRow = 3;
+
+                    if (remaining === 1) {
+                        itemsInRow = 1;
+                    } else if (remaining === 2) {
+                        itemsInRow = 2;
+                    } else {
+                        const c2 = cards[idx + 1];
+                        const r2 = parseFloat(c2.dataset.aspectRatio || "1.0");
+                        const c3 = cards[idx + 2];
+                        const r3 = parseFloat(c3.dataset.aspectRatio || "1.0");
+
+                        // 若第一張或第二張為橫幅寬圖 (r >= 1.3)，本列配 2 個效果最佳，否則預設配 3 個
+                        if (r1 >= 1.3 || r2 >= 1.3) {
+                            itemsInRow = 2;
+                        } else {
+                            itemsInRow = 3;
+                        }
+                    }
+
+                    if (itemsInRow === 1) {
+                        c1.style.gridColumn = 'span 12';
+                        idx += 1;
+                    } else if (itemsInRow === 2) {
+                        const c2 = cards[idx + 1];
+                        const r2 = parseFloat(c2.dataset.aspectRatio || "1.0");
+                        
+                        // 依照長寬比總和計算 12 欄系統中的相對比例
+                        const sumR = r1 + r2;
+                        let span1 = Math.round((r1 / sumR) * 12);
+                        span1 = Math.max(4, Math.min(8, span1)); // 限制在 4 到 8 欄之間
+                        let span2 = 12 - span1;
+
+                        c1.style.gridColumn = `span ${span1}`;
+                        if (c2) c2.style.gridColumn = `span ${span2}`;
+                        idx += 2;
+                    } else if (itemsInRow === 3) {
+                        const c2 = cards[idx + 1];
+                        const r2 = parseFloat(c2.dataset.aspectRatio || "1.0");
+                        const c3 = cards[idx + 2];
+                        const r3 = parseFloat(c3.dataset.aspectRatio || "1.0");
+
+                        const sumR = r1 + r2 + r3;
+                        let span1 = Math.round((r1 / sumR) * 12);
+                        let span2 = Math.round((r2 / sumR) * 12);
+                        
+                        // 微調最小與最大寬度限制 (每張卡片介於 3-6 欄)
+                        span1 = Math.max(3, Math.min(6, span1));
+                        span2 = Math.max(3, Math.min(6, span2));
+                        let span3 = 12 - span1 - span2;
+
+                        if (span3 < 3) {
+                            span3 = 3;
+                            span1 = 12 - span2 - span3;
+                        }
+
+                        c1.style.gridColumn = `span ${span1}`;
+                        if (c2) c2.style.gridColumn = `span ${span2}`;
+                        if (c3) c3.style.gridColumn = `span ${span3}`;
+                        idx += 3;
+                    }
+                }
             },
 
             initIntersectionObserver() {
@@ -1537,7 +1641,7 @@
         };
 
         /**
-         * 光譜與影像調色控制 Logic
+         * ColorAdjustmentControl: 光譜與影像調色控制 Logic
          */
         const ColorAdjustmentControl = {
             resetBtn: document.getElementById('ps-reset-btn'),
@@ -1549,28 +1653,24 @@
             waveFreqTag: document.getElementById('wave-freq-tag'),
             sineWavePath: document.getElementById('sine-wave-path'),
             
-            // 數據顯示元素
             hueDisplay: document.getElementById('hue-value-display'),
             wavelengthDisplay: document.getElementById('wavelength-display'),
             satDisplay: document.getElementById('sat-val-display'),
             conDisplay: document.getElementById('con-val-display'),
             expDisplay: document.getElementById('exp-val-display'),
             
-            // 滑桿元素
             satSlider: document.getElementById('sat-slider'),
             conSlider: document.getElementById('con-slider'),
             expSlider: document.getElementById('exp-slider'),
             
             isDraggingSpectrum: false,
             
-            // 數值狀態 (預設 6500K 色溫)
             kelvin: 6500,
             hueAngle: 0,
             saturation: 100,
             contrast: 100,
             exposure: 100,
 
-            // 色溫 Kelvin 與對應名稱表
             tempColorMap: [
                 { maxK: 3000, name: "WARM CANDLELIGHT" },
                 { maxK: 4000, name: "STUDIO TUNGSTEN" },
@@ -1585,7 +1685,7 @@
                 this.bindSpectrumDragging();
                 this.bindSliders();
                 this.bindReset();
-                this.updateSpectrumUI(0.5625); // 預設 6500K
+                this.updateSpectrumUI(0.5625);
                 this.applyFilters();
             },
 
@@ -1623,10 +1723,8 @@
             },
 
             updateSpectrumUI(pct) {
-                // 2000K 到 10000K 換算
                 this.kelvin = Math.round(2000 + (pct * 8000));
                 
-                // 透過 Kelvin 偏離 6500K 計算 Hue 角度變化
                 if (this.kelvin <= 6500) {
                     this.hueAngle = -Math.round(((6500 - this.kelvin) / 4500) * 25);
                 } else {
@@ -1643,7 +1741,6 @@
                 if (this.wavelengthDisplay) this.wavelengthDisplay.innerText = shiftText;
                 if (this.hueDisplay) this.hueDisplay.innerText = phaseText;
 
-                // 更新色溫名稱
                 const matched = this.tempColorMap.find(m => this.kelvin <= m.maxK) || this.tempColorMap[this.tempColorMap.length - 1];
                 if (this.funBadge) {
                     this.funBadge.innerText = matched.name;
@@ -1654,13 +1751,11 @@
                     this.waveFreqTag.innerText = `${level} [${this.kelvin} K]`;
                 }
 
-                // 動態運算生成 Sine Wave SVG 繪製路徑
                 this.renderSineWave(this.kelvin);
             },
 
             renderSineWave(kelvin) {
                 if (!this.sineWavePath) return;
-                // 色溫越高波形越密
                 const cycles = 10 + ((kelvin - 2000) / 8000) * 28;
                 const points = 250;
                 let d = `M 0 20`;
