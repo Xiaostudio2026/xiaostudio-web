@@ -19,7 +19,8 @@
             --bg-color: #ffffff;
             --text-color: #000000;
             --accent-gray: #f3f3f3;
-            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --marquee-duration: 25s; /* 跑馬燈播放時間變數 */
         }
 
         /* 隱藏原生鼠標以使用自訂相機對焦鼠標 */
@@ -52,7 +53,7 @@
 
         .mono-text { font-family: 'Barlow', sans-serif; }
         .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
-        .no-scroll { overflow: hidden; }
+        .no-scroll { overflow: hidden !important; }
 
         /* =========================================
            1.2 相機對焦鼠標 (Camera Focus Custom Cursor)
@@ -76,7 +77,6 @@
             #camera-cursor { display: block; }
         }
 
-        /* 對焦框四角外殼 */
         .cursor-box {
             position: absolute;
             inset: 0;
@@ -96,7 +96,6 @@
             transition: all 0.2s ease;
         }
 
-        /* 滑過可點擊物件與作品卡片時的對焦狀態 */
         #camera-cursor.hovering-card {
             width: 48px;
             height: 48px;
@@ -169,7 +168,6 @@
 
         @media (min-width: 768px) { .masthead-border { padding: 1.25rem 0; } }
 
-        /* 防護標籤指示器 */
         .security-badge {
             display: inline-flex;
             align-items: center;
@@ -193,7 +191,7 @@
         }
 
         /* =========================================
-           3. 作品網格與相機對焦 Hover 特效 (黑框線 + Viewfinder)
+           3. 作品網格與相機對焦 Hover 特效
            ========================================= */
         .project-card {
             position: relative;
@@ -203,6 +201,7 @@
             opacity: 0;
             transform: translateY(35px);
             padding-bottom: 0;
+            cursor: pointer;
         }
         
         .project-card.is-visible {
@@ -210,7 +209,6 @@
             transform: translateY(0);
         }
 
-        /* 垂直標題樣式 */
         .vertical-title {
             writing-mode: vertical-rl;
             transform: rotate(180deg) translateY(30px);
@@ -230,7 +228,6 @@
             transform: rotate(180deg) translateY(0);
         }
 
-        /* 專案描述文字 */
         .project-meta-text {
             opacity: 0;
             transform: translateY(15px);
@@ -247,7 +244,6 @@
             overflow: hidden;
             position: relative;
             background-color: var(--accent-gray);
-            /* Hover 時外圍顯示黑框線 */
             outline: 0px solid #000;
             transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -257,7 +253,6 @@
             outline-offset: -3px;
         }
 
-        /* 相機對焦觀景窗框線 Overlay (Viewfinder Frame) */
         .focus-frame-overlay {
             position: absolute;
             inset: 0;
@@ -271,7 +266,6 @@
             opacity: 1;
         }
 
-        /* 相機對焦四角 L 型標籤 */
         .focus-corner {
             position: absolute;
             width: 18px;
@@ -291,7 +285,6 @@
         .project-card:hover .focus-corner-bl { transform: translate(0, 0); }
         .project-card:hover .focus-corner-br { transform: translate(0, 0); }
 
-        /* 相機觀景窗數據標籤 (HUD Tags) */
         .focus-meta-tag {
             position: absolute;
             font-family: 'Barlow', sans-serif;
@@ -314,7 +307,6 @@
             transform: translateY(0);
         }
 
-        /* 圖片微幅放大與細節 */
         .project-asset {
             width: 100%;
             height: 100%;
@@ -333,7 +325,6 @@
         }
         .project-card:hover .project-asset.loaded { transform: scale(1.03); }
 
-        /* 媒體保護遮罩 */
         .asset-protection-layer {
             position: absolute;
             inset: 0;
@@ -359,77 +350,73 @@
         }
 
         /* =========================================
-           4. 專案詳情視窗與安全提示 UI
+           4. 專案詳情視窗 (Overlay & Full Iframe View)
            ========================================= */
         #project-overlay {
             position: fixed;
+            top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--bg-color);
-            z-index: 500;
-            transform: translateX(100%);
-            transition: var(--transition-smooth);
-            display: flex;
-            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            opacity: 0;
             visibility: hidden;
+            transform: scale(0.98);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #project-overlay.active {
-            transform: translateX(0);
+            opacity: 1;
             visibility: visible;
+            transform: scale(1);
         }
 
         .project-modal-content {
-            width: 85vw;
-            max-width: 85vw; 
+            width: 100%;
             height: 100%;
             position: relative;
-            background: var(--bg-color);
             display: flex;
             flex-direction: column;
-            padding: 0; 
-        }
-
-        @media (max-width: 768px) { 
-            .project-modal-content { 
-                width: 95vw;
-                max-width: 95vw;
-            } 
-            .close-project-btn {
-                width: 25px;
-                height: 25px;
-            }
+            overflow: hidden;
         }
 
         .close-project-btn {
-            position: absolute;
-            top: 0; 
-            right: 0; 
-            width: 35px;
-            height: 35px;
-            background: #fff;
-            color: #000;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: #000;
+            color: #fff;
             border: 1px solid #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            z-index: 601;
-            transition: var(--transition-smooth);
+            font-size: 20px;
+            font-weight: 300;
+            z-index: 2100;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .close-project-btn:hover {
-            background: #000;
-            color: #fff;
+            background: #fff;
+            color: #000;
             transform: rotate(90deg);
         }
 
         #project-iframe {
             width: 100%;
-            flex-grow: 1;
+            height: 100%;
             border: none;
             background: #fff;
+            flex-grow: 1;
         }
 
         /* 安全防護 Toast 提示視窗 */
@@ -461,6 +448,9 @@
             opacity: 1;
         }
 
+        /* =========================================
+           5. 版權跑馬燈 (Seamless Infinite Marquee)
+           ========================================= */
         .marquee-container {
             border: 1px solid #000000;
             overflow: hidden;
@@ -468,13 +458,20 @@
             position: relative;
             display: inline-flex;
             align-items: center;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .marquee-content {
             display: flex;
             white-space: nowrap;
-            animation: marquee-scroll 14s linear infinite;
+            animation: marquee-scroll var(--marquee-duration, 25s) linear infinite;
             will-change: transform;
+        }
+
+        /* 懸停時暫停播放，方便讀者仔細閱讀 */
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
         }
 
         @keyframes marquee-scroll {
@@ -482,7 +479,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* 手機版強制 1:1 比例與瀑布流排版 */
         @media (max-width: 767px) {
             .project-image-container {
                 aspect-ratio: 1 / 1 !important;
@@ -505,7 +501,6 @@
             margin-bottom: 3.5rem;
         }
 
-        /* 自訂相機風格簡約滑桿 (Range Slider) */
         input[type=range].col-range-slider {
             -webkit-appearance: none;
             appearance: none;
@@ -564,11 +559,10 @@
                 </div>
             </div>
             
-            <div class="mt-4 flex flex-wrap sm:flex-nowrap justify-between items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 animate-text-vert">
-                <div class="flex items-center gap-3 md:gap-4 flex-1">
+            <div class="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-3 sm:gap-4 animate-text-vert">
+                <div class="flex items-center justify-between sm:justify-start gap-3 md:gap-4 w-full sm:w-auto">
                     <span class="security-badge shrink-0">PROTECTED AREA</span>
                     
-                    <!-- 即時滑桿切換欄數工具列 (手機版隱藏，桌機 md 以上顯示) -->
                     <div id="grid-controls" class="hidden md:flex items-center gap-2 flex-1 pr-2 md:pr-4">
                         <label for="col-slider" class="text-gray-400 text-[10px] md:text-xs font-bold whitespace-nowrap shrink-0">
                             GRID: <span id="col-count-label" class="text-black font-extrabold">2 COLS</span>
@@ -579,19 +573,22 @@
                     </div>
                 </div>
                 
-                <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px] shrink-0">
-                    <div class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
-                       <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 本頁面展示之專案作品均為已公開上市成果，版權歸原品牌客戶所有。內容僅作個人非營利視覺設計與技術展示，未經授權禁止任意轉載或作商業利用。</span>
-                        <span class="shrink-0">All project trademarks and copyrighted materials belong to their respective owners. Content displayed on xiaostudio.xyz is for non-commercial portfolio presentation only.</span>
+                <!-- 版權宣言跑馬燈：手機版獨立成行且全寬顯示，徹底避免與周圍元素重疊 -->
+                <div class="marquee-container py-1.5 px-3 w-full sm:w-auto sm:max-w-[400px] md:max-w-[560px] shrink-0">
+                    <div id="marquee-track" class="marquee-content gap-6 text-black font-bold text-xs md:text-xs">
+                        <div class="marquee-group flex items-center gap-6 shrink-0">
+                            <span class="shrink-0">本頁面包含商業專案與個人創作。品牌標示與專案素材版權歸原權利人所有，全站內容僅供非營利展示，未經疊轉載或商用。This portfolio features both client and personal work. All trademarks belong to their respective owners. Content on xiaostudio.xyz is for non-commercial presentation only.</span>
+                        </div>
+                        <!-- 第二組節點將由 MarqueeManager JS 自動建立複製，以保證 100% 無縫無遺漏顯示 -->
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- Main Portfolio Grid: 瀑布流動態欄數排列 (Masonry layout) -->
+        <!-- Main Portfolio Grid: 瀑布流動態欄數排列 -->
         <main id="project-grid" class="masonry-grid columns-1 md:columns-2 transition-all duration-500">
 
-<!-- ==================== PROJECT 10 ==================== -->
+            <!-- ==================== PROJECT 10 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789668229/A-Nun_02.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -621,8 +618,6 @@
                     </div>
                 </div>
             </div>
-
-           
 
             <!-- ==================== PROJECT 2 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789411970/Seafood_packaging.jpg">
@@ -654,8 +649,9 @@
                     </div>
                 </div>
             </div>
-  <!-- ==================== PROJECT 01 ==================== -->
-             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1776679615/AR_cover_te9ids.jpg">
+
+            <!-- ==================== PROJECT 01 (含 Iframe 連結) ==================== -->
+            <div class="project-card reveal" href="xiaostudio.xyz/print/ar-zine.html" data-thumb="https://res.cloudinary.com/dssycfvxr/image/upload/v1776679615/AR_cover_te9ids.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
                         <div class="flex-shrink-0 flex items-start justify-center pt-1">
@@ -809,9 +805,7 @@
                 </div>
             </div>
 
-  
-
-     <!-- ==================== PROJECT 7 ==================== -->
+            <!-- ==================== PROJECT 7 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789575313/DreamBigCover.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -841,7 +835,8 @@
                     </div>
                 </div>
             </div>
-   <!-- ==================== PROJECT 08 ==================== -->
+
+            <!-- ==================== PROJECT 08 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789582830/Leadsense_brand_01.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -864,14 +859,15 @@
                     </div>
                     <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
                         <div class="flex gap-6">
-                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">LEADSENSE ENTERTAINMENT & CONSULTING CO., LTD.</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">LEADSENSE ENTERTAINMENT</span></div>
                             <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PRINT</span></div>
                         </div>
                         <div class="text-gray-600 text-xs font-medium">LOGO & BUSINESS CARD DESIGN</div>
                     </div>
                 </div>
             </div>
- <!-- ==================== PROJECT 9 ==================== -->
+
+            <!-- ==================== PROJECT 9 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789588818/summercamp.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -901,8 +897,8 @@
                     </div>
                 </div>
             </div>
- 
-  <!-- ==================== PROJECT 10 ==================== -->
+
+            <!-- ==================== PROJECT 10 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789591076/DG_vip.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -932,7 +928,8 @@
                     </div>
                 </div>
             </div>
-   <!-- ==================== PROJECT 10 ==================== -->
+
+            <!-- ==================== PROJECT 11 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789721717/DOZO_Menu_03.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -962,7 +959,8 @@
                     </div>
                 </div>
             </div>
-  <!-- ==================== PROJECT 10 ==================== -->
+
+            <!-- ==================== PROJECT 12 ==================== -->
             <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/f_auto/q_auto/v1789726154/BeerLabel.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -992,9 +990,36 @@
                     </div>
                 </div>
             </div>
-   
-   
-  
+     <!-- ==================== PROJECT 13 ==================== -->
+            <div class="project-card reveal" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789918884/SADU-KATA-BUAN.jpg">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                           <h2 class="vertical-title text-xl md:text-2xl font-bold tracking-normal text-black"> SADU KATA BUAN</h2>
+                        </div>
+                        <div class="project-image-container aspect-square md:aspect-[5/4] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-br">1/160s F2.8</div>
+                            </div>
+                            <img src="" class="project-asset auto-thumb" alt=" SADU KATA BUAN">
+                        </div>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-between items-end gap-2 text-xs mono-text leading-relaxed project-meta-text uppercase">
+                        <div class="flex gap-6">
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CLIENT</span><span class="font-bold text-black text-xs">Feeling Good Music</span></div>
+                            <div><span class="text-gray-400 font-semibold text-[10px] block">CATEGORY</span><span class="font-bold text-black text-xs">PACKAGING</span></div>
+                        </div>
+                        <div class="text-gray-600 text-xs font-medium">ALBUM PACKAGING DESIGN</div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- 頁尾 Footer 區域 -->
@@ -1003,11 +1028,11 @@
         </footer>
     </div>
 
-    <!-- 專案展示視窗 -->
+    <!-- 專案展示全螢幕視窗 -->
     <aside id="project-overlay" aria-hidden="true" role="dialog">
         <div class="project-modal-content">
             <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
-            <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
+            <iframe id="project-iframe" src="" title="專案詳情內容"></iframe>
         </div>
     </aside>
 
@@ -1022,10 +1047,6 @@
 
     <!-- 腳本區 -->
     <script>
-        /**
-         * XIAOSTUDIO 相機對焦鼠標與保護系統
-         */
-
         const CameraCursor = {
             cursorEl: document.getElementById('camera-cursor'),
             mouseX: 0,
@@ -1046,7 +1067,6 @@
             },
 
             bindHoverEvents() {
-                // 專案卡片 Hover 狀態
                 document.querySelectorAll('.project-card').forEach(card => {
                     card.addEventListener('mouseenter', () => {
                         this.cursorEl.classList.add('hovering-card');
@@ -1056,7 +1076,6 @@
                     });
                 });
 
-                // 一般按鈕 Hover 狀態
                 document.querySelectorAll('button, a, .security-badge').forEach(btn => {
                     btn.addEventListener('mouseenter', () => {
                         this.cursorEl.classList.add('hovering-btn');
@@ -1068,7 +1087,6 @@
             },
 
             render() {
-                // 流暢平滑跟隨 (Lerp)
                 this.currentX += (this.mouseX - this.currentX) * 0.25;
                 this.currentY += (this.mouseY - this.currentY) * 0.25;
 
@@ -1133,7 +1151,7 @@
                     }
 
                     if (ctrlOrCmd) {
-                        if (keyCode === 83 || keyCode === 85 || keyCode === 80) {
+                        if (keyCode === 83 || keyCode === 80) {
                             e.preventDefault();
                             this.showToast('SAVING/PRINTING DISABLED // 禁止下載與列印');
                             return false;
@@ -1193,12 +1211,6 @@
                         }
                     });
                 });
-
-                window.addEventListener('resize', () => {
-                    if (this.elements.overlay.classList.contains('active')) {
-                        this.updateOverlayPosition();
-                    }
-                });
             },
 
             setColumns(num) {
@@ -1207,7 +1219,6 @@
                 const label = document.getElementById('col-count-label');
                 if (!grid) return;
 
-                // 同步更新滑桿數值與標籤文字
                 if (slider && parseInt(slider.value) !== num) {
                     slider.value = num;
                 }
@@ -1215,7 +1226,6 @@
                     label.textContent = `${num} ${num === 1 ? 'COL' : 'COLS'}`;
                 }
 
-                // 動態切換瀑布流欄數類別
                 grid.className = 'masonry-grid transition-all duration-500 ';
                 if (num === 1) grid.className += 'columns-1';
                 else if (num === 2) grid.className += 'columns-1 md:columns-2';
@@ -1258,7 +1268,6 @@
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             const card = entry.target;
-                            
                             const staggerDelay = (visibleQueue % 4) * 100;
                             visibleQueue++;
 
@@ -1347,7 +1356,6 @@
             },
 
             open(url) {
-                this.updateOverlayPosition();
                 this.elements.iframe.src = url;
                 this.elements.overlay.classList.add('active');
                 this.elements.overlay.setAttribute('aria-hidden', 'false');
@@ -1358,14 +1366,33 @@
                 this.elements.overlay.classList.remove('active');
                 this.elements.overlay.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('no-scroll');
-                setTimeout(() => { this.elements.iframe.src = ''; }, 600);
+                setTimeout(() => { this.elements.iframe.src = ''; }, 400);
+            }
+        };
+
+        /* =========================================
+           版權宣言跑馬燈無縫循環與速度管理器
+           ========================================= */
+        const MarqueeManager = {
+            track: document.getElementById('marquee-track'),
+
+            init(targetDurationInSeconds = 25) {
+                if (!this.track) return;
+
+                // 複製原有的文字群組節點，確保在 -50% 位移時能無縫銜接完全部文字
+                const firstGroup = this.track.querySelector('.marquee-group');
+                if (firstGroup && this.track.children.length === 1) {
+                    const clonedGroup = firstGroup.cloneNode(true);
+                    clonedGroup.setAttribute('aria-hidden', 'true');
+                    this.track.appendChild(clonedGroup);
+                }
+
+                // 設定播放一圈所需的精確秒數
+                this.setDuration(targetDurationInSeconds);
             },
 
-            updateOverlayPosition() {
-                if (this.elements.masthead) {
-                    const rect = this.elements.masthead.getBoundingClientRect();
-                    this.elements.overlay.style.top = rect.top + 'px';
-                }
+            setDuration(seconds) {
+                document.documentElement.style.setProperty('--marquee-duration', `${seconds}s`);
             }
         };
 
@@ -1373,9 +1400,12 @@
             SecurityGuard.init();
             Portfolio.init();
             CameraCursor.init();
+            
+            // 初始化跑馬燈，設定為 25 秒內跑完完整無縫循環（可依據需求調整秒數）
+            MarqueeManager.init(25);
         }
 
-        if (document.readyStates === 'loading') {
+        if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', startApp);
         } else {
             startApp();
