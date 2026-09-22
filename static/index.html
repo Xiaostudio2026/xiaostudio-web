@@ -96,7 +96,7 @@
             transition: all 0.2s ease;
         }
 
-        /* 滑過可點擊物件與作品卡片時的對焦狀態 */
+        /* 滑過物件時的對焦狀態 */
         #camera-cursor.hovering-card {
             width: 48px;
             height: 48px;
@@ -152,12 +152,9 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* 版權跑馬燈動畫 */
-        @keyframes marquee-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
+        /* =========================================
+           5. 版權跑馬燈 (Seamless Infinite Marquee)
+           ========================================= */
         .marquee-container {
             border: 1px solid #000000;
             overflow: hidden;
@@ -165,13 +162,25 @@
             position: relative;
             display: inline-flex;
             align-items: center;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .marquee-content {
             display: flex;
             white-space: nowrap;
-            animation: marquee-scroll 12s linear infinite;
+            animation: marquee-scroll var(--marquee-duration, 25s) linear infinite;
             will-change: transform;
+        }
+
+        /* 懸停時暫停播放，方便讀者仔細閱讀 */
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
         }
 
         /* =========================================
@@ -383,79 +392,8 @@
         }
 
         /* =========================================
-           4. 專案詳情視窗與安全提示 UI
+           4. 安全提示 UI
            ========================================= */
-        #project-overlay {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--bg-color);
-            z-index: 500;
-            transform: translateX(100%);
-            transition: var(--transition-smooth);
-            display: flex;
-            justify-content: center;
-            visibility: hidden;
-        }
-
-        #project-overlay.active {
-            transform: translateX(0);
-            visibility: visible;
-        }
-
-        .project-modal-content {
-            width: 85vw;
-            max-width: 85vw; 
-            height: 100%;
-            position: relative;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            padding: 0; 
-        }
-
-        @media (max-width: 768px) { 
-            .project-modal-content { 
-                width: 95vw;
-                max-width: 95vw;
-            } 
-            .close-project-btn {
-                width: 25px;
-                height: 25px;
-            }
-        }
-      
-        .close-project-btn {
-            position: absolute;
-            top: 0; 
-            right: 0; 
-            width: 35px;
-            height: 35px;
-            background: #fff;
-            color: #000;
-            border: 1px solid #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            z-index: 601;
-            transition: var(--transition-smooth);
-        }
-
-        .close-project-btn:hover {
-            background: #000;
-            color: #fff;
-            transform: rotate(90deg);
-        }
-
-        #project-iframe {
-            width: 100%;
-            flex-grow: 1;
-            border: none;
-            background: #fff;
-        }
-
         /* 安全防護 Toast 提示視窗 */
         #security-toast {
             position: fixed;
@@ -582,8 +520,8 @@
                 
                 <div class="marquee-container py-1.5 px-3 max-w-[220px] sm:max-w-[320px] md:max-w-[420px]">
                     <div class="marquee-content text-black font-bold text-xs md:text-xs">
-                     <span class="shrink-0">UNAUTHORIZED REPRODUCTION PROHIBITED // 本頁面展示之專案作品均為已公開上市成果，版權歸原品牌客戶所有。內容僅作個人非營利視覺設計與技術展示，未經授權禁止任意轉載或作商業利用。</span>
-                        <span class="shrink-0">All project trademarks and copyrighted materials belong to their respective owners. Content displayed on xiaostudio.xyz is for non-commercial portfolio presentation only.</span>
+                        <span class="shrink-0 mr-6">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
+                        <span class="shrink-0 mr-6">UNAUTHORIZED REPRODUCTION PROHIBITED // 未經授權禁止轉載</span>
                     </div>
                 </div>
             </div>
@@ -1245,7 +1183,8 @@
                     </div>
                 </div>
             </div>
- <!-- ==================== PROJECT 02 ==================== -->
+
+            <!-- ==================== PROJECT 02 ==================== -->
             <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-6" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789642745/Dungeon_branding.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -1307,7 +1246,7 @@
                 </div>
             </div>
 
-  <!-- ==================== PROJECT 21 ==================== -->
+            <!-- ==================== PROJECT 21 ==================== -->
             <div class="project-card reveal col-span-1 md:col-span-1 lg:col-span-4" data-thumb="https://res.cloudinary.com/qddgnnyv/image/upload/v1789581068/Leadsense_brand.jpg">
                 <div class="flex flex-col gap-3">
                     <div class="flex flex-row gap-3 md:gap-4 items-stretch w-full">
@@ -1338,7 +1277,6 @@
                 </div>
             </div>
 
-
         </main>
 
         <!-- 頁尾 Footer 區域 -->
@@ -1346,14 +1284,6 @@
             &copy; XIAOSTUDIO. ALL RIGHTS RESERVED.
         </footer>
     </div>
-
-    <!-- 專案展示視窗 -->
-    <aside id="project-overlay" aria-hidden="true" role="dialog">
-        <div class="project-modal-content">
-            <button class="close-project-btn" onclick="Portfolio.close()" aria-label="關閉專案">✕</button>
-            <iframe id="project-iframe" src="" frameborder="0" title="專案詳情內容"></iframe>
-        </div>
-    </aside>
 
     <!-- 安全防護動態提示框 -->
     <div id="security-toast">
@@ -1454,18 +1384,15 @@
         };
 
         /**
-         * Portfolio: 作品集縮圖載入、電腦版長寬比瀑布流動態排版、Scroll Reveal 及視窗對話框
+         * Portfolio: 作品集縮圖載入、電腦版長寬比瀑布流動態排版、Scroll Reveal
          */
         const Portfolio = {
-            overlay: document.getElementById('project-overlay'),
-            iframe: document.getElementById('project-iframe'),
             loadedCount: 0,
             totalCards: 0,
 
             init() {
                 this.loadImages();
                 this.initIntersectionObserver();
-                this.bindCardClicks();
                 
                 // 監聽螢幕縮放以重新配置電腦版列拼貼
                 window.addEventListener('resize', () => {
@@ -1613,32 +1540,6 @@
                 }, { threshold: 0.1 });
 
                 cards.forEach(card => observer.observe(card));
-            },
-
-            bindCardClicks() {
-                const cards = document.querySelectorAll('.project-card');
-                cards.forEach(card => {
-                    card.addEventListener('click', () => {
-                        const thumb = card.getAttribute('data-thumb');
-                        this.open(thumb);
-                    });
-                });
-            },
-
-            open(src) {
-                if (!this.overlay) return;
-                if (this.iframe && src) {
-                    this.iframe.src = src;
-                }
-                this.overlay.classList.add('active');
-                document.body.classList.add('no-scroll');
-            },
-
-            close() {
-                if (!this.overlay) return;
-                this.overlay.classList.remove('active');
-                document.body.classList.remove('no-scroll');
-                if (this.iframe) this.iframe.src = '';
             }
         };
 
@@ -1850,3 +1751,5 @@
     </script>
 </body>
 </html>
+
+
