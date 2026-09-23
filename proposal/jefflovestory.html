@@ -358,6 +358,10 @@
         }
 
         /* Thumbnail Navigation Drawer */
+        #thumb-container {
+            position: relative;
+        }
+
         .thumb-item {
             flex: 0 0 auto;
             width: 60px;
@@ -705,8 +709,8 @@
                 minHeight: 380,
                 maxHeight: 950,
                 maxShadowOpacity: 0.6,
-                showCover: true, // CRITICAL: Makes Page 1 and Page 36 render as Single Page Covers!
-                autoCenter: true, // 封面與封底自動置中顯示
+                showCover: true, // Single Page Covers for P1 and P36
+                autoCenter: true,
                 mobileScrollSupport: false,
                 useMouseEvents: true,
                 clickEventForward: true
@@ -785,12 +789,22 @@
             if (btnPrev) btnPrev.disabled = (pageIndex === 0);
             if (btnNext) btnNext.disabled = (pageIndex >= this.totalPages - 1);
 
-            // Update Active Thumbnail Highlight (Skip auto-scroll on page init)
+            // Update Active Thumbnail Highlight without triggering main window scroll
+            const thumbContainer = document.getElementById('thumb-container');
             document.querySelectorAll('.thumb-item').forEach((thumb, idx) => {
                 if (idx === pageIndex) {
                     thumb.classList.add('active');
-                    if (!isInitial) {
-                        thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    if (!isInitial && thumbContainer) {
+                        // 精確計算縮圖在水平容器內的位置，僅對內部軸進行水平平滑滾動，完全不影響頁面視窗
+                        const containerRect = thumbContainer.getBoundingClientRect();
+                        const thumbRect = thumb.getBoundingClientRect();
+                        const relativeThumbLeft = thumbRect.left - containerRect.left + thumbContainer.scrollLeft;
+                        const targetScrollLeft = relativeThumbLeft - (containerRect.width / 2) + (thumbRect.width / 2);
+
+                        thumbContainer.scrollTo({
+                            left: targetScrollLeft,
+                            behavior: 'smooth'
+                        });
                     }
                 } else {
                     thumb.classList.remove('active');
