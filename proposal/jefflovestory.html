@@ -176,7 +176,7 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            min-height: 480px;
+            min-height: 280px;
             position: relative;
             margin: 0 auto;
         }
@@ -692,11 +692,11 @@
             let pageHeight = 640;
 
             if (screenWidth < 640) {
-                pageWidth = 320;
-                pageHeight = 440;
+                pageWidth = 180;
+                pageHeight = 255;
             } else if (screenWidth < 1024) {
-                pageWidth = 420;
-                pageHeight = 560;
+                pageWidth = 360;
+                pageHeight = 480;
             }
 
             // Initialize StPageFlip
@@ -704,16 +704,17 @@
                 width: pageWidth,
                 height: pageHeight,
                 size: "stretch",
-                minWidth: 280,
+                minWidth: 140,
                 maxWidth: 700,
-                minHeight: 380,
+                minHeight: 200,
                 maxHeight: 950,
                 maxShadowOpacity: 0.6,
                 showCover: true, // Single Page Covers for P1 and P36
                 autoCenter: true,
                 mobileScrollSupport: false,
                 useMouseEvents: true,
-                clickEventForward: true
+                clickEventForward: true,
+                usePortrait: false // 強制保持左右雙頁（跨頁）完整呈現，防止手機版自動切換為單頁
             });
 
             // Load Pages from DOM
