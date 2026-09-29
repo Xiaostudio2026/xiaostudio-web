@@ -236,6 +236,14 @@
             transition: outline 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* Video Asset Styling */
+        .project-video-asset {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
         .project-card:hover .project-image-container {
             outline: 2px solid #000;
             outline-offset: -2px;
@@ -315,7 +323,6 @@
         .project-card:hover .focus-meta-br { opacity: 1; transform: translateY(0); }
         .project-card:hover .focus-meta-center { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-        /* Preserve image aspect ratio */
         .project-asset {
             width: 100%;
             height: 100%;
@@ -497,7 +504,6 @@
 </div>
 
 <div class="content-container">
-    <!-- Header & Proposal Metadata -->
     <header id="main-header" class="mb-12 md:mb-24">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-6 mono-text text-xs md:text-sm font-bold tracking-widest uppercase animate-text-horiz gap-2 sm:gap-4">
             <div>PROPOSAL NO. // 2026-MEDIPRO-012</div>
@@ -525,229 +531,110 @@
         </div>
     </header>
 
-    <!-- 01. VISUAL CONCEPTS: WEB BANNERS (1600 X 400 PX) -->
     <section class="proposal-section mb-20 md:mb-32 max-w-6xl mx-auto">
-        <div class="mb-10 md:mb-16 text-left">
-            <div class="section-label">01 // WEB BANNER DESIGN OPTIONS (1600 × 400 PX)</div>
-            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Hero Banner Concepts</h2>
-            
-            <!-- Shared Text Specification -->
-            <div class="mono-text text-xs text-gray-800 uppercase mt-4 md:mt-6 leading-relaxed space-y-1 md:space-y-2">
-                <div>MAIN TITLE: Find My Scalp Solution</div>
-                <div>SUB TITLE: CLINICAL SCALP SOLUTIONS, TAILORED BY DERMATOLOGISTS</div>
-                <div>CTA BUTTON: START THE QUIZ</div>
+         <!-- SUBSECTION 3: BRAND & CONCEPT TEASERS -->
+        <div class="mb-20 md:mb-36">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-8 flex justify-between items-center w-full px-1">
+                <span>CONCEPT // BRAND & LINE TEASERS</span>
+                <span class="text-gray-500 font-normal">SPEC: FULL-WIDTH MOTION BANNER</span>
             </div>
-        </div>
 
-        <main id="project-grid" class="flex flex-col gap-14 md:gap-28 items-center">
-
-            <!-- Proposal Item 01: Banner Option A -->
-            <div class="project-card reveal w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384827/MediPRO_banner_02.jpg">
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-stretch">
-                    <div class="sm:col-span-9 flex flex-row gap-3 md:gap-6 items-stretch">
-                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                            <h3 class="vertical-title text-base md:text-xl font-bold tracking-normal text-black">OPTION A</h3>
-                        </div>
-                        <div class="project-image-container aspect-[4/1] w-full flex-grow">
-                            <div class="asset-protection-layer"></div>
-                            <div class="loading-shimmer"></div>
-                            <div class="focus-frame-overlay">
-                                <div class="focus-corner focus-corner-tl"></div>
-                                <div class="focus-corner focus-corner-tr"></div>
-                                <div class="focus-corner focus-corner-bl"></div>
-                                <div class="focus-corner focus-corner-br"></div>
-                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
-                                <div class="focus-meta-tag focus-meta-center">1600 × 400 PX</div>
-                                <div class="focus-meta-tag focus-meta-br">OPTION A</div>
-                            </div>
-                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384827/MediPRO_banner_02.jpg" 
-                                 onerror="this.onerror=null; this.src='https://placehold.co/1600x400/111111/ffffff?text=MediPRO+Banner+Option+A';"
-                                 class="project-asset" alt="MediPRO Web Banner Option A">
-                        </div>
+            <!-- HERO BRAND TEASER (FULL-WIDTH BANNER) -->
+            <div class="w-full">
+                <div class="project-card reveal flex flex-col gap-3 w-full" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790245744/MediPRO_Newl_1_1.mp4">
+                    <div class="flex items-center justify-between mono-text text-xs font-bold">
+                        <span>HERO // NEW LINE</span>
+                        <span class="text-gray-400">FULL-WIDTH BANNER</span>
                     </div>
-                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase text-gray-700">
-                        <div>
-                            CONCEPT: CLINICAL DERMATOLOGICAL PRECISION HIGHLIGHTING MEDICAL AUTHORITY AND ACCURATE DIAGNOSIS.
+                    <div class="project-image-container aspect-[16/9] md:aspect-[21/9] w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <div class="focus-frame-overlay">
+                            <div class="focus-corner focus-corner-tl"></div>
+                            <div class="focus-corner focus-corner-tr"></div>
+                            <div class="focus-corner focus-corner-bl"></div>
+                            <div class="focus-corner focus-corner-br"></div>
+                            <div class="focus-meta-tag focus-meta-tl">HERO MOTION</div>
+                            <div class="focus-meta-tag focus-meta-center">FULL-WIDTH BANNER</div>
+                            <div class="focus-meta-tag focus-meta-br">MEDIPRO</div>
                         </div>
+                        <video autoplay loop muted playsinline class="project-video-asset w-full h-full object-cover">
+                            <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790245744/MediPRO_Newl_1_1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        MediPRO New Line Overview
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Scalp Solution Collection Teaser
                     </div>
                 </div>
             </div>
-
-            <!-- Proposal Item 02: Banner Option B -->
-            <div class="project-card reveal w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384450/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_%E8%A4%87%E6%9C%AC.jpg">
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-stretch">
-                    <div class="sm:col-span-9 flex flex-row gap-3 md:gap-6 items-stretch">
-                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                            <h3 class="vertical-title text-base md:text-xl font-bold tracking-normal text-black">OPTION B</h3>
-                        </div>
-                        <div class="project-image-container aspect-[4/1] w-full flex-grow">
-                            <div class="asset-protection-layer"></div>
-                            <div class="loading-shimmer"></div>
-                            <div class="focus-frame-overlay">
-                                <div class="focus-corner focus-corner-tl"></div>
-                                <div class="focus-corner focus-corner-tr"></div>
-                                <div class="focus-corner focus-corner-bl"></div>
-                                <div class="focus-corner focus-corner-br"></div>
-                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
-                                <div class="focus-meta-tag focus-meta-center">1600 × 400 PX</div>
-                                <div class="focus-meta-tag focus-meta-br">OPTION B</div>
-                            </div>
-                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384450/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_%E8%A4%87%E6%9C%AC.jpg" 
-                                 onerror="this.onerror=null; this.src='https://placehold.co/1600x400/111111/ffffff?text=MediPRO+Banner+Option+B';"
-                                 class="project-asset" alt="MediPRO Web Banner Option B">
-                        </div>
-                    </div>
-                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase text-gray-700">
-                        <div>
-                            CONCEPT: CLINICAL DERMATOLOGICAL PRECISION HIGHLIGHTING MEDICAL AUTHORITY AND ACCURATE DIAGNOSIS.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <!-- 02. INGREDIENT GRAPHICS PRODUCTION (300 X 300 PX) -->
-        <div class="mt-20 md:mt-36 mb-12 text-left">
-            <div class="section-label">02 // INGREDIENT GRAPHICS PRODUCTION (300 X 300 PX)</div>
-            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Core Ingredient Visual Assets</h2>
         </div>
 
-        <!-- INGREDIENT ROW 1: NcPA -->
+        <!-- SUBSECTION 4: TEXTURE & FORMULATION SHOWCASE -->
         <div class="mb-20 md:mb-36">
             <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-8 flex justify-between items-center max-w-4xl mx-auto px-1">
-                <span>INGREDIENT 01 // NcPA</span>
-                <span class="text-gray-500 font-normal">SPEC: 300 × 300 PX</span>
+                <span>FORMULATION // TEXTURE SHOWCASE</span>
+                <span class="text-gray-500 font-normal">SPEC: MACRO TEXTURE CLIPS</span>
             </div>
-            
-            <div class="flex flex-wrap justify-center gap-10 md:gap-24 items-start max-w-4xl mx-auto">
-                <!-- NcPA Option A -->
-                <div class="project-card reveal flex flex-row gap-3 md:gap-6 items-stretch max-w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384828/NCPA_01.jpg">
-                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION A</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 max-w-4xl mx-auto">
+                <!-- Shampoo Texture -->
+                <div class="project-card reveal flex flex-col gap-3" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790245744/Shampoo_texture_804_1.mp4">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <div class="focus-frame-overlay">
+                            <div class="focus-corner focus-corner-tl"></div>
+                            <div class="focus-corner focus-corner-tr"></div>
+                            <div class="focus-corner focus-corner-bl"></div>
+                            <div class="focus-corner focus-corner-br"></div>
+                            <div class="focus-meta-tag focus-meta-tl">TEXTURE 01</div>
+                            <div class="focus-meta-tag focus-meta-br">SHAMPOO</div>
+                        </div>
+                        <video autoplay loop muted playsinline class="project-video-asset">
+                            <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790245744/Shampoo_texture_804_1.mp4" type="video/mp4">
+                        </video>
                     </div>
-                    <div class="flex flex-col gap-3 flex-1 min-w-0">
-                        <div class="project-image-container aspect-square w-full sm:w-[300px] sm:h-[300px] max-w-[300px]">
-                            <div class="asset-protection-layer"></div>
-                            <div class="loading-shimmer"></div>
-                            <div class="focus-frame-overlay">
-                                <div class="focus-corner focus-corner-tl"></div>
-                                <div class="focus-corner focus-corner-tr"></div>
-                                <div class="focus-corner focus-corner-bl"></div>
-                                <div class="focus-corner focus-corner-br"></div>
-                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
-                                <div class="focus-meta-tag focus-meta-br">NcPA A</div>
-                            </div>
-                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384828/NCPA_01.jpg" 
-                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/111111/ffffff?text=NcPA+Option+A';"
-                                 class="project-asset" alt="NcPA Option A">
-                        </div>
-                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
-                            Small-seeded soybeans
-                        </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        Shampoo Texture & Density
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Rich Viscosity & Micro-Foaming Action
                     </div>
                 </div>
 
-                <!-- NcPA Option B -->
-                <div class="project-card reveal flex flex-row gap-3 md:gap-6 items-stretch max-w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384827/NCPA_02.jpg">
-                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION B</h3>
+                <!-- Liquid Texture -->
+                <div class="project-card reveal flex flex-col gap-3" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790245742/Liquid_texture_804_1.mp4">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <div class="focus-frame-overlay">
+                            <div class="focus-corner focus-corner-tl"></div>
+                            <div class="focus-corner focus-corner-tr"></div>
+                            <div class="focus-corner focus-corner-bl"></div>
+                            <div class="focus-corner focus-corner-br"></div>
+                            <div class="focus-meta-tag focus-meta-tl">TEXTURE 02</div>
+                            <div class="focus-meta-tag focus-meta-br">LIQUID</div>
+                        </div>
+                        <video autoplay loop muted playsinline class="project-video-asset">
+                            <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790245742/Liquid_texture_804_1.mp4" type="video/mp4">
+                        </video>
                     </div>
-                    <div class="flex flex-col gap-3 flex-1 min-w-0">
-                        <div class="project-image-container aspect-square w-full sm:w-[300px] sm:h-[300px] max-w-[300px]">
-                            <div class="asset-protection-layer"></div>
-                            <div class="loading-shimmer"></div>
-                            <div class="focus-frame-overlay">
-                                <div class="focus-corner focus-corner-tl"></div>
-                                <div class="focus-corner focus-corner-tr"></div>
-                                <div class="focus-corner focus-corner-bl"></div>
-                                <div class="focus-corner focus-corner-br"></div>
-                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
-                                <div class="focus-meta-tag focus-meta-br">NcPA B</div>
-                            </div>
-                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384827/NCPA_02.jpg" 
-                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/111111/ffffff?text=NcPA+Option+B';"
-                                 class="project-asset" alt="NcPA Option B">
-                        </div>
-                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
-                           Large-seeded soybeans
-                        </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        Liquid Essence Texture
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Lightweight Fluid & Rapid Absorption
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- INGREDIENT ROW 2: Decyl Glucoside -->
-        <div class="mb-20 md:mb-36">
-            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-8 flex justify-between items-center max-w-4xl mx-auto px-1">
-                <span>INGREDIENT 02 // DECYL GLUCOSIDE</span>
-                <span class="text-gray-500 font-normal">SPEC: 300 × 300 PX</span>
-            </div>
-
-            <div class="flex flex-wrap justify-center gap-10 md:gap-24 items-start max-w-4xl mx-auto">
-                <!-- Decyl Glucoside Option A -->
-                <div class="project-card reveal flex flex-row gap-3 md:gap-6 items-stretch max-w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384828/Decyl-Glucoside_01.jpg">
-                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION A</h3>
-                    </div>
-                    <div class="flex flex-col gap-3 flex-1 min-w-0">
-                        <div class="project-image-container aspect-square w-full sm:w-[300px] sm:h-[300px] max-w-[300px]">
-                            <div class="asset-protection-layer"></div>
-                            <div class="loading-shimmer"></div>
-                            <div class="focus-frame-overlay">
-                                <div class="focus-corner focus-corner-tl"></div>
-                                <div class="focus-corner focus-corner-tr"></div>
-                                <div class="focus-corner focus-corner-bl"></div>
-                                <div class="focus-corner focus-corner-br"></div>
-                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
-                                <div class="focus-meta-tag focus-meta-br">Glucoside A</div>
-                            </div>
-                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384828/Decyl-Glucoside_01.jpg" 
-                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/111111/ffffff?text=Decyl+Glucoside+Option+A';"
-                                 class="project-asset" alt="Decyl Glucoside Option A">
-                        </div>
-                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
-                       Semi-transparent golden molecular structure
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Decyl Glucoside Option B -->
-                <div class="project-card reveal flex flex-row gap-3 md:gap-6 items-stretch max-w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384827/Decyl-Glucoside_02.jpg">
-                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
-                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">OPTION B</h3>
-                    </div>
-                    <div class="flex flex-col gap-3 flex-1 min-w-0">
-                        <div class="project-image-container aspect-square w-full sm:w-[300px] sm:h-[300px] max-w-[300px]">
-                            <div class="asset-protection-layer"></div>
-                            <div class="loading-shimmer"></div>
-                            <div class="focus-frame-overlay">
-                                <div class="focus-corner focus-corner-tl"></div>
-                                <div class="focus-corner focus-corner-tr"></div>
-                                <div class="focus-corner focus-corner-bl"></div>
-                                <div class="focus-corner focus-corner-br"></div>
-                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
-                                <div class="focus-meta-tag focus-meta-br">Glucoside B</div>
-                            </div>
-                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384827/Decyl-Glucoside_02.jpg" 
-                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/111111/ffffff?text=Decyl+Glucoside+Option+B';"
-                                 class="project-asset" alt="Decyl Glucoside Option B">
-                        </div>
-                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
-                            Smooth plastic molecular structure
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 03. MOTION & DYNAMIC ASSETS SHOWCASE -->
+       
         <div class="mt-20 md:mt-36 mb-12 text-left">
-            <div class="section-label">03 // MOTION & DYNAMIC ASSETS SHOWCASE</div>
+            <div class="section-label">01 // MOTION & DYNAMIC ASSETS SHOWCASE</div>
             <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Dynamic Demonstration & Product Usage</h2>
-        </div>
+        </div> 
 
-        <!-- SUBSECTION 1: THREE-STEP DEMONSTRATION (IN ONE ROW) -->
+        <!-- SUBSECTION 1: THREE-STEP DEMONSTRATION -->
         <div class="mb-20 md:mb-36">
             <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-8 flex justify-between items-center max-w-5xl mx-auto px-1">
                 <span>APPLICATION // 3-STEP DEMONSTRATION</span>
@@ -772,7 +659,7 @@
                             <div class="focus-meta-tag focus-meta-tl">MP4 [PLAY]</div>
                             <div class="focus-meta-tag focus-meta-br">STEP 01</div>
                         </div>
-                        <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                        <video autoplay loop muted playsinline class="project-video-asset">
                             <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068643/Juniper_Tear_off_1.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -797,7 +684,7 @@
                             <div class="focus-meta-tag focus-meta-tl">MP4 [PLAY]</div>
                             <div class="focus-meta-tag focus-meta-br">STEP 02</div>
                         </div>
-                        <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                        <video autoplay loop muted playsinline class="project-video-asset">
                             <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068644/Juniper_Twist_1.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -822,7 +709,7 @@
                             <div class="focus-meta-tag focus-meta-tl">MP4 [PLAY]</div>
                             <div class="focus-meta-tag focus-meta-br">STEP 03</div>
                         </div>
-                        <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                        <video autoplay loop muted playsinline class="project-video-asset">
                             <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068649/Juniper_Rinse_1.mp4" type="video/mp4">
                         </video>
                     </div>
@@ -858,7 +745,7 @@
                                 <div class="focus-meta-tag focus-meta-tl">PRODUCT 01</div>
                                 <div class="focus-meta-tag focus-meta-br">FRESH SHAMPOO</div>
                             </div>
-                            <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                            <video autoplay loop muted playsinline class="project-video-asset">
                                 <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068647/Fresh_shampoo_1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -882,7 +769,7 @@
                                 <div class="focus-meta-tag focus-meta-tl">PRODUCT 02</div>
                                 <div class="focus-meta-tag focus-meta-br">HYDRO SHAMPOO</div>
                             </div>
-                            <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                            <video autoplay loop muted playsinline class="project-video-asset">
                                 <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068647/Hydro_shampoo_1.mp4" type="video/mp4">
                             </video>
                         </div>
@@ -902,7 +789,7 @@
                     02 // SPRAY SERIES
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 max-w-4xl mx-auto">
-                    <!-- Video 3: Fresh Spray -->
+                    <!-- Video 3: Fresh Spray (940) -->
                     <div class="project-card reveal flex flex-col gap-3" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068645/Fresh_spray_940_1.mp4">
                         <div class="project-image-container w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
@@ -912,21 +799,21 @@
                                 <div class="focus-corner focus-corner-bl"></div>
                                 <div class="focus-corner focus-corner-br"></div>
                                 <div class="focus-meta-tag focus-meta-tl">PRODUCT 03</div>
-                                <div class="focus-meta-tag focus-meta-br">FRESH SPRAY</div>
+                                <div class="focus-meta-tag focus-meta-br">FRESH SPRAY 940</div>
                             </div>
-                            <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                            <video autoplay loop muted playsinline class="project-video-asset">
                                 <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068645/Fresh_spray_940_1.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                            FRESH SPRAY
+                            FRESH SPRAY (940)
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600">
-                            Soothe & Purify Mist
+                            Soothe & Purify Mist (940 Spec)
                         </div>
                     </div>
 
-                    <!-- Video 4: Hydro Spray -->
+                    <!-- Video 4: Hydro Spray (940) -->
                     <div class="project-card reveal flex flex-col gap-3" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068643/Hydro_spray_940_1.mp4">
                         <div class="project-image-container w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
@@ -936,17 +823,181 @@
                                 <div class="focus-corner focus-corner-bl"></div>
                                 <div class="focus-corner focus-corner-br"></div>
                                 <div class="focus-meta-tag focus-meta-tl">PRODUCT 04</div>
-                                <div class="focus-meta-tag focus-meta-br">HYDRO SPRAY</div>
+                                <div class="focus-meta-tag focus-meta-br">HYDRO SPRAY 940</div>
                             </div>
-                            <video autoplay loop muted playsinline class="w-full h-auto block object-contain">
+                            <video autoplay loop muted playsinline class="project-video-asset">
                                 <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790068643/Hydro_spray_940_1.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                            HYDRO SPRAY (940)
+                        </div>
+                        <div class="mono-text text-xs uppercase text-gray-600">
+                            Deep Moisture Nourishment (940 Spec)
+                        </div>
+                    </div>
+
+                    <!-- Video 5: Fresh Spray -->
+                    <div class="project-card reveal flex flex-col gap-3" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790249234/Fresh_1.mp4">
+                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                            <div class="asset-protection-layer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">PRODUCT 05</div>
+                                <div class="focus-meta-tag focus-meta-br">FRESH SPRAY MAIN</div>
+                            </div>
+                            <video autoplay loop muted playsinline class="project-video-asset">
+                                <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790249234/Fresh_1.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                            FRESH SPRAY
+                        </div>
+                        <div class="mono-text text-xs uppercase text-gray-600">
+                            Scalp Refreshing Spray Demo
+                        </div>
+                    </div>
+
+                    <!-- Video 6: Hydro Spray -->
+                    <div class="project-card reveal flex flex-col gap-3" href="https://res.cloudinary.com/qddgnnyv/video/upload/v1790249206/Hydro_1.mp4">
+                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                            <div class="asset-protection-layer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">PRODUCT 06</div>
+                                <div class="focus-meta-tag focus-meta-br">HYDRO SPRAY MAIN</div>
+                            </div>
+                            <video autoplay loop muted playsinline class="project-video-asset">
+                                <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1790249206/Hydro_1.mp4" type="video/mp4">
                             </video>
                         </div>
                         <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
                             HYDRO SPRAY
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600">
-                            Deep Moisture Nourishment
+                            Hydrating Scalp Mist Demo
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       <div class="mb-10 md:mb-16 text-left">
+            <div class="section-label">02 // WEB BANNER DESIGN OPTIONS (1600 × 400 PX)</div>
+            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Hero Banner Concepts</h2>
+            
+            <div class="mono-text text-xs text-gray-800 uppercase mt-4 md:mt-6 leading-relaxed space-y-1 md:space-y-2">
+                <div>MAIN TITLE: Find My Scalp Solution</div>
+                <div>SUB TITLE: CLINICAL SCALP SOLUTIONS, TAILORED BY DERMATOLOGISTS</div>
+                <div>CTA BUTTON: START THE QUIZ</div>
+            </div>
+        </div>
+
+        <main id="project-grid" class="flex flex-col gap-14 md:gap-28 items-center">
+
+            <!-- Proposal Item 02: Banner Option B -->
+            <div class="project-card reveal w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384450/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_%E8%A4%87%E6%9C%AC.jpg">
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-stretch">
+                    <div class="sm:col-span-9 flex flex-row gap-3 md:gap-6 items-stretch">
+                        <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                         
+                        </div>
+                        <div class="project-image-container aspect-[4/1] w-full flex-grow">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">AF-LOCK [●]</div>
+                                <div class="focus-meta-tag focus-meta-center">1600 × 400 PX</div>
+                                <div class="focus-meta-tag focus-meta-br">OPTION B</div>
+                            </div>
+                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384450/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_1_%E8%A4%87%E6%9C%AC.jpg" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/1600x400/111111/ffffff?text=MediPRO+Banner+Option+B';"
+                                 class="project-asset" alt="MediPRO Web Banner Option B">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3 flex flex-col justify-between py-1 text-xs mono-text leading-relaxed project-meta-text uppercase text-gray-700">
+                        <div>
+                            CONCEPT: CLINICAL DERMATOLOGICAL PRECISION HIGHLIGHTING MEDICAL AUTHORITY AND ACCURATE DIAGNOSIS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <div class="mt-20 md:mt-36 mb-12 text-left">
+            <div class="section-label">03 // INGREDIENT GRAPHICS PRODUCTION (300 X 300 PX)</div>
+            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">Core Ingredient Visual Assets</h2>
+        </div>
+
+        <!-- INGREDIENT SECTION (SIDE-BY-SIDE LAYOUT) -->
+        <div class="mb-20 md:mb-36">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-8 flex justify-between items-center max-w-4xl mx-auto px-1">
+                <span>INGREDIENTS // NcPA & DECYL GLUCOSIDE</span>
+                <span class="text-gray-500 font-normal">SPEC: 300 × 300 PX</span>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12 items-start max-w-4xl mx-auto justify-items-center">
+                <!-- NcPA Card -->
+                <div class="project-card reveal flex flex-row gap-3 md:gap-6 items-stretch w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384828/NCPA_01.jpg">
+                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">NcPA</h3>
+                    </div>
+                    <div class="flex flex-col gap-3 flex-1 min-w-0">
+                        <div class="project-image-container aspect-square w-full sm:w-[260px] sm:h-[260px] md:w-[300px] md:h-[300px] max-w-[300px]">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
+                                <div class="focus-meta-tag focus-meta-br">NcPA</div>
+                            </div>
+                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384828/NCPA_01.jpg" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/111111/ffffff?text=NcPA+Option+A';"
+                                 class="project-asset" alt="NcPA Option A">
+                        </div>
+                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
+                            Small-seeded soybeans
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decyl Glucoside Card -->
+                <div class="project-card reveal flex flex-row gap-3 md:gap-6 items-stretch w-full" href="https://res.cloudinary.com/opovqate/image/upload/v1789384828/Decyl-Glucoside_01.jpg">
+                    <div class="flex-shrink-0 flex items-start justify-center pt-1">
+                        <h3 class="vertical-title text-base md:text-lg font-bold tracking-normal text-black">Decyl Glucoside</h3>
+                    </div>
+                    <div class="flex flex-col gap-3 flex-1 min-w-0">
+                        <div class="project-image-container aspect-square w-full sm:w-[260px] sm:h-[260px] md:w-[300px] md:h-[300px] max-w-[300px]">
+                            <div class="asset-protection-layer"></div>
+                            <div class="loading-shimmer"></div>
+                            <div class="focus-frame-overlay">
+                                <div class="focus-corner focus-corner-tl"></div>
+                                <div class="focus-corner focus-corner-tr"></div>
+                                <div class="focus-corner focus-corner-bl"></div>
+                                <div class="focus-corner focus-corner-br"></div>
+                                <div class="focus-meta-tag focus-meta-tl">300×300</div>
+                                <div class="focus-meta-tag focus-meta-br">Glucoside</div>
+                            </div>
+                            <img src="https://res.cloudinary.com/opovqate/image/upload/v1789384828/Decyl-Glucoside_01.jpg" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/111111/ffffff?text=Decyl+Glucoside+Option+A';"
+                                 class="project-asset" alt="Decyl Glucoside Option A">
+                        </div>
+                        <div class="mono-text text-xs uppercase pt-2 text-gray-700 max-w-[300px]">
+                            Semi-transparent golden molecular structure
                         </div>
                     </div>
                 </div>
@@ -1164,8 +1215,8 @@
                 if (isVideo) {
                     this.modalContainer.innerHTML = `
                         <button class="close-project-btn interactive-el" onclick="Portfolio.close()" aria-label="Close Project Preview">✕</button>
-                        <div class="w-full h-full flex items-center justify-center bg-black p-4">
-                            <video src="${url}" controls autoplay loop class="max-w-full max-h-full object-contain"></video>
+                        <div class="w-full h-full flex items-center justify-center bg-black/90 p-4 md:p-8">
+                            <video src="${url}" controls autoplay loop playsinline class="max-w-full max-h-full w-auto h-auto object-contain rounded shadow-2xl" style="max-height: 85vh;"></video>
                         </div>
                     `;
                 } else {
