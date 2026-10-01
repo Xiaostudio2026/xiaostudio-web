@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AROMASE - Video & Static Production Proposal</title>
+    
+    <!-- Open Graph Meta Tags for Social Media Sharing -->
+    <meta property="og:title" content="AROMASE Video & Static Production Proposal">
+    <meta property="og:description" content="PROPOSAL NO. 2026-AROMASE-1002 // CLIENT: AROMASE - Herbal Daily Amino Acid Shampoo & Body Wash 'Sunlight Forest' Production Proposal">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_15.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AROMASE Video & Static Production Proposal">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fraunces:opsz,wght@9..144,600&family=Montserrat:wght@300;400;500;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Only hide native cursor when custom cursor is active on fine pointer devices */
+        @media (pointer: fine) {
+            body.custom-cursor-active, 
+            body.custom-cursor-active a, 
+            body.custom-cursor-active button, 
+            body.custom-cursor-active input, 
+            body.custom-cursor-active textarea, 
+            body.custom-cursor-active .project-card, 
+            body.custom-cursor-active .asset-protection-layer {
+                cursor: none !important;
+            }
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            overflow-x: hidden; 
+            margin: 0; 
+            padding: 2rem 1.25rem 6rem 1.25rem;
+        } 
+        
+        @media (min-width: 640px) { body { padding: 3rem 2.5rem 8rem 2.5rem; } }
+        @media (min-width: 768px) { body { padding: 4rem 4rem 14rem 4rem; } }
+        @media (min-width: 1024px) { body { padding: 5rem 6rem 18rem 6rem; } }
+
+        .mono-text { font-family: 'Barlow', sans-serif; }
+        .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
+        .no-scroll { overflow: hidden; }
+
+        /* Camera Focus Cursor */
+        #camera-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            z-index: 10000;
+            transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                        height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.2s ease;
+            display: none;
+            opacity: 0;
+        }
+
+        @media (pointer: fine) {
+            #camera-cursor.active { 
+                display: block; 
+                opacity: 1;
+            }
+        }
+
+        .cursor-box {
+            position: absolute;
+            inset: 0;
+            border: 1.5px solid #000;
+            transition: all 0.25s ease;
+        }
+
+        .cursor-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+
+        #camera-cursor.hovering-card {
+            width: 44px;
+            height: 44px;
+        }
+
+        #camera-cursor.hovering-card .cursor-box {
+            border-color: #000;
+            border-width: 1.5px;
+        }
+
+        #camera-cursor.hovering-card .cursor-dot {
+            background: #000;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #camera-cursor.hovering-btn {
+            width: 26px;
+            height: 26px;
+        }
+
+        #camera-cursor.hovering-btn .cursor-box {
+            border-radius: 50%;
+            border-color: #000;
+        }
+
+        .animate-text-diag {
+            opacity: 1;
+            animation: textDiagIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-text-horiz {
+            opacity: 1;
+            animation: textHorizIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+        }
+        .animate-text-vert {
+            opacity: 1;
+            animation: textVertIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+        }
+
+        @keyframes textDiagIn {
+            0% { opacity: 0; transform: translate(-35px, -20px); }
+            100% { opacity: 1; transform: translate(0, 0); }
+        }
+        @keyframes textHorizIn {
+            0% { opacity: 0; transform: translateX(-35px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes textVertIn {
+            0% { opacity: 0; transform: translateY(-25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .masthead-border { 
+            padding: 0.5rem 0;
+            margin: 1rem 0;
+        }
+
+        @media (min-width: 768px) { .masthead-border { padding: 1.5rem 0; margin: 1.5rem 0; } }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #000;
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .security-badge::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+
+        .project-card {
+            position: relative;
+            display: block;
+            background-color: transparent;
+            transition: var(--transition-smooth);
+            opacity: 1;
+            transform: translateY(0);
+            padding-bottom: 0;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .project-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pure transparent container, no background color blocks */
+        .project-image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            background-color: transparent;
+            outline: 0px solid #000;
+        }
+
+        .project-asset {
+            max-width: 100%;
+            max-height: 70vh;
+            width: auto;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            margin: 0 auto;
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.8s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: none;
+        }
+        
+        .project-card:hover .project-asset { transform: scale(1.01); }
+
+        .asset-protection-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: transparent;
+        }
+
+        #security-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 14px 28px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #security-toast.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Clean transparent tags with thin black border */
+        .tag-pill {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid #000000;
+            color: #000000;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 0px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="camera-cursor">
+    <div class="cursor-box"></div>
+    <div class="cursor-dot"></div>
+</div>
+
+<div class="content-container">
+    <header id="main-header" class="mb-12 md:mb-20">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-6 mono-text text-xs md:text-sm font-bold tracking-widest uppercase animate-text-horiz gap-2 sm:gap-4">
+            <div>PROPOSAL NO. // 2026-AROMASE-1002</div>
+            <div>CLIENT: AROMASE</div>
+            <div>DATE: 2026.10.02</div>
+        </div>
+        
+        <div class="masthead-border">
+            <div class="flex flex-col text-left">
+                <div class="text-xs md:text-sm font-bold tracking-widest text-black uppercase mb-2">VIDEO & STATIC PRODUCTION PROPOSAL</div>
+                <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-[900] tracking-[-0.03em] uppercase leading-tight text-left animate-text-diag py-1 text-black">
+                   Herbal Daily SHAMPOO & BODY WASH
+                </h1>
+                <div class="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-black mt-2">
+                    HERBAL AMINO ACID DAILY HEALTH SHAMPOO & BODY WASH — SUNLIGHT FOREST
+                </div>
+            </div>
+        </div>	
+
+        <!-- PROJECT SPECIFICATIONS & TIMELINE GRID -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-6 my-4 border-y border-black text-xs mono-text uppercase">
+            <div>
+                <div class="font-extrabold text-black mb-2 border-b border-black pb-1">// VIDEO SPECIFICATIONS</div>
+                <div class="text-black font-bold mb-1">DURATION: <span class="font-normal">20 SECONDS</span></div>
+                <div class="text-black font-bold mb-1">FORMAT: <span class="font-normal">4:5 / 9:16 (2 CUTS TOTAL)</span></div>
+                <div class="text-black font-bold">PLATFORMS: <span class="font-normal">META / GOOGLE</span></div>
+            </div>
+
+            <div>
+                <div class="font-extrabold text-black mb-2 border-b border-black pb-1">// PRODUCTION TIMELINE</div>
+                <div class="text-black font-bold mb-1">1ST DRAFT: <span class="font-normal">BEFORE SEP 30</span></div>
+                <div class="text-black font-bold">FINAL DELIVERY: <span class="font-normal">OCT 09</span></div>
+            </div>
+
+            <div class="md:col-span-2">
+                <div class="font-extrabold text-black mb-2 border-b border-black pb-1">// CORE MESSAGING & KEY FEATURES</div>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-black font-medium leading-relaxed list-inside list-disc">
+                    <li>FRESH NATURAL ESSENTIAL OIL AROMA</li>
+                    <li>FINE AMINO ACID SURFACTANT LATHER</li>
+                    <li>WEAK ACID GENTLE CLEANSING FORMULA</li>
+                    <li>3-IN-1 SHAMPOO, FACE WASH & BODY WASH</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="mt-4 flex flex-wrap gap-2 text-xs font-mono">
+            <span class="tag-pill">20s Video</span>
+            <span class="tag-pill">4:5 & 9:16</span>
+            <span class="tag-pill">META / Google</span>
+            <span class="tag-pill">3-in-1 Wash</span>
+            <span class="tag-pill">Amino Acid Surfactant</span>
+            <span class="tag-pill">Sunlight Forest</span>
+        </div>
+
+        <div class="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 sm:gap-6 animate-text-vert">
+            <span class="security-badge">CONFIDENTIAL / AROMASE PROPOSAL</span>
+            
+            <div class="marquee-container py-1.5 px-3 w-full sm:w-auto sm:max-w-[340px] md:max-w-[520px]">
+                <div class="marquee-content gap-6 text-black font-bold text-xs">
+                    <span class="shrink-0">PROPRIETARY PROPOSAL // AROMASE HERBAL DAILY HEALTH SHAMPOO & BODY WASH - SUNLIGHT FOREST PRODUCTION PROPOSAL. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED</span>
+                    <span class="shrink-0">PROPRIETARY PROPOSAL // AROMASE HERBAL DAILY HEALTH SHAMPOO & BODY WASH - SUNLIGHT FOREST PRODUCTION PROPOSAL. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="proposal-section mb-20 md:mb-32 max-w-6xl mx-auto">
+        <!-- SECTION 1: KEY VISUAL & MODEL SETTING -->
+        <div class="mb-20 md:mb-28">
+            <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">01 // KEY VISUAL & MODEL SPECIFICATION</div>
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full border-b border-black pb-2">
+                <span>KEY VISUAL & MODEL SETTING // CONCEPT & CASTING VISUAL</span>
+                <span class="text-gray-500 font-normal">SPEC: KV & MODEL WORKSPACE</span>
+            </div>
+
+            <!-- 2-COLUMN GRID: KEY VISUAL (LEFT) & MODEL SETTING (RIGHT) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 w-full items-start">
+                <!-- KEY VISUAL CARD (LEFT) -->
+                <div class="project-card reveal flex flex-col gap-3 w-full">
+                    <div class="flex items-center justify-between mono-text text-xs font-bold">
+                        <span>KEY VISUAL // 01</span>
+                        <span class="text-gray-400">BRAND CONCEPT</span>
+                    </div>
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790881696/KeyVisual.jpg" 
+                             alt="AROMASE Key Visual Reference" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        KEY VISUAL CONCEPT
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Brand mood, sunlight forest atmosphere & product visual concept
+                    </div>
+                </div>
+
+                <!-- MODEL IMAGE CARD (RIGHT) -->
+                <div class="project-card reveal flex flex-col gap-3 w-full">
+                    <div class="flex items-center justify-between mono-text text-xs font-bold">
+                        <span>MODEL SETTING // 01</span>
+                        <span class="text-gray-400">AROMASE MODEL SPEC</span>
+                    </div>
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_15.jpg" 
+                             alt="AROMASE Model Setting" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        MODEL WORKSPACE SETTING
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Natural clear texture and scalp/skin presentation setting
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-12 text-left border-t border-black pt-12">
+            <div class="section-label text-xs font-bold tracking-widest text-gray-500">02 // STORYBOARD & SCENE CUTS</div>
+            <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">STORYBOARD PROPOSAL - 4 SCENE CUTS</h2>
+            <p class="text-xs md:text-sm text-gray-600 font-mono mt-2 uppercase">
+                Storyboards & Visual Sequences for AROMASE Herbal Daily Shampoo & Body Wash
+            </p>
+        </div>
+
+        <!-- CUT 1 -->
+        <div class="mb-16 md:mb-24">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full border-b border-black pb-2">
+                <span>CUT 01 // OPENING SHOT / SCENE INTRODUCTION</span>
+                <span class="text-gray-500 font-normal">3 FRAMES</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-6 max-w-6xl mx-auto">
+                <!-- Cut 1 - Frame 1 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790879177/opening_01.jpg" 
+                             alt="Cut 1 Frame A" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 01-A // ATMOSPHERE & MORNING LIGHT
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Sunlight forest morning glow & atmosphere establishment
+                    </div>
+                </div>
+
+                <!-- Cut 1 - Frame 2 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790879180/opening_02.jpg" 
+                             alt="Cut 1 Frame B" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 01-B // FOREST AMBIENCE
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Natural environment & gentle light interaction
+                    </div>
+                </div>
+
+                <!-- Cut 1 - Frame 3 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC.jpg" 
+                             alt="Cut 1 Frame C" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 01-C // SCENE ESTABLISHING
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Sunlight forest morning glow & natural ambience creation
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUT 2 -->
+        <div class="mb-16 md:mb-24">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full border-b border-black pb-2">
+                <span>CUT 02 // PRODUCT CLOSE-UP & USER EXPERIENCE</span>
+                <span class="text-gray-500 font-normal">2 FRAMES</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+                <!-- Cut 2 - Frame 1 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873998/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9.jpg" 
+                             alt="Cut 2 Frame A" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 02-A // PRODUCT INTERACTION
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Texture contact & refreshing herbal touch
+                    </div>
+                </div>
+
+                <!-- Cut 2 - Frame 2 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_6.jpg" 
+                             alt="Cut 2 Frame B" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 02-B // BUBBLE & LATHER
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Fine lathering & soothing bath process
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUT 3 -->
+        <div class="mb-16 md:mb-24">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full border-b border-black pb-2">
+                <span>CUT 03 // SHAMPOO & BODY WASH DYNAMIC SEQUENCE</span>
+                <span class="text-gray-500 font-normal">3 FRAMES</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-6 max-w-6xl mx-auto">
+                <!-- Cut 3 - Frame 1 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_5.jpg" 
+                             alt="Cut 3 Frame 1" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 03-A // SCALP CLEANSE
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Daily herbal amino acid hair purification
+                    </div>
+                </div>
+
+                <!-- Cut 3 - Frame 2 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873999/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_9.jpg" 
+                             alt="Cut 3 Frame 2" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 03-B // BODY WASH MASSAGE
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Gentle full-body wash and relaxation experience
+                    </div>
+                </div>
+
+                <!-- Cut 3 - Frame 3 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_12.jpg" 
+                             alt="Cut 3 Frame 3" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 03-C // WATER RINSE
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Water rinsing with airy, voluminous hair finish
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUT 4 -->
+        <div class="mb-16 md:mb-24">
+            <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full border-b border-black pb-2">
+                <span>CUT 04 // OUTRO & BRANDING</span>
+                <span class="text-gray-500 font-normal">2 FRAMES</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+                <!-- Cut 4 - Frame 1 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790880841/Ending_01.jpg" 
+                             alt="Cut 4 Frame A" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 04-A // BRAND REFLECTION & GLOW
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        Post-wash refreshed look & brand aesthetic presentation
+                    </div>
+                </div>
+
+                <!-- Cut 4 - Frame 2 -->
+                <div class="project-card reveal flex flex-col gap-3">
+                    <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="asset-protection-layer"></div>
+                        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_8.jpg" 
+                             alt="Cut 4 Frame B" 
+                             class="project-asset">
+                    </div>
+                    <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                        CUT 04-B // ENDING PACKSHOT & BRAND OUTRO
+                    </div>
+                    <div class="mono-text text-xs uppercase text-gray-600">
+                        "Sunlight Forest" product summary and brand tagline closing
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="w-full pt-12 md:pt-20 pb-8 md:pb-10 flex flex-col md:flex-row justify-between items-center text-xs text-black font-bold tracking-[0.15em] uppercase gap-4 md:gap-6 text-center md:text-left border-t border-black">
+        <div>&copy; XIAOSTUDIO. ALL RIGHTS RESERVED.</div>
+        
+        <div class="mono-text text-xs flex items-center gap-2">
+            <span class="text-gray-500 font-normal">OFFICIAL WEBSITE:</span>
+            <a href="https://xiaostudio.xyz" target="_blank" rel="noopener noreferrer" class="interactive-el underline hover:text-gray-500 transition-colors tracking-widest font-extrabold text-black">
+                XIAOSTUDIO.XYZ ↗
+            </a>
+        </div>
+
+        <div class="mono-text text-gray-500">CONFIDENTIAL PROPOSAL // FOR CLIENT REVIEW ONLY</div>
+    </footer>
+</div>
+
+<!-- Security Toast -->
+<div id="security-toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span id="toast-message">PROTECTED // PROPOSAL CONTENT DOWNLOAD DISABLED</span>
+</div>
+
+<script>
+    /* Camera Cursor Controller */
+    const CameraCursor = {
+        cursorEl: null,
+        mouseX: 0,
+        mouseY: 0,
+        currentX: 0,
+        currentY: 0,
+        initialized: false,
+
+        init() {
+            this.cursorEl = document.getElementById('camera-cursor');
+            if (!this.cursorEl) return;
+
+            const updatePos = (e) => {
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+
+                if (!this.initialized) {
+                    this.currentX = e.clientX;
+                    this.currentY = e.clientY;
+                    this.initialized = true;
+                    document.body.classList.add('custom-cursor-active');
+                    this.cursorEl.classList.add('active');
+                }
+            };
+            
+            window.addEventListener('mousemove', updatePos, { passive: true });
+            window.addEventListener('pointermove', updatePos, { passive: true });
+
+            this.bindHoverEvents();
+            this.render();
+        },
+
+        bindHoverEvents() {
+            document.addEventListener('mouseover', (e) => {
+                if (!this.cursorEl) return;
+                
+                if (e.target.closest('.project-card')) {
+                    this.cursorEl.classList.add('hovering-card');
+                }
+                if (e.target.closest('button, a, .security-badge, .interactive-el')) {
+                    this.cursorEl.classList.add('hovering-btn');
+                }
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                if (!this.cursorEl) return;
+
+                const related = e.relatedTarget;
+                if (!related || !related.closest('.project-card')) {
+                    this.cursorEl.classList.remove('hovering-card');
+                }
+                if (!related || !related.closest('button, a, .security-badge, .interactive-el')) {
+                    this.cursorEl.classList.remove('hovering-btn');
+                }
+            });
+        },
+
+        render() {
+            if (this.initialized && this.cursorEl) {
+                this.currentX += (this.mouseX - this.currentX) * 0.3;
+                this.currentY += (this.mouseY - this.currentY) * 0.3;
+
+                this.cursorEl.style.transform = `translate3d(${this.currentX}px, ${this.currentY}px, 0) translate(-50%, -50%)`;
+            }
+
+            requestAnimationFrame(() => this.render());
+        }
+    };
+
+    /* Security Guard Controller - Right Click & Content Protection */
+    const SecurityGuard = {
+        toastTimeout: null,
+
+        init() {
+            this.disableContextMenu();
+            this.disableDragAndDrop();
+            this.disableShortcuts();
+            this.preventPrintScreen();
+        },
+
+        showToast(message) {
+            const toast = document.getElementById('security-toast');
+            const msgEl = document.getElementById('toast-message');
+            if (!toast || !msgEl) return;
+
+            msgEl.innerText = message || 'PROTECTED // PROPOSAL CONTENT DOWNLOAD DISABLED';
+            toast.classList.add('active');
+
+            if (this.toastTimeout) clearTimeout(this.toastTimeout);
+            this.toastTimeout = setTimeout(() => {
+                toast.classList.remove('active');
+            }, 2500);
+        },
+
+        disableContextMenu() {
+            // Strict Right-Click Prevention with Security Warning
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                this.showToast('RIGHT CLICK DISABLED // PROPOSAL CONTENT IS COPYRIGHT PROTECTED');
+                return false;
+            }, false);
+        },
+
+        disableDragAndDrop() {
+            // Prevent Dragging Proposal Assets
+            document.addEventListener('dragstart', (e) => {
+                e.preventDefault();
+                this.showToast('DRAG & DROP DISABLED // ASSET DOWNLOAD IS RESTRICTED');
+                return false;
+            }, false);
+        },
+
+        disableShortcuts() {
+            // Disable DevTools, Save, Print, and Select/Copy Shortcuts
+            document.addEventListener('keydown', (e) => {
+                const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+                const keyCode = e.keyCode || e.which;
+
+                if (keyCode === 123) { // F12
+                    e.preventDefault();
+                    this.showToast('DEVTOOLS ACCESS RESTRICTED');
+                    return false;
+                }
+
+                if (ctrlOrCmd) {
+                    if (keyCode === 83 || keyCode === 80) { // Cmd/Ctrl + S, P
+                        e.preventDefault();
+                        this.showToast('SAVING/PRINTING DISABLED // PROPOSAL DOWNLOADING RESTRICTED');
+                        return false;
+                    }
+
+                    if (e.shiftKey && (keyCode === 73 || keyCode === 74 || keyCode === 67)) { // Cmd/Ctrl + Shift + I/J/C
+                        e.preventDefault();
+                        this.showToast('DEVTOOLS ACCESS RESTRICTED');
+                        return false;
+                    }
+
+                    if (keyCode === 65 || keyCode === 67) { // Cmd/Ctrl + A, C
+                        if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                            e.preventDefault();
+                            this.showToast('COPYING DISABLED // CONTENT IS COPYRIGHT PROTECTED');
+                            return false;
+                        }
+                    }
+                }
+            }, false);
+        },
+
+        preventPrintScreen() {
+            window.addEventListener('keyup', (e) => {
+                if (e.key === 'PrintScreen') {
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText('');
+                    }
+                    this.showToast('SCREENSHOT DETECTED // PROPOSAL ASSETS ARE PROTECTED');
+                }
+            });
+        }
+    };
+
+    function startApp() {
+        SecurityGuard.init();
+        CameraCursor.init();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startApp);
+    } else {
+        startApp();
+    }
+</script>
+</body>
+</html>
