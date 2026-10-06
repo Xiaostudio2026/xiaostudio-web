@@ -224,7 +224,7 @@
             pointer-events: none;
         }
 
-        /* 實體書本中線紅色車縫線 (Red Thread Stitching) */
+        /* 實體書本中線寶藍色車縫線 (Royal Blue Thread Stitching) */
         .page::before {
             content: "";
             position: absolute;
@@ -235,8 +235,8 @@
             pointer-events: none;
             background: repeating-linear-gradient(
                 to bottom,
-                #e63946 0px,
-                #e63946 7px,
+                #0047AB 0px,
+                #0047AB 7px,
                 transparent 7px,
                 transparent 11px
             );
@@ -419,12 +419,52 @@
         </div>	
     </header>
 
-    <!-- 封面情境圖區塊 -->
-    <section class="w-full mb-8 overflow-hidden rounded">
-        <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790114045/cover_01.jpg" 
-             alt="舜喆愛的婚紗 封面情境圖" 
-             class="w-full h-auto aspect-square sm:aspect-auto object-cover sm:object-contain rounded"
-             onerror="this.style.display='none';">
+    <!-- 封面提案區塊 (COVER CONCEPT 01 & 02) -->
+    <section class="w-full mb-12">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-2 border-b border-black/10">
+            <div class="mono-text text-xs md:text-sm font-bold tracking-widest uppercase text-gray-900 flex items-center gap-2">
+                <span class="w-2 h-2 bg-black inline-block rounded-full"></span>
+                COVER OPTIONS // 封面提案
+            </div>
+            <div class="mono-text text-[11px] text-gray-500 font-semibold tracking-wider uppercase">
+                [ PLEASE SELECT YOUR PREFERRED COVER CONCEPT ]
+            </div>
+        </div>
+        <div class="flex flex-col gap-10 md:gap-14">
+            <!-- CONCEPT 01 -->
+            <div class="flex flex-col gap-3">
+                <div class="relative overflow-hidden rounded">
+                    <div class="absolute top-3 left-3 z-10 bg-black text-white text-[10px] mono-text px-2.5 py-1 font-bold tracking-widest uppercase rounded">
+                        CONCEPT 01
+                    </div>
+                    <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1791301871/Cover_001.jpg" 
+                         alt="舜喆愛的婚紗 封面提案 01" 
+                         class="w-full h-auto object-cover rounded"
+                         onerror="this.style.display='none';">
+                </div>
+                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1791302072/line_01.jpg" 
+                     alt="Cover 01 說明附圖" 
+                     class="w-full max-w-[400px] h-auto object-cover rounded"
+                     onerror="this.style.display='none';">
+            </div>
+
+            <!-- CONCEPT 02 -->
+            <div class="flex flex-col gap-3">
+                <div class="relative overflow-hidden rounded">
+                    <div class="absolute top-3 left-3 z-10 bg-black text-white text-[10px] mono-text px-2.5 py-1 font-bold tracking-widest uppercase rounded">
+                        CONCEPT 02
+                    </div>
+                    <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1791301870/Cover_002.jpg" 
+                         alt="舜喆愛的婚紗 封面提案 02" 
+                         class="w-full h-auto object-cover rounded"
+                         onerror="this.style.display='none';">
+                </div>
+                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1791302068/line_02.jpg" 
+                     alt="Cover 02 說明附圖" 
+                     class="w-full max-w-[400px] h-auto object-cover rounded"
+                     onerror="this.style.display='none';">
+            </div>
+        </div>
     </section>
 
     <!-- Interactive Flipbook Workspace -->
@@ -499,39 +539,6 @@
             </script>
         </div>
     </main>
-
-    <!-- 延伸封面提案展示區塊（02 & 03） -->
-    <section class="w-full mb-12">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-2 border-b border-black/10">
-            <div class="mono-text text-xs md:text-sm font-bold tracking-widest uppercase text-gray-900 flex items-center gap-2">
-                <span class="w-2 h-2 bg-black inline-block rounded-full"></span>
-                COVER OPTIONS // 封面備選提案
-            </div>
-            <div class="mono-text text-[11px] text-gray-500 font-semibold tracking-wider uppercase">
-                [ PLEASE SELECT YOUR PREFERRED COVER CONCEPT ]
-            </div>
-        </div>
-        <div class="flex flex-col md:flex-row gap-6">
-            <div class="w-full md:w-1/2 overflow-hidden rounded relative">
-                <div class="absolute top-3 left-3 z-10 bg-black text-white text-[10px] mono-text px-2.5 py-1 font-bold tracking-widest uppercase rounded">
-                    CONCEPT 02
-                </div>
-                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790115039/cover_02.jpg" 
-                     alt="舜喆愛的婚紗 封面提案 02" 
-                     class="w-full h-auto aspect-square sm:aspect-auto object-cover sm:object-contain rounded"
-                     onerror="this.style.display='none';">
-            </div>
-            <div class="w-full md:w-1/2 overflow-hidden rounded relative">
-                <div class="absolute top-3 left-3 z-10 bg-black text-white text-[10px] mono-text px-2.5 py-1 font-bold tracking-widest uppercase rounded">
-                    CONCEPT 03
-                </div>
-                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790115039/cover_03.jpg" 
-                     alt="舜喆愛的婚紗 封面提案 03" 
-                     class="w-full h-auto aspect-square sm:aspect-auto object-cover sm:object-contain rounded"
-                     onerror="this.style.display='none';">
-            </div>
-        </div>
-    </section>
 
     <!-- 顏色表區塊 -->
     <section class="w-full mb-12">
