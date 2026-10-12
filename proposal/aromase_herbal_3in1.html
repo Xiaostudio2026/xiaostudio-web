@@ -401,7 +401,7 @@
                     <span class="text-gray-400">CUT V1</span>
                 </div>
                 <div class="w-full bg-black rounded-sm overflow-hidden relative shadow-lg aspect-[9/16] sm:aspect-[4/5]">
-                    <video controls loop playsinline class="w-full h-full object-contain mx-auto">
+                    <video controls controlsList="nodownload" disablePictureInPicture playsinline class="w-full h-full object-contain mx-auto">
                         <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1791785093/HERBAL_3IN1_1012.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -418,7 +418,7 @@
                     <span class="text-gray-400">CUT V2</span>
                 </div>
                 <div class="w-full bg-black rounded-sm overflow-hidden relative shadow-lg aspect-[9/16] sm:aspect-[4/5]">
-                    <video controls loop playsinline class="w-full h-full object-contain mx-auto">
+                    <video controls controlsList="nodownload" disablePictureInPicture playsinline class="w-full h-full object-contain mx-auto">
                         <source src="https://res.cloudinary.com/qddgnnyv/video/upload/v1791787002/AR_HERABAL_3IN1_1920_V2.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -430,25 +430,24 @@
         </div>
     </section>
 
+    <!-- PROPOSAL SECTION COLLAPSIBLE CONTAINER -->
     <section class="proposal-section mb-20 md:mb-32 max-w-6xl mx-auto">
-        <!-- SECTION 1: KEY VISUAL & MODEL SETTING -->
-        <div class="mb-20 md:mb-28">
-            
-            
-            <!-- COLLAPSIBLE ACCORDION TOGGLE BUTTON -->
-            <div class="mb-4 w-full">
-                <button type="button" id="toggle-kv-section" onclick="toggleKvSection()" class="group relative inline-flex items-center justify-between px-5 py-3 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full whitespace-nowrap">
-                    <span class="flex items-center gap-3">
-                        <span id="kv-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg]">[+]</span>
-                        <span>20261002 visual proposal</span>
-                    </span>
-                    <span class="ml-4 text-[10px] mono-text opacity-75 font-normal tracking-wider shrink-0">// TOGGLE SECTION</span>
-                </button>
-            </div>
+        <!-- COLLAPSIBLE ACCORDION TOGGLE BUTTON -->
+        <div class="mb-0 w-full">
+            <button type="button" id="toggle-kv-section" onclick="toggleKvSection()" class="group relative inline-flex items-center justify-between px-5 py-3 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full whitespace-nowrap">
+                <span class="flex items-center gap-3">
+                    <span id="kv-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg]">[+]</span>
+                    <span>20261002 visual proposal</span>
+                </span>
+                <span class="ml-4 text-[10px] mono-text opacity-75 font-normal tracking-wider shrink-0">// TOGGLE SECTION</span>
+            </button>
+        </div>
 
-            <!-- COLLAPSIBLE CONTENT WRAPPER (DEFAULT CLOSED) -->
-            <div id="kv-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-0">
-                <div class="border border-black border-t-0 p-6 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+        <!-- COLLAPSIBLE CONTENT WRAPPER (DEFAULT CLOSED) -->
+        <div id="kv-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-0">
+            <div class="border border-black border-t-0 p-6 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+                <!-- SECTION 1: KEY VISUAL & MODEL SPECIFICATION -->
+                <div class="mb-20 md:mb-28">
                     <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">01 // KEY VISUAL & MODEL SPECIFICATION</div>
                     <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
                         <span>KEY VISUAL & MODEL SETTING // CONCEPT & CASTING VISUAL</span>
@@ -456,43 +455,45 @@
                     </div>
 
                     <!-- 2-COLUMN GRID: KEY VISUAL (LEFT) & MODEL SETTING (RIGHT) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 w-full items-start mb-20">
-                    <div class="project-card reveal flex flex-col gap-3 w-full">
-                        <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>KEY VISUAL // 01</span>
-                            <span class="text-gray-400">BRAND CONCEPT</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 w-full items-start">
+                        <!-- KEY VISUAL CARD (LEFT) -->
+                        <div class="project-card reveal flex flex-col gap-3 w-full">
+                            <div class="flex items-center justify-between mono-text text-xs font-bold">
+                                <span>KEY VISUAL // 01</span>
+                                <span class="text-gray-400">BRAND CONCEPT</span>
+                            </div>
+                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                                <div class="asset-protection-layer"></div>
+                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790881696/KeyVisual.jpg" 
+                                     alt="AROMASE Key Visual Reference" 
+                                     class="project-asset">
+                            </div>
+                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                                KEY VISUAL CONCEPT
+                            </div>
+                            <div class="mono-text text-xs uppercase text-gray-600">
+                                Brand mood, sunlight forest atmosphere & product visual concept
+                            </div>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                            <div class="asset-protection-layer"></div>
-                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790881696/KeyVisual.jpg" 
-                                 alt="AROMASE Key Visual Reference" 
-                                 class="project-asset">
-                        </div>
-                        <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                            KEY VISUAL CONCEPT
-                        </div>
-                        <div class="mono-text text-xs uppercase text-gray-600">
-                            Brand mood, sunlight forest atmosphere & product visual concept
-                        </div>
-                    </div>
 
-                    <!-- MODEL IMAGE CARD (RIGHT) -->
-                    <div class="project-card reveal flex flex-col gap-3 w-full">
-                        <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>MODEL SETTING // 01</span>
-                            <span class="text-gray-400">AROMASE MODEL SPEC</span>
-                        </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                            <div class="asset-protection-layer"></div>
-                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_15.jpg" 
-                                 alt="AROMASE Model Setting" 
-                                 class="project-asset">
-                        </div>
-                        <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                            MODEL WORKSPACE SETTING
-                        </div>
-                        <div class="mono-text text-xs uppercase text-gray-600">
-                            Natural clear texture and scalp/skin presentation setting
+                        <!-- MODEL IMAGE CARD (RIGHT) -->
+                        <div class="project-card reveal flex flex-col gap-3 w-full">
+                            <div class="flex items-center justify-between mono-text text-xs font-bold">
+                                <span>MODEL SETTING // 01</span>
+                                <span class="text-gray-400">AROMASE MODEL SPEC</span>
+                            </div>
+                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                                <div class="asset-protection-layer"></div>
+                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_15.jpg" 
+                                     alt="AROMASE Model Setting" 
+                                     class="project-asset">
+                            </div>
+                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
+                                MODEL WORKSPACE SETTING
+                            </div>
+                            <div class="mono-text text-xs uppercase text-gray-600">
+                                Natural clear texture and scalp/skin presentation setting
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -706,7 +707,6 @@
                 </div>
             </div>
         </div>
-
     </section>
 
     <footer class="w-full pt-12 md:pt-20 pb-8 md:pb-10 flex flex-col md:flex-row justify-between items-center text-xs text-black font-bold tracking-[0.15em] uppercase gap-4 md:gap-6 text-center md:text-left">
@@ -937,33 +937,9 @@
         }
     };
 
-    /* Collapsible Accordion Controller */
-    function initCollapsible() {
-        const toggleBtn = document.getElementById('toggle-proposal-details');
-        const contentDiv = document.getElementById('proposal-collapsible-content');
-        const toggleIcon = document.getElementById('toggle-icon');
-
-        if (!toggleBtn || !contentDiv) return;
-
-        toggleBtn.addEventListener('click', () => {
-            const isHidden = contentDiv.classList.contains('hidden');
-            if (isHidden) {
-                contentDiv.classList.remove('hidden');
-                toggleBtn.querySelector('span:first-child').innerText = toggleBtn.querySelector('span:first-child').innerText.replace('CLICK TO EXPAND', 'CLICK TO COLLAPSE');
-                toggleIcon.innerText = '-';
-            } else {
-                contentDiv.classList.add('hidden');
-                toggleBtn.querySelector('span:first-child').innerText = toggleBtn.querySelector('span:first-child').innerText.replace('CLICK TO COLLAPSE', 'CLICK TO EXPAND');
-                toggleIcon.innerText = '+';
-                toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    }
-
     function startApp() {
         SecurityGuard.init();
         CameraCursor.init();
-        initCollapsible();
     }
 
     if (document.readyState === 'loading') {
