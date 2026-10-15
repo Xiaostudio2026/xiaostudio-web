@@ -321,20 +321,20 @@
         </div>	
 
         <!-- HEADER SPECS COLLAPSIBLE TOGGLE BUTTON -->
-        <div class="mb-2 w-full">
-            <button type="button" id="toggle-header-specs" onclick="toggleHeaderSpecs()" class="group relative inline-flex items-center justify-between px-5 py-3 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full whitespace-nowrap">
-                <span class="flex items-center gap-3">
-                    <span id="header-specs-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg]">[+]</span>
-                    <span>PROJECT SPECIFICATIONS & TIMELINE</span>
+        <div class="mb-1 w-full">
+            <button type="button" id="toggle-header-specs" onclick="toggleHeaderSpecs()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+                <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
+                    <span id="header-specs-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg] shrink-0">[+]</span>
+                    <span class="truncate">PROJECT SPECIFICATIONS & TIMELINE // DETAILS</span>
                 </span>
-              
             </button>
         </div>
 
         <!-- COLLAPSIBLE HEADER SPECS WRAPPER (DEFAULT CLOSED) -->
-        <div id="header-specs-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-4">
-            <div class="border border-black border-t-0 p-6 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+        <div id="header-specs-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-2">
+            <div class="border border-black border-t-0 p-4 md:p-6 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
                 <!-- PROJECT SPECIFICATIONS & TIMELINE GRID -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-1 my-1 text-xs mono-text uppercase">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-2 my-2 text-xs mono-text uppercase">
                     <div>
                         <div class="font-extrabold text-black mb-2 pb-1">// VIDEO SPECIFICATIONS</div>
@@ -385,19 +385,18 @@
     </header>
 
     <!-- NEW RELEASE // 2026.10.15 VIDEO CONTENT (DEFAULT OPEN) -->
-    <section class="mb-4 max-w-6xl mx-auto pb-4">
-        <div class="mb-2 w-full">
-            <button type="button" id="toggle-v1015-section" onclick="toggleV1015Section()" class="group relative inline-flex items-center justify-between px-5 py-3 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full whitespace-nowrap">
-                <span class="flex items-center gap-3">
-                 
-                    <span>20261015 VIDEO CONTENT PROPOSAL</span>
+    <section class="mb-2 max-w-6xl mx-auto pb-2">
+        <div class="mb-1 w-full">
+            <button type="button" id="toggle-v1015-section" onclick="toggleV1015Section()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+                <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
+                    <span id="v1015-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[0deg] shrink-0">[-]</span>
+                    <span class="truncate">20261015 VIDEO CONTENT PROPOSAL // FINAL PREVIEW</span>
                 </span>
-              
             </button>
         </div>
 
-        <div id="v1015-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden opacity-100 mb-4" style="max-height: 8000px;">
-            <div class="border border-black border-t-0 p-6 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+        <div id="v1015-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden opacity-100 mb-2" style="max-height: 8000px;">
+            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
                 <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">NEW RELEASE // 2026.10.15 VIDEO FINAL PREVIEW</div>
                 <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
                     <span>20261015 FINAL VIDEO EDIT // SUNLIGHT FOREST 3-IN-1</span>
@@ -424,19 +423,18 @@
     </section>
 
     <!-- 20261012 INITIAL VIDEO EDIT PROPOSAL (COLLAPSIBLE, DEFAULT CLOSED) -->
-    <section class="mb-4 max-w-6xl mx-auto pb-4">
-        <div class="mb-2 w-full">
-            <button type="button" id="toggle-v1012-section" onclick="toggleV1012Section()" class="group relative inline-flex items-center justify-between px-5 py-3 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full whitespace-nowrap">
-                <span class="flex items-center gap-3">
-                    <span id="v1012-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg]">[+]</span>
-                    <span>20261012 INITIAL VIDEO EDIT PROPOSAL</span>
+    <section class="mb-2 max-w-6xl mx-auto pb-2">
+        <div class="mb-1 w-full">
+            <button type="button" id="toggle-v1012-section" onclick="toggleV1012Section()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+                <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
+                    <span id="v1012-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg] shrink-0">[+]</span>
+                    <span class="truncate">20261012 INITIAL VIDEO EDIT PROPOSAL // EDIT DEMOS</span>
                 </span>
-               
             </button>
         </div>
 
-        <div id="v1012-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-4">
-            <div class="border border-black border-t-0 p-6 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+        <div id="v1012-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-2">
+            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
                 <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">ARCHIVE // 2026.10.12 VIDEO EDIT DEMOS</div>
                 <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
                     <span>INITIAL EDIT DEMOS // 20261012 EDITS PREVIEW</span>
@@ -484,21 +482,20 @@
     </section>
 
     <!-- PROPOSAL SECTION COLLAPSIBLE CONTAINER -->
-    <section class="proposal-section mb-4 max-w-6xl mx-auto">
+    <section class="proposal-section mb-2 max-w-6xl mx-auto">
         <!-- COLLAPSIBLE ACCORDION TOGGLE BUTTON -->
-        <div class="mb-2 w-full">
-            <button type="button" id="toggle-kv-section" onclick="toggleKvSection()" class="group relative inline-flex items-center justify-between px-5 py-3 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full whitespace-nowrap">
-                <span class="flex items-center gap-3">
-                    <span id="kv-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg]">[+]</span>
-                    <span>20261002 visual proposal</span>
+        <div class="mb-1 w-full">
+            <button type="button" id="toggle-kv-section" onclick="toggleKvSection()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+                <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
+                    <span id="kv-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg] shrink-0">[+]</span>
+                    <span class="truncate">20261002 visual proposal</span>
                 </span>
-            
             </button>
         </div>
 
         <!-- COLLAPSIBLE CONTENT WRAPPER (DEFAULT CLOSED) -->
-        <div id="kv-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-4">
-            <div class="border border-black border-t-0 p-6 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+        <div id="kv-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-2">
+            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
                 <!-- SECTION 1: KEY VISUAL & MODEL SPECIFICATION -->
                 <div class="mb-20 md:mb-28">
                     <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">01 // KEY VISUAL & MODEL SPECIFICATION</div>
