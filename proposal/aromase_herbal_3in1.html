@@ -28,6 +28,21 @@
             --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-container {
+            display: flex;
+            width: 200%;
+            animation: marquee 25s linear infinite;
+        }
+
+        .marquee-container:hover {
+            animation-play-state: paused;
+        }
+
         *, *::before, *::after {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
@@ -37,7 +52,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Only hide native cursor when custom cursor is active on fine pointer devices */
         @media (pointer: fine) {
             body.custom-cursor-active, 
             body.custom-cursor-active a, 
@@ -51,23 +65,22 @@
         }
 
         body { 
-            font-family: 'Montserrat', sans-serif; 
+            font-family: 'Montserrat', 'Noto Sans TC', sans-serif; 
             background-color: var(--bg-color); 
             color: var(--text-color);
             overflow-x: hidden; 
             margin: 0; 
-            padding: 2rem 1.25rem 6rem 1.25rem;
+            padding: 5rem 1.25rem 6rem 1.25rem;
         } 
         
-        @media (min-width: 640px) { body { padding: 3rem 2.5rem 8rem 2.5rem; } }
-        @media (min-width: 768px) { body { padding: 4rem 4rem 14rem 4rem; } }
-        @media (min-width: 1024px) { body { padding: 5rem 6rem 18rem 6rem; } }
+        @media (min-width: 640px) { body { padding: 5.5rem 2.5rem 8rem 2.5rem; } }
+        @media (min-width: 768px) { body { padding: 6rem 4rem 14rem 4rem; } }
+        @media (min-width: 1024px) { body { padding: 6.5rem 6rem 18rem 6rem; } }
 
         .mono-text { font-family: 'Barlow', sans-serif; }
         .ampersand { font-family: 'Fraunces', serif; font-weight: 600; text-transform: none; }
         .no-scroll { overflow: hidden; }
 
-        /* Camera Focus Cursor */
         #camera-cursor {
             position: fixed;
             top: 0;
@@ -174,6 +187,22 @@
 
         @media (min-width: 768px) { .masthead-border { padding: 1.5rem 0; margin: 1.5rem 0; } }
 
+        /* Generic X square icon for marquee - Enlarged and Centered */
+        .marquee-x-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            color: #fff;
+            width: 2rem;
+            height: 2rem;
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
         .security-badge {
             display: inline-flex;
             align-items: center;
@@ -213,26 +242,24 @@
             transform: translateY(0);
         }
 
-        /* Pure transparent container, no background color blocks */
         .project-image-container {
             width: 100%;
+            aspect-ratio: 16 / 9;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             position: relative;
-            background-color: transparent;
-            outline: 0px solid #000;
+            background-color: #f8f9fa;
+            border: 1px solid #000000;
         }
 
         .project-asset {
-            max-width: 100%;
-            max-height: 70vh;
-            width: auto;
-            height: auto;
+            width: 100%;
+            height: 100%;
             display: block;
-            object-fit: contain;
-            margin: 0 auto;
+            object-fit: cover;
+            object-position: center;
             opacity: 1;
             transform: scale(1);
             transition: opacity 0.8s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -241,7 +268,7 @@
             pointer-events: none;
         }
         
-        .project-card:hover .project-asset { transform: scale(1.01); }
+        .project-card:hover .project-asset { transform: scale(1.03); }
 
         .asset-protection-layer {
             position: absolute;
@@ -278,7 +305,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Clean transparent tags with thin black border */
         .tag-pill {
             display: inline-block;
             background: transparent;
@@ -291,9 +317,81 @@
             text-transform: uppercase;
             border-radius: 0px;
         }
+
+        .industrial-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #000000;
+            font-family: 'Barlow', 'Noto Sans TC', sans-serif;
+            background: #ffffff;
+        }
+
+        .industrial-table th, .industrial-table td {
+            border: 1px solid #000000;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .industrial-table th {
+            background-color: #000000;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .industrial-table tr:hover td {
+            background-color: #f4f4f5;
+        }
+
+        /* Enlarged Duration Display Component */
+        .duration-badge-large {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #000000;
+            color: #ffffff;
+            padding: 8px 16px;
+            border: 2px solid #000000;
+            font-family: 'Barlow', sans-serif;
+            box-shadow: 3px 3px 0px 0px #666;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .duration-badge-large:hover {
+            transform: translateY(-2px);
+            box-shadow: 5px 5px 0px 0px #000000;
+        }
+        .duration-number {
+            font-size: 2.25rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+        .duration-unit {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: 2px;
+            color: #d1d5db;
+        }
     </style>
 </head>
 <body>
+
+<div class="fixed top-0 left-0 right-0 z-50 bg-white border-b-2 border-black overflow-hidden py-2 px-0">
+    <div class="marquee-container mono-text text-xs md:text-sm font-extrabold tracking-widest text-black uppercase whitespace-nowrap">
+        <span class="mx-6 flex items-center gap-2">
+            <span class="marquee-x-icon">X</span> CONFIDENTIAL PROPOSAL // ALL RIGHTS RESERVED // COPYRIGHT 2026 XIAOSTUDIO & CLIENT // UNAUTHORIZED REPRODUCTION, DISTRIBUTION OR SHARING IS STRICTLY PROHIBITED
+        </span>
+        <span class="mx-6 flex items-center gap-2">
+            <span class="marquee-x-icon">X</span> CONFIDENTIAL PROPOSAL // ALL RIGHTS RESERVED // COPYRIGHT 2026 XIAOSTUDIO & CLIENT // UNAUTHORIZED REPRODUCTION, DISTRIBUTION OR SHARING IS STRICTLY PROHIBITED
+        </span>
+    </div>
+</div>
 
 <div id="camera-cursor">
     <div class="cursor-box"></div>
@@ -322,7 +420,7 @@
 
         <!-- HEADER SPECS COLLAPSIBLE TOGGLE BUTTON -->
         <div class="mb-1 w-full">
-            <button type="button" id="toggle-header-specs" onclick="toggleHeaderSpecs()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+            <button type="button" id="toggle-header-specs" onclick="toggleHeaderSpecs()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 w-full overflow-hidden">
                 <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
                     <span id="header-specs-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg] shrink-0">[+]</span>
                     <span class="truncate">PROJECT SPECIFICATIONS & TIMELINE // DETAILS</span>
@@ -332,9 +430,8 @@
 
         <!-- COLLAPSIBLE HEADER SPECS WRAPPER (DEFAULT CLOSED) -->
         <div id="header-specs-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-2">
-            <div class="border border-black border-t-0 p-4 md:p-6 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+            <div class="border border-black border-t-0 p-4 md:p-6 bg-white -mt-px">
                 <!-- PROJECT SPECIFICATIONS & TIMELINE GRID -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-1 my-1 text-xs mono-text uppercase">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-2 my-2 text-xs mono-text uppercase">
                     <div>
                         <div class="font-extrabold text-black mb-2 pb-1">// VIDEO SPECIFICATIONS</div>
@@ -372,22 +469,14 @@
 
                 <div class="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center mono-text text-xs md:text-sm font-medium tracking-wider uppercase gap-4 sm:gap-6 animate-text-vert">
                     <span class="security-badge">CONFIDENTIAL / AROMASE PROPOSAL</span>
-                    
-                    <div class="marquee-container py-1.5 px-3 w-full sm:w-auto sm:max-w-[340px] md:max-w-[520px]">
-                        <div class="marquee-content gap-6 text-black font-bold text-xs">
-                            <span class="shrink-0">PROPRIETARY PROPOSAL // AROMASE HERBAL DAILY HEALTH SHAMPOO & BODY WASH - SUNLIGHT FOREST PRODUCTION PROPOSAL. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED</span>
-                            <span class="shrink-0">PROPRIETARY PROPOSAL // AROMASE HERBAL DAILY HEALTH SHAMPOO & BODY WASH - SUNLIGHT FOREST PRODUCTION PROPOSAL. UNAUTHORIZED REPRODUCTION IS STRICTLY PROHIBITED</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- NEW RELEASE // 2026.10.15 VIDEO CONTENT (DEFAULT OPEN) -->
     <section class="mb-2 max-w-6xl mx-auto pb-2">
         <div class="mb-1 w-full">
-            <button type="button" id="toggle-v1015-section" onclick="toggleV1015Section()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+            <button type="button" id="toggle-v1015-section" onclick="toggleV1015Section()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 w-full overflow-hidden">
                 <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
                     <span id="v1015-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[0deg] shrink-0">[-]</span>
                     <span class="truncate">20261015 VIDEO CONTENT PROPOSAL // FINAL PREVIEW</span>
@@ -396,7 +485,7 @@
         </div>
 
         <div id="v1015-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden opacity-100 mb-2" style="max-height: 8000px;">
-            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px">
                 <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">NEW RELEASE // 2026.10.15 VIDEO FINAL PREVIEW</div>
                 <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
                     <span>20261015 FINAL VIDEO EDIT // SUNLIGHT FOREST 3-IN-1</span>
@@ -422,10 +511,9 @@
         </div>
     </section>
 
-    <!-- 20261012 INITIAL VIDEO EDIT PROPOSAL (COLLAPSIBLE, DEFAULT CLOSED) -->
     <section class="mb-2 max-w-6xl mx-auto pb-2">
         <div class="mb-1 w-full">
-            <button type="button" id="toggle-v1012-section" onclick="toggleV1012Section()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+            <button type="button" id="toggle-v1012-section" onclick="toggleV1012Section()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 w-full overflow-hidden">
                 <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
                     <span id="v1012-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg] shrink-0">[+]</span>
                     <span class="truncate">20261012 INITIAL VIDEO EDIT PROPOSAL // EDIT DEMOS</span>
@@ -434,16 +522,14 @@
         </div>
 
         <div id="v1012-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-2">
-            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px">
                 <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">ARCHIVE // 2026.10.12 VIDEO EDIT DEMOS</div>
                 <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
                     <span>INITIAL EDIT DEMOS // 20261012 EDITS PREVIEW</span>
                     <span class="text-gray-500 font-normal">SPEC: 20S VIDEO CUTS (V1 & V2)</span>
                 </div>
 
-                <!-- SIDE BY SIDE VIDEO GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 w-full items-start">
-                    <!-- VIDEO CUT V1 -->
                     <div class="flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
                             <span>HERBAL 3-IN-1 EDIT DEMO // V1</span>
@@ -460,7 +546,6 @@
                         </div>
                     </div>
 
-                    <!-- VIDEO CUT V2 -->
                     <div class="flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
                             <span>HERBAL 3-IN-1 EDIT DEMO // V2</span>
@@ -481,32 +566,29 @@
         </div>
     </section>
 
-    <!-- PROPOSAL SECTION COLLAPSIBLE CONTAINER -->
     <section class="proposal-section mb-2 max-w-6xl mx-auto">
-        <!-- COLLAPSIBLE ACCORDION TOGGLE BUTTON -->
         <div class="mb-1 w-full">
-            <button type="button" id="toggle-kv-section" onclick="toggleKvSection()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] active:shadow-[2px_2px_0px_0px_#000000] w-full overflow-hidden">
+            <button type="button" id="toggle-kv-section" onclick="toggleKvSection()" class="group relative inline-flex items-center justify-between px-3 md:px-5 py-2.5 text-xs md:text-sm font-extrabold uppercase tracking-widest text-black bg-white border border-black transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 w-full overflow-hidden">
                 <span class="flex items-center gap-2 md:gap-3 truncate pr-1">
                     <span id="kv-toggle-icon" class="inline-block transform transition-transform duration-300 font-mono text-base font-black rotate-[-90deg] shrink-0">[+]</span>
-                    <span class="truncate">20261002 visual proposal</span>
+                    <span class="truncate">20261002 VISUAL PROPOSAL // INDUSTRIAL TABLE LAYOUT & STORYBOARD</span>
                 </span>
             </button>
         </div>
 
-        <!-- COLLAPSIBLE CONTENT WRAPPER (DEFAULT CLOSED) -->
         <div id="kv-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden max-h-0 opacity-0 mb-2">
-            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
+            <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px">
+                
                 <!-- SECTION 1: KEY VISUAL & MODEL SPECIFICATION -->
-                <div class="mb-20 md:mb-28">
+                <div class="mb-16">
                     <div class="section-label mb-2 text-xs font-bold tracking-widest text-gray-500">01 // KEY VISUAL & MODEL SPECIFICATION</div>
                     <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
                         <span>KEY VISUAL & MODEL SETTING // CONCEPT & CASTING VISUAL</span>
                         <span class="text-gray-500 font-normal">SPEC: KV & MODEL WORKSPACE</span>
                     </div>
 
-                    <!-- 2-COLUMN GRID: KEY VISUAL (LEFT) & MODEL SETTING (RIGHT) -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 w-full items-start">
-                        <!-- KEY VISUAL CARD (LEFT) -->
+                        <!-- KEY VISUAL CARD -->
                         <div class="project-card reveal flex flex-col gap-3 w-full">
                             <div class="flex items-center justify-between mono-text text-xs font-bold">
                                 <span>KEY VISUAL // 01</span>
@@ -526,7 +608,7 @@
                             </div>
                         </div>
 
-                        <!-- MODEL IMAGE CARD (RIGHT) -->
+                        <!-- MODEL IMAGE CARD -->
                         <div class="project-card reveal flex flex-col gap-3 w-full">
                             <div class="flex items-center justify-between mono-text text-xs font-bold">
                                 <span>MODEL SETTING // 01</span>
@@ -548,213 +630,321 @@
                     </div>
                 </div>
 
-                <div class="mb-12 text-left pt-12">
-                    <div class="section-label text-xs font-bold tracking-widest text-gray-500">02 // STORYBOARD & SCENE CUTS</div>
-                    <h2 class="text-2xl md:text-4xl font-extrabold uppercase mt-2 tracking-tight">STORYBOARD PROPOSAL - 4 SCENE CUTS</h2>
+                <div class="mb-8 text-left pt-6">
+                    <div class="section-label text-xs font-bold tracking-widest text-gray-500">02 // INDUSTRIAL TABLE STORYBOARD & SCENE CUTS</div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold uppercase mt-2 tracking-tight">INDUSTRIAL STORYBOARD TABLE - 4 SCENE CUTS</h2>
                     <p class="text-xs md:text-sm text-gray-600 font-mono mt-2 uppercase">
-                        Storyboards & Visual Sequences for AROMASE Herbal Daily Shampoo & Body Wash
+                        Structured Table Layout with Magnified Duration Seconds, Equalized Frame Boxes & Integrated Product Details
                     </p>
                 </div>
 
-                <!-- CUT 1 -->
-                <div class="mb-16 md:mb-24">
-                    <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
-                        <span>CUT 01 // OPENING SHOT / SCENE INTRODUCTION</span>
-                        <span class="text-gray-500 font-normal">3 FRAMES</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-6 max-w-6xl mx-auto">
-                        <!-- Cut 1 - Frame 1 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790879177/opening_01.jpg" 
-                                     alt="Cut 1 Frame A" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 01-A // ATMOSPHERE & MORNING LIGHT
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Sunlight forest morning glow & atmosphere establishment
-                            </div>
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-4 pb-2 border-b border-black">
+                        <div class="mono-text text-sm font-extrabold tracking-widest text-black uppercase">
+                            CUT 01 // OPENING SHOT & ATMOSPHERE ESTABLISHMENT
                         </div>
-
-                        <!-- Cut 1 - Frame 2 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790879180/opening_02.jpg" 
-                                     alt="Cut 1 Frame B" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 01-B // FOREST AMBIENCE
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Natural environment & gentle light interaction
-                            </div>
-                        </div>
-
-                        <!-- Cut 1 - Frame 3 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC.jpg" 
-                                     alt="Cut 1 Frame C" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 01-C // SCENE ESTABLISHING
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Sunlight forest morning glow & natural ambience creation
-                            </div>
+                        <div class="duration-badge-large">
+                            <span class="duration-number">05</span>
+                            <span class="duration-unit">SECONDS</span>
                         </div>
                     </div>
+
+                    <table class="industrial-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">SEQUENCE</th>
+                                <th style="width: 30%;">VISUAL FRAME</th>
+                                <th style="width: 55%;">SCENE DESCRIPTION & INTEGRATED PRODUCT SPECIFICATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">CUT 01-A</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790879177/opening_01.jpg" alt="Cut 1 Frame A" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">MORNING GLOW & SUNLIGHT FOREST AMBIENCE</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Establishing shot with natural morning light streaming through lush forest canopy. Establishes the organic brand tone and pure botanical environment.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">0-2s</span>
+                                        <span class="tag-pill">Natural Aroma</span>
+                                        <span class="tag-pill">Sunlight Forest</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">CUT 01-B</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790879180/opening_02.jpg" alt="Cut 1 Frame B" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">BOTANICAL ESSENTIAL OIL AROMA INTRODUCTION</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Close-up transition introducing fresh essential oil aromas and natural daily vitality for scalp and skin care.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">2-4s</span>
+                                        <span class="tag-pill">Essential Oils</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">CUT 01-C</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC.jpg" alt="Cut 1 Frame C" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">SCENE SETUP & 3-IN-1 CLEANSING INTRODUCTION</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Seamless integration of daily health hair, face, and body care routine in a pristine bathroom space.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">4-5s</span>
+                                        <span class="tag-pill">3-in-1 Wash</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- CUT 2 -->
-                <div class="mb-16 md:mb-24">
-                    <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
-                        <span>CUT 02 // PRODUCT CLOSE-UP & USER EXPERIENCE</span>
-                        <span class="text-gray-500 font-normal">2 FRAMES</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
-                        <!-- Cut 2 - Frame 1 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873998/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9.jpg" 
-                                     alt="Cut 2 Frame A" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 02-A // PRODUCT INTERACTION
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Texture contact & refreshing herbal touch
-                            </div>
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-4 pb-2 border-b border-black">
+                        <div class="mono-text text-sm font-extrabold tracking-widest text-black uppercase">
+                            CUT 02 // PRODUCT CLOSE-UP & USER EXPERIENCE
                         </div>
-
-                        <!-- Cut 2 - Frame 2 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_6.jpg" 
-                                     alt="Cut 2 Frame B" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 02-B // BUBBLE & LATHER
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Fine lathering & soothing bath process
-                            </div>
+                        <div class="duration-badge-large">
+                            <span class="duration-number">05</span>
+                            <span class="duration-unit">SECONDS</span>
                         </div>
                     </div>
+
+                    <table class="industrial-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">SEQUENCE</th>
+                                <th style="width: 30%;">VISUAL FRAME</th>
+                                <th style="width: 55%;">SCENE DESCRIPTION & INTEGRATED PRODUCT SPECIFICATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">CUT 02-A</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873998/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9.jpg" alt="Cut 2 Frame A" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">TEXTURE CONTACT & REFRESHING HERBAL TOUCH</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Highlighting the transparent liquid texture, smooth application, and soothing herbal feel on skin and hair.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">5-7s</span>
+                                        <span class="tag-pill">Texture Touch</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">CUT 02-B</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_6.jpg" alt="Cut 2 Frame B" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">FINE AMINO ACID SURFACTANT BUBBLE LATHER</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Rich, dense micro-bubbles created by amino acid surfactants. Gentle on sensitive skin with no harsh chemical residue.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">7-10s</span>
+                                        <span class="tag-pill">Amino Acid Lather</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- CUT 3 -->
-                <div class="mb-16 md:mb-24">
-                    <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
-                        <span>CUT 03 // SHAMPOO & BODY WASH DYNAMIC SEQUENCE</span>
-                        <span class="text-gray-500 font-normal">3 FRAMES</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-6 max-w-6xl mx-auto">
-                        <!-- Cut 3 - Frame 1 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_5.jpg" 
-                                     alt="Cut 3 Frame 1" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 03-A // SCALP CLEANSE
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Daily herbal amino acid hair purification
-                            </div>
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-4 pb-2 border-b border-black">
+                        <div class="mono-text text-sm font-extrabold tracking-widest text-black uppercase">
+                            CUT 03 // SHAMPOO & BODY WASH DYNAMIC SEQUENCE
                         </div>
-
-                        <!-- Cut 3 - Frame 2 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873999/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_9.jpg" 
-                                     alt="Cut 3 Frame 2" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 03-B // BODY WASH MASSAGE
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Gentle full-body wash and relaxation experience
-                            </div>
-                        </div>
-
-                        <!-- Cut 3 - Frame 3 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_12.jpg" 
-                                     alt="Cut 3 Frame 3" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 03-C // WATER RINSE
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Water rinsing with airy, voluminous hair finish
-                            </div>
+                        <div class="duration-badge-large">
+                            <span class="duration-number">06</span>
+                            <span class="duration-unit">SECONDS</span>
                         </div>
                     </div>
+
+                    <table class="industrial-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">SEQUENCE</th>
+                                <th style="width: 30%;">VISUAL FRAME</th>
+                                <th style="width: 55%;">SCENE DESCRIPTION & INTEGRATED PRODUCT SPECIFICATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">CUT 03-A</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_5.jpg" alt="Cut 3 Frame 1" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">SCALP PURIFICATION & HAIR CLEANSING</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Daily herbal amino acid hair purification that deep cleans sebum while maintaining moisture balance.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">10-12s</span>
+                                        <span class="tag-pill">Scalp Cleanse</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">CUT 03-B</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873999/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_9.jpg" alt="Cut 3 Frame 2" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">GENTLE BODY WASH MASSAGE</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Full-body cleansing with refreshing scent, soothing tired muscles and leaving skin soft and hydrated.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">12-14s</span>
+                                        <span class="tag-pill">Body Wash Massage</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">CUT 03-C</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790873997/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_12.jpg" alt="Cut 3 Frame 3" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">WATER RINSE & AIRY VOLUME FINISH</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Easy rinsing with clean water. Leaves hair airy, bouncy, and completely free from buildup.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">14-16s</span>
+                                        <span class="tag-pill">Easy Rinse</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- CUT 4 -->
-                <div class="mb-16 md:mb-24">
-                    <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex justify-between items-center w-full pb-2">
-                        <span>CUT 04 // OUTRO & BRANDING</span>
-                        <span class="text-gray-500 font-normal">2 FRAMES</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
-                        <!-- Cut 4 - Frame 1 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790880841/Ending_01.jpg" 
-                                     alt="Cut 4 Frame A" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 04-A // BRAND REFLECTION & GLOW
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                Post-wash refreshed look & brand aesthetic presentation
-                            </div>
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4 pb-2 border-b border-black">
+                        <div class="mono-text text-sm font-extrabold tracking-widest text-black uppercase">
+                            CUT 04 // OUTRO & BRANDING PACKSHOT
                         </div>
-
-                        <!-- Cut 4 - Frame 2 -->
-                        <div class="project-card reveal flex flex-col gap-3">
-                            <div class="project-image-container w-full rounded-sm overflow-hidden relative">
-                                <div class="asset-protection-layer"></div>
-                                <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_8.jpg" 
-                                     alt="Cut 4 Frame B" 
-                                     class="project-asset">
-                            </div>
-                            <div class="mono-text text-xs font-bold uppercase pt-1 text-black">
-                                CUT 04-B // ENDING PACKSHOT & BRAND OUTRO
-                            </div>
-                            <div class="mono-text text-xs uppercase text-gray-600">
-                                "Sunlight Forest" product summary and brand tagline closing
-                            </div>
+                        <div class="duration-badge-large">
+                            <span class="duration-number">04</span>
+                            <span class="duration-unit">SECONDS</span>
                         </div>
                     </div>
+
+                    <table class="industrial-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">SEQUENCE</th>
+                                <th style="width: 30%;">VISUAL FRAME</th>
+                                <th style="width: 55%;">SCENE DESCRIPTION & INTEGRATED PRODUCT SPECIFICATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">CUT 04-A</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790880841/Ending_01.jpg" alt="Cut 4 Frame A" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">BRAND REFLECTION & RADIANT GLOW</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        Post-wash refreshed look, glowing natural confidence, and radiant vitality.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">16-18s</span>
+                                        <span class="tag-pill">Radiant Glow</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">CUT 04-B</td>
+                                <td>
+                                    <div class="project-card reveal flex flex-col gap-2">
+                                        <div class="project-image-container rounded-sm overflow-hidden relative">
+                                            <div class="asset-protection-layer"></div>
+                                            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1790874000/model%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_9_%E8%A4%87%E6%9C%AC_8.jpg" alt="Cut 4 Frame B" class="project-asset">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="font-bold text-black uppercase mb-1">ENDING PACKSHOT & BRAND OUTRO</div>
+                                    <div class="text-gray-700 text-xs leading-relaxed">
+                                        "Sunlight Forest" product bottle packshot with brand call-to-action closing.
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200 flex flex-wrap gap-1 text-[11px] font-mono">
+                                        <span class="tag-pill">18-20s</span>
+                                        <span class="tag-pill">Packshot</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
     </section>
