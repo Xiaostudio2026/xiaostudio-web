@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rose Botanical Shampoo — Video & Visual Production Proposal</title>
+    <title>Rose Thickening Shampoo — Video & Visual Production Proposal</title>
     
     <!-- Open Graph Meta Tags for Social Media Sharing (LINE / FB / Twitter) -->
     <meta property="og:title" content="AROMASE玫瑰強健豐盈影音製作">
@@ -301,6 +301,44 @@
             background: transparent;
         }
 
+        /* 9:16 Aspect Ratio Styling for 20261028 Visuals - Full Cover Fitting */
+        .project-image-container.aspect-9-16 {
+            aspect-ratio: 9 / 16;
+            width: 100%;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Force image to cover full 9:16 container without black bars */
+        .project-image-container.aspect-9-16 img.project-asset {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: none !important;
+            max-height: none !important;
+            object-fit: cover !important;
+            object-position: center !important;
+        }
+
+        /* Meta 9:16 Safe Zone Overlay (Clean border without text overlays) */
+        .meta-safe-zone-916 {
+            position: absolute;
+            top: 14.5%;
+            bottom: 20%;
+            left: 4%;
+            right: 4%;
+            border: 2px dashed #ffffff;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body.show-meta-safe-zone .meta-safe-zone-916 {
+            opacity: 1;
+        }
+
         #security-toast {
             position: fixed;
             bottom: 24px;
@@ -447,10 +485,18 @@
 
         <div id="rose-1028-content-wrapper" class="transition-all duration-500 ease-in-out overflow-hidden opacity-100 mb-2" style="max-height: 12000px;">
             <div class="border border-black border-t-0 p-4 md:p-8 bg-white -mt-px shadow-[4px_4px_0px_0px_#000000]">
-                <div class="section-label mb-2 text-xs font-bold tracking-widest text-pink-600">NEW REVISION // 2026.10.28 GRAPHIC VISUAL CONCEPT</div>
-                <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center w-full pb-2 gap-2 border-b border-gray-200">
-                    <span>REVISED GRAPHIC VISUAL PROPOSAL 20261028 // HAIR THICKENING ROSE ESSENTIAL SHAMPOO</span>
-                    <span class="text-gray-500 font-normal">SPEC: 6 KEY GRAPHICS (ROSE 01 - 06)</span>
+                <div class="section-label mb-2 text-xs font-bold tracking-widest text-pink-600">NEW REVISION // 2026.10.28 GRAPHIC VISUAL CONCEPT (9:16 STORIES / REELS)</div>
+                <div class="mono-text text-xs font-bold tracking-widest text-black uppercase mb-6 flex flex-col md:flex-row justify-between items-start md:items-center w-full pb-3 gap-3 border-b border-gray-200">
+                    <div class="flex flex-col gap-1">
+                        <span>REVISED GRAPHIC VISUAL PROPOSAL 20261028 // HAIR THICKENING ROSE ESSENTIAL SHAMPOO</span>
+                        <span class="text-gray-500 font-normal">SPEC: 6 KEY GRAPHICS (ROSE 01 - 06) // 9:16 FULL VERTICAL</span>
+                    </div>
+
+                    <!-- META 9:16 SAFE ZONE TOGGLE BUTTON -->
+                    <button type="button" id="toggle-safe-zone-btn" onclick="toggleMetaSafeZone()" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-mono font-bold tracking-wider text-black bg-gray-100 hover:bg-black hover:text-white border border-black transition-all shadow-[2px_2px_0px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5">
+                        <span id="safe-zone-btn-icon" class="inline-block w-2.5 h-2.5 border border-black bg-white"></span>
+                        <span id="safe-zone-btn-text">TOGGLE META 9:16 SAFE ZONE</span>
+                    </button>
                 </div>
 
                 <!-- Grid layout with 3 columns on large screens -->
@@ -459,13 +505,14 @@
                     <!-- Rose 01 1028 -->
                     <div class="project-card reveal flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>ROSE VISUAL // 01</span>
+                            <span>ROSE VISUAL // 01 (9:16)</span>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="project-image-container aspect-9-16 w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
+                            <div class="meta-safe-zone-916"></div>
                             <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1793178388/Rose_01_1028.jpg" 
                                  alt="Rose Visual Proposal 01 - 20261028" 
-                                 class="project-asset">
+                                 class="project-asset h-full w-full !object-cover">
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600 pt-1">
                             Updated rose botanical fragrance concept and rich restorative visual tone setting
@@ -475,13 +522,14 @@
                     <!-- Rose 02 1028 -->
                     <div class="project-card reveal flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>ROSE VISUAL // 02</span>
+                            <span>ROSE VISUAL // 02 (9:16)</span>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="project-image-container aspect-9-16 w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
+                            <div class="meta-safe-zone-916"></div>
                             <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1793178388/Rose_02_1028.jpg" 
                                  alt="Rose Visual Proposal 02 - 20261028" 
-                                 class="project-asset">
+                                 class="project-asset h-full w-full !object-cover">
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600 pt-1">
                             Rich, delicate foam lather with natural rose essential oil scalp nourishment
@@ -491,13 +539,14 @@
                     <!-- Rose 03 1028 -->
                     <div class="project-card reveal flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>ROSE VISUAL // 03</span>
+                            <span>ROSE VISUAL // 03 (9:16)</span>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="project-image-container aspect-9-16 w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
+                            <div class="meta-safe-zone-916"></div>
                             <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1793178388/Rose_03_1028.jpg" 
                                  alt="Rose Visual Proposal 03 - 20261028" 
-                                 class="project-asset">
+                                 class="project-asset h-full w-full !object-cover">
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600 pt-1">
                             Highlighting silky smooth hair texture, scalp care and soothing shower atmosphere
@@ -507,13 +556,14 @@
                     <!-- Rose 04 1028 -->
                     <div class="project-card reveal flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>ROSE VISUAL // 04</span>
+                            <span>ROSE VISUAL // 04 (9:16)</span>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="project-image-container aspect-9-16 w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
+                            <div class="meta-safe-zone-916"></div>
                             <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1793178388/Rose_04_1028.jpg" 
                                  alt="Rose Visual Proposal 04 - 20261028" 
-                                 class="project-asset">
+                                 class="project-asset h-full w-full !object-cover">
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600 pt-1">
                             Elegant exterior design of rose shampoo under natural lighting and botanical background
@@ -523,13 +573,14 @@
                     <!-- Rose 05 1028 -->
                     <div class="project-card reveal flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>ROSE VISUAL // 05</span>
+                            <span>ROSE VISUAL // 05 (9:16)</span>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="project-image-container aspect-9-16 w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
+                            <div class="meta-safe-zone-916"></div>
                             <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1793178388/Rose_05_1028.jpg" 
                                  alt="Rose Visual Proposal 05 - 20261028" 
-                                 class="project-asset">
+                                 class="project-asset h-full w-full !object-cover">
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600 pt-1">
                             Gentle scalp cleansing experience paired with premium rose aroma profile
@@ -539,13 +590,14 @@
                     <!-- Rose 06 1028 -->
                     <div class="project-card reveal flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-between mono-text text-xs font-bold">
-                            <span>ROSE VISUAL // 06</span>
+                            <span>ROSE VISUAL // 06 (9:16)</span>
                         </div>
-                        <div class="project-image-container w-full rounded-sm overflow-hidden relative">
+                        <div class="project-image-container aspect-9-16 w-full rounded-sm overflow-hidden relative">
                             <div class="asset-protection-layer"></div>
+                            <div class="meta-safe-zone-916"></div>
                             <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1793178388/Rose_06_1028.jpg" 
                                  alt="Rose Visual Proposal 06 - 20261028" 
-                                 class="project-asset">
+                                 class="project-asset h-full w-full !object-cover">
                         </div>
                         <div class="mono-text text-xs uppercase text-gray-600 pt-1">
                             Complete brand image summary with high-converting Call to Action frame
@@ -689,6 +741,28 @@
 </div>
 
 <script>
+    /* Meta 9:16 Safe Zone Toggle Function */
+    function toggleMetaSafeZone() {
+        document.body.classList.toggle('show-meta-safe-zone');
+        const isShown = document.body.classList.contains('show-meta-safe-zone');
+        const icon = document.getElementById('safe-zone-btn-icon');
+        const btn = document.getElementById('toggle-safe-zone-btn');
+
+        if (isShown) {
+            if (icon) icon.className = 'inline-block w-2.5 h-2.5 bg-black border border-black';
+            if (btn) {
+                btn.classList.remove('bg-gray-100', 'text-black');
+                btn.classList.add('bg-black', 'text-white');
+            }
+        } else {
+            if (icon) icon.className = 'inline-block w-2.5 h-2.5 bg-white border border-black';
+            if (btn) {
+                btn.classList.remove('bg-black', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-black');
+            }
+        }
+    }
+
     /* Collapsible Header Specs Toggle Function */
     function toggleHeaderSpecs() {
         const wrapper = document.getElementById('header-specs-wrapper');
