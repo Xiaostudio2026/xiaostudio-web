@@ -7,7 +7,7 @@
     <!-- Google Fonts: Barlow, Montserrat, Noto Sans TC/JP/KR -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;400;600;700;800&family=Noto+Sans+JP:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;700&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Montserrat:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -35,7 +35,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             padding: 32px 24px;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -89,6 +89,7 @@
             border-right: none;
         }
 
+        /* Hover 暗示可填表 */
         .cell:has(input),
         .cell:has(textarea),
         .cell:has(.custom-select-wrapper) {
@@ -120,6 +121,7 @@
             transition: color 0.2s ease;
         }
 
+        /* 品牌滿版大字距横幅 */
         .brand-logo {
             display: flex;
             align-items: center;
@@ -131,8 +133,8 @@
 
         .brand-logo-text {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2rem, 5.2vw, 4.2rem);
-            font-weight: 700;
+            font-size: clamp(2rem, 5.6vw, 4.6rem);
+            font-weight: 900;
             text-transform: uppercase;
             color: var(--text-main);
             width: 100%;
@@ -142,11 +144,127 @@
             line-height: 1;
             opacity: 0;
             animation: logoFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.1s;
-            padding: 0 30px;
         }
 
         .brand-logo-text span {
             display: inline-block;
+        }
+
+        /* Node 工作流畫布留白與點陣背景 */
+        .node-canvas-cell {
+            padding: 48px 36px;
+            background-color: #fafafa;
+            background-image: radial-gradient(#cccccc 1px, transparent 1px);
+            background-size: 18px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Node 工作流節點面板 */
+        .node-panel {
+            width: 100%;
+            max-width: 780px;
+            background-color: #ffffff;
+            border: 2px solid var(--border-color);
+            box-shadow: 0px 0px 0px 0px #ffffff, 0px 0px 0px 0px var(--border-color);
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: contentFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.7s;
+        }
+
+        /* 滾動觸發時展開三層一致的白底黑框線陰影（第1層、第2層、第3層統一步調與厚度） */
+        .node-panel.shadow-active {
+            box-shadow: 8px 8px 0px 0px #ffffff,
+                        8px 8px 0px 2px var(--border-color),
+                        16px 16px 0px 0px #ffffff,
+                        16px 16px 0px 2px var(--border-color),
+                        24px 24px 0px 0px #ffffff,
+                        24px 24px 0px 2px var(--border-color);
+            transform: translate(-3px, -3px);
+        }
+
+        /* Node 左右連接埠 (I/O Ports) */
+        .node-port {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background-color: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .node-port.port-in {
+            left: -7px;
+        }
+
+        .node-port.port-out {
+            right: -7px;
+            background-color: var(--border-color);
+        }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #ffffff;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .node-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .node-status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #000000;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulseDot 1.6s infinite ease-in-out;
+        }
+
+        /* 影片容器與左右留白邊界 */
+        .node-body {
+            width: 100%;
+            background-color: #ffffff;
+            padding: 16px 24px;
+        }
+
+        .node-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid var(--border-color);
+            background-color: #000000;
+            object-fit: cover;
+        }
+
+        .node-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            border-top: 1px solid var(--border-color);
+            background-color: #ffffff;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
         }
 
         .tag-label {
@@ -371,24 +489,54 @@
             font-weight: 700;
         }
 
+        /* Keyframes */
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
         @keyframes logoFadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes gridDraw {
-            from { opacity: 0; transform: scaleY(0.99); }
-            to { opacity: 1; transform: scaleY(1); }
+            from {
+                opacity: 0;
+                transform: scaleY(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
         }
 
         @keyframes contentFadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes menuSlideDown {
-            from { opacity: 0; transform: translateY(-6px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 768px) {
@@ -407,6 +555,23 @@
                 padding: 18px 20px;
             }
 
+            .node-canvas-cell {
+                padding: 28px 18px;
+            }
+
+            .node-body {
+                padding: 12px 14px;
+            }
+
+            .node-panel.shadow-active {
+                box-shadow: 5px 5px 0px 0px #ffffff,
+                            5px 5px 0px 2px var(--border-color),
+                            10px 10px 0px 0px #ffffff,
+                            10px 10px 0px 2px var(--border-color),
+                            15px 15px 0px 0px #ffffff,
+                            15px 15px 0px 2px var(--border-color);
+            }
+
             .cell:last-child {
                 border-bottom: none;
             }
@@ -421,7 +586,7 @@
 <body>
 
 <div class="industrial-wrapper">
-    <!-- Header Row -->
+    <!-- Top Brand Banner -->
     <div class="grid-row form-grid-1col">
         <div class="cell">
             <div class="brand-logo">
@@ -430,6 +595,34 @@
                 </div>
             </div>
             <span class="cell-corner">⌟</span>
+        </div>
+    </div>
+
+    <!-- Node Workflow Video Panel -->
+    <div class="grid-row form-grid-1col">
+        <div class="cell node-canvas-cell">
+            <div class="node-panel">
+                <span class="node-port port-in" title="Input Port"></span>
+                <span class="node-port port-out" title="Output Port"></span>
+                
+                <div class="node-header">
+                    <span>NODE_00 // VISUAL_FEED</span>
+                    <div class="node-status">
+                        <span class="node-status-dot"></span>
+                        <span>LIVE STREAM</span>
+                    </div>
+                </div>
+                
+                <div class="node-body">
+                    <video class="node-video" src="https://res.cloudinary.com/qddgnnyv/video/upload/v1794855866/BEAR__OPERATOR_1.mp4" autoplay loop muted playsinline></video>
+                </div>
+                
+                <div class="node-footer">
+                    <span>SRC: BEAR_OPERATOR_01.MP4</span>
+                    <span>[AUTO_LOOP // MUTED]</span>
+                </div>
+            </div>
+            <span class="cell-corner">+</span>
         </div>
     </div>
 
@@ -479,7 +672,7 @@
             </div>
             <div class="cell">
                 <div class="tag-label">
-                    <span data-i18n="labelBudget">04 // BUDGET RANGE 預算區間</span>
+                    <span data-i18n="labelBudget">04 // BUDGET 預算區間</span>
                 </div>
                 <div class="custom-select-wrapper" id="budget-select-wrapper">
                     <input type="hidden" name="budget" id="input-budget" value="30k-50k">
@@ -499,7 +692,7 @@
             </div>
         </div>
 
-        <!-- Row 3: Target Timeline (Original Field Restored to Industrial Layout) -->
+        <!-- Row 3: Target Timeline -->
         <div class="grid-row form-grid-1col">
             <div class="cell">
                 <div class="tag-label">
@@ -527,7 +720,7 @@
         <div class="grid-row form-grid-3col">
             <div class="cell">
                 <div class="tag-label">
-                    <span data-i18n="labelRef">06 // REF LINK 01 參考範例</span>
+                    <span data-i18n="labelRef">06 // REFERENCE LINKS 參考範例 (MAX 3)</span>
                 </div>
                 <input type="url" name="ref_1" placeholder="Link 01 - https://..." data-i18n-placeholder="placeholderRef1">
                 <span class="cell-corner">+</span>
@@ -552,7 +745,7 @@
         <div class="grid-row form-grid-1col">
             <div class="cell">
                 <div class="tag-label">
-                    <span data-i18n="labelMessage">07 // PROJECT DETAILS 詳情描述</span>
+                    <span data-i18n="labelMessage">07 // MESSAGE 詳情</span>
                 </div>
                 <textarea name="message" rows="4" placeholder="請描述您的專案需求與想法..." data-i18n-placeholder="placeholderMessage"></textarea>
                 <span class="cell-corner">+</span>
@@ -589,7 +782,7 @@
             optPackaging: "包裝設計",
             optWebDesign: "網頁設計",
             optOthers: "其他（書籍,海報,攝影等）",
-            labelBudget: "04 // BUDGET RANGE 預算區間",
+            labelBudget: "04 // BUDGET 預算區間",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
@@ -601,11 +794,11 @@
             optTimeline3: "2 - 3 個月",
             optTimeline4: "3 個月以上",
             optTimelineDiscuss: "彈性 / 尚未確定",
-            labelRef: "06 // REF LINK 01 參考範例 (Max 3)",
+            labelRef: "06 // REFERENCE LINKS 參考範例 (MAX 3)",
             placeholderRef1: "Link 01 - https://...",
             placeholderRef2: "Link 02 - https://...",
             placeholderRef3: "Link 03 - https://...",
-            labelMessage: "07 // PROJECT DETAILS 詳情描述",
+            labelMessage: "07 // MESSAGE 詳情",
             placeholderMessage: "請描述您的專案需求與想法...",
             btnSubmit: "SEND INQUIRY / 送出需求",
             btnSending: "SENDING...",
@@ -636,11 +829,11 @@
             optTimeline3: "2 - 3 Months",
             optTimeline4: "3+ Months",
             optTimelineDiscuss: "Flexible / To Be Discussed",
-            labelRef: "06 // REF LINK 01 (MAX 3)",
+            labelRef: "06 // REFERENCE LINKS (MAX 3)",
             placeholderRef1: "Link 01 - https://...",
             placeholderRef2: "Link 02 - https://...",
             placeholderRef3: "Link 03 - https://...",
-            labelMessage: "07 // PROJECT DETAILS",
+            labelMessage: "07 // MESSAGE",
             placeholderMessage: "Tell me about your project...",
             btnSubmit: "SEND INQUIRY",
             btnSending: "SENDING...",
@@ -649,103 +842,103 @@
         },
         ja: {
             header: "お問い合わせ",
-            labelName: "01 // NAME お名前",
-            placeholderName: "浦飯 幽助",
-            labelEmail: "02 // EMAIL メール",
+            labelName: "01 // お名前",
+            placeholderName: "山田 太郎",
+            labelEmail: "02 // メールアドレス",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "03 // SERVICE サービス",
+            labelService: "03 // サービス内容",
             optBrandVisual: "ブランディング・ビジュアルデザイン",
             optBrandMotion: "ブランド映像制作",
             optPackaging: "パッケージデザイン",
             optWebDesign: "ウェブデザイン",
             optOthers: "その他 (エディトリアル, ポスター, 撮影等)",
-            labelBudget: "04 // BUDGET 予算感",
+            labelBudget: "04 // 予算感",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 以上",
             optBudgetDiscuss: "未定 / 要相談",
-            labelTimeline: "05 // TIMELINE 納期希望",
+            labelTimeline: "05 // 納期希望",
             optTimeline1: "1ヶ月以内（急募）",
             optTimeline2: "1〜2ヶ月",
             optTimeline3: "2〜3ヶ月",
             optTimeline4: "3ヶ月以上",
             optTimelineDiscuss: "柔軟に対応 / 未定",
-            labelRef: "06 // REF LINK 01 (最大3件)",
+            labelRef: "06 // 参考リンク (最大3件)",
             placeholderRef1: "リンク 01 - https://...",
             placeholderRef2: "リンク 02 - https://...",
             placeholderRef3: "リンク 03 - https://...",
-            labelMessage: "07 // DETAILS 詳細内容",
+            labelMessage: "07 // メッセージ詳細",
             placeholderMessage: "プロジェクトの詳細をご記入ください...",
             btnSubmit: "送信する",
             btnSending: "送信中...",
             btnError: "エラー。再試行してください",
-            statusSuccess: "<span>THANK YOU.</span><br>メッセージが正常に送信されました。"
+            statusSuccess: "<span>ありがとうございます。</span><br>メッセージが送信されました。"
         },
         ko: {
             header: "문의하기",
-            labelName: "01 // NAME 성함",
+            labelName: "01 // 성함",
             placeholderName: "홍길동",
-            labelEmail: "02 // EMAIL 이메일",
+            labelEmail: "02 // 이메일 주소",
             placeholderEmail: "jewuenxiao@gmail.com",
-            labelService: "03 // SERVICE 서비스",
+            labelService: "03 // 서비스 항목",
             optBrandVisual: "브랜드 비주얼 디자인",
             optBrandMotion: "브랜드 영상 제작",
             optPackaging: "패키지 디자인",
             optWebDesign: "웹 디자인",
             optOthers: "기타 (포스터, 인쇄, 촬영 등)",
-            labelBudget: "04 // BUDGET 예산 범위",
+            labelBudget: "04 // 예산 범위",
             optBudget1: "NT$ 30,000 - 50,000",
             optBudget2: "NT$ 50,000 - 100,000",
             optBudget3: "NT$ 100,000 - 200,000",
             optBudget4: "NT$ 200,000 이상",
             optBudgetDiscuss: "미정 / 논의 필요",
-            labelTimeline: "05 // TIMELINE 희망 일정",
+            labelTimeline: "05 // 희망 일정",
             optTimeline1: "1개월 이내 (긴급)",
             optTimeline2: "1 - 2개월",
             optTimeline3: "2 - 3개월",
             optTimeline4: "3개월 이상",
             optTimelineDiscuss: "유동적 / 미정",
-            labelRef: "06 // REF LINK 01 (최대 3개)",
+            labelRef: "06 // 참고 링크 (최대 3개)",
             placeholderRef1: "링크 01 - https://...",
             placeholderRef2: "링크 02 - https://...",
             placeholderRef3: "링크 03 - https://...",
-            labelMessage: "07 // DETAILS 상세 내용",
+            labelMessage: "07 // 상세 내용",
             placeholderMessage: "프로젝트에 대해 설명해주세요...",
             btnSubmit: "문의 보내기",
             btnSending: "전송 중...",
             btnError: "오류 발생, 다시 시도해주세요",
-            statusSuccess: "<span>THANK YOU.</span><br>문의가 성공적으로 전송되었습니다."
+            statusSuccess: "<span>감사합니다.</span><br>메시지가 성공적으로 전송되었습니다."
         },
         fr: {
             header: "DEMANDE DE PROJET",
-            labelName: "01 // NAME NOM",
+            labelName: "01 // NOM",
             placeholderName: "Votre Nom",
-            labelEmail: "02 // EMAIL E-MAIL",
+            labelEmail: "02 // E-MAIL",
             placeholderEmail: "jewuenxiao@gmail.com",
             labelService: "03 // SERVICE",
             optBrandVisual: "Design Visuel de Marque",
             optBrandMotion: "Production Vidéo de Marque",
             optPackaging: "Design d'Emballage",
             optWebDesign: "Design Web",
-            optOthers: "Autres (Livres, Affiches, Photo, etc.)",
-            labelBudget: "04 // BUDGET RANGE",
+            optOthers: "Autres (Livres, affiches, photo, etc.)",
+            labelBudget: "04 // FOURCHETTE DE BUDGET",
             optBudget1: "NT$ 30 000 - 50 000",
             optBudget2: "NT$ 50 000 - 100 000",
             optBudget3: "NT$ 100 000 - 200 000",
             optBudget4: "NT$ 200 000+",
             optBudgetDiscuss: "À Discuter",
-            labelTimeline: "05 // TARGET TIMELINE DÉLAI SOUHAITÉ",
+            labelTimeline: "05 // DÉLAI SOUHAITÉ",
             optTimeline1: "Moins d'un mois (Urgent)",
             optTimeline2: "1 à 2 mois",
             optTimeline3: "2 à 3 mois",
             optTimeline4: "Plus de 3 mois",
             optTimelineDiscuss: "Flexible / À discuter",
-            labelRef: "06 // REF LINK 01 (MAX 3)",
+            labelRef: "06 // LIENS DE RÉFÉRENCE (MAX 3)",
             placeholderRef1: "Lien 01 - https://...",
             placeholderRef2: "Lien 02 - https://...",
             placeholderRef3: "Lien 03 - https://...",
-            labelMessage: "07 // PROJECT DETAILS MESSAGE",
+            labelMessage: "07 // MESSAGE",
             placeholderMessage: "Parlez-moi de votre projet...",
             btnSubmit: "ENVOYER LA DEMANDE",
             btnSending: "ENVOI EN COURS...",
@@ -756,22 +949,15 @@
 
     let currentLang = 'zh';
 
-    function normalizeLang(lang) {
-        if (!lang) return 'zh';
-        const l = String(lang).toLowerCase().trim();
-        if (l.startsWith('ja') || l.startsWith('jp')) return 'ja';
-        if (l.startsWith('ko') || l.startsWith('kr')) return 'ko';
-        if (l.startsWith('en')) return 'en';
-        if (l.startsWith('fr')) return 'fr';
-        if (l.startsWith('zh') || l.startsWith('cn') || l.startsWith('tw') || l.startsWith('hk')) return 'zh';
-        return 'zh';
-    }
-
     function applyLanguage(lang) {
-        currentLang = normalizeLang(lang);
-        const dict = dictionary[currentLang] || dictionary.zh;
+        let target = (lang || 'zh').toLowerCase();
+        if (target === 'jp') target = 'ja';
+        if (target === 'kr') target = 'ko';
+        if (!dictionary[target]) target = 'zh';
 
-        // 1. Update text elements with data-i18n
+        currentLang = target;
+        const dict = dictionary[currentLang];
+
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (dict[key]) {
@@ -779,23 +965,10 @@
             }
         });
 
-        // 2. Update placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             if (dict[key]) {
                 el.placeholder = dict[key];
-            }
-        });
-
-        // 3. Update currently displayed selection text for custom dropdowns
-        document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
-            const selectedOpt = wrapper.querySelector('.custom-option.selected');
-            if (selectedOpt) {
-                const triggerText = wrapper.querySelector('.selected-text');
-                const i18nKey = selectedOpt.getAttribute('data-i18n');
-                if (i18nKey && dict[i18nKey]) {
-                    triggerText.innerHTML = dict[i18nKey];
-                }
             }
         });
     }
@@ -817,23 +990,8 @@
         return 'zh';
     }
 
-    function requestLangFromParent() {
-        const msg = JSON.stringify({ type: 'REQUEST_LANG', action: 'getLanguage' });
-        if (window.parent && window.parent !== window) {
-            window.parent.postMessage(msg, '*');
-            window.parent.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
-        }
-        if (window.top && window.top !== window && window.top !== window.parent) {
-            try {
-                window.top.postMessage(msg, '*');
-                window.top.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
-            } catch (err) {}
-        }
-    }
-
     const form = document.getElementById('contact-form');
     const submitBtn = document.getElementById('submit-btn');
-    const btnText = document.getElementById('btn-text');
     const statusMsg = document.getElementById('status-msg');
 
     form.addEventListener('submit', async function(e) {
@@ -841,13 +999,16 @@
         const dict = dictionary[currentLang] || dictionary.zh;
 
         submitBtn.disabled = true;
+        const btnText = document.getElementById('btn-text');
         if (btnText) btnText.innerText = dict.btnSending;
 
         try {
             const response = await fetch(form.action, {
                 method: form.method,
                 body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
 
             if (response.ok) {
@@ -867,7 +1028,28 @@
         }
     });
 
-    // Custom Dropdown Interactions
+    // 跨層 postMessage 視窗通訊監聽器
+    window.addEventListener('message', (e) => {
+        if (!e.data) return;
+        let lang = null;
+        if (typeof e.data === 'string') {
+            try {
+                const parsed = JSON.parse(e.data);
+                lang = parsed.lang || parsed.language || parsed.locale || parsed.langKey;
+            } catch (err) {
+                lang = e.data;
+            }
+        } else if (typeof e.data === 'object') {
+            if (e.data.type === 'LANGUAGE_CHANGE' || e.data.type === 'CHANGE_LANGUAGE' || e.data.type === 'SET_LANGUAGE') {
+                lang = e.data.lang || e.data.language;
+            } else if (e.data.lang || e.data.language) {
+                lang = e.data.lang || e.data.language;
+            }
+        }
+        if (lang) applyLanguage(lang);
+    });
+
+    // 客製化下拉選單互動事件綁定
     document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
         const trigger = wrapper.querySelector('.custom-select-trigger');
         const hiddenInput = wrapper.querySelector('input[type="hidden"]');
@@ -902,34 +1084,56 @@
         });
     });
 
+    // 點擊選單外部自動關閉下拉選單
     document.addEventListener('click', () => {
         document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
     });
 
-    window.addEventListener('message', (e) => {
-        if (!e.data) return;
-        let data = e.data;
+    // 偵測畫面上下滑動觸發影片框三層白底黑框線陰影效果
+    function initScrollShadowTrigger() {
+        const nodePanel = document.querySelector('.node-panel');
+        if (!nodePanel) return;
 
-        if (typeof data === 'string') {
-            try {
-                data = JSON.parse(data);
-            } catch (err) {
-                applyLanguage(data);
-                return;
+        let scrollTimeout;
+        const triggerShadow = () => {
+            const rect = nodePanel.getBoundingClientRect();
+            const inViewport = rect.top < window.innerHeight * 0.9 && rect.bottom > window.innerHeight * 0.1;
+
+            if (inViewport) {
+                nodePanel.classList.add('shadow-active');
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    nodePanel.classList.remove('shadow-active');
+                }, 1200);
+            } else {
+                nodePanel.classList.remove('shadow-active');
             }
-        }
+        };
 
-        const targetLang = data.lang || data.language || data.locale || data.langKey || data.currentLang;
-        if (targetLang) {
-            applyLanguage(targetLang);
-        } else if ((data.type === 'LANGUAGE_CHANGE' || data.type === 'CHANGE_LANGUAGE' || data.type === 'SET_LANGUAGE') && (data.lang || data.language)) {
-            applyLanguage(data.lang || data.language);
+        window.addEventListener('scroll', triggerShadow, { passive: true });
+        window.addEventListener('wheel', triggerShadow, { passive: true });
+        window.addEventListener('touchmove', triggerShadow, { passive: true });
+    }
+
+    // 主動向上層視窗請求當前語言（支援雙層 iframe）
+    function requestLangFromParent() {
+        const msg = JSON.stringify({ type: 'REQUEST_LANG', action: 'getLanguage' });
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage(msg, '*');
+            window.parent.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
         }
-    });
+        if (window.top && window.top !== window && window.top !== window.parent) {
+            try {
+                window.top.postMessage(msg, '*');
+                window.top.postMessage({ type: 'REQUEST_LANG', action: 'getLanguage' }, '*');
+            } catch (err) {}
+        }
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
         applyLanguage(detectLanguage());
         requestLangFromParent();
+        initScrollShadowTrigger();
     });
 </script>
 
