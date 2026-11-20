@@ -961,41 +961,64 @@
             {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1777020592/Liquid_Lobby_Loop_Edit_hqoh72.mp3"
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1777020592/Liquid_Lobby_Loop_Edit_hqoh72.mp3",
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795150796/DiscoBall.mp4" // DiscoBall 背景影片
             },
             {
-                title: "Flow As Liquid",
+                title: "Night Loop",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518848/Xiaostudio_mixdown_V2_lopypg.mp3"
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518848/Xiaostudio_mixdown_V2_lopypg.mp3",
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795153992/Night_begin.mp4" // Night Loop 背景影片
             },
 
             {
                 title: "Intro",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Intro_spxbdt.mp3"
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Intro_spxbdt.mp3",
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795160321/Run_loop.mp4" // Intro 背景影片
             },
             {
-                title: "Liquid Lobby Loop",
+                title: "Roll with the form",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518836/Xiaostudio_Lift_x_Mashup_cofnvw.mp3"
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518836/Xiaostudio_Lift_x_Mashup_cofnvw.mp3",
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795166881/Rolling.mp4" // Roll with the form 背景影片
             },
             {
-                title: "Liquid Lobby Loop",
+                title: "Render",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518854/Xiaostudio_Lift_V3_gfc4jf.mp3"
+                src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795164017/Lofi_03.mp3",
+                video: "" // 填入這首歌的背景影片網址；留空則使用首頁預設背景
             },
                {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Drift_V2_ktldo4.mp3"
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Drift_V2_ktldo4.mp3",
+                video: "" // 填入這首歌的背景影片網址；留空則使用首頁預設背景
             },
             {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518859/Xiaostudio_mixdown_5_omzsdt.mp3"
+                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518859/Xiaostudio_mixdown_5_omzsdt.mp3",
+                video: "" // 填入這首歌的背景影片網址；留空則使用首頁預設背景
             },
-        ];
-        let currentTrackIndex = 0;
+        ];        let currentTrackIndex = 0;
+
+        // 未指定歌曲影片時，使用首頁原本的背景影片。
+        const defaultBackgroundVideo = "https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4";
+
+        function setBackgroundVideo(videoUrl) {
+            const nextUrl = videoUrl || defaultBackgroundVideo;
+            const bgVideo = document.getElementById('bgVideo');
+            const textureVideo = document.getElementById('textureVideo');
+            [bgVideo, textureVideo].forEach(video => {
+                if (!video) return;
+                const currentUrl = video.currentSrc || video.src;
+                if (currentUrl === nextUrl || currentUrl.startsWith(nextUrl + '?')) return;
+                video.src = nextUrl;
+                video.load();
+                video.play().catch(() => {});
+            });
+        }
 
         function initAudio() {
             if (audioCtx) return;
@@ -1019,6 +1042,7 @@
         function loadTrack(index) {
             currentTrackIndex = (index + playlist.length) % playlist.length;
             const track = playlist[currentTrackIndex];
+            setBackgroundVideo(track.video);
             const bgAudio = document.getElementById('bgAudio');
             
             if (bgAudio) {
@@ -1314,6 +1338,7 @@
         }
 
         function playAudio() {
+            setBackgroundVideo(playlist[currentTrackIndex].video);
             initAudio();
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
@@ -1331,6 +1356,7 @@
 
         function pauseAudio() {
             bgAudio.pause();
+            setBackgroundVideo(defaultBackgroundVideo);
             isPlaying = false;
             updatePlayStateUI(false);
         }
