@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XiaoStudio | TREE HOUSE 2026 - Yearbook demo #01</title>
+    <title>XiaoStudio | TREE HOUSE 2026 - Yearbook demo </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
@@ -97,7 +97,7 @@
                 <!-- 精緻化的標題排版層次 -->
                 <h1 class="text-black text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]">
                     TREE HOUSE <span class="font-light text-gray-400 text-4xl md:text-7xl block md:inline">2026</span> <br class="hidden md:block">
-                    <span class="text-xl md:text-4xl font-normal tracking-normal text-gray-500 block mt-3">EDITORIAL & BRAND VISUAL ARCHIVING<br>DEMO#02</span>
+                    <span class="text-xl md:text-4xl font-normal tracking-normal text-gray-500 block mt-3">EDITORIAL & BRAND VISUAL ARCHIVING<br>1121</span>
                 </h1>
             </div>
 
@@ -125,6 +125,11 @@
         <!-- 年鑑內頁 2026_01 至 2026_029 -->
         <div id="yearbook-pages" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16"></div>
 
+        <!-- 封底 -->
+        <section class="image-container reveal-item fade-in-up">
+            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1795256060/Cover_back.jpg" alt="年鑑封底" class="project-image">
+        </section>
+
         <!-- 內頁縮圖導覽 -->
         <section class="reveal-item fade-in-up border-t border-gray-100 pt-16 mt-32">
             <div class="mb-10">
@@ -134,10 +139,6 @@
             <div id="yearbook-index" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-9 gap-4 pt-2"></div>
         </section>
 
-        <!-- 封底 -->
-        <section class="image-container reveal-item fade-in-up">
-            <img src="https://res.cloudinary.com/qddgnnyv/image/upload/v1795256060/Cover_back.jpg" alt="年鑑封底" class="project-image">
-        </section>
     </main>
 
     <!-- 頁尾版權 -->
@@ -154,7 +155,8 @@
         for (let page = 1; page <= 29; page++) {
             const fileNumber = page < 10 ? String(page).padStart(2, '0') : String(page).padStart(3, '0');
             const fileName = `2026_${fileNumber}.jpg`;
-            const imageUrl = `${pageBaseUrl}${fileName}`;
+            const imageVersion = page >= 16 && page <= 28 ? 'v1795257464' : 'v1795256236';
+            const imageUrl = `https://res.cloudinary.com/qddgnnyv/image/upload/${imageVersion}/${fileName}`;
 
             const imageContainer = document.createElement('div');
             imageContainer.id = `project-img-${page}`;
