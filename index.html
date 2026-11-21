@@ -958,6 +958,12 @@
         let isPlaying = false;
 
          const playlist = [
+               {
+                title: "Liquid Lobby Loop",
+                artist: "xiaostudio · Suno AI",
+                src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795238430/Road.mp3",
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795240191/Wind_1.mp4" // 第六首背景影片
+            },
             {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
@@ -987,13 +993,7 @@
                 title: "Render",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795164017/Lofi_03.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795177244/%E5%BD%B1%E7%89%87_17.mp4" // 填入這首歌的背景影片網址；留空則使用首頁預設背景
-            },
-               {
-                title: "Liquid Lobby Loop",
-                artist: "xiaostudio · Suno AI",
-                src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Drift_V2_ktldo4.mp3",
-                video: "" // 填入這首歌的背景影片網址；留空則使用首頁預設背景
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795177244/%E5%BD%B1%E7%89%87_17.mp4" // Render 背景影片
             },
             {
                 title: "Liquid Lobby Loop",
@@ -1338,7 +1338,13 @@
         }
 
         function playAudio() {
-            setBackgroundVideo(playlist[currentTrackIndex].video);
+            const track = playlist[currentTrackIndex];
+            setBackgroundVideo(track.video);
+            if (bgAudio.src !== track.src) {
+                bgAudio.src = track.src;
+                bgAudio.load();
+            }
+            updateMarqueeText(track.title, track.artist);
             initAudio();
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
