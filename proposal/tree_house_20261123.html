@@ -152,14 +152,25 @@
         const pagesContainer = document.getElementById('yearbook-pages');
         const indexContainer = document.getElementById('yearbook-index');
 
+        const pageEntries = [];
         for (let page = 1; page <= 29; page++) {
             const fileNumber = page < 10 ? String(page).padStart(2, '0') : String(page).padStart(3, '0');
             const fileName = `2026_${fileNumber}.jpg`;
             const imageVersion = page >= 16 && page <= 28 ? 'v1795257464' : 'v1795256236';
             const imageUrl = `https://res.cloudinary.com/qddgnnyv/image/upload/${imageVersion}/${fileName}`;
+            pageEntries.push({ fileName, imageUrl });
+            if (page === 2) {
+                pageEntries.push({
+                    fileName: '工作區域_44.jpg',
+                    imageUrl: 'https://res.cloudinary.com/qddgnnyv/image/upload/v1795426689/%E5%B7%A5%E4%BD%9C%E5%8D%80%E5%9F%9F_44.jpg'
+                });
+            }
+        }
 
+        pageEntries.forEach(({ fileName, imageUrl }, entryIndex) => {
+            const pageIndex = entryIndex + 1;
             const imageContainer = document.createElement('div');
-            imageContainer.id = `project-img-${page}`;
+            imageContainer.id = `project-img-${pageIndex}`;
             imageContainer.className = 'image-container md:col-span-2 reveal-item fade-in-up';
             imageContainer.innerHTML = `<img src="${imageUrl}" alt="年鑑內頁 ${fileName}" class="project-image" loading="lazy">`;
             pagesContainer.appendChild(imageContainer);
@@ -167,14 +178,13 @@
             const thumbnail = document.createElement('button');
             thumbnail.type = 'button';
             thumbnail.className = 'group focus:outline-none text-left w-full';
-            thumbnail.setAttribute('onclick', `scrollToImage(${page})`);
+            thumbnail.setAttribute('onclick', `scrollToImage(${pageIndex})`);
             thumbnail.innerHTML = `
                 <div class="aspect-[3/4] w-full overflow-hidden rounded bg-gray-50 border border-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:border-black">
                     <img src="${imageUrl}" alt="${fileName}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" loading="lazy">
-                </div>
-                <span class="block text-[10px] font-bold text-gray-500 group-hover:text-black transition-colors duration-300 mt-2 truncate">${fileName}</span>`;
+                </div>`;
             indexContainer.appendChild(thumbnail);
-        }
+        });
 
         // 設定 Intersection Observer 參數
         const observerOptions = { 
