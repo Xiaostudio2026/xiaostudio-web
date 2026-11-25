@@ -572,7 +572,7 @@
             .node-id { font-size: 12px; }
             .node-label { font-size: 15px; gap: 7px; }
             .node-btn-text { font-size: 14px; }
-            .hero-text { bottom: 24px !important; left: 20px !important; right: 20px; }
+            .hero-text { bottom: 24px !important; left: 16px !important; right: 16px; margin-left: 0; }
             .hero-text h2 { font-size: 2.5rem !important; line-height: 1.25 !important; }
             .marquee-item { font-size: 10px; letter-spacing: 0.1em; }
         }   
@@ -651,6 +651,18 @@
             opacity: 1;
             transform: translateY(0) scale(1);
         }
+
+        .a11y-close {
+            border: 0;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            font: inherit;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 2px;
+        }
+        .a11y-close:hover { color: #fff; }
 
         .a11y-title {
             font-size: 12px;
@@ -887,6 +899,7 @@
     <div id="a11y-panel" class="mono">
         <div class="a11y-title">
             <span id="lbl-a11y-title">A11Y ACCESSIBILITY</span>
+            <button id="a11y-close" class="a11y-close" type="button" aria-label="Close accessibility settings">&times;</button>
         </div>
 
         <div class="a11y-row">
@@ -1269,6 +1282,11 @@
             const isActive = a11yPanel.classList.contains('active');
             a11yPanel.classList.toggle('active', !isActive);
             magnifierBtn.classList.toggle('active', !isActive);
+        });
+
+        document.getElementById("a11y-close").addEventListener("click", () => {
+            a11yPanel.classList.remove("active");
+            magnifierBtn.classList.remove("active");
         });
 
         const playPauseBtn = document.getElementById('btn-play-pause');
