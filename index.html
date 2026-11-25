@@ -158,7 +158,6 @@
             z-index: 0; 
             filter: brightness(0.95) contrast(1.1); 
             background: #000;
-            transition: opacity 0.5s ease;
         }
 
         .video-background video { 
@@ -166,16 +165,6 @@
             height: 100%; 
             object-fit: cover; 
             display: block;
-        }
-        
-        #webgl-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; 
-            pointer-events: none;
         }
 
         .video-overlay { 
@@ -187,17 +176,6 @@
             background: radial-gradient(circle at center, transparent 25%, rgba(0,0,0,0.85) 100%); 
             z-index: 2; 
             pointer-events: none;
-        }
-        
-        #textureVideo {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            opacity: 0.01;
-            pointer-events: none;
-            bottom: 0;
-            left: 0;
-            z-index: -10;
         }
 
         .lang-switcher { display: flex; gap: 10px; pointer-events: auto; }
@@ -256,9 +234,9 @@
         .workflow-node { position: absolute; pointer-events: auto; cursor: grab; z-index: 10; user-select: none; touch-action: none; white-space: nowrap; }
         .workflow-node.dragging { cursor: grabbing; z-index: 100; }
         .node-box { 
-            background: rgba(10, 10, 10, 0.8); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px); 
+            background: rgba(10, 10, 10, 0.85); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px); 
             border: 1px solid rgba(255, 255, 255, 0.22); 
             padding: 12px 14px; 
             border-radius: 2px; 
@@ -266,7 +244,7 @@
             line-height: 1.3; 
             white-space: nowrap;
         }
-        .node-box.special { border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.08); }
+        .node-box.special { border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(18, 18, 22, 0.82); }
         .node-id { font-size: 11px; letter-spacing: 0.1em; line-height: 1; }
         .node-label { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; display: flex; align-items: center; gap: 8px; line-height: 1.3; white-space: nowrap; }
         .status-indicator { width: 6px; height: 6px; background-color: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,255,255,0.8); animation: status-pulse 3s infinite ease-in-out; }
@@ -357,7 +335,7 @@
             opacity: 0.5;
         }
 
-        /* 底部整合播放器與跑馬燈列：控制區無外框 */
+        /* 底部整合播放器與跑馬燈列 */
         #music-marquee-bar {
             position: fixed;
             bottom: 0;
@@ -388,7 +366,6 @@
             gap: 12px;
         }
 
-        /* 音樂控制區：取消外框 (border: none)，黑底加大圖示，hover 時反白（白底黑字） */
         .bar-controls {
             display: flex;
             align-items: center;
@@ -442,7 +419,6 @@
             box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
         }
 
-        /* 跑馬燈內容區塊 */
         .marquee-container {
             flex: 1;
             overflow: hidden;
@@ -488,7 +464,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Overlay 頂部導覽列跑馬燈 */
         .nav-marquee-container {
             width: 140px;
             overflow: hidden;
@@ -510,7 +485,6 @@
             animation: marquee-scroll 12s linear infinite;
         }
 
-        /* 右側音量與控制區（包含加長的方格音量條） */
         .bar-extras {
             display: flex;
             align-items: center;
@@ -533,7 +507,6 @@
             .bar-time { display: inline-block; }
         }
 
-        /* 加長方格音量條 */
         .grid-volume-bar {
             display: flex;
             align-items: center;
@@ -769,12 +742,6 @@
             </video>
         </div>
 
-        <video id="textureVideo" autoplay loop playsinline webkit-playsinline x5-playsinline muted preload="auto" crossorigin="anonymous" controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;">
-            <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4?gl=1" type="video/mp4">
-        </video>
-        
-        <canvas id="webgl-canvas"></canvas>
-
         <audio id="bgAudio" preload="auto" crossorigin="anonymous">
             <source src="https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1777020592/Liquid_Lobby_Loop_Edit_hqoh72.mp3" type="audio/mpeg">
         </audio>
@@ -815,10 +782,9 @@
         </div>
     </div>
 
-    <!-- 底部整合播放器與跑馬燈列 (取消按鈕外框、無圓角矩形) -->
+    <!-- 底部整合播放器與跑馬燈列 -->
     <div id="music-marquee-bar">
         <div class="integrated-bar-inner">
-            <!-- 左側播放控制按鈕（取消外框、黑底加大圖示、hover反白） -->
             <div class="bar-controls">
                 <button class="bar-btn" id="btn-prev-track" title="Previous Track">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
@@ -831,7 +797,6 @@
                 </button>
             </div>
 
-            <!-- 中間滾動跑馬燈 -->
             <div class="marquee-container">
                 <div class="marquee-track" id="marquee-track">
                     <div class="marquee-item"><span class="marquee-icon"></span>NOW PLAYING:《Liquid Lobby Loop》Flow as Liquid · Roll with the Form · Spin into the World</div>
@@ -841,17 +806,13 @@
                 </div>
             </div>
 
-            <!-- 右側加長方格音量調節條與時間 -->
             <div class="bar-extras">
                 <span id="player-time-curr" class="bar-time">0:00</span>
                 <span class="bar-time">/</span>
                 <span id="player-time-dur" class="bar-time">0:00</span>
                 <div class="flex items-center gap-1.5 bg-black/40 px-2 py-1 border border-white/20">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="opacity-70"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                    <!-- 20格加長方格音量調節條 -->
-                    <div class="grid-volume-bar" id="grid-volume-bar" title="音量控制">
-                        <!-- 動態產生 20 格 -->
-                    </div>
+                    <div class="grid-volume-bar" id="grid-volume-bar" title="音量控制"></div>
                 </div>
             </div>
         </div>
@@ -864,9 +825,7 @@
                     <span class="status-indicator"></span>
                     <span id="overlay-title" class="mono text-[10px] opacity-60 uppercase tracking-widest text-white hidden sm:inline">Pipeline System</span>
                     
-                    <!-- 頂部 Pipeline System 音訊播放模組：音樂控制區右側包含動態跑馬燈 -->
                     <div id="nav-mini-player" class="flex items-center gap-2 border-l border-white/20 pl-3 mono text-[13px] text-white/80">
-                        <!-- 音樂控制區按鈕 -->
                         <div class="flex items-center gap-1 flex-shrink-0">
                             <button id="nav-btn-prev" class="p-1 hover:text-white opacity-70 hover:opacity-100 transition-opacity" title="Previous Track">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
@@ -879,7 +838,6 @@
                             </button>
                         </div>
 
-                        <!-- 音樂控制區右邊：歌曲名稱跑馬燈 -->
                         <div class="nav-marquee-container">
                             <div class="nav-marquee-track" id="nav-marquee-track">
                                 <span class="pr-6 uppercase tracking-wider text-[11px] sm:text-[12px] opacity-90">NOW PLAYING: Liquid Lobby Loop · xiaostudio</span>
@@ -921,7 +879,6 @@
         </div>
     </div>
 
-    <!-- 側邊功能按鈕維持圓形 -->
     <button id="magnifierToggle" class="action-btn magnifier-toggle" aria-label="Toggle Accessibility Settings" title="Text Scale & Accessibility">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="6" cy="12" r="4"></circle>
@@ -973,78 +930,93 @@
         let audioCtx, analyser, source, dataArray;
         let particleHistory = [];
         let isPlaying = false;
+        let isVisualizerRunning = false;
 
-         const playlist = [
-               {
+        const playlist = [
+            {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795238430/Road.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795240191/Wind_1.mp4" // 第六首背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795240191/Wind_1.mp4"
             },
             {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1777020592/Liquid_Lobby_Loop_Edit_hqoh72.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795150796/DiscoBall.mp4" // DiscoBall 背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795150796/DiscoBall.mp4"
             },
             {
                 title: "Night Loop",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518848/Xiaostudio_mixdown_V2_lopypg.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795153992/Night_begin.mp4" // Night Loop 背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795153992/Night_begin.mp4"
             },
-
             {
                 title: "Intro",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518855/Xiaostudio_Intro_spxbdt.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795160321/Run_loop.mp4" // Intro 背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795160321/Run_loop.mp4"
             },
             {
                 title: "Roll with the form",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/dssycfvxr/video/upload/v1788518836/Xiaostudio_Lift_x_Mashup_cofnvw.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795166881/Rolling.mp4" // Roll with the form 背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795166881/Rolling.mp4"
             },
             {
                 title: "Render",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795164017/Lofi_03.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795177244/%E5%BD%B1%E7%89%87_17.mp4" // Render 背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795177244/%E5%BD%B1%E7%89%87_17.mp4"
             },
             {
                 title: "Liquid Lobby Loop",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795247283/Xiaostudio_Beer_V2.mp3",
-                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795251070/beer_1.mp4" // 第七首背景影片
+                video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795251070/beer_1.mp4"
             },
             {
                 title: "LAW?",
                 artist: "xiaostudio · Suno AI",
                 src: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795424127/retro_soul.mp3",
                 video: "https://res.cloudinary.com/qddgnnyv/video/upload/v1795423854/Law.mp4"
-            },
-        ];        let currentTrackIndex = 0;
+            }
+        ];
+        let currentTrackIndex = 0;
 
-        // 未指定歌曲影片時，使用首頁原本的背景影片。
         const defaultBackgroundVideo = "https://res.cloudinary.com/dssycfvxr/video/upload/q_auto/f_auto/v1775112335/BG_Vdeo_2_oxvrmg.mp4";
+
+        function isOverlayOpen() {
+            const screen = document.getElementById('overlay-screen');
+            return screen && screen.classList.contains('active');
+        }
 
         function setBackgroundVideo(videoUrl) {
             const nextUrl = videoUrl || defaultBackgroundVideo;
             const bgVideo = document.getElementById('bgVideo');
-            const textureVideo = document.getElementById('textureVideo');
-            [bgVideo, textureVideo].forEach(video => {
-                if (!video) return;
-                const currentUrl = video.currentSrc || video.src;
-                if (currentUrl === nextUrl || currentUrl.startsWith(nextUrl + '?')) return;
-                video.src = nextUrl;
-                video.load();
-                video.play().catch(() => {});
-            });
+            if (!bgVideo) return;
+            const currentUrl = bgVideo.currentSrc || bgVideo.src;
+            if (currentUrl !== nextUrl && !currentUrl.startsWith(nextUrl + '?')) {
+                bgVideo.src = nextUrl;
+                bgVideo.load();
+            }
+            if (!document.hidden && !isOverlayOpen()) {
+                bgVideo.play().catch(() => {});
+            }
+        }
+
+        function startVisualizer() {
+            if (!isVisualizerRunning) {
+                isVisualizerRunning = true;
+                requestAnimationFrame(renderVisualizer);
+            }
         }
 
         function initAudio() {
-            if (audioCtx) return;
+            if (audioCtx) {
+                startVisualizer();
+                return;
+            }
             const bgAudio = document.getElementById('bgAudio');
             try {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1055,11 +1027,11 @@
                 
                 analyser.fftSize = 512;
                 dataArray = new Uint8Array(analyser.frequencyBinCount);
-                for(let i=0; i<dataArray.length; i++) particleHistory[i] = 0;
+                for (let i = 0; i < dataArray.length; i++) particleHistory[i] = 0;
             } catch (e) {
                 console.log("Audio API not supported or blocked", e);
             }
-            renderVisualizer();
+            startVisualizer();
         }
 
         function loadTrack(index) {
@@ -1109,37 +1081,53 @@
             }
         }
 
+        // 音樂視覺化：播放時渲染，暫停且餘波歸零後自動進入休眠省電
         function renderVisualizer() {
             const vCanvas = document.getElementById('visualizer');
-            if (!vCanvas) return;
+            if (!vCanvas) {
+                isVisualizerRunning = false;
+                return;
+            }
             const vCtx = vCanvas.getContext('2d');
             
-            requestAnimationFrame(renderVisualizer);
             if (analyser && isPlaying) analyser.getByteFrequencyData(dataArray);
             
             vCtx.clearRect(0, 0, vCanvas.width, vCanvas.height);
 
             const displayCount = 80;
             const barWidth = vCanvas.width / displayCount;
+            let hasActiveBars = false;
 
             for (let i = 0; i < displayCount; i++) {
-                let value = (isPlaying && dataArray) ? dataArray[i] : (Math.random() * 2 + 0.5);
+                let value = (isPlaying && dataArray) ? dataArray[i] : 0;
                 
-                if (value > particleHistory[i]) particleHistory[i] = value;
-                else particleHistory[i] -= 2.5;
+                if (value > particleHistory[i]) {
+                    particleHistory[i] = value;
+                } else {
+                    particleHistory[i] -= 3.5;
+                }
                 if (particleHistory[i] < 0) particleHistory[i] = 0;
 
-                const intensity = particleHistory[i] / 255;
-                const h = intensity * vCanvas.height;
-                const xBase = i * barWidth;
+                if (particleHistory[i] > 0) {
+                    hasActiveBars = true;
+                    const intensity = particleHistory[i] / 255;
+                    const h = intensity * vCanvas.height;
+                    const xBase = i * barWidth;
 
-                const yStep = 4; 
-                for (let y = 0; y < h; y += yStep) {
-                    const jX = (Math.random() - 0.5) * 2;
-                    const alpha = Math.min(1.0, 0.3 + (y / h) * (intensity * 0.7 + 0.3));
-                    vCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-                    vCtx.fillRect(xBase + jX, vCanvas.height - y, 2.0, 2.0);
+                    const yStep = 4; 
+                    for (let y = 0; y < h; y += yStep) {
+                        const jX = (Math.random() - 0.5) * 2;
+                        const alpha = Math.min(1.0, 0.3 + (y / h) * (intensity * 0.7 + 0.3));
+                        vCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                        vCtx.fillRect(xBase + jX, vCanvas.height - y, 2.0, 2.0);
+                    }
                 }
+            }
+
+            if (isPlaying || hasActiveBars) {
+                requestAnimationFrame(renderVisualizer);
+            } else {
+                isVisualizerRunning = false;
             }
         }
 
@@ -1296,7 +1284,6 @@
         const timeDur = document.getElementById('player-time-dur');
         const svgPlayIcon = document.getElementById('svg-play-icon');
 
-        // 初始化 20 格加長方格音量條
         const totalVolumeCells = 20;
         const gridVolumeBar = document.getElementById('grid-volume-bar');
         const volumeCells = [];
@@ -1381,6 +1368,7 @@
             isMuted = false;
             bgAudio.play().then(() => {
                 isPlaying = true;
+                startVisualizer();
                 if (musicMarqueeBar) musicMarqueeBar.classList.add('active');
                 document.body.classList.add('music-active');
                 audioBtn.classList.add('active');
@@ -1497,10 +1485,10 @@
         const startDate = new Date('2024-01-01T00:00:00Z').getTime();
         
         function updateCarbonCounter() {
-            const now = Date.now();
-            const elapsed = now - startDate;
-            const currentTotal = (elapsed * perMsEmissions) + 2450000000000; 
-            if (carbonValueEl) {
+            if (!document.hidden && !isOverlayOpen() && carbonValueEl) {
+                const now = Date.now();
+                const elapsed = now - startDate;
+                const currentTotal = (elapsed * perMsEmissions) + 2450000000000; 
                 carbonValueEl.innerText = currentTotal.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
             }
             requestAnimationFrame(updateCarbonCounter);
@@ -1637,9 +1625,6 @@
 
         window.addEventListener('mousemove', (e) => { 
             handlePointerMove(e.clientX, e.clientY);
-            if (typeof pushDistortionRipple === 'function') {
-                pushDistortionRipple(e.clientX, e.clientY);
-            }
             if (!activeNode) return; 
             activeNode.style.left = `${e.clientX - offset.x}px`; 
             activeNode.style.top = `${e.clientY - offset.y}px`; 
@@ -1649,9 +1634,6 @@
         window.addEventListener('touchmove', (e) => { 
             const touch = e.touches[0];
             handlePointerMove(touch.clientX, touch.clientY);
-            if (typeof pushDistortionRipple === 'function') {
-                pushDistortionRipple(touch.clientX, touch.clientY);
-            }
             if (!activeNode) return; 
             activeNode.style.left = `${touch.clientX - offset.x}px`; 
             activeNode.style.top = `${touch.clientY - offset.y}px`; 
@@ -1666,7 +1648,11 @@
             const screen = document.getElementById('overlay-screen');
             const container = document.getElementById('overlay-container');
             const content = document.getElementById('overlay-content');
+            const bgVideoEl = document.getElementById('bgVideo');
             
+            // 開啟彈窗時暫停底層背景影片，讓系統資源專注於彈窗內容
+            if (bgVideoEl) bgVideoEl.pause();
+
             const baseUrl = "https://xiaostudio.xyz";
             let targetUrl = "";
             const isPop = (type === 'about' || type === 'form' || type === 'ai' || type === 'static' || type === 'motion' || type === 'web' || type === 'print');
@@ -1753,233 +1739,39 @@
         function hideOverlay() {
             document.body.classList.remove('ai-active');
             const screen = document.getElementById('overlay-screen');
+            const bgVideoEl = document.getElementById('bgVideo');
             if (screen) {
                 screen.classList.remove('active');
-                setTimeout(() => { if (!screen.classList.contains('active')) { screen.style.display = 'none'; document.getElementById('overlay-content').innerHTML = ''; } }, 600);
+                setTimeout(() => { 
+                    if (!screen.classList.contains('active')) { 
+                        screen.style.display = 'none'; 
+                        document.getElementById('overlay-content').innerHTML = ''; 
+                        if (bgVideoEl && !document.hidden) bgVideoEl.play().catch(() => {});
+                    } 
+                }, 600);
             }
-        }
-
-        const webglCanvas = document.getElementById('webgl-canvas');
-        const textureVideo = document.getElementById('textureVideo');
-        const gl = webglCanvas ? (webglCanvas.getContext('webgl') || webglCanvas.getContext('experimental-webgl')) : null;
-
-        let isWebGLActive = false;
-
-        const vsSource = `
-            attribute vec2 position;
-            varying vec2 vTexCoord;
-            void main() {
-                vTexCoord = position * 0.5 + 0.5;
-                vTexCoord.y = 1.0 - vTexCoord.y; 
-                gl_Position = vec4(position, 0.0, 1.0);
-            }
-        `;
-
-        const fsSource = `
-            precision mediump float;
-            varying vec2 vTexCoord;
-            uniform sampler2D uVideoTexture;
-            uniform vec2 uResolution;
-            uniform vec2 uTextureScale; 
-            
-            uniform vec3 uRipples[16];
-
-            void main() {
-                vec2 uvScreen = vTexCoord;
-                vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
-                vec2 totalOffset = vec2(0.0);
-
-                for (int i = 0; i < 16; i++) {
-                    vec2 center = uRipples[i].xy;
-                    float age = uRipples[i].z; 
-
-                    if (age > 0.0 && age < 1.0) {
-                        vec2 toPixel = (uvScreen - center) * aspect;
-                        float dist = length(toPixel);
-
-                        float currentRadius = age * 0.25; 
-                        float waveWidth = 0.05;          
-                        
-                        if (dist < currentRadius + waveWidth && dist > currentRadius - waveWidth) {
-                            float progress = (dist - (currentRadius - waveWidth)) / (waveWidth * 2.0);
-                            float wave = sin(progress * 3.14159265);
-                            float strength = (1.0 - age) * 0.06 * wave; 
-                            
-                            totalOffset += normalize(toPixel) * strength;
-                        }
-                    }
-                }
-
-                vec2 distortedUvScreen = clamp(uvScreen - totalOffset, 0.0, 1.0);
-                vec2 finalUv = (distortedUvScreen - 0.5) * uTextureScale + 0.5;
-                vec4 videoColor = texture2D(uVideoTexture, finalUv);
-                float highlights = length(totalOffset) * 2.5;
-                gl_FragColor = videoColor + vec4(vec3(highlights), 0.0);
-            }
-        `;
-
-        let program, positionLocation, uVideoTextureLoc, uResolutionLoc, uTextureScaleLoc, uRipplesLoc, buffer, videoTexture;
-
-        if (gl) {
-            try {
-                const vs = gl.createShader(gl.VERTEX_SHADER);
-                gl.shaderSource(vs, vsSource);
-                gl.compileShader(vs);
-
-                const fs = gl.createShader(gl.FRAGMENT_SHADER);
-                gl.shaderSource(fs, fsSource);
-                gl.compileShader(fs);
-
-                program = gl.createProgram();
-                gl.attachShader(program, vs);
-                gl.attachShader(program, fs);
-                gl.linkProgram(program);
-
-                if (gl.getProgramParameter(program, gl.LINK_STATUS)) {
-                    positionLocation = gl.getAttribLocation(program, 'position');
-                    uVideoTextureLoc = gl.getUniformLocation(program, 'uVideoTexture');
-                    uResolutionLoc = gl.getUniformLocation(program, 'uResolution');
-                    uTextureScaleLoc = gl.getUniformLocation(program, 'uTextureScale');
-                    uRipplesLoc = gl.getUniformLocation(program, 'uRipples');
-
-                    buffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-                        -1, -1,   1, -1,  -1,  1,
-                        -1,  1,   1, -1,   1,  1,
-                    ]), gl.STATIC_DRAW);
-
-                    videoTexture = gl.createTexture();
-                    gl.bindTexture(gl.TEXTURE_2D, videoTexture);
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-                    isWebGLActive = true;
-                    const fallbackBg = document.getElementById('fallback-bg');
-                    if (fallbackBg) fallbackBg.style.opacity = '0';
-                } else {
-                    throw new Error('Link failed');
-                }
-            } catch (e) {
-                console.warn('WebGL setup fallback to standard video:', e);
-                isWebGLActive = false;
-                if (webglCanvas) webglCanvas.style.display = 'none';
-            }
-        } else {
-            isWebGLActive = false;
-            if (webglCanvas) webglCanvas.style.display = 'none';
-        }
-
-        let ripples = [];
-        const maxRipples = 16;
-        let lastMousePos = { x: 0, y: 0 };
-
-        function pushDistortionRipple(clientX, clientY) {
-            const overlay = document.getElementById('overlay-screen');
-            if (overlay && overlay.classList.contains('active')) return;
-
-            const x = clientX / window.innerWidth;
-            const y = clientY / window.innerHeight;
-
-            const speed = Math.hypot(clientX - lastMousePos.x, clientY - lastMousePos.y);
-            if (speed > 4) {
-                ripples.push({ x, y, age: 0.01 });
-                if (ripples.length > maxRipples) {
-                    ripples.shift();
-                }
-            }
-            lastMousePos = { x: clientX, y: clientY };
-        }
-
-        function resizeCanvas() {
-            if (!webglCanvas) return;
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            webglCanvas.width = window.innerWidth * dpr;
-            webglCanvas.height = window.innerHeight * dpr;
-            if (gl) gl.viewport(0, 0, webglCanvas.width, webglCanvas.height);
         }
 
         window.addEventListener('resize', () => {
-            resizeCanvas();
             initNodePositions();
             updateLines();
         });
 
-        function renderWebGL() {
-            if (!isWebGLActive || !gl || !textureVideo) return;
-
-            try {
-                if (textureVideo.readyState >= textureVideo.HAVE_CURRENT_DATA) {
-                    gl.bindTexture(gl.TEXTURE_2D, videoTexture);
-                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureVideo);
-                }
-
-                gl.useProgram(program);
-
-                gl.uniform2f(uResolutionLoc, webglCanvas.width, webglCanvas.height);
-
-                const screenAspect = webglCanvas.width / webglCanvas.height;
-                const videoAspect = (textureVideo.videoWidth && textureVideo.videoHeight) ? (textureVideo.videoWidth / textureVideo.videoHeight) : (16/9);
-                let scaleX = 1.0, scaleY = 1.0;
-                if (screenAspect > videoAspect) {
-                    scaleY = videoAspect / screenAspect;
-                } else {
-                    scaleX = screenAspect / videoAspect;
-                }
-                gl.uniform2f(uTextureScaleLoc, scaleX, scaleY);
-
-                const activeRipples = [];
-                const rippleData = new Float32Array(16 * 3);
-
-                for (let i = 0; i < ripples.length; i++) {
-                    ripples[i].age += 0.018;
-                    if (ripples[i].age < 1.0) {
-                        activeRipples.push(ripples[i]);
-                    }
-                }
-                ripples = activeRipples;
-
-                for (let i = 0; i < 16; i++) {
-                    if (i < ripples.length) {
-                        rippleData[i * 3 + 0] = ripples[i].x;
-                        rippleData[i * 3 + 1] = ripples[i].y;
-                        rippleData[i * 3 + 2] = ripples[i].age;
-                    } else {
-                        rippleData[i * 3 + 0] = 0;
-                        rippleData[i * 3 + 1] = 0;
-                        rippleData[i * 3 + 2] = 0.0;
-                    }
-                }
-
-                gl.uniform3fv(uRipplesLoc, rippleData);
-
-                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-                gl.enableVertexAttribArray(positionLocation);
-
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
-            } catch(e) {
-                console.warn("Render WebGL error fallback:", e);
-                isWebGLActive = false;
-                const fallbackBg = document.getElementById('fallback-bg');
-                if (fallbackBg) fallbackBg.style.opacity = '1';
+        // 切換分頁或視窗縮小至背景時，自動暫停背景影片
+        document.addEventListener('visibilitychange', () => {
+            const bgVideoEl = document.getElementById('bgVideo');
+            if (!bgVideoEl) return;
+            if (document.hidden) {
+                bgVideoEl.pause();
+            } else if (!isOverlayOpen()) {
+                bgVideoEl.play().catch(() => {});
             }
-
-            requestAnimationFrame(renderWebGL);
-        }
+        });
 
         window.addEventListener('load', () => {
-            resizeCanvas();
             initNodePositions();
-            if (isWebGLActive) {
-                renderWebGL();
-            }
             const bgVideoEl = document.getElementById('bgVideo');
             if (bgVideoEl) bgVideoEl.play().catch(() => {});
-            const textureVidEl = document.getElementById('textureVideo');
-            if (textureVidEl) textureVidEl.play().catch(() => {});
         });
     </script>
 </body>
